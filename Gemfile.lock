@@ -1,0 +1,27 @@
+PATH
+  remote: .
+  specs:
+    timr (0.1.0.pre.dev.1)
+      curses (~> 1.0)
+      uuid (~> 2.3)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    curses (1.0.2)
+    macaddr (1.7.1)
+      systemu (~> 2.6.2)
+    minitest (5.8.4)
+    systemu (2.6.5)
+    uuid (2.3.8)
+      macaddr (~> 1.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  minitest (~> 5.8)
+  timr!
+
+BUNDLED WITH
+   1.11.2

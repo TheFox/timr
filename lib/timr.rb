@@ -1,0 +1,10 @@
+
+require 'timr/version'
+require 'timr/timr'
+require 'timr/stack'
+require 'timr/task'
+require 'timr/window'
+require 'timr/window_help'
+require 'timr/window_tasks'
+require 'timr/window_timeline'
+require 'timr/window_test'

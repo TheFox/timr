@@ -1,0 +1,38 @@
+#!/usr/bin/env ruby
+# coding: UTF-8
+
+require 'optparse'
+require 'timr'
+
+
+@options = {
+	:dir => nil,
+}
+opts = OptionParser.new do |o|
+	o.banner = 'Usage: timr [options]'
+	o.separator('')
+	
+	o.on_tail('-d', '--dir <path>', 'Path to a timr directory.') do |path|
+		@options[:dir] = path
+	end
+	
+	o.on_tail('-v', '--version', 'Show version.') do
+		puts "#{TheFox::Timr::NAME} #{TheFox::Timr::VERSION} (#{TheFox::Timr::DATE})"
+		puts "#{TheFox::Timr::HOMEPAGE}"
+		exit
+	end
+	
+	o.on_tail('-h', '--help', 'Show this message.') do
+		puts o
+		puts
+		exit 3
+	end
+end
+ARGV << '-h' if ARGV.count == 0
+opts.parse(ARGV)
+
+puts 'currently under heavy development'
+
+# timr = TheFox::Timr::Timr.new(@options[:dir])
+# timr.run
+# timr.close

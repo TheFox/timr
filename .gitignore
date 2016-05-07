@@ -1,0 +1,6 @@
+/.bundle/
+.setup
+/bin/dev
+/releases/
+README.html
+/tmp/
