@@ -14,7 +14,12 @@ module TheFox
 				@page_changed = true
 				@page_refreshes = 1
 				
+				setup
 				content_refresh
+			end
+			
+			def setup
+				
 			end
 			
 			def content_length=(content_length)
