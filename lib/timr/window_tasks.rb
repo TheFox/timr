@@ -15,6 +15,7 @@ module TheFox
 			
 			def content
 				if @tasks.nil? || @tasks.length == 0
+					@has_cursor = false
 					[
 						'',
 						'#### NO TASKS YET ####',
@@ -22,6 +23,7 @@ module TheFox
 						"Press 'n' to create a new task.",
 					]
 				else
+					@has_cursor = true
 					@tasks
 						.sort_by{ |k, v|
 							v.name

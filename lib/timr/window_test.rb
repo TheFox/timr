@@ -4,6 +4,10 @@ module TheFox
 		
 		class TestWindow < Window
 			
+			def setup
+				@has_cursor = true
+			end
+			
 			def content
 				c = []
 				(1..30).each do |n|

@@ -8,6 +8,7 @@ module TheFox
 				@content_length = 0
 				@current_line = 0
 				@cursor = 1
+				@has_cursor = false
 				@content_changed = true
 				@content_refreshes = 1
 				@page = nil
@@ -144,6 +145,10 @@ module TheFox
 			
 			def cursor
 				@cursor
+			end
+			
+			def has_cursor?
+				@has_cursor
 			end
 			
 			def cursor_next_line

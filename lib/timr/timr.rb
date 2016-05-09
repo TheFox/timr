@@ -213,15 +213,21 @@ module TheFox
 						
 						rest = Curses.cols - line_text.length - COL
 						
-						if is_cursor
-							Curses.setpos(line_nr, 0)
-							Curses.attron(Curses.color_pair(Curses::COLOR_BLUE) | Curses::A_BOLD) do
-								Curses.addstr(' ' * COL + line_text + ' ' * rest)
+						if @window.has_cursor?
+							if is_cursor
+								Curses.setpos(line_nr, 0)
+								Curses.attron(Curses.color_pair(Curses::COLOR_BLUE) | Curses::A_BOLD) do
+									Curses.addstr(' ' * COL + line_text + ' ' * rest)
+								end
+							else
+								Curses.setpos(line_nr, COL)
+								Curses.addstr(line_text)
 							end
 						else
 							Curses.setpos(line_nr, COL)
 							Curses.addstr(line_text)
 						end
+						
 						
 						line_nr += 1
 					end
@@ -286,15 +292,21 @@ module TheFox
 						@window.previous_page if !@window.nil?
 						window_refresh
 					when Curses::Key::DOWN
-						#@window.next_line if !@window.nil?
-						@window.cursor_next_line if !@window.nil?
-						#status_text("Cursor: #{@window.cursor} c=#{content_length}  l=#{@window.current_line}  pr=#{@window.page_refreshes}  cr=#{@window.content_refreshes}") if !@window.nil?
-						window_refresh
+						if !@window.nil? && @window.has_cursor?
+							@window.cursor_next_line 
+							
+							#status_text("Cursor: #{@window.cursor} c=#{content_length}  l=#{@window.current_line}  pr=#{@window.page_refreshes}  cr=#{@window.content_refreshes}")
+							
+							window_refresh
+						end
 					when Curses::Key::UP
-						#@window.previous_line if !@window.nil?
-						@window.cursor_previous_line if !@window.nil?
-						#status_text("Cursor: #{@window.cursor} c=#{content_length}  l=#{@window.current_line}  pr=#{@window.page_refreshes}  cr=#{@window.content_refreshes}") if !@window.nil?
-						window_refresh
+						if !@window.nil? && @window.has_cursor?
+							@window.cursor_previous_line
+							
+							#status_text("Cursor: #{@window.cursor} c=#{content_length}  l=#{@window.current_line}  pr=#{@window.page_refreshes}  cr=#{@window.content_refreshes}")
+							
+							window_refresh
+						end
 					when Curses::Key::HOME
 						@window.first_page if !@window.nil?
 						window_refresh
