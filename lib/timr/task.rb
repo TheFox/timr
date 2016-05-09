@@ -106,6 +106,10 @@ module TheFox
 				@meta['description'] = description == '' ? nil : description
 			end
 			
+			def timeline
+				@timeline
+			end
+			
 			def start
 				if !running?
 					changed

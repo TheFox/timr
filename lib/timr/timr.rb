@@ -25,12 +25,14 @@ module TheFox
 				tasks_load
 				
 				@window = nil
-				@window_timeline = TimelineWindow.new
 				@window_help = HelpWindow.new
 				@window_test = TestWindow.new
 				
 				@window_tasks = TasksWindow.new
 				@window_tasks.tasks = @tasks
+				
+				@window_timeline = TimelineWindow.new
+				@window_timeline.tasks = @tasks
 			end
 			
 			def init_dirs
@@ -243,10 +245,10 @@ module TheFox
 			def update_content_length
 				cl = content_length
 				
-				@window_timeline.content_length = cl
 				@window_help.content_length = cl
 				@window_test.content_length = cl
 				@window_tasks.content_length = cl
+				@window_timeline.content_length = cl
 			end
 			
 			def refresh
@@ -340,6 +342,7 @@ module TheFox
 							@tasks[task.id] = task
 							@stack.pop_all(task)
 							@window_tasks.content_changed
+							@window_timeline.content_changed
 							
 							status_text("Task '#{task_name}' created: #{task.id}")
 							
@@ -354,6 +357,7 @@ module TheFox
 						@tasks[task.id] = task
 						@stack.push(task)
 						@window_tasks.content_changed
+						@window_timeline.content_changed
 						
 						status_text("Task '#{task_name}' created: #{task.id}")
 						
