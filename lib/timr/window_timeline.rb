@@ -24,8 +24,9 @@ module TheFox
 					@has_cursor = true
 					@tasks
 						.map{ |task_id, task|
-							n = "#{task_id}  #{task.name}"
-							task.timeline.map{ |tl| "#{n}  #{tl['b']} - #{tl['e']}" }
+							task.timeline.map{ |track|
+								"#{task} -- #{track}"
+							}
 						}
 						.flatten
 				end

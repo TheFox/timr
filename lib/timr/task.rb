@@ -1,6 +1,5 @@
 
 require 'time'
-#require 'yaml'
 require 'yaml/store'
 require 'uuid'
 
@@ -23,7 +22,7 @@ module TheFox
 					'created' => Time.now.strftime(TIME_FORMAT),
 					'modified' => Time.now.strftime(TIME_FORMAT),
 				}
-				@time = nil
+				@track = nil
 				@timeline = []
 				
 				@path = path
@@ -36,11 +35,8 @@ module TheFox
 				content = YAML::load_file(path)
 				@meta = content['meta']
 				@timeline = content['timeline']
-					.map{ |time_raw|
-						time = {
-							'b' => Time.parse(time_raw['b']),
-							'e' => Time.parse(time_raw['e']),
-						}
+					.map{ |track_raw|
+						Track.from_h(track_raw)
 					}
 			end
 			
@@ -49,16 +45,8 @@ module TheFox
 					path = File.expand_path("task_#{@meta['id']}.yml", basepath)
 					
 					timeline_c = @timeline
-						.clone
-						.map{ |time|
-							time = time.clone
-							if !time['b'].nil?
-								time['b'] = time['b'].strftime(TIME_FORMAT)
-							end
-							if !time['e'].nil?
-								time['e'] = time['e'].strftime(TIME_FORMAT)
-							end
-							time
+						.map{ |track|
+							track.to_h
 						}
 					
 					store = YAML::Store.new(path)
@@ -113,19 +101,17 @@ module TheFox
 			def start
 				if !running?
 					changed
-					@time = {
-						'b' => Time.now, # begin
-						'e' => nil, # end
-					}
-					@timeline << @time
+					@track = Track.new
+					@timeline << @track
 				end
 				@status = :running
 			end
 			
 			def stop
-				if running? && !@time.nil?
+				if running? && !@track.nil?
 					changed
-					@time['e'] = Time.now
+					@track.end = Time.now
+					@track = nil
 				end
 				@status = :stop
 			end
