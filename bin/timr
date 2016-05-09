@@ -31,8 +31,6 @@ end
 ARGV << '-h' if ARGV.count == 0
 opts.parse(ARGV)
 
-puts 'currently under heavy development'
-
-# timr = TheFox::Timr::Timr.new(@options[:dir])
-# timr.run
-# timr.close
+timr = TheFox::Timr::Timr.new(@options[:dir])
+timr.run
+timr.close
