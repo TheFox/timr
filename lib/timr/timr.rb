@@ -353,6 +353,7 @@ module TheFox
 						
 						@tasks[task.id] = task
 						@stack.push(task)
+						@window_tasks.content_changed
 						
 						status_text("Task '#{task_name}' created: #{task.id}")
 						
