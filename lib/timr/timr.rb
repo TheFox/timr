@@ -111,6 +111,10 @@ module TheFox
 				Curses.refresh
 			end
 			
+			def status_text_error(text)
+				status_text(text, Curses.color_pair(Curses::COLOR_RED) | Curses::A_BOLD)
+			end
+			
 			def status_input(text)
 				Curses.echo
 				Curses.timeout = -1
@@ -398,7 +402,7 @@ module TheFox
 						# Do some work.
 						status_line
 					else
-						status_text("Invalid key '#{key_pressed}' (#{Curses.keyname(key_pressed)})", Curses.color_pair(Curses::COLOR_RED) | Curses::A_BOLD)
+						status_text_error("Invalid key '#{key_pressed}' (#{Curses.keyname(key_pressed)})")
 					end
 				end
 			end
