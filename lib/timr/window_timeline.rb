@@ -24,9 +24,7 @@ module TheFox
 					@has_cursor = true
 					@tasks
 						.map{ |task_id, task|
-							task.timeline.map{ |track|
-								"#{track}   #{task}"
-							}
+							task.timeline
 						}
 						.flatten
 				end
