@@ -55,7 +55,7 @@ module TheFox
 				tbegin_date_s = ''
 				tbegin_date = @tbegin.to_date
 				tend_date_s = ''
-				if tbegin_date != tend_date || !tbegin_date.today?
+				if (tbegin_date != tend_date && !tend_date.nil?) || !tbegin_date.today?
 					tbegin_date_s = @tbegin.strftime('%F')
 					tend_date_s = @tend.strftime('%F') if !@tend.nil?
 				end
