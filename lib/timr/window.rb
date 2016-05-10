@@ -73,7 +73,12 @@ module TheFox
 			end
 			
 			def page_length
-				page.length
+				cpage = page
+				if cpage.nil?
+					0
+				else
+					cpage.length
+				end
 			end
 			
 			def next_page?
