@@ -63,11 +63,13 @@ module TheFox
 			end
 			
 			def push(task)
-				@task.stop if has_task?
-				
-				@task = task
-				@task.start
-				@tasks << @task
+				if !@tasks.include?(task)
+					@task.stop if has_task?
+					
+					@task = task
+					@task.start
+					@tasks << @task
+				end
 			end
 			
 		end
