@@ -345,13 +345,18 @@ module TheFox
 						refresh
 					when 10
 						object = @window.page_object if !@window.nil?
-						status_text("Object: #{object.class}")
+						
+						task = nil
 						if object.is_a?(Task)
-							
+							task = object
 						elsif object.is_a?(Track)
-							
+							task = object.task
+						end
+						
+						if task.nil?
+							status_text("Unrecognized object: #{object.class}")
 						else
-							
+							task_apply(task)
 						end
 					when 'r'
 						refresh

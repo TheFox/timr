@@ -18,6 +18,7 @@ module TheFox
 					'           h .. Help',
 					'           1 .. Timeline Window',
 					'           2 .. Tasks Window',
+					'      RETURN .. Start selected task.',
 					'      KEY UP .. Move Cursor up.',
 					'    KEY DOWN .. Move Cursor down.',
 					'',
