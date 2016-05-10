@@ -314,6 +314,7 @@ module TheFox
 				update_content_length
 				title_line
 				status_line(true)
+				window_show(@window_timeline)
 				
 				loop do
 					key_pressed = Curses.getch
