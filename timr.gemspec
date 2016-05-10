@@ -27,4 +27,6 @@ Gem::Specification.new do |spec|
 	
 	spec.add_dependency 'curses', '~>1.0'
 	spec.add_dependency 'uuid', '~>2.3'
+	
+	spec.add_dependency 'thefox-ext', '~>1.4'
 end
