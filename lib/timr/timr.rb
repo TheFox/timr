@@ -68,7 +68,7 @@ module TheFox
 				end
 			end
 			
-			def init_curses
+			def ui_init_curses
 				Curses.noecho
 				Curses.timeout = TIMEOUT
 				Curses.curs_set(0)
@@ -83,7 +83,7 @@ module TheFox
 				Curses.init_pair(Curses::COLOR_YELLOW, Curses::COLOR_BLACK, Curses::COLOR_YELLOW)
 			end
 			
-			def title_line
+			def ui_title_line
 				title = "#{NAME} #{VERSION} -- #{@base_dir_name}"
 				if Curses.cols <= title.length + 1
 					title = "#{NAME} #{VERSION}"
@@ -99,7 +99,7 @@ module TheFox
 				end
 			end
 			
-			def status_text(text, attrn = Curses::A_NORMAL)
+			def ui_status_text(text, attrn = Curses::A_NORMAL)
 				line_nr = Curses.lines - 1
 				
 				Curses.setpos(line_nr, 0)
@@ -111,16 +111,16 @@ module TheFox
 				Curses.refresh
 			end
 			
-			def status_text_error(text)
-				status_text(text, Curses.color_pair(Curses::COLOR_RED) | Curses::A_BOLD)
+			def ui_status_text_error(text)
+				ui_status_text(text, Curses.color_pair(Curses::COLOR_RED) | Curses::A_BOLD)
 			end
 			
-			def status_input(text)
+			def ui_status_input(text)
 				Curses.echo
 				Curses.timeout = -1
 				Curses.curs_set(1)
 				
-				status_text(text)
+				ui_status_text(text)
 				
 				input = ''
 				abort = false
@@ -150,7 +150,7 @@ module TheFox
 				input
 			end
 			
-			def status_line(init = false)
+			def ui_status_line(init = false)
 				line_nr = Curses.lines - 2
 				
 				Curses.attron(Curses.color_pair(Curses::COLOR_YELLOW) | Curses::A_NORMAL) do
@@ -189,13 +189,13 @@ module TheFox
 				Curses.refresh
 			end
 			
-			def window_show(window)
+			def ui_window_show(window)
 				@window = window
-				window_refresh
+				ui_window_refresh
 			end
 			
-			def window_refresh
-				max_lines = content_length
+			def ui_window_refresh
+				max_lines = ui_content_length
 				(1..max_lines).each do |line_nr|
 					Curses.setpos(line_nr, 0)
 					Curses.clrtoeol
@@ -248,12 +248,12 @@ module TheFox
 				Curses.refresh
 			end
 			
-			def content_length
+			def ui_content_length
 				Curses.lines - RESERVED_LINES - @stack.length
 			end
 			
 			def update_content_length
-				cl = content_length
+				cl = ui_content_length
 				
 				@window_help.content_length = cl
 				@window_test.content_length = cl
@@ -261,15 +261,19 @@ module TheFox
 				@window_timeline.content_length = cl
 			end
 			
-			def refresh
-				update_content_length
-				title_line
-				status_line(true)
-				stack_lines
-				window_refresh
+			def ui_refresh
+				ui_stack_lines_refresh
+				ui_window_refresh
 			end
 			
-			def stack_lines
+			def ui_refresh_all
+				update_content_length
+				ui_title_line
+				ui_status_line(true)
+				ui_refresh
+			end
+			
+			def ui_stack_lines_refresh
 				line_nr = Curses.lines - (3 + (@stack.length - 1))
 				
 				Curses.attron(Curses.color_pair(Curses::COLOR_BLUE)) do
@@ -299,11 +303,9 @@ module TheFox
 					end
 				end
 				
-				@window_tasks.content_changed
-				@window_timeline.content_changed
-				
-				stack_lines
-				window_refresh if !push
+				window_content_changed
+				ui_stack_lines_refresh
+				ui_window_refresh if !push
 			end
 			
 			def task_apply_replace_stack(task)
@@ -318,12 +320,17 @@ module TheFox
 				task_apply(task, true)
 			end
 			
+			def window_content_changed
+				@window_tasks.content_changed
+				@window_timeline.content_changed
+			end
+			
 			def run
-				init_curses
+				ui_init_curses
 				update_content_length
-				title_line
-				status_line(true)
-				window_show(@window_timeline)
+				ui_title_line
+				ui_status_line(true)
+				ui_window_show(@window_timeline)
 				
 				loop do
 					key_pressed = Curses.getch
@@ -331,40 +338,40 @@ module TheFox
 					case key_pressed
 					when Curses::Key::NPAGE
 						@window.next_page if !@window.nil?
-						window_refresh
+						ui_window_refresh
 					when Curses::Key::PPAGE
 						@window.previous_page if !@window.nil?
-						window_refresh
+						ui_window_refresh
 					when Curses::Key::DOWN
 						if !@window.nil? && @window.has_cursor?
 							@window.cursor_next_line 
 							
-							#status_text("Cursor: #{@window.cursor} c=#{content_length}  l=#{@window.current_line}  pr=#{@window.page_refreshes}  cr=#{@window.content_refreshes}")
+							#ui_status_text("Cursor: #{@window.cursor} c=#{ui_content_length}  l=#{@window.current_line}  pr=#{@window.page_refreshes}  cr=#{@window.content_refreshes}")
 							
-							window_refresh
+							ui_window_refresh
 						end
 					when Curses::Key::UP
 						if !@window.nil? && @window.has_cursor?
 							@window.cursor_previous_line
 							
-							#status_text("Cursor: #{@window.cursor} c=#{content_length}  l=#{@window.current_line}  pr=#{@window.page_refreshes}  cr=#{@window.content_refreshes}")
+							#ui_status_text("Cursor: #{@window.cursor} c=#{ui_content_length}  l=#{@window.current_line}  pr=#{@window.page_refreshes}  cr=#{@window.content_refreshes}")
 							
-							window_refresh
+							ui_window_refresh
 						end
 					when Curses::Key::HOME
 						@window.first_page if !@window.nil?
-						window_refresh
+						ui_window_refresh
 					when Curses::Key::END
 						@window.last_page if !@window.nil?
-						window_refresh
+						ui_window_refresh
 					when Curses::Key::RESIZE
 						update_content_length
-						status_text("Resizing: #{Curses.lines}x#{Curses.cols}")
+						ui_status_text("Resizing: #{Curses.lines}x#{Curses.cols}")
 						
 						# Refreshing the complete screen while resizing
 						# can make everything slower. So for fast resizing
 						# comment this line.
-						refresh
+						ui_refresh_all
 					when 10
 						object = @window.page_object if !@window.nil?
 						
@@ -376,7 +383,7 @@ module TheFox
 						end
 						
 						if task.nil?
-							status_text("Unrecognized object: #{object.class}")
+							ui_status_text("Unrecognized object: #{object.class}")
 						else
 							task_apply_replace_stack(task)
 						end
@@ -391,24 +398,24 @@ module TheFox
 						end
 						
 						if task.nil?
-							status_text("Unrecognized object: #{object.class}")
+							ui_status_text("Unrecognized object: #{object.class}")
 						else
 							task_apply_push(task)
 						end
 					when 'r'
-						refresh
-						status_text('')
+						ui_refresh_all
+						ui_status_text('')
 					when 'n'
-						task_name = status_input('New task: ')
+						task_name = ui_status_input('New task: ')
 						if task_name.nil?
-							status_text('Aborted.')
+							ui_status_text('Aborted.')
 						else
-							task_description = status_input('Description: ')
+							task_description = ui_status_input('Description: ')
 							
 							task = @stack.create(task_name, task_description)
 							task_apply_replace_stack(task)
 							
-							status_text("Task '#{task_name}' created: #{task.id}")
+							ui_status_text("Task '#{task_name}' created: #{task.id}")
 						end
 					when 'x'
 						@stack.task.stop if @stack.has_task?
@@ -416,28 +423,28 @@ module TheFox
 						@stack.task.toggle if @stack.has_task?
 					when 'v'
 						if @stack.pop
-							stack_lines
-							window_refresh
+							window_content_changed
+							ui_refresh
 						end
 					when 'f'
 						task_apply_stack_pop_all
 					when 'h', '?'
-						window_show(@window_help)
+						ui_window_show(@window_help)
 					when 't' # Test Windows
-						window_show(@window_test)
+						ui_window_show(@window_test)
 					when '1'
-						window_show(@window_timeline)
+						ui_window_show(@window_timeline)
 					when '2'
-						window_show(@window_tasks)
+						ui_window_show(@window_tasks)
 					when 'w'
 						tasks_save
 					when 'q'
 						break
 					when nil
 						# Do some work.
-						status_line
+						ui_status_line
 					else
-						status_text_error("Invalid key '#{key_pressed}' (#{Curses.keyname(key_pressed)})")
+						ui_status_text_error("Invalid key '#{key_pressed}' (#{Curses.keyname(key_pressed)})")
 					end
 				end
 			end
