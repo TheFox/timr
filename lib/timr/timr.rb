@@ -351,7 +351,7 @@ module TheFox
 						end
 					when 'p'
 						task = Task.new
-						task.name = "task #{Time.now.strftime(TIME_FORMAT)}"
+						task.name = "task #{Time.now.strftime('%T')}"
 						task.description = 'description1'
 						
 						@tasks[task.id] = task

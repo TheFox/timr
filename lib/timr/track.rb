@@ -1,5 +1,6 @@
 
 require 'time'
+require 'thefox-ext'
 
 module TheFox
 	module Timr
@@ -35,7 +36,19 @@ module TheFox
 			end
 			
 			def to_s
-				@tbegin.strftime('%y-%m-%d %H:%M')
+				tbegin_date = @tbegin.to_date
+				tend_date = @tend.to_date
+				
+				tbegin_date_s = ''
+				tbegin_time_s = @tbegin.strftime('%R')
+				tend_date_s = ''
+				tend_time_s = @tend.strftime('%R')
+				if tbegin_date != tend_date || !tbegin_date.today?
+					tbegin_date_s = @tbegin.strftime('%F')
+					tend_date_s = @tend.strftime('%F')
+				end
+				
+				'%10s %5s - %10s %5s' % [tbegin_date_s, tbegin_time_s, tend_date_s, tend_time_s]
 			end
 			
 			def self.from_h(h)
