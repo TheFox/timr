@@ -27,6 +27,9 @@ module TheFox
 							task.timeline
 						}
 						.flatten
+						.sort{ |task_a, task_b|
+							task_a.begin <=> task_b.begin || task_a.end <=> task_b.end
+						}
 				end
 			end
 			
