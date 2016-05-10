@@ -12,6 +12,7 @@ module TheFox
 					'           c .. Current Task: Start/Continue',
 					'           x .. Current Task: Stop',
 					'           v .. Current Task: Stop and Pop from Stack',
+					'        p, b .. Push and start selected Task.',
 					'           r .. Refresh Window',
 					'           w .. Write all changes.',
 					'           q .. Exit',

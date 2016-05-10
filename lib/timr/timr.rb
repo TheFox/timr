@@ -287,14 +287,26 @@ module TheFox
 				Curses.refresh
 			end
 			
-			def task_apply(task)
+			def task_apply(task, push = false)
 				@tasks[task.id] = task
-				@stack.pop_all(task)
+				if push
+					@stack.push(task)
+				else
+					@stack.pop_all(task)
+				end
 				@window_tasks.content_changed
 				@window_timeline.content_changed
 				
 				stack_lines
-				window_refresh
+				window_refresh if !push
+			end
+			
+			def task_apply_remove_stack(task)
+				task_apply(task, false)
+			end
+			
+			def task_apply_push(task)
+				task_apply(task, true)
 			end
 			
 			def run
@@ -356,7 +368,22 @@ module TheFox
 						if task.nil?
 							status_text("Unrecognized object: #{object.class}")
 						else
-							task_apply(task)
+							task_apply_remove_stack(task)
+						end
+					when 'b', 'p'
+						object = @window.page_object if !@window.nil?
+						
+						task = nil
+						if object.is_a?(Task)
+							task = object
+						elsif object.is_a?(Track)
+							task = object.task
+						end
+						
+						if task.nil?
+							status_text("Unrecognized object: #{object.class}")
+						else
+							task_apply_push(task)
 						end
 					when 'r'
 						refresh
@@ -369,23 +396,10 @@ module TheFox
 							task_description = status_input('Description: ')
 							
 							task = @stack.create(task_name, task_description)
-							task_apply(task)
+							task_apply_remove_stack(task)
 							
 							status_text("Task '#{task_name}' created: #{task.id}")
 						end
-					when 'p'
-						task = Task.new
-						task.name = "task #{Time.now.strftime('%T')}"
-						task.description = 'description1'
-						
-						@tasks[task.id] = task
-						@stack.push(task)
-						@window_tasks.content_changed
-						@window_timeline.content_changed
-						
-						status_text("Task '#{task_name}' created: #{task.id}")
-						
-						stack_lines
 					when 'x'
 						@stack.task.stop if @stack.has_task?
 					when 'c'
