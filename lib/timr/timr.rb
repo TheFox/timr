@@ -206,7 +206,13 @@ module TheFox
 					@window.page.each do |line_object|
 						is_cursor = line_nr == @window.cursor
 						
-						line_text = line_object.to_s
+						line_text = ''
+						if line_object.is_a?(Task) || line_object.is_a?(Track)
+							line_text = line_object.to_list_s
+						else
+							line_text = line_object.to_s
+						end
+						
 						#line_text = "#{line_text} #{is_cursor ? 'X' : ''}"
 						if line_text.length > max_line_len
 							cut = line_text.length - max_line_len + 4
@@ -325,8 +331,13 @@ module TheFox
 						refresh
 					when 10
 						object = @window.page_object if !@window.nil?
+						status_text("Object: #{object.class}")
 						if object.is_a?(Task)
-							status_text("Object: #{object.class} #{object}")
+							
+						elsif object.is_a?(Track)
+							
+						else
+							
 						end
 					when 'r'
 						refresh

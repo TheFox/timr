@@ -128,6 +128,10 @@ module TheFox
 				name
 			end
 			
+			def to_list_s
+				name
+			end
+			
 		end
 		
 	end

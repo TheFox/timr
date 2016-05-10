@@ -41,6 +41,10 @@ module TheFox
 			end
 			
 			def to_s
+				'track'
+			end
+			
+			def to_list_s
 				tend_date = nil
 				tend_time_s = ''
 				if !@tend.nil?
@@ -56,7 +60,7 @@ module TheFox
 					tend_date_s = @tend.strftime('%F') if !@tend.nil?
 				end
 				
-				'%10s %5s - %10s %5s -- %s' % [tbegin_date_s, @tbegin.strftime('%R'), tend_date_s, tend_time_s, @task.to_s]
+				'%10s %5s - %10s %5s -- %s' % [tbegin_date_s, @tbegin.strftime('%R'), tend_date_s, tend_time_s, @task.to_list_s]
 			end
 			
 			def self.from_h(task, h)
