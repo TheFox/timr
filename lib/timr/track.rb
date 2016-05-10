@@ -36,19 +36,22 @@ module TheFox
 			end
 			
 			def to_s
-				tbegin_date = @tbegin.to_date
-				tend_date = @tend.to_date
-				
-				tbegin_date_s = ''
-				tbegin_time_s = @tbegin.strftime('%R')
-				tend_date_s = ''
-				tend_time_s = @tend.strftime('%R')
-				if tbegin_date != tend_date || !tbegin_date.today?
-					tbegin_date_s = @tbegin.strftime('%F')
-					tend_date_s = @tend.strftime('%F')
+				tend_date = nil
+				tend_time_s = ''
+				if !@tend.nil?
+					tend_time_s = !@tend.nil? ? @tend.strftime('%R') : 'xx:xx'
+					tend_date = @tend.to_date
 				end
 				
-				'%10s %5s - %10s %5s' % [tbegin_date_s, tbegin_time_s, tend_date_s, tend_time_s]
+				tbegin_date_s = ''
+				tbegin_date = @tbegin.to_date
+				tend_date_s = ''
+				if tbegin_date != tend_date || !tbegin_date.today?
+					tbegin_date_s = @tbegin.strftime('%F')
+					tend_date_s = @tend.strftime('%F') if !@tend.nil?
+				end
+				
+				'%10s %5s - %10s %5s' % [tbegin_date_s, @tbegin.strftime('%R'), tend_date_s, tend_time_s]
 			end
 			
 			def self.from_h(h)
