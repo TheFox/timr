@@ -34,7 +34,7 @@ module TheFox
 				@tasks.map{ |task|
 					status = task.status
 					status = '*' if task == @task
-					"#{status} #{task.name}"
+					"#{status} #{task}"
 				}
 			end
 			
