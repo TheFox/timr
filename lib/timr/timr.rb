@@ -287,6 +287,16 @@ module TheFox
 				Curses.refresh
 			end
 			
+			def task_apply(task)
+				@tasks[task.id] = task
+				@stack.pop_all(task)
+				@window_tasks.content_changed
+				@window_timeline.content_changed
+				
+				stack_lines
+				window_refresh
+			end
+			
 			def run
 				init_curses
 				update_content_length
@@ -354,15 +364,9 @@ module TheFox
 							task_description = status_input('Description: ')
 							
 							task = @stack.create(task_name, task_description)
-							@tasks[task.id] = task
-							@stack.pop_all(task)
-							@window_tasks.content_changed
-							@window_timeline.content_changed
+							task_apply(task)
 							
 							status_text("Task '#{task_name}' created: #{task.id}")
-							
-							stack_lines
-							window_refresh
 						end
 					when 'p'
 						task = Task.new
