@@ -1,6 +1,7 @@
 
 require 'curses'
 require 'time'
+require 'fileutils'
 
 module TheFox
 	module Timr
@@ -37,10 +38,10 @@ module TheFox
 			
 			def init_dirs
 				if !Dir.exist?(@base_dir_path)
-					Dir.mkdir(@base_dir_path)
+					FileUtils.mkdir_p(@base_dir_path)
 				end
 				if !Dir.exist?(@data_dir_path)
-					Dir.mkdir(@data_dir_path)
+					FileUtils.mkdir_p(@data_dir_path)
 				end
 			end
 			
