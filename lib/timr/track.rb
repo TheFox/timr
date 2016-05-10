@@ -7,7 +7,8 @@ module TheFox
 		
 		class Track
 			
-			def initialize(tbegin = Time.now, tend = nil)
+			def initialize(task, tbegin = Time.now, tend = nil)
+				@task = task
 				@tbegin = tbegin
 				@tend = tend
 			end
@@ -26,6 +27,10 @@ module TheFox
 			
 			def end
 				@tend
+			end
+			
+			def task
+				@task
 			end
 			
 			def to_h
@@ -54,8 +59,8 @@ module TheFox
 				'%10s %5s - %10s %5s' % [tbegin_date_s, @tbegin.strftime('%R'), tend_date_s, tend_time_s]
 			end
 			
-			def self.from_h(h)
-				t = Track.new
+			def self.from_h(task, h)
+				t = Track.new(task)
 				t.begin = Time.parse(h['b'])
 				t.end = Time.parse(h['e'])
 				t

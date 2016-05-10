@@ -36,7 +36,7 @@ module TheFox
 				@meta = content['meta']
 				@timeline = content['timeline']
 					.map{ |track_raw|
-						Track.from_h(track_raw)
+						Track.from_h(self, track_raw)
 					}
 			end
 			
@@ -101,7 +101,7 @@ module TheFox
 			def start
 				if !running?
 					changed
-					@track = Track.new
+					@track = Track.new(self)
 					@timeline << @track
 				end
 				@status = :running
