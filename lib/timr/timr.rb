@@ -47,7 +47,7 @@ module TheFox
 			def tasks_load
 				Dir.chdir(@data_dir_path) do
 					Dir['task_*.yml'].each do |file_name|
-						puts "file: '#{file_name}'"
+						#puts "file: '#{file_name}'"
 						task = Task.new(file_name)
 						@tasks[task.id] = task
 					end
@@ -162,9 +162,13 @@ module TheFox
 					
 					Curses.setpos(line_nr, COL)
 					if @stack.has_task?
-						Curses.addstr(@stack.task.status)
+						status = @stack.task.status
+						run_time_track = '%4d:%02d:%02d' % @stack.task.run_time_track
+						run_time_total = '%4d:%02d:%02d' % @stack.task.run_time_total
+						
+						Curses.addstr("#{status} #{run_time_track} #{run_time_total}")
 					else
-						Curses.addstr(TASK_NO_TASK_LOADED_C)
+						Curses.addstr("#{TASK_NO_TASK_LOADED_C} ----:--:-- ----:--:--")
 					end
 					
 					if Curses.cols > MIN_COLS

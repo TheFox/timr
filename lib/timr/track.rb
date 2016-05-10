@@ -29,6 +29,14 @@ module TheFox
 				@tend
 			end
 			
+			def diff
+				if !@tbegin.nil? && !@tend.nil?
+					(@tend - @tbegin).abs
+				else
+					0
+				end
+			end
+			
 			def task
 				@task
 			end
@@ -60,7 +68,7 @@ module TheFox
 					tend_date_s = @tend.strftime('%F') if !@tend.nil?
 				end
 				
-				'%10s %5s - %5s %10s -- %s' % [tbegin_date_s, @tbegin.strftime('%R'), tend_time_s, tend_date_s, @task.to_list_s]
+				'%10s %5s - %5s %10s    %s' % [tbegin_date_s, @tbegin.strftime('%R'), tend_time_s, tend_date_s, @task.to_list_s]
 			end
 			
 			def self.from_h(task, h)

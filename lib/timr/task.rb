@@ -24,6 +24,7 @@ module TheFox
 				}
 				@track = nil
 				@timeline = []
+				@timeline_diff_total = nil
 				
 				@path = path
 				if !@path.nil?
@@ -112,6 +113,7 @@ module TheFox
 					changed
 					@track.end = Time.now
 					@track = nil
+					@timeline_diff_total = nil
 				end
 				@status = :stop
 			end
@@ -130,6 +132,55 @@ module TheFox
 			
 			def to_list_s
 				name
+			end
+			
+			def run_time_track
+				hours = 0
+				minutes = 0
+				seconds = 0
+				
+				if !@track.nil?
+					diff = (Time.now - @track.begin).to_i.abs
+					hours = diff / 3600
+					
+					diff -= hours * 3600
+					minutes = diff / 60
+					
+					diff -= minutes * 60
+					seconds = diff
+				end
+				
+				[hours, minutes, seconds]
+			end
+			
+			def run_time_total
+				# Cache all other tracks.
+				if @timeline_diff_total.nil?
+					@timeline_diff_total = @timeline
+						.select{ |track| track != @track }
+						.map{ |track| track.diff }
+						.inject(:+)
+				end
+				
+				hours = 0
+				minutes = 0
+				seconds = 0
+				
+				track_diff = 0
+				if !@track.nil?
+					track_diff = (Time.now - @track.begin).to_i.abs
+				end
+				
+				diff = @timeline_diff_total.to_i + track_diff
+				hours = diff / 3600
+				
+				diff -= hours * 3600
+				minutes = diff / 60
+				
+				diff -= minutes * 60
+				seconds = diff
+				
+				[hours, minutes, seconds]
 			end
 			
 		end
