@@ -287,13 +287,18 @@ module TheFox
 				Curses.refresh
 			end
 			
-			def task_apply(task, push = false)
-				@tasks[task.id] = task
-				if push
-					@stack.push(task)
+			def task_apply(task = nil, push = false)
+				if task.nil?
+					@stack.pop_all
 				else
-					@stack.pop_all(task)
+					@tasks[task.id] = task
+					if push
+						@stack.push(task)
+					else
+						@stack.pop_all(task)
+					end
 				end
+				
 				@window_tasks.content_changed
 				@window_timeline.content_changed
 				
@@ -301,8 +306,12 @@ module TheFox
 				window_refresh if !push
 			end
 			
-			def task_apply_remove_stack(task)
+			def task_apply_replace_stack(task)
 				task_apply(task, false)
+			end
+			
+			def task_apply_stack_pop_all
+				task_apply(nil, false)
 			end
 			
 			def task_apply_push(task)
@@ -369,7 +378,7 @@ module TheFox
 						if task.nil?
 							status_text("Unrecognized object: #{object.class}")
 						else
-							task_apply_remove_stack(task)
+							task_apply_replace_stack(task)
 						end
 					when 'b', 'p'
 						object = @window.page_object if !@window.nil?
@@ -397,7 +406,7 @@ module TheFox
 							task_description = status_input('Description: ')
 							
 							task = @stack.create(task_name, task_description)
-							task_apply_remove_stack(task)
+							task_apply_replace_stack(task)
 							
 							status_text("Task '#{task_name}' created: #{task.id}")
 						end
@@ -410,6 +419,8 @@ module TheFox
 							stack_lines
 							window_refresh
 						end
+					when 'f'
+						task_apply_stack_pop_all
 					when 'h', '?'
 						window_show(@window_help)
 					when 't' # Test Windows
