@@ -11,7 +11,7 @@ module TheFox
 				@has_cursor = false
 				@content_changed = true
 				@content_refreshes = 1
-				@page = nil
+				@page = []
 				@page_changed = true
 				@page_refreshes = 1
 				
@@ -56,16 +56,13 @@ module TheFox
 			end
 			
 			def page
-				if @content.nil?
-					[]
-				else
-					if @page.nil? || @page_changed
-						@page = @content[@current_line, @content_length]
-						@page_refreshes += 1
-						@page_changed = false
-					end
-					@page
+				if @page_changed
+					@page = @content[@current_line, @content_length]
+					@page_refreshes += 1
+					@page_changed = false
 				end
+				
+				@page
 			end
 			
 			def page_object
@@ -108,10 +105,10 @@ module TheFox
 				@current_line > 0
 			end
 			
-			def previous_page
+			def previous_page(length = @content_length)
 				if previous_page?
 					page_changed
-					@current_line -= @content_length
+					@current_line -= length
 					if @current_line < 0
 						@current_line = 0
 					end
@@ -129,8 +126,14 @@ module TheFox
 			end
 			
 			def last_page
-				page_changed
-				@current_line = @content.length - @content_length
+				if !last_page?
+					page_changed
+					
+					new_current_line = @content.length - @content_length
+					if new_current_line >= 0
+						@current_line = @content.length - @content_length
+					end
+				end
 				cursor_last_line
 			end
 			
@@ -198,6 +201,9 @@ module TheFox
 			
 			def cursor_last_line
 				@cursor = @content_length
+				if page_length < @content_length
+					@cursor = page_length
+				end
 			end
 			
 			def cursor_first_line

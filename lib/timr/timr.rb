@@ -204,7 +204,6 @@ module TheFox
 				if !@window.nil?
 					line_nr = 1
 					@window.content_refresh
-					page_length = @window.page_length
 					current_line = @window.current_line
 					max_line_len = Curses.cols - 2
 					@window.page.each do |line_object|
@@ -217,7 +216,6 @@ module TheFox
 							line_text = line_object.to_s
 						end
 						
-						#line_text = "#{line_text} #{is_cursor ? 'X' : ''}"
 						if line_text.length > max_line_len
 							cut = line_text.length - max_line_len + 4
 							line_text = "#{line_text[0..-cut]}..."
