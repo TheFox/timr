@@ -24,12 +24,8 @@ module TheFox
 					@has_cursor = true
 					@tasks
 						.map{ |task_id, task|
-							task_name = task.to_s
-							if task_name.length >= 20
-								task_name = "#{task_name[0..16]}..."
-							end
 							task.timeline.map{ |track|
-								"#{track}   #{task_name}"
+								"#{track}   #{task}"
 							}
 						}
 						.flatten
