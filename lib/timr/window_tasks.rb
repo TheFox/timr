@@ -26,7 +26,7 @@ module TheFox
 					@has_cursor = true
 					@tasks
 						.sort_by{ |k, v|
-							v.name
+							v.name.downcase
 						}
 						.map{ |a| a[1] }
 				end
