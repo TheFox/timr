@@ -418,7 +418,7 @@ module TheFox
 							task = @stack.create(task_name, task_description)
 							task_apply_replace_stack(task)
 							
-							ui_status_text("Task '#{task_name}' created: #{task.id}")
+							ui_status_text("Task '#{task_name}' created.")
 						end
 					when 'x'
 						@stack.task.stop if @stack.has_task?
