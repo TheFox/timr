@@ -51,14 +51,16 @@ module TheFox
 			end
 			
 			def pop_all(new_task = nil)
-				@tasks.each do |task|
-					task.stop
-				end
-				@tasks = []
-				@task = nil
-				
-				if !new_task.nil?
-					push(new_task)
+				if @task != new_task
+					@tasks.each do |task|
+						task.stop
+					end
+					@tasks = []
+					@task = nil
+					
+					if !new_task.nil?
+						push(new_task)
+					end
 				end
 			end
 			

@@ -400,9 +400,7 @@ module TheFox
 							task = object.task
 						end
 						
-						if task.nil?
-							ui_status_text("Unrecognized object: #{object.class}")
-						else
+						if !task.nil? # && @stack.task != task
 							task_apply_replace_stack(task)
 						end
 					when 'b', 'p'
