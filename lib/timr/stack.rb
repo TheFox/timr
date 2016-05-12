@@ -17,7 +17,7 @@ module TheFox
 				!@task.nil?
 			end
 			
-			def create(name, description)
+			def create(name, description = nil)
 				@task = Task.new
 				@task.name = name
 				@task.description = description

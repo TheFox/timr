@@ -413,9 +413,7 @@ module TheFox
 						if task_name.nil?
 							ui_status_text('Aborted.')
 						else
-							task_description = ui_status_input('Description: ')
-							
-							task = @stack.create(task_name, task_description)
+							task = @stack.create(task_name)
 							task_apply_replace_stack(task)
 							
 							ui_status_text("Task '#{task_name}' created: #{task.id}")
