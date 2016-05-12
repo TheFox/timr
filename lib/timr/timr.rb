@@ -81,7 +81,7 @@ module TheFox
 				
 				Curses.init_pair(Curses::COLOR_BLUE, Curses::COLOR_WHITE, Curses::COLOR_BLUE)
 				Curses.init_pair(Curses::COLOR_RED, Curses::COLOR_WHITE, Curses::COLOR_RED)
-				Curses.init_pair(Curses::COLOR_YELLOW, Curses::COLOR_BLACK, Curses::COLOR_YELLOW)
+				Curses.init_pair(Curses::COLOR_GREEN, Curses::COLOR_BLACK, Curses::COLOR_GREEN)
 			end
 			
 			def ui_title_line
@@ -154,7 +154,7 @@ module TheFox
 			def ui_status_line(init = false)
 				line_nr = Curses.lines - 2
 				
-				Curses.attron(Curses.color_pair(Curses::COLOR_YELLOW) | Curses::A_NORMAL) do
+				Curses.attron(Curses.color_pair(Curses::COLOR_GREEN) | Curses::A_NORMAL) do
 					if init
 						Curses.setpos(line_nr, 0)
 						Curses.clrtoeol
