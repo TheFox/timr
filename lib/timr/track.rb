@@ -73,8 +73,8 @@ module TheFox
 			
 			def self.from_h(task, h)
 				t = Track.new(task)
-				t.begin = Time.parse(h['b'])
-				t.end = Time.parse(h['e'])
+				t.begin = Time.parse(h['b']).localtime
+				t.end = Time.parse(h['e']).localtime
 				t
 			end
 			
