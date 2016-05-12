@@ -173,7 +173,7 @@ module TheFox
 					end
 					
 					if Curses.cols > MIN_COLS
-						time_format = '%F %R %Z'
+						time_format = '%F %R'
 						if Curses.cols <= 30
 							time_format = '%R'
 						elsif Curses.cols <= 40
@@ -183,7 +183,7 @@ module TheFox
 						elsif Curses.cols <= 60
 							time_format = '%F %R'
 						elsif Curses.cols > 80
-							time_format = '%F %T %Z'
+							time_format = '%F %T'
 						end
 						time_str = Time.now.strftime(time_format)
 						Curses.setpos(line_nr, Curses.cols - time_str.length - 1)
