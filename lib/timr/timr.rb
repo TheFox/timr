@@ -310,6 +310,7 @@ module TheFox
 					end
 				end
 				
+				update_content_length
 				window_content_changed
 				ui_stack_lines_refresh
 				ui_window_refresh if !push
@@ -327,6 +328,9 @@ module TheFox
 				task_apply(task, true)
 			end
 			
+			# Update only Windows which shows the data. For example,
+			# if a task is created all Windows needs to know this,
+			# and only Windows which are using the tasks.
 			def window_content_changed
 				@window_tasks.content_changed
 				@window_timeline.content_changed
