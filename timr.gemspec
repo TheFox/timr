@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
 	spec.email         = 'christian@fox21.at'
 	
 	spec.summary       = %q{Timr}
-	spec.description   = %q{Time Tracking Tool for the Command-line.}
+	spec.description   = %q{Time Tracking for Hackers.}
 	spec.homepage      = TheFox::Timr::HOMEPAGE
 	spec.license       = 'GPL-3.0'
 	

@@ -1,6 +1,6 @@
 # Timr
 
-A Time Tracking Tool for the Command-line.
+Time Tracking for Hackers.
 
 ## License
 
