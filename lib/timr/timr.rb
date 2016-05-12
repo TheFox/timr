@@ -164,12 +164,16 @@ module TheFox
 					Curses.setpos(line_nr, COL)
 					if @stack.has_task?
 						status = @stack.task.status
+						track_begin_time_s = '--:--'
+						if @stack.task.has_track?
+							track_begin_time_s = @stack.task.track.begin.strftime('%R')
+						end
 						run_time_track = '%4d:%02d:%02d' % @stack.task.run_time_track
 						run_time_total = '%4d:%02d:%02d' % @stack.task.run_time_total
 						
-						Curses.addstr("#{status} #{run_time_track} #{run_time_total}")
+						Curses.addstr("#{status} #{track_begin_time_s} #{run_time_track} #{run_time_total}")
 					else
-						Curses.addstr("#{TASK_NO_TASK_LOADED_C} ----:--:-- ----:--:--")
+						Curses.addstr("#{TASK_NO_TASK_LOADED_C} --:-- ----:--:-- ----:--:--")
 					end
 					
 					if Curses.cols > MIN_COLS

@@ -95,6 +95,14 @@ module TheFox
 				@meta['description'] = description == '' ? nil : description
 			end
 			
+			def track
+				@track
+			end
+			
+			def has_track?
+				!@track.nil?
+			end
+			
 			def timeline
 				@timeline
 			end
