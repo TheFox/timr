@@ -24,6 +24,9 @@ module TheFox
 			end
 			
 			def content_length=(content_length)
+				if @content_length != content_length
+					@content_changed = true
+				end
 				@content_length = content_length
 			end
 			

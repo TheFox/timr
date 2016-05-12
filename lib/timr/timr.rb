@@ -245,7 +245,6 @@ module TheFox
 							Curses.addstr(line_text)
 						end
 						
-						
 						line_nr += 1
 					end
 				end
@@ -309,7 +308,7 @@ module TheFox
 				end
 				
 				update_content_length
-				window_content_changed
+				#window_content_changed
 				ui_stack_lines_refresh
 				ui_window_refresh if !push
 			end
@@ -326,12 +325,22 @@ module TheFox
 				task_apply(task, true)
 			end
 			
+			def task_apply_pop
+				if @stack.pop
+					update_content_length
+					#window_content_changed
+					ui_refresh
+				end
+			end
+			
 			# Update only Windows which shows the data. For example,
 			# if a task is created all Windows needs to know this,
 			# and only Windows which are using the tasks.
+			# Not only the length of the rows can change, but also
+			# the actual an change.
 			def window_content_changed
-				@window_tasks.content_changed
-				@window_timeline.content_changed
+				#@window_tasks.content_changed
+				#@window_timeline.content_changed
 			end
 			
 			def run
@@ -431,10 +440,7 @@ module TheFox
 					when 'c'
 						@stack.task.toggle if @stack.has_task?
 					when 'v'
-						if @stack.pop
-							window_content_changed
-							ui_refresh
-						end
+						task_apply_pop
 					when 'f'
 						task_apply_stack_pop_all
 					when 'h', '?'
