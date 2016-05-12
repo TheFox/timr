@@ -308,9 +308,9 @@ module TheFox
 				end
 				
 				update_content_length
-				#window_content_changed
+				window_content_changed
 				ui_stack_lines_refresh
-				ui_window_refresh if !push
+				ui_window_refresh
 			end
 			
 			def task_apply_replace_stack(task)
@@ -339,8 +339,8 @@ module TheFox
 			# Not only the length of the rows can change, but also
 			# the actual an change.
 			def window_content_changed
-				#@window_tasks.content_changed
-				#@window_timeline.content_changed
+				@window_tasks.content_changed
+				@window_timeline.content_changed
 			end
 			
 			def run
@@ -437,8 +437,12 @@ module TheFox
 						end
 					when 'x'
 						@stack.task.stop if @stack.has_task?
+						window_content_changed
+						ui_refresh
 					when 'c'
 						@stack.task.toggle if @stack.has_task?
+						window_content_changed
+						ui_refresh
 					when 'v'
 						task_apply_pop
 					when 'f'
