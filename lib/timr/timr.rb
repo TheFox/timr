@@ -216,8 +216,6 @@ module TheFox
 					current_line = @window.current_line
 					max_line_len = Curses.cols - 2
 					@window.page.each do |line_object|
-						is_cursor = line_nr == @window.cursor
-						
 						line_text = ''
 						if line_object.is_a?(Task) || line_object.is_a?(Track)
 							line_text = line_object.to_list_s
@@ -233,7 +231,7 @@ module TheFox
 						rest = Curses.cols - line_text.length - COL
 						
 						if @window.has_cursor?
-							if is_cursor
+							if line_nr == @window.cursor
 								Curses.setpos(line_nr, 0)
 								Curses.attron(Curses.color_pair(Curses::COLOR_BLUE) | Curses::A_BOLD) do
 									Curses.addstr(' ' * COL + line_text + ' ' * rest)
