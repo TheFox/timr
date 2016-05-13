@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    timr (0.1.0.pre.dev.7)
+    timr (0.1.0.pre.dev.8)
       curses (~> 1.0)
       thefox-ext (~> 1.4)
       uuid (~> 2.3)
