@@ -18,6 +18,10 @@ module TheFox
 			end
 			
 			def begin
+				raise '[DEPRECATED] `begin` is deprecated.  Please use `begin_time` instead'
+			end
+			
+			def begin_time
 				@tbegin
 			end
 			
@@ -26,6 +30,10 @@ module TheFox
 			end
 			
 			def end
+				raise '[DEPRECATED] `begin` is deprecated.  Please use `begin_time` instead'
+			end
+			
+			def end_time
 				@tend
 			end
 			
