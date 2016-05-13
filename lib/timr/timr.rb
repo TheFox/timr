@@ -164,12 +164,16 @@ module TheFox
 					Curses.setpos(line_nr, COL)
 					if @stack.has_task?
 						status = @stack.task.status
+						track_begin_time_s = '--:--'
+						if @stack.task.has_track?
+							track_begin_time_s = @stack.task.track.begin.strftime('%R')
+						end
 						run_time_track = '%4d:%02d:%02d' % @stack.task.run_time_track
 						run_time_total = '%4d:%02d:%02d' % @stack.task.run_time_total
 						
-						Curses.addstr("#{status} #{run_time_track} #{run_time_total}")
+						Curses.addstr("#{status} #{track_begin_time_s} #{run_time_track} #{run_time_total}")
 					else
-						Curses.addstr("#{TASK_NO_TASK_LOADED_C} ----:--:-- ----:--:--")
+						Curses.addstr("#{TASK_NO_TASK_LOADED_C} --:-- ----:--:-- ----:--:--")
 					end
 					
 					if Curses.cols > MIN_COLS
@@ -212,8 +216,6 @@ module TheFox
 					current_line = @window.current_line
 					max_line_len = Curses.cols - 2
 					@window.page.each do |line_object|
-						is_cursor = line_nr == @window.cursor
-						
 						line_text = ''
 						if line_object.is_a?(Task) || line_object.is_a?(Track)
 							line_text = line_object.to_list_s
@@ -229,7 +231,7 @@ module TheFox
 						rest = Curses.cols - line_text.length - COL
 						
 						if @window.has_cursor?
-							if is_cursor
+							if line_nr == @window.cursor
 								Curses.setpos(line_nr, 0)
 								Curses.attron(Curses.color_pair(Curses::COLOR_BLUE) | Curses::A_BOLD) do
 									Curses.addstr(' ' * COL + line_text + ' ' * rest)
@@ -242,7 +244,6 @@ module TheFox
 							Curses.setpos(line_nr, COL)
 							Curses.addstr(line_text)
 						end
-						
 						
 						line_nr += 1
 					end
@@ -306,9 +307,10 @@ module TheFox
 					end
 				end
 				
+				update_content_length
 				window_content_changed
 				ui_stack_lines_refresh
-				ui_window_refresh if !push
+				ui_window_refresh
 			end
 			
 			def task_apply_replace_stack(task)
@@ -323,6 +325,19 @@ module TheFox
 				task_apply(task, true)
 			end
 			
+			def task_apply_pop
+				if @stack.pop
+					update_content_length
+					#window_content_changed
+					ui_refresh
+				end
+			end
+			
+			# Update only Windows which shows the data. For example,
+			# if a task is created all Windows needs to know this,
+			# and only Windows which are using the tasks.
+			# Not only the length of the rows can change, but also
+			# the actual an change.
 			def window_content_changed
 				@window_tasks.content_changed
 				@window_timeline.content_changed
@@ -385,9 +400,7 @@ module TheFox
 							task = object.task
 						end
 						
-						if task.nil?
-							ui_status_text("Unrecognized object: #{object.class}")
-						else
+						if !task.nil? # && @stack.task != task
 							task_apply_replace_stack(task)
 						end
 					when 'b', 'p'
@@ -416,17 +429,18 @@ module TheFox
 							task = @stack.create(task_name)
 							task_apply_replace_stack(task)
 							
-							ui_status_text("Task '#{task_name}' created: #{task.id}")
+							ui_status_text("Task '#{task_name}' created.")
 						end
 					when 'x'
 						@stack.task.stop if @stack.has_task?
+						window_content_changed
+						ui_refresh
 					when 'c'
 						@stack.task.toggle if @stack.has_task?
+						window_content_changed
+						ui_refresh
 					when 'v'
-						if @stack.pop
-							window_content_changed
-							ui_refresh
-						end
+						task_apply_pop
 					when 'f'
 						task_apply_stack_pop_all
 					when 'h', '?'

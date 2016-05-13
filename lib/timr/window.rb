@@ -24,6 +24,9 @@ module TheFox
 			end
 			
 			def content_length=(content_length)
+				if @content_length != content_length
+					@content_changed = true
+				end
 				@content_length = content_length
 			end
 			
@@ -44,11 +47,9 @@ module TheFox
 					@content = content
 					@content_refreshes += 1
 					@content_changed = false
+					
+					@page_changed = true
 				end
-			end
-			
-			def page_changed
-				@page_changed = true
 			end
 			
 			def page_refreshes
@@ -96,7 +97,7 @@ module TheFox
 					add_lines = @content_length
 				end
 				
-				page_changed
+				@page_changed = true
 				@current_line += add_lines if next_page?
 				cursor_set_to_last_if_out_of_range
 			end
@@ -107,7 +108,7 @@ module TheFox
 			
 			def previous_page(length = @content_length)
 				if previous_page?
-					page_changed
+					@page_changed = true
 					@current_line -= length
 					if @current_line < 0
 						@current_line = 0
@@ -116,7 +117,7 @@ module TheFox
 			end
 			
 			def first_page
-				page_changed
+				@page_changed = true
 				@current_line = 0
 				cursor_first_line
 			end
@@ -127,7 +128,7 @@ module TheFox
 			
 			def last_page
 				if !last_page?
-					page_changed
+					@page_changed = true
 					
 					new_current_line = @content.length - @content_length
 					if new_current_line >= 0
@@ -138,12 +139,12 @@ module TheFox
 			end
 			
 			def next_line
-				page_changed
+				@page_changed = true
 				next_page(1)
 			end
 			
 			def previous_line
-				page_changed
+				@page_changed = true
 				previous_page(1)
 			end
 			

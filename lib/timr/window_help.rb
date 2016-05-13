@@ -29,7 +29,6 @@ module TheFox
 					"    #{TASK_NO_TASK_LOADED_C} .. No task loaded.",
 					'    | .. Task stopped.',
 					'    > .. Task is running.',
-					#'',
 				]
 			end
 			
