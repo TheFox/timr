@@ -426,8 +426,7 @@ module TheFox
 							ui_status_text('Aborted.')
 						else
 							task = Task.new
-							task.name = name
-							task.description = description
+							task.name = task_name
 							task_apply_replace_stack(task)
 							
 							ui_status_text("Task '#{task_name}' created.")
