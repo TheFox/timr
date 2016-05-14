@@ -213,7 +213,6 @@ module TheFox
 				if !@window.nil?
 					line_nr = 1
 					@window.content_refresh
-					current_line = @window.current_line
 					max_line_len = Curses.cols - 2
 					@window.page.each do |line_object|
 						line_text = ''

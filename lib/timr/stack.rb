@@ -22,7 +22,6 @@ module TheFox
 			end
 			
 			def tasks_texts
-				show_star = length > 1
 				@tasks.map{ |task|
 					status = task.status
 					status = '*' if task == @task
