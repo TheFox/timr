@@ -4,6 +4,12 @@ rvm:
     - 2.2
 sudo: required
 before_install:
+    - date +"%Y-%m-%d %H:%M:%S %z %Z"
+    - cat /etc/timezone
+    - echo 'UTC' > /etc/timezone
+    - dpkg-reconfigure --frontend noninteractive tzdata
+    - cat /etc/timezone
+    - date +"%Y-%m-%d %H:%M:%S %z %Z"
     - gem update --system
     - gem --version
     - gem install bundler -v '~>1.12'
