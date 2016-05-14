@@ -21,6 +21,7 @@ module TheFox
 				
 				@stack = Stack.new
 				@tasks = {}
+				@last_write = nil
 				
 				init_dirs
 				tasks_load
@@ -61,11 +62,18 @@ module TheFox
 				end
 			end
 			
-			def tasks_save
+			def tasks_save(print_status = false)
+				@last_write = Time.now
+				if print_status
+					ui_status_text("Store files ... #{Time.now.strftime('%T')}")
+				end
 				Dir.chdir(@data_dir_path) do
 					@tasks.each do |task_id, task|
 						task.save_to_file('.')
 					end
+				end
+				if print_status
+					ui_status_text("Files stored. #{Time.now.strftime('%T')}")
 				end
 			end
 			
@@ -342,6 +350,16 @@ module TheFox
 				@window_timeline.content_changed
 			end
 			
+			def write_all_data
+				if @last_write.nil?
+					@last_write = Time.now
+				else
+					if Time.now - @last_write >= 300
+						tasks_save(true)
+					end
+				end
+			end
+			
 			def run
 				ui_init_curses
 				update_content_length
@@ -452,12 +470,13 @@ module TheFox
 					when '2'
 						ui_window_show(@window_tasks)
 					when 'w'
-						tasks_save
+						tasks_save(true)
 					when 'q'
 						break
 					when nil
 						# Do some work.
 						ui_status_line
+						write_all_data
 					else
 						ui_status_text_error("Invalid key '#{key_pressed}' (#{Curses.keyname(key_pressed)})")
 					end
