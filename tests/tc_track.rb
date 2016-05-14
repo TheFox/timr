@@ -59,12 +59,12 @@ class TestTrack < MiniTest::Test
 	
 	def test_to_list_s
 		track = TheFox::Timr::Track.new(nil, Time.parse('1990-08-29 12:34:56').utc)
-		assert_equal('1990-08-29 12:34 - xx:xx               ', track.to_list_s)
+		assert_equal('1990-08-29 10:34 - xx:xx               ', track.to_list_s)
 		
 		task = TheFox::Timr::Task.new
 		task.name = 'task1'
 		track = TheFox::Timr::Track.new(task, Time.parse('1990-08-29 12:34:56').utc)
-		assert_equal('1990-08-29 12:34 - xx:xx               task1', track.to_list_s)
+		assert_equal('1990-08-29 10:34 - xx:xx               task1', track.to_list_s)
 		
 		track.begin_time = Time.parse('1987-06-11 12:00').utc
 		track.end_time   = Time.parse('1987-06-12 23:00').utc
