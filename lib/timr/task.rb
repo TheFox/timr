@@ -42,9 +42,9 @@ module TheFox
 			end
 			
 			def save_to_file(basepath)
+				path = File.expand_path("task_#{@meta['id']}.yml", basepath)
+				
 				if @changed
-					path = File.expand_path("task_#{@meta['id']}.yml", basepath)
-					
 					timeline_c = @timeline
 						.map{ |track|
 							track.to_h
@@ -57,6 +57,8 @@ module TheFox
 					end
 					@changed = false
 				end
+				
+				path
 			end
 			
 			def running?
@@ -66,9 +68,9 @@ module TheFox
 			def status
 				case @status
 				when :running
-					'>'
+					?>
 				when :stop
-					'|'
+					?|
 				end
 			end
 			
@@ -88,6 +90,10 @@ module TheFox
 			def name=(name)
 				changed
 				@meta['name'] = name
+			end
+			
+			def description
+				@meta['description']
 			end
 			
 			def description=(description)
@@ -142,13 +148,13 @@ module TheFox
 				name
 			end
 			
-			def run_time_track
+			def run_time_track(end_time = Time.now)
 				hours = 0
 				minutes = 0
 				seconds = 0
 				
 				if !@track.nil?
-					diff = (Time.now - @track.begin_time).to_i.abs
+					diff = (end_time - @track.begin_time).to_i.abs
 					hours = diff / 3600
 					
 					diff -= hours * 3600
@@ -161,7 +167,7 @@ module TheFox
 				[hours, minutes, seconds]
 			end
 			
-			def run_time_total
+			def run_time_total(end_time = nil)
 				# Cache all other tracks.
 				if @timeline_diff_total.nil?
 					@timeline_diff_total = @timeline
@@ -176,7 +182,7 @@ module TheFox
 				
 				track_diff = 0
 				if !@track.nil?
-					track_diff = (Time.now - @track.begin_time).to_i.abs
+					track_diff = (end_time - @track.begin_time).to_i.abs
 				end
 				
 				diff = @timeline_diff_total.to_i + track_diff
