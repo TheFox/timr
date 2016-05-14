@@ -35,7 +35,7 @@ module TheFox
 			
 			def diff
 				if !@begin_time.nil? && !@end_time.nil?
-					(@end_time - @begin_time).abs.to_i
+					(@end_time.utc - @begin_time.utc).abs.to_i
 				else
 					0
 				end
