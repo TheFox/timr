@@ -167,7 +167,7 @@ module TheFox
 				[hours, minutes, seconds]
 			end
 			
-			def run_time_total(end_time = nil)
+			def run_time_total(end_time = Time.now)
 				# Cache all other tracks.
 				if @timeline_diff_total.nil?
 					@timeline_diff_total = @timeline

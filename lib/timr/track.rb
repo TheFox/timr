@@ -7,10 +7,14 @@ module TheFox
 		
 		class Track
 			
-			def initialize(task, begin_time = Time.now, end_time = nil)
+			def initialize(task = nil, begin_time = Time.now, end_time = nil)
 				@task = task
 				@begin_time = begin_time
 				@end_time = end_time
+			end
+			
+			def task
+				@task
 			end
 			
 			def begin_time=(begin_time)
@@ -31,18 +35,17 @@ module TheFox
 			
 			def diff
 				if !@begin_time.nil? && !@end_time.nil?
-					(@end_time - @begin_time).abs
+					(@end_time - @begin_time).abs.to_i
 				else
 					0
 				end
 			end
 			
-			def task
-				@task
-			end
-			
 			def to_h
-				h = {}
+				h = {
+					'b' => nil,
+					'e' => nil,
+				}
 				h['b'] = @begin_time.strftime(TIME_FORMAT) if !@begin_time.nil?
 				h['e'] = @end_time.strftime(TIME_FORMAT) if !@end_time.nil?
 				h
@@ -54,10 +57,10 @@ module TheFox
 			
 			def to_list_s
 				end_date = nil
-				end_time_s = ''
+				end_time_s = 'xx:xx'
 				if !@end_time.nil?
-					end_time_s = !@end_time.nil? ? @end_time.strftime('%R') : 'xx:xx'
 					end_date = @end_time.to_date
+					end_time_s = @end_time.strftime('%R')
 				end
 				
 				begin_date_s = ''
@@ -68,13 +71,18 @@ module TheFox
 					end_date_s = @end_time.strftime('%F') if !@end_time.nil?
 				end
 				
-				'%10s %5s - %5s %10s    %s' % [begin_date_s, @begin_time.strftime('%R'), end_time_s, end_date_s, @task.to_list_s]
+				task_name = ''
+				if !@task.nil?
+					task_name = @task.to_list_s
+				end
+				
+				'%10s %5s - %5s %10s    %s' % [begin_date_s, @begin_time.strftime('%R'), end_time_s, end_date_s, task_name]
 			end
 			
-			def self.from_h(task, h)
-				t = Track.new(task)
-				t.begin_time = Time.parse(h['b']).localtime
-				t.end_time = Time.parse(h['e']).localtime
+			def self.from_h(task = nil, h)
+				t = Track.new(task, nil)
+				t.begin_time = Time.parse(h['b']).localtime if h.has_key?('b')
+				t.end_time   = Time.parse(h['e']).localtime if h.has_key?('e')
 				t
 			end
 			
