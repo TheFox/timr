@@ -52,6 +52,9 @@ module TheFox
 					if !new_task.nil?
 						push(new_task)
 					end
+					true
+				else
+					false
 				end
 			end
 			
@@ -62,6 +65,9 @@ module TheFox
 					@task = task
 					@task.start
 					@tasks << @task
+					true
+				else
+					false
 				end
 			end
 			
