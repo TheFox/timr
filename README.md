@@ -2,6 +2,10 @@
 
 Time Tracking for Hackers.
 
+## Project Links
+
+- [Timr Gem](https://rubygems.org/gems/timr)
+
 ## License
 
 Copyright (C) 2016 Christian Mayer <http://fox21.at>
