@@ -383,7 +383,7 @@ module TheFox
 						ui_window_refresh
 					when Curses::Key::RESIZE
 						update_content_length
-						ui_status_text("Resizing: #{Curses.lines}x#{Curses.cols}")
+						ui_status_text("Window size: #{Curses.cols}x#{Curses.lines}")
 						
 						# Refreshing the complete screen while resizing
 						# can make everything slower. So for fast resizing
