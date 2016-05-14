@@ -1,21 +1,21 @@
 language: ruby
 rvm:
-	- 2.0
-	- 2.1
-	- 2.2
+    - 2.0
+    - 2.1
+    - 2.2
 sudo: required
 before_install:
-	- gem update --system
-	- gem --version
-	- gem install bundler -v '~>1.12'
-	- bundler --version
+    - gem update --system
+    - gem --version
+    - gem install bundler -v '~>1.12'
+    - bundler --version
 install:
-	- make
-	- gem build timr.gemspec
-	- gem install timr-*.gem
-	- gem list -l timr
+    - make
+    - gem build timr.gemspec
+    - gem install timr-*.gem
+    - gem list -l timr
 script:
-	- make test
-	- cd
-	- which -a timr
-	- timr --version
+    - make test
+    - cd
+    - which -a timr
+    - timr --version
