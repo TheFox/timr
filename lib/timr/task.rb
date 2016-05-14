@@ -119,7 +119,7 @@ module TheFox
 			def stop
 				if running? && !@track.nil?
 					changed
-					@track.end = Time.now
+					@track.end_time = Time.now
 					@track = nil
 					@timeline_diff_total = nil
 				end
@@ -148,7 +148,7 @@ module TheFox
 				seconds = 0
 				
 				if !@track.nil?
-					diff = (Time.now - @track.begin).to_i.abs
+					diff = (Time.now - @track.begin_time).to_i.abs
 					hours = diff / 3600
 					
 					diff -= hours * 3600
@@ -176,7 +176,7 @@ module TheFox
 				
 				track_diff = 0
 				if !@track.nil?
-					track_diff = (Time.now - @track.begin).to_i.abs
+					track_diff = (Time.now - @track.begin_time).to_i.abs
 				end
 				
 				diff = @timeline_diff_total.to_i + track_diff

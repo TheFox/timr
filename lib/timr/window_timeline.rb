@@ -28,7 +28,7 @@ module TheFox
 						}
 						.flatten
 						.sort{ |task_a, task_b|
-							task_a.begin <=> task_b.begin || task_a.end <=> task_b.end
+							task_a.begin_time <=> task_b.begin_time || task_a.end_time <=> task_b.end_time
 						}
 				end
 			end

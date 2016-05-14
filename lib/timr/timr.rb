@@ -166,7 +166,7 @@ module TheFox
 						status = @stack.task.status
 						track_begin_time_s = '--:--'
 						if @stack.task.has_track?
-							track_begin_time_s = @stack.task.track.begin.strftime('%R')
+							track_begin_time_s = @stack.task.track.begin_time.strftime('%R')
 						end
 						run_time_track = '%4d:%02d:%02d' % @stack.task.run_time_track
 						run_time_total = '%4d:%02d:%02d' % @stack.task.run_time_total

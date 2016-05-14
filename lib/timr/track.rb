@@ -7,39 +7,31 @@ module TheFox
 		
 		class Track
 			
-			def initialize(task, tbegin = Time.now, tend = nil)
+			def initialize(task, begin_time = Time.now, end_time = nil)
 				@task = task
-				@tbegin = tbegin
-				@tend = tend
+				@begin_time = begin_time
+				@end_time = end_time
 			end
 			
-			def begin=(tb)
-				@tbegin = tb
-			end
-			
-			def begin
-				raise '[DEPRECATED] `begin` is deprecated.  Please use `begin_time` instead'
+			def begin_time=(begin_time)
+				@begin_time = begin_time
 			end
 			
 			def begin_time
-				@tbegin
+				@begin_time
 			end
 			
-			def end=(te)
-				@tend = te
-			end
-			
-			def end
-				raise '[DEPRECATED] `begin` is deprecated.  Please use `begin_time` instead'
+			def end_time=(end_time)
+				@end_time = end_time
 			end
 			
 			def end_time
-				@tend
+				@end_time
 			end
 			
 			def diff
-				if !@tbegin.nil? && !@tend.nil?
-					(@tend - @tbegin).abs
+				if !@begin_time.nil? && !@end_time.nil?
+					(@end_time - @begin_time).abs
 				else
 					0
 				end
@@ -51,8 +43,8 @@ module TheFox
 			
 			def to_h
 				h = {}
-				h['b'] = @tbegin.strftime(TIME_FORMAT) if !@tbegin.nil?
-				h['e'] = @tend.strftime(TIME_FORMAT) if !@tend.nil?
+				h['b'] = @begin_time.strftime(TIME_FORMAT) if !@begin_time.nil?
+				h['e'] = @end_time.strftime(TIME_FORMAT) if !@end_time.nil?
 				h
 			end
 			
@@ -61,28 +53,28 @@ module TheFox
 			end
 			
 			def to_list_s
-				tend_date = nil
-				tend_time_s = ''
-				if !@tend.nil?
-					tend_time_s = !@tend.nil? ? @tend.strftime('%R') : 'xx:xx'
-					tend_date = @tend.to_date
+				end_date = nil
+				end_time_s = ''
+				if !@end_time.nil?
+					end_time_s = !@end_time.nil? ? @end_time.strftime('%R') : 'xx:xx'
+					end_date = @end_time.to_date
 				end
 				
-				tbegin_date_s = ''
-				tbegin_date = @tbegin.to_date
-				tend_date_s = ''
-				if (tbegin_date != tend_date && !tend_date.nil?) || !tbegin_date.today?
-					tbegin_date_s = @tbegin.strftime('%F')
-					tend_date_s = @tend.strftime('%F') if !@tend.nil?
+				begin_date_s = ''
+				begin_date = @begin_time.to_date
+				end_date_s = ''
+				if (begin_date != end_date && !end_date.nil?) || !begin_date.today?
+					begin_date_s = @begin_time.strftime('%F')
+					end_date_s = @end_time.strftime('%F') if !@end_time.nil?
 				end
 				
-				'%10s %5s - %5s %10s    %s' % [tbegin_date_s, @tbegin.strftime('%R'), tend_time_s, tend_date_s, @task.to_list_s]
+				'%10s %5s - %5s %10s    %s' % [begin_date_s, @begin_time.strftime('%R'), end_time_s, end_date_s, @task.to_list_s]
 			end
 			
 			def self.from_h(task, h)
 				t = Track.new(task)
-				t.begin = Time.parse(h['b']).localtime
-				t.end = Time.parse(h['e']).localtime
+				t.begin_time = Time.parse(h['b']).localtime
+				t.end_time = Time.parse(h['e']).localtime
 				t
 			end
 			
