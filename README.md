@@ -5,6 +5,7 @@ Time Tracking for Hackers.
 ## Project Links
 
 - [Timr Gem](https://rubygems.org/gems/timr)
+- [Travis CI Repository](https://travis-ci.org/TheFox/timr)
 
 ## License
 
