@@ -44,10 +44,12 @@ module TheFox
 			def save_to_file(basepath)
 				path = File.expand_path("task_#{@meta['id']}.yml", basepath)
 				
-				if @changed
+				if @changed || !@track.nil?
 					timeline_c = @timeline
 						.map{ |track|
-							track.to_h
+							h = track.to_h
+							h['e'] = Time.now.utc.strftime(TIME_FORMAT) if !h.has_key?('e') || h['e'].nil?
+							h
 						}
 					
 					store = YAML::Store.new(path)
@@ -88,7 +90,7 @@ module TheFox
 			end
 			
 			def name=(name)
-				changed
+				@changed = true
 				@meta['name'] = name
 			end
 			
@@ -97,7 +99,7 @@ module TheFox
 			end
 			
 			def description=(description)
-				changed
+				@changed = true
 				@meta['description'] = description == '' ? nil : description
 			end
 			
@@ -115,7 +117,7 @@ module TheFox
 			
 			def start
 				if !running?
-					changed
+					@changed = true
 					@track = Track.new(self)
 					@timeline << @track
 				end
@@ -124,7 +126,7 @@ module TheFox
 			
 			def stop
 				if running? && !@track.nil?
-					changed
+					@changed = true
 					@track.end_time = Time.now
 					@track = nil
 					@timeline_diff_total = nil
