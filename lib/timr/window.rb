@@ -10,10 +10,10 @@ module TheFox
 				@cursor = 1
 				@has_cursor = false
 				@content_changed = true
-				@content_refreshes = 1
+				@content_refreshes = 0
 				@page = []
 				@page_changed = true
-				@page_refreshes = 1
+				@page_refreshes = 0
 				
 				setup
 				content_refresh
@@ -190,7 +190,7 @@ module TheFox
 					else
 						
 					end
-				elsif @cursor <= border
+				elsif @cursor < border
 					if previous_page?
 						@cursor = border
 						previous_line
