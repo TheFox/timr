@@ -19,8 +19,8 @@ module TheFox
 					'id' => UUID.new.generate,
 					'name' => nil,
 					'description' => nil,
-					'created' => Time.now.strftime(TIME_FORMAT),
-					'modified' => Time.now.strftime(TIME_FORMAT),
+					'created' => Time.now.utc.strftime(TIME_FORMAT),
+					'modified' => Time.now.utc.strftime(TIME_FORMAT),
 				}
 				@track = nil
 				@timeline = []
@@ -76,7 +76,7 @@ module TheFox
 			
 			def changed
 				@changed = true
-				@meta['modified'] = Time.now.strftime(TIME_FORMAT)
+				@meta['modified'] = Time.now.utc.strftime(TIME_FORMAT)
 			end
 			
 			def id
