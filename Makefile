@@ -5,7 +5,7 @@ ALL_TARGETS_EXT = tmp
 include Makefile.common
 
 dev:
-	RUBYOPT=-rbundler/setup ruby ./bin/timr
+	RUBYOPT=-rbundler/setup ruby ./bin/timr -d tmp/timr -c tmp/timr.conf
 
 .PHONY: test
 test:

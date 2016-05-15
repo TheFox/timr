@@ -2,6 +2,8 @@
 require 'curses'
 require 'time'
 require 'fileutils'
+require 'yaml/store'
+require 'thefox-ext'
 
 module TheFox
 	module Timr
@@ -10,19 +12,29 @@ module TheFox
 			
 			#include Curses
 			
-			def initialize(path)
-				@base_dir_path = File.expand_path(path)
+			def initialize(base_dir_path, config_path = nil)
+				@base_dir_path = File.expand_path(base_dir_path)
 				@base_dir_name = File.basename(@base_dir_path)
 				@data_dir_path = "#{@base_dir_path}/data"
+				@config_path = config_path
 				
-				puts "base: #{@base_dir_path}"
-				puts "name: #{@base_dir_name}"
-				puts "data: #{@data_dir_path}"
+				puts "base:   #{@base_dir_path}"
+				puts "name:   #{@base_dir_name}"
+				puts "data:   #{@data_dir_path}"
+				puts "config: #{@config_path}"
 				
 				@stack = Stack.new
 				@tasks = {}
 				@last_write = nil
+				@config = {
+					'clock' => {
+						'default' => '%F %R',
+						'large' => '%F %T',
+						'short' => '%R',
+					},
+				}
 				
+				config_read
 				init_dirs
 				tasks_load
 				
@@ -35,6 +47,15 @@ module TheFox
 				
 				@window_timeline = TimelineWindow.new
 				@window_timeline.tasks = @tasks
+			end
+			
+			def config_read(path = @config_path)
+				if !path.nil? && File.exist?(path)
+					content = YAML::load_file(path)
+					@config.merge_recursive!(content)
+					
+					pp @config
+				end
 			end
 			
 			def init_dirs
@@ -185,21 +206,19 @@ module TheFox
 					end
 					
 					if Curses.cols > MIN_COLS
-						time_format = '%F %R'
-						if Curses.cols <= 30
-							time_format = '%R'
-						elsif Curses.cols <= 40
-							time_format = '%m-%d %R'
-						elsif Curses.cols <= 50
-							time_format = '%y-%m-%d %R'
+						time_format = @config['clock']['default']
+						if Curses.cols <= 50
+							time_format = nil
 						elsif Curses.cols <= 60
-							time_format = '%F %R'
+							time_format = @config['clock']['short']
 						elsif Curses.cols > 80
-							time_format = '%F %T'
+							time_format = @config['clock']['large']
 						end
-						time_str = Time.now.strftime(time_format)
-						Curses.setpos(line_nr, Curses.cols - time_str.length - 1)
-						Curses.addstr(time_str)
+						if !time_format.nil?
+							time_str = Time.now.strftime(time_format)
+							Curses.setpos(line_nr, Curses.cols - time_str.length - 1)
+							Curses.addstr(time_str)
+						end
 					end
 				end
 				
