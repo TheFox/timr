@@ -8,7 +8,8 @@ module TheFox
 				[
 					'#### Help ####',
 					'',
-					'           n .. Create a New Task',
+					'           n .. Create a new Task and start',
+					'           t .. Create a new Task',
 					'           c .. Current Task: Start/Continue',
 					'           x .. Current Task: Stop',
 					'           v .. Current Task: Stop and Pop from Stack',

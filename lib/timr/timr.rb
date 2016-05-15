@@ -466,6 +466,24 @@ module TheFox
 							
 							ui_status_text("Task '#{task_name}' created.")
 						end
+					when 't'
+						task_name = ui_status_input('New task: ')
+						if task_name.nil?
+							ui_status_text('Aborted.')
+						else
+							task = Task.new
+							task.name = task_name
+							task.save_to_file(@data_dir_path)
+							
+							@tasks[task.id] = task
+							
+							update_content_length
+							window_content_changed
+							ui_stack_lines_refresh
+							ui_window_refresh
+							
+							ui_status_text("Task '#{task_name}' created.")
+						end
 					when 'x'
 						@stack.task.stop if @stack.has_task?
 						window_content_changed
@@ -480,7 +498,7 @@ module TheFox
 						task_apply_stack_pop_all
 					when 'h', '?'
 						ui_window_show(@window_help)
-					when 't' # Test Windows
+					when 'z' # Test Windows
 						ui_window_show(@window_test)
 					when '1'
 						ui_window_show(@window_timeline)
