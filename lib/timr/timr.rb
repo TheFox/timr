@@ -53,8 +53,6 @@ module TheFox
 				if !path.nil? && File.exist?(path)
 					content = YAML::load_file(path)
 					@config.merge_recursive!(content)
-					
-					pp @config
 				end
 			end
 			
