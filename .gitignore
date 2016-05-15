@@ -1,3 +1,4 @@
+CHANGELOG-*.txt
 /.bundle/
 .setup
 /bin/dev
