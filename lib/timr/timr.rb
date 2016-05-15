@@ -462,6 +462,8 @@ module TheFox
 						else
 							task = Task.new
 							task.name = task_name
+							task.save_to_file(@data_dir_path)
+							
 							task_apply_replace_stack(task)
 							
 							ui_status_text("Task '#{task_name}' created.")
