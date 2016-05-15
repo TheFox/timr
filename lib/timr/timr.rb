@@ -181,7 +181,7 @@ module TheFox
 						
 						Curses.addstr("#{status} #{track_begin_time_s} #{run_time_track} #{run_time_total}")
 					else
-						Curses.addstr("#{TASK_NO_TASK_LOADED_C} --:-- ----:--:-- ----:--:--")
+						Curses.addstr(TASK_NO_TASK_LOADED_CHAR)
 					end
 					
 					if Curses.cols > MIN_COLS

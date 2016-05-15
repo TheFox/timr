@@ -16,8 +16,8 @@ module TheFox
 		# - Status Text Line
 		RESERVED_LINES = 3
 		
-		TIME_FORMAT = '%FT%T%z'
+		TIME_FORMAT_FILE = '%FT%T%z'
 		
-		TASK_NO_TASK_LOADED_C = ?-
+		TASK_NO_TASK_LOADED_CHAR = ?-
 	end
 end

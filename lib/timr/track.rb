@@ -56,8 +56,8 @@ module TheFox
 					'b' => nil,
 					'e' => nil,
 				}
-				h['b'] = @begin_time.utc.strftime(TIME_FORMAT) if !@begin_time.nil?
-				h['e'] = @end_time.utc.strftime(TIME_FORMAT) if !@end_time.nil?
+				h['b'] = @begin_time.utc.strftime(TIME_FORMAT_FILE) if !@begin_time.nil?
+				h['e'] = @end_time.utc.strftime(TIME_FORMAT_FILE) if !@end_time.nil?
 				h
 			end
 			

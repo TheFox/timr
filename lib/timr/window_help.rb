@@ -26,7 +26,7 @@ module TheFox
 					'',
 					'Current Task Status',
 					'',
-					"    #{TASK_NO_TASK_LOADED_C} .. No task loaded.",
+					"    #{TASK_NO_TASK_LOADED_CHAR} .. No task loaded.",
 					'    | .. Task stopped.',
 					'    > .. Task is running.',
 				]

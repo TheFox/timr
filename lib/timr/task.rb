@@ -19,8 +19,8 @@ module TheFox
 					'id' => UUID.new.generate,
 					'name' => nil,
 					'description' => nil,
-					'created' => Time.now.utc.strftime(TIME_FORMAT),
-					'modified' => Time.now.utc.strftime(TIME_FORMAT),
+					'created' => Time.now.utc.strftime(TIME_FORMAT_FILE),
+					'modified' => Time.now.utc.strftime(TIME_FORMAT_FILE),
 				}
 				@track = nil
 				@timeline = []
@@ -48,7 +48,7 @@ module TheFox
 					timeline_c = @timeline
 						.map{ |track|
 							h = track.to_h
-							h['e'] = Time.now.utc.strftime(TIME_FORMAT) if !h.has_key?('e') || h['e'].nil?
+							h['e'] = Time.now.utc.strftime(TIME_FORMAT_FILE) if !h.has_key?('e') || h['e'].nil?
 							h
 						}
 					
@@ -78,7 +78,7 @@ module TheFox
 			
 			def changed
 				@changed = true
-				@meta['modified'] = Time.now.utc.strftime(TIME_FORMAT)
+				@meta['modified'] = Time.now.utc.strftime(TIME_FORMAT_FILE)
 			end
 			
 			def id
