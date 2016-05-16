@@ -45,6 +45,5 @@ begin
 	timr.run
 rescue Exception => e
 	timr.close
-	#raise e
-	puts "ERROR: #{e}"
+	raise e
 end
