@@ -273,7 +273,7 @@ module TheFox
 						
 						if $DEBUG
 							Curses.refresh
-							sleep 0.2
+							sleep 0.01
 						end
 					end
 					
@@ -286,7 +286,7 @@ module TheFox
 							if $DEBUG
 								Curses.addstr("-- CLEAR -- #{line_nr} #{Time.now.strftime('%T')}")
 								Curses.refresh
-								sleep 0.1
+								sleep 0.01
 							end
 						end
 					end
@@ -409,15 +409,21 @@ module TheFox
 					case key_pressed
 					when Curses::Key::NPAGE
 						@window.next_page if !@window.nil?
+						
+						ui_status_text('DEBUG: %03d C=%03d L=%03d pr=%03d cr=%03d' % [@window.cursor, ui_content_length, @window.current_line, @window.page_refreshes, @window.content_refreshes]) if $DEBUG
+						
 						ui_window_refresh
 					when Curses::Key::PPAGE
 						@window.previous_page if !@window.nil?
+						
+						ui_status_text('DEBUG: %03d C=%03d L=%03d pr=%03d cr=%03d' % [@window.cursor, ui_content_length, @window.current_line, @window.page_refreshes, @window.content_refreshes]) if $DEBUG
+						
 						ui_window_refresh
 					when Curses::Key::DOWN
 						if !@window.nil? && @window.has_cursor?
 							@window.cursor_next_line 
 							
-							#ui_status_text("Cursor: #{@window.cursor} c=#{ui_content_length}  l=#{@window.current_line}  pr=#{@window.page_refreshes}  cr=#{@window.content_refreshes}")
+							ui_status_text('DEBUG: %03d C=%03d L=%03d pr=%03d cr=%03d' % [@window.cursor, ui_content_length, @window.current_line, @window.page_refreshes, @window.content_refreshes]) if $DEBUG
 							
 							ui_window_refresh
 						end
@@ -425,15 +431,21 @@ module TheFox
 						if !@window.nil? && @window.has_cursor?
 							@window.cursor_previous_line
 							
-							#ui_status_text("Cursor: #{@window.cursor} c=#{ui_content_length}  l=#{@window.current_line}  pr=#{@window.page_refreshes}  cr=#{@window.content_refreshes}")
+							ui_status_text('DEBUG: %03d C=%03d L=%03d pr=%03d cr=%03d' % [@window.cursor, ui_content_length, @window.current_line, @window.page_refreshes, @window.content_refreshes]) if $DEBUG
 							
 							ui_window_refresh
 						end
 					when Curses::Key::HOME
 						@window.first_page if !@window.nil?
+						
+						ui_status_text('DEBUG: %03d C=%03d L=%03d pr=%03d cr=%03d' % [@window.cursor, ui_content_length, @window.current_line, @window.page_refreshes, @window.content_refreshes]) if $DEBUG
+						
 						ui_window_refresh
 					when Curses::Key::END
 						@window.last_page if !@window.nil?
+						
+						ui_status_text('DEBUG: %03d C=%03d L=%03d pr=%03d cr=%03d' % [@window.cursor, ui_content_length, @window.current_line, @window.page_refreshes, @window.content_refreshes]) if $DEBUG
+						
 						ui_window_refresh
 					when Curses::Key::RESIZE
 						update_content_length
