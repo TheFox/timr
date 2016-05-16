@@ -165,8 +165,11 @@ module TheFox
 						input = input[0..-2]
 					when 10
 						break
+					when nil
+						# Do nothing.
+						#sleep TIMEOUT.to_f / 1000
 					else
-						input += key_pressed
+						input += key_pressed.to_s
 					end
 				end
 				if abort
