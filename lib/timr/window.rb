@@ -218,6 +218,15 @@ module TheFox
 				end
 			end
 			
+			def cursor_border_top
+				previous_page? ? 3 : 1
+			end
+			
+			def cursor_border_bottom
+				#next_page? ? @content_length - 2 : -1
+				next_page? ? @content_length - 2 : @content_length
+			end
+			
 		end
 		
 	end

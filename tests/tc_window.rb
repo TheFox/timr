@@ -301,4 +301,44 @@ class TestWindow < MiniTest::Test
 		page = window.page.map{ |page_item| page_item }
 		assert_equal((1..3).map{ |n| 'line %d' % [n] }, page)
 	end
+	
+	def test_cursor_border_top_bottom
+		window = TheFox::Timr::TestWindow.new
+		window.content_length = 7
+		window.content_refresh
+		assert_equal(1, window.cursor_border_top)
+		assert_equal(5, window.cursor_border_bottom)
+		
+		window.cursor_next_line
+		assert_equal(1, window.cursor_border_top)
+		assert_equal(5, window.cursor_border_bottom)
+		
+		window.cursor_next_line
+		assert_equal(1, window.cursor_border_top)
+		assert_equal(5, window.cursor_border_bottom)
+		
+		window.cursor_next_line
+		assert_equal(1, window.cursor_border_top)
+		assert_equal(5, window.cursor_border_bottom)
+		
+		window.cursor_next_line
+		assert_equal(1, window.cursor_border_top)
+		assert_equal(5, window.cursor_border_bottom)
+		
+		window.cursor_next_line
+		assert_equal(3, window.cursor_border_top)
+		assert_equal(5, window.cursor_border_bottom)
+		
+		21.times.each do
+			window.cursor_next_line
+			assert_equal(3, window.cursor_border_top)
+			assert_equal(5, window.cursor_border_bottom)
+		end
+		
+		2.times.each do
+			window.cursor_next_line
+			assert_equal(3, window.cursor_border_top)
+			assert_equal(7, window.cursor_border_bottom)
+		end
+	end
 end
