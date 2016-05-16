@@ -41,5 +41,10 @@ ARGV << '-h' if ARGV.count == 0
 opts.parse(ARGV)
 
 timr = TheFox::Timr::Timr.new(@options[:dir], @options[:config_path])
-timr.run
-timr.close
+begin
+	timr.run
+rescue Exception => e
+	timr.close
+	#raise e
+	puts "ERROR: #{e}"
+end
