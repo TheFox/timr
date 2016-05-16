@@ -33,6 +33,7 @@ module TheFox
 						'short' => '%R',
 					},
 				}
+				#@ui_window_refresh_last = nil
 				
 				config_read
 				init_dirs
@@ -230,10 +231,45 @@ module TheFox
 			
 			def ui_window_show(window)
 				@window = window
-				ui_window_refresh
+				ui_window_refresh_all
 			end
 			
-			def ui_window_refresh
+			def ui_content_line(line_nr, text)
+				Curses.setpos(line_nr, 0)
+				Curses.clrtoeol
+				
+				rest = Curses.cols - text.length - COL
+				if rest < 0
+					rest = 0
+				end
+				out = ' ' * COL + text + ' ' * rest
+				
+				if @window.has_cursor? && line_nr == @window.cursor
+					Curses.attron(Curses.color_pair(Curses::COLOR_BLUE) | Curses::A_BOLD) do
+						Curses.addstr(out)
+					end
+				else
+					Curses.addstr(out)
+				end
+			end
+			
+			def ui_window_refresh(lines)
+				ui_window_refresh_all
+				
+				# if !@window.nil?
+				# 	simple_refresh = @window.cursor_on_inner_range?
+					
+				# 	if !simple_refresh || simple_refresh != @ui_window_refresh_last
+				# 		ui_window_refresh_all
+				# 	else
+				# 		ui_window_refresh_simple(lines)
+				# 	end
+					
+				# 	@ui_window_refresh_last = simple_refresh
+				# end
+			end
+			
+			def ui_window_refresh_all
 				if !@window.nil?
 					line_nr = 1
 					@window.content_refresh
@@ -247,21 +283,11 @@ module TheFox
 						end
 						
 						if line_text.length > max_line_len
-							cut = line_text.length - max_line_len + 4
-							line_text = "#{line_text[0..-cut]}..."
+							range = 0..-(line_text.length - max_line_len + 4)
+							line_text = "#{line_text[range]}..."
 						end
 						
-						Curses.setpos(line_nr, 0)
-						Curses.clrtoeol
-						
-						if @window.has_cursor? && line_nr == @window.cursor
-							Curses.attron(Curses.color_pair(Curses::COLOR_BLUE) | Curses::A_BOLD) do
-								Curses.addstr(' ' * COL + line_text + ' ' * (Curses.cols - line_text.length - COL))
-							end
-						else
-							Curses.setpos(line_nr, COL)
-							Curses.addstr(line_text)
-						end
+						ui_content_line(line_nr, line_text)
 						
 						line_nr += 1
 						
@@ -289,6 +315,46 @@ module TheFox
 				Curses.refresh
 			end
 			
+			def ui_window_refresh_simple(lines)
+				max_line_len = Curses.cols - 2
+				
+				
+				old_cursor = @window.cursor + (lines * -1)
+				old_line_object = @window.page[old_cursor - 1]
+				
+				old_line_text = ''
+				if old_line_object.is_a?(Task) || old_line_object.is_a?(Track)
+					old_line_text = old_line_object.to_list_s
+				else
+					old_line_text = old_line_object.to_s
+				end
+				
+				if old_line_text.length > max_line_len
+					range = 0..-(line_text.length - max_line_len + 4)
+					old_line_text = "#{old_line_text[range]}..."
+				end
+				
+				
+				new_cursor = @window.cursor
+				new_line_object = @window.page[new_cursor - 1]
+				
+				new_line_text = ''
+				if new_line_object.is_a?(Task) || new_line_object.is_a?(Track)
+					new_line_text = new_line_object.to_list_s
+				else
+					new_line_text = new_line_object.to_s
+				end
+				
+				if new_line_text.length > max_line_len
+					range = 0..-(line_text.length - max_line_len + 4)
+					new_line_text = "#{new_line_text[range]}..."
+				end
+				
+				ui_content_line(old_cursor, old_line_text)
+				ui_content_line(@window.cursor, new_line_text)
+				Curses.refresh
+			end
+			
 			def ui_content_length
 				Curses.lines - RESERVED_LINES - @stack.length
 			end
@@ -304,10 +370,12 @@ module TheFox
 			
 			def ui_refresh
 				ui_stack_lines_refresh
-				ui_window_refresh
+				ui_window_refresh_all
 			end
 			
 			def ui_refresh_all
+				#@ui_window_refresh_last = nil
+				
 				update_content_length
 				ui_title_line
 				ui_status_line(true)
@@ -347,7 +415,7 @@ module TheFox
 				update_content_length
 				window_content_changed
 				ui_stack_lines_refresh
-				ui_window_refresh
+				ui_window_refresh_all
 			end
 			
 			def task_apply_replace_stack(task)
@@ -404,43 +472,63 @@ module TheFox
 					when Curses::Key::NPAGE
 						@window.next_page if !@window.nil?
 						
-						ui_status_text('DEBUG: %03d C=%03d L=%03d pr=%03d cr=%03d' % [@window.cursor, ui_content_length, @window.current_line, @window.page_refreshes, @window.content_refreshes]) if $DEBUG
+						if $DEBUG
+							ui_status_text('DEBUG: %03d C=%03d L=%03d pr=%03d cr=%03d' % [@window.cursor, ui_content_length, @window.current_line, @window.page_refreshes, @window.content_refreshes])
+						end
 						
-						ui_window_refresh
+						ui_window_refresh_all
 					when Curses::Key::PPAGE
 						@window.previous_page if !@window.nil?
 						
-						ui_status_text('DEBUG: %03d C=%03d L=%03d pr=%03d cr=%03d' % [@window.cursor, ui_content_length, @window.current_line, @window.page_refreshes, @window.content_refreshes]) if $DEBUG
+						if $DEBUG
+							ui_status_text('DEBUG: %03d C=%03d L=%03d pr=%03d cr=%03d' % [@window.cursor, ui_content_length, @window.current_line, @window.page_refreshes, @window.content_refreshes])
+						end
 						
-						ui_window_refresh
+						ui_window_refresh_all
 					when Curses::Key::DOWN
 						if !@window.nil? && @window.has_cursor?
-							@window.cursor_next_line 
+							simple_refresh_b = @window.cursor_on_inner_range?
 							
-							ui_status_text('DEBUG: %03d C=%03d L=%03d pr=%03d cr=%03d' % [@window.cursor, ui_content_length, @window.current_line, @window.page_refreshes, @window.content_refreshes]) if $DEBUG
+							@window.cursor_next_line
 							
-							ui_window_refresh
+							simple_refresh_a = @window.cursor_on_inner_range?
+							
+							if $DEBUG
+								ui_status_text('DEBUG: %03d C=%03d L=%03d pr=%03d cr=%03d %02d %02d %s %s' % [@window.cursor, ui_content_length, @window.current_line, @window.page_refreshes, @window.content_refreshes, @window.cursor_border_top, @window.cursor_border_bottom, simple_refresh_b ? 'SIMPLE' : 'FULL', simple_refresh_a ? 'SIMPLE' : 'FULL'])
+							end
+							
+							ui_window_refresh(1)
 						end
 					when Curses::Key::UP
 						if !@window.nil? && @window.has_cursor?
+							simple_refresh_b = @window.cursor_on_inner_range?
+							
 							@window.cursor_previous_line
 							
-							ui_status_text('DEBUG: %03d C=%03d L=%03d pr=%03d cr=%03d' % [@window.cursor, ui_content_length, @window.current_line, @window.page_refreshes, @window.content_refreshes]) if $DEBUG
+							simple_refresh_a = @window.cursor_on_inner_range?
 							
-							ui_window_refresh
+							if $DEBUG
+								ui_status_text('DEBUG: %03d C=%03d L=%03d pr=%03d cr=%03d %02d %02d %s %s' % [@window.cursor, ui_content_length, @window.current_line, @window.page_refreshes, @window.content_refreshes, @window.cursor_border_top, @window.cursor_border_bottom, simple_refresh_b ? 'SIMPLE' : 'FULL', simple_refresh_a ? 'SIMPLE' : 'FULL'])
+							end
+							
+							ui_window_refresh(-1)
 						end
 					when Curses::Key::HOME
 						@window.first_page if !@window.nil?
 						
-						ui_status_text('DEBUG: %03d C=%03d L=%03d pr=%03d cr=%03d' % [@window.cursor, ui_content_length, @window.current_line, @window.page_refreshes, @window.content_refreshes]) if $DEBUG
+						if $DEBUG
+							ui_status_text('DEBUG: %03d C=%03d L=%03d pr=%03d cr=%03d' % [@window.cursor, ui_content_length, @window.current_line, @window.page_refreshes, @window.content_refreshes])
+						end
 						
-						ui_window_refresh
+						ui_window_refresh_all
 					when Curses::Key::END
 						@window.last_page if !@window.nil?
 						
-						ui_status_text('DEBUG: %03d C=%03d L=%03d pr=%03d cr=%03d' % [@window.cursor, ui_content_length, @window.current_line, @window.page_refreshes, @window.content_refreshes]) if $DEBUG
+						if $DEBUG
+							ui_status_text('DEBUG: %03d C=%03d L=%03d pr=%03d cr=%03d' % [@window.cursor, ui_content_length, @window.current_line, @window.page_refreshes, @window.content_refreshes])
+						end
 						
-						ui_window_refresh
+						ui_window_refresh_all
 					when Curses::Key::RESIZE
 						update_content_length
 						ui_status_text("Window size: #{Curses.cols}x#{Curses.lines}")
@@ -507,7 +595,7 @@ module TheFox
 							update_content_length
 							window_content_changed
 							ui_stack_lines_refresh
-							ui_window_refresh
+							ui_window_refresh_all
 							
 							ui_status_text("Task '#{task_name}' created.")
 						end
@@ -525,12 +613,12 @@ module TheFox
 						task_apply_stack_pop_all
 					when 'h', '?'
 						ui_window_show(@window_help)
-					when 'z' # Test Windows
-						ui_window_show(@window_test)
 					when '1'
 						ui_window_show(@window_timeline)
 					when '2'
 						ui_window_show(@window_tasks)
+					when '3' # Test Windows
+						ui_window_show(@window_test)
 					when 'w'
 						tasks_save(true)
 					when 'q'
