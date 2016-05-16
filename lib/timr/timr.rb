@@ -127,14 +127,16 @@ module TheFox
 				end
 			end
 			
-			def ui_status_text(text, attrn = Curses::A_NORMAL)
+			def ui_status_text(text = nil, attrn = Curses::A_NORMAL)
 				line_nr = Curses.lines - 1
 				
 				Curses.setpos(line_nr, 0)
 				Curses.clrtoeol
-				Curses.setpos(line_nr, COL)
-				Curses.attron(attrn) do
-					Curses.addstr(text)
+				if !text.nil?
+					Curses.setpos(line_nr, COL)
+					Curses.attron(attrn) do
+						Curses.addstr(text)
+					end
 				end
 				Curses.refresh
 			end
@@ -468,7 +470,7 @@ module TheFox
 						end
 					when 'r'
 						ui_refresh_all
-						ui_status_text('')
+						ui_status_text
 					when 'n'
 						task_name = ui_status_input('New task: ')
 						if task_name.nil?
