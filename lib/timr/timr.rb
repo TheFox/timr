@@ -254,15 +254,9 @@ module TheFox
 						Curses.setpos(line_nr, 0)
 						Curses.clrtoeol
 						
-						if @window.has_cursor?
-							if line_nr == @window.cursor
-								Curses.setpos(line_nr, 0)
-								Curses.attron(Curses.color_pair(Curses::COLOR_BLUE) | Curses::A_BOLD) do
-									Curses.addstr(' ' * COL + line_text + ' ' * (Curses.cols - line_text.length - COL))
-								end
-							else
-								Curses.setpos(line_nr, COL)
-								Curses.addstr(line_text)
+						if @window.has_cursor? && line_nr == @window.cursor
+							Curses.attron(Curses.color_pair(Curses::COLOR_BLUE) | Curses::A_BOLD) do
+								Curses.addstr(' ' * COL + line_text + ' ' * (Curses.cols - line_text.length - COL))
 							end
 						else
 							Curses.setpos(line_nr, COL)
