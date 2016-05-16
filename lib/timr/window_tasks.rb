@@ -8,6 +8,10 @@ module TheFox
 			
 			@tasks = nil
 			
+			def setup
+				@tasks = nil
+			end
+			
 			def tasks=(tasks)
 				content_changed
 				@tasks = tasks
