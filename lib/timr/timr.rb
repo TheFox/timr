@@ -229,12 +229,6 @@ module TheFox
 			end
 			
 			def ui_window_refresh
-				max_lines = ui_content_length
-				(1..max_lines).each do |line_nr|
-					Curses.setpos(line_nr, 0)
-					Curses.clrtoeol
-				end
-				
 				if !@window.nil?
 					line_nr = 1
 					@window.content_refresh
@@ -252,13 +246,14 @@ module TheFox
 							line_text = "#{line_text[0..-cut]}..."
 						end
 						
-						rest = Curses.cols - line_text.length - COL
+						Curses.setpos(line_nr, 0)
+						Curses.clrtoeol
 						
 						if @window.has_cursor?
 							if line_nr == @window.cursor
 								Curses.setpos(line_nr, 0)
 								Curses.attron(Curses.color_pair(Curses::COLOR_BLUE) | Curses::A_BOLD) do
-									Curses.addstr(' ' * COL + line_text + ' ' * rest)
+									Curses.addstr(' ' * COL + line_text + ' ' * (Curses.cols - line_text.length - COL))
 								end
 							else
 								Curses.setpos(line_nr, COL)
@@ -270,6 +265,25 @@ module TheFox
 						end
 						
 						line_nr += 1
+						
+						if $DEBUG
+							Curses.refresh
+							sleep 0.2
+						end
+					end
+					
+					window_page_length = @window.page_length
+					content_length = ui_content_length
+					if window_page_length < content_length
+						((window_page_length + 1)..content_length).to_a.each do |line_nr|
+							Curses.setpos(line_nr, 0)
+							Curses.clrtoeol
+							if $DEBUG
+								Curses.addstr("-- CLEAR -- #{line_nr} #{Time.now.strftime('%T')}")
+								Curses.refresh
+								sleep 0.1
+							end
+						end
 					end
 				end
 				
