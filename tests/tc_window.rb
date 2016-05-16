@@ -341,4 +341,85 @@ class TestWindow < MiniTest::Test
 			assert_equal(7, window.cursor_border_bottom)
 		end
 	end
+	
+	def test_cursor_on_inner_range_multiple_pages
+		window = TheFox::Timr::TestWindow.new
+		window.content_length = 7
+		window.content_refresh
+		assert_equal(true, window.cursor_on_inner_range?)
+		
+		window.cursor_next_line
+		assert_equal(true, window.cursor_on_inner_range?)
+		
+		window.cursor_next_line
+		assert_equal(true, window.cursor_on_inner_range?)
+		
+		window.cursor_next_line
+		assert_equal(true, window.cursor_on_inner_range?)
+		
+		window.cursor_next_line
+		assert_equal(true, window.cursor_on_inner_range?)
+		
+		window.cursor_next_line
+		assert_equal(false, window.cursor_on_inner_range?)
+		
+		window.cursor_previous_line
+		assert_equal(true, window.cursor_on_inner_range?)
+		window.cursor_next_line
+		
+		21.times.each do
+			window.cursor_next_line
+			assert_equal(false, window.cursor_on_inner_range?)
+		end
+		
+		window.cursor_next_line
+		assert_equal(true, window.cursor_on_inner_range?)
+		
+		window.cursor_next_line
+		assert_equal(true, window.cursor_on_inner_range?)
+		
+		window.cursor_next_line
+		assert_equal(true, window.cursor_on_inner_range?)
+		
+		window.cursor_previous_line
+		assert_equal(true, window.cursor_on_inner_range?)
+		
+		window.cursor_previous_line
+		assert_equal(true, window.cursor_on_inner_range?)
+		
+		window.cursor_previous_line
+		assert_equal(true, window.cursor_on_inner_range?)
+		
+		window.cursor_previous_line
+		assert_equal(true, window.cursor_on_inner_range?)
+		
+		window.cursor_previous_line
+		assert_equal(false, window.cursor_on_inner_range?)
+		
+		21.times.each do
+			window.cursor_previous_line
+			assert_equal(false, window.cursor_on_inner_range?)
+		end
+		
+		window.cursor_previous_line
+		assert_equal(true, window.cursor_on_inner_range?)
+		
+		window.cursor_previous_line
+		assert_equal(true, window.cursor_on_inner_range?)
+		
+		window.cursor_previous_line
+		assert_equal(true, window.cursor_on_inner_range?)
+	end
+	
+	def test_cursor_on_inner_range_one_page
+		window = TheFox::Timr::TestWindow.new
+		window.content_length = 35
+		window.content_refresh
+		assert_equal(true, window.cursor_on_inner_range?)
+		
+		29.times.each do
+			window.cursor_next_line
+			assert_equal(true, window.cursor_on_inner_range?)
+		end
+	end
 end

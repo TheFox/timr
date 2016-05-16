@@ -227,6 +227,26 @@ module TheFox
 				next_page? ? @content_length - 2 : @content_length
 			end
 			
+			def cursor_on_inner_range?
+				if previous_page?
+					if next_page?
+						# Middle
+						@cursor > cursor_border_top && @cursor < cursor_border_bottom
+					else
+						# Bottom
+						@cursor >= cursor_border_top
+					end
+				else
+					if next_page?
+						# First page.
+						@cursor <= cursor_border_bottom
+					else
+						# Only one page, so middle.
+						true
+					end
+				end
+			end
+			
 		end
 		
 	end
