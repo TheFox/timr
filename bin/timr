@@ -17,7 +17,7 @@ opts = OptionParser.new do |o|
 		@options[:dir] = path
 	end
 	
-	o.on('-p', '--project <name>', 'Project Name: use ~/.timr/NAME as path.') do |name|
+	o.on('-p', '--project <name>', 'Project Name: use ~/.timr/projects/NAME as path.') do |name|
 		@options[:dir] = File.expand_path(name, "#{Dir.home}/.timr/projects")
 	end
 	
