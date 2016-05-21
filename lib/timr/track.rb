@@ -1,5 +1,6 @@
 
 require 'time'
+require 'uuid'
 require 'thefox-ext'
 
 module TheFox
@@ -7,11 +8,42 @@ module TheFox
 		
 		class Track
 			
-			def initialize(task = nil, begin_time = Time.now, end_time = nil)
-				@task = task
-				@begin_time = begin_time
-				@end_time = end_time
+			def initialize
+				@id = UUID.new.generate
+				@parent = nil
+				@parent_id = nil
+				@task = nil
+				@begin_time = nil
+				@end_time = nil
 				@description = nil
+			end
+			
+			def id=(id)
+				@id = id
+			end
+			
+			def id
+				@id
+			end
+			
+			def parent=(parent)
+				@parent = parent
+			end
+			
+			def parent
+				@parent
+			end
+			
+			def parent_id=(parent_id)
+				@parent_id = parent_id
+			end
+			
+			def parent_id
+				@parent_id
+			end
+			
+			def task=(task)
+				@task = task
 			end
 			
 			def task
@@ -48,8 +80,8 @@ module TheFox
 				@description
 			end
 			
-			def description=(description)
-				@description = description == '' ? nil : description
+			def description=(descr_s)
+				@description = descr_s == '' ? nil : descr_s
 			end
 			
 			def diff
@@ -62,18 +94,27 @@ module TheFox
 			
 			def to_h
 				h = {
-					'b' => nil, # begin time
-					'e' => nil, # end time
+					'id' => @id,
+					#'p' => nil, # parent_id
+					#'b' => nil, # begin time
+					#'e' => nil, # end time
 					#'d' => nil, # description
 				}
+				h['p'] = @parent.id if !@parent.nil?
+				h['p'] = @parent_id if !@parent_id.nil?
+				
 				h['b'] = @begin_time.utc.strftime(TIME_FORMAT_FILE) if !@begin_time.nil?
 				h['e'] = @end_time.utc.strftime(TIME_FORMAT_FILE) if !@end_time.nil?
-				h['d'] = @description if !@description.nil?
+				
+				#h['d'] = @description if !@description.nil?
+				d = description
+				h['d'] = d if !d.nil?
+				
 				h
 			end
 			
 			def to_s
-				'track'
+				@id
 			end
 			
 			def to_list_s
@@ -96,22 +137,27 @@ module TheFox
 				if !@task.nil?
 					task_name = @task.to_list_s
 				end
+				#task_name = @id[0..4]
 				
-				description = ''
+				descr_s = ''
 				if !@description.nil? && @description.length > 0
-					description = ": #{@description}"
+					descr_s = ": #{@description}"
 				end
 				
 				'%10s %5s - %5s %10s    %s%s' % [
 					begin_date_s, @begin_time.localtime.strftime('%R'), end_time_s, end_date_s,
-					task_name, description]
+					task_name, descr_s]
 			end
 			
 			def self.from_h(task = nil, h)
-				t = Track.new(task, nil)
+				t = Track.new
+				t.task = task
+				t.id = h['id'] if h.has_key?('id')
+				t.parent_id = h['p'] if h.has_key?('p')
 				t.begin_time = Time.parse(h['b']) if h.has_key?('b')
 				t.end_time   = Time.parse(h['e']) if h.has_key?('e')
 				t.description = h['d'] if h.has_key?('d')
+				
 				t
 			end
 			

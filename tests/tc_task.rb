@@ -8,9 +8,9 @@ require 'timr'
 
 class TestTask < MiniTest::Test
 	def test_class_name
-		task = TheFox::Timr::Task.new
+		task1 = TheFox::Timr::Task.new
 		
-		assert_equal('TheFox::Timr::Task', task.class.to_s)
+		assert_equal('TheFox::Timr::Task', task1.class.to_s)
 	end
 	
 	def test_save_load
@@ -20,7 +20,7 @@ class TestTask < MiniTest::Test
 		assert_equal(false, File.exist?(file_path))
 		
 		task1.name = 'task1'
-		task1.description = 'hello world'
+		task1.description = 'hello world1'
 		file_path = task1.save_to_file('tmp')
 		assert_equal(true, File.exist?(file_path))
 		
@@ -29,12 +29,12 @@ class TestTask < MiniTest::Test
 		
 		assert_equal(task1.id, task2.id)
 		assert_equal('task1', task2.name)
-		assert_equal('hello world', task2.description)
+		assert_equal('hello world1', task2.description)
 		
 		FileUtils.rm_r(file_path)
 	end
 	
-	def test_running
+	def test_status
 		task1 = TheFox::Timr::Task.new
 		assert_equal(false, task1.running?)
 		assert_equal(?|, task1.status)
@@ -46,50 +46,89 @@ class TestTask < MiniTest::Test
 		task1.stop
 		assert_equal(false, task1.running?)
 		assert_equal(?|, task1.status)
+		
+		task1.start
+		assert_equal(true, task1.running?)
+		assert_equal(?>, task1.status)
+		
+		task1.pause
+		assert_equal(false, task1.running?)
+		assert_equal(true, task1.paused?)
+		assert_equal(?#, task1.status)
+		
+		task1.stop
+		assert_equal(false, task1.running?)
+		assert_equal(?|, task1.status)
 	end
 	
-	def test_track
+	def test_start_stop
 		task1 = TheFox::Timr::Task.new
+		assert_equal(false, task1.running?)
 		assert_equal(false, task1.has_track?)
 		assert_equal(0, task1.timeline.length)
 		
-		start_res = task1.start
-		assert_equal(true, start_res)
+		assert_equal(true, task1.start)
+		assert_equal(true, task1.running?)
 		assert_equal(true, task1.has_track?)
 		assert_equal(1, task1.timeline.length)
 		
 		task1.stop
+		assert_equal(false, task1.running?)
 		assert_equal(false, task1.has_track?)
 		assert_equal(1, task1.timeline.length)
 		
-		start_res = task1.start
-		assert_equal(true, start_res)
+		assert_equal(true, task1.start)
+		assert_equal(true, task1.running?)
 		assert_equal(true, task1.has_track?)
 		assert_equal(2, task1.timeline.length)
 		
-		start_res = task1.start
-		assert_equal(false, start_res)
+		assert_equal(false, task1.start)
+		assert_equal(true, task1.running?)
 		assert_equal(true, task1.has_track?)
 		assert_equal(2, task1.timeline.length)
 		
 		task1.stop
+		assert_equal(false, task1.running?)
 		assert_equal(false, task1.has_track?)
 		assert_equal(2, task1.timeline.length)
 		
 		task1.toggle
+		assert_equal(true, task1.running?)
 		assert_equal(true, task1.has_track?)
 		assert_equal(3, task1.timeline.length)
 		
 		task1.toggle
+		assert_equal(false, task1.running?)
 		assert_equal(false, task1.has_track?)
 		assert_equal(3, task1.timeline.length)
+		
+		# Track
+		assert_equal(true, task1.start)
+		
+		track1 = TheFox::Timr::Track.new
+		track1.description = 'hello world1'
+		track2 = TheFox::Timr::Track.new
+		track2.description = 'hello world2'
+		
+		assert_equal(true, task1.start(track1))
+		assert_equal(false, task1.start(track1))
+		assert_equal(true, task1.start(track2))
 	end
 	
 	def test_to_s
 		task1 = TheFox::Timr::Task.new
-		assert_equal(nil, task1.to_s)
+		assert_equal('', task1.to_s)
 		
 		task1.name = 'task1'
+		assert_equal('task1', task1.to_s)
+		
+		track1 = TheFox::Timr::Track.new
+		track1.description = 'hello world1'
+		
+		task1.start(track1)
+		assert_equal('task1: hello world1', task1.to_s)
+		
+		task1.stop
 		assert_equal('task1', task1.to_s)
 	end
 	

@@ -17,7 +17,7 @@ module TheFox
 				!@task.nil?
 			end
 			
-			def length
+			def size
 				@tasks.length
 			end
 			
@@ -34,17 +34,22 @@ module TheFox
 				if !old.nil?
 					old.stop
 					@task = @tasks.last
-					@task.start if has_task?
+					@task.start if !@task.nil?
 					true
 				else
 					false
 				end
 			end
 			
-			def pop_all(new_task = nil)
+			def pop_all(new_task = nil, parent_track = nil)
 				if @task == new_task
-					@task.start
+					#puts 'tasks =='
+					x = @task.start(parent_track)
+					#puts "return #{x}"
+					#puts
+					x
 				else
+					#puts 'stop all tasks'
 					@tasks.each do |task|
 						task.stop
 					end
@@ -52,18 +57,18 @@ module TheFox
 					@task = nil
 					
 					if !new_task.nil?
-						push(new_task)
+						push(new_task, parent_track)
 					end
 					true
 				end
 			end
 			
-			def push(task)
+			def push(task, parent_track = nil)
 				if !@tasks.include?(task)
-					@task.stop if has_task?
+					@task.pause if has_task?
 					
 					@task = task
-					@task.start
+					@task.start(parent_track)
 					@tasks << @task
 					true
 				else

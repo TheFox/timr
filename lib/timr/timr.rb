@@ -275,7 +275,7 @@ module TheFox
 			
 			def ui_window_refresh_all
 				if !@window.nil?
-					line_nr = 1
+					content_line_nr = 1
 					@window.content_refresh
 					max_line_len = Curses.cols - 2
 					@window.page.each do |line_object|
@@ -291,9 +291,9 @@ module TheFox
 							line_text = "#{line_text[range]}..."
 						end
 						
-						ui_content_line(line_nr, line_text)
+						ui_content_line(content_line_nr, line_text)
 						
-						line_nr += 1
+						content_line_nr += 1
 						
 						# if $DEBUG
 						# 	Curses.refresh
@@ -304,12 +304,12 @@ module TheFox
 					window_page_length = @window.page_length
 					content_length = ui_content_length
 					if window_page_length < content_length
-						((window_page_length + 1)..content_length).to_a.each do |line_nr|
-							Curses.setpos(line_nr, 0)
+						((window_page_length + 1)..content_length).to_a.each do |rest_line_nr|
+							Curses.setpos(rest_line_nr, 0)
 							Curses.clrtoeol
 							
 							# if $DEBUG
-							# 	Curses.addstr("-- CLEAR -- #{line_nr} #{Time.now.strftime('%T')}")
+							# 	Curses.addstr("-- CLEAR -- #{rest_line_nr} #{Time.now.strftime('%T')}")
 							# 	Curses.refresh
 							# 	sleep 0.01
 							# end
@@ -361,7 +361,7 @@ module TheFox
 			end
 			
 			def ui_content_length
-				Curses.lines - RESERVED_LINES - @stack.length
+				Curses.lines - RESERVED_LINES - @stack.size
 			end
 			
 			def update_content_length
@@ -373,7 +373,7 @@ module TheFox
 				@window_timeline.content_length = cl
 			end
 			
-			def ui_refresh
+			def ui_refresh_simple
 				ui_stack_lines_refresh
 				ui_window_refresh_all
 			end
@@ -384,11 +384,11 @@ module TheFox
 				update_content_length
 				ui_title_line
 				ui_status_line(true)
-				ui_refresh
+				ui_refresh_simple
 			end
 			
 			def ui_stack_lines_refresh
-				line_nr = Curses.lines - (3 + (@stack.length - 1))
+				line_nr = Curses.lines - (3 + (@stack.size - 1))
 				
 				Curses.attron(Curses.color_pair(Curses::COLOR_BLUE)) do
 					@stack.tasks_texts.reverse.each do |line_text|
@@ -405,15 +405,15 @@ module TheFox
 				Curses.refresh
 			end
 			
-			def task_apply(task = nil, push = false)
+			def task_apply(task = nil, parent_track = nil, push = false)
 				if task.nil?
 					@stack.pop_all
 				else
 					@tasks[task.id] = task
 					if push
-						@stack.push(task)
+						@stack.push(task, parent_track)
 					else
-						@stack.pop_all(task)
+						@stack.pop_all(task, parent_track)
 					end
 				end
 				
@@ -423,23 +423,24 @@ module TheFox
 				ui_window_refresh_all
 			end
 			
-			def task_apply_replace_stack(task)
-				task_apply(task, false)
+			def task_apply_replace_stack(task, parent_track = nil)
+				if !task.nil?
+					task_apply(task, parent_track, false)
+				end
 			end
 			
 			def task_apply_stack_pop_all
-				task_apply(nil, false)
+				task_apply(nil, nil, false)
 			end
 			
-			def task_apply_push(task)
-				task_apply(task, true)
+			def task_apply_push(task, parent_track = nil)
+				task_apply(task, parent_track, true)
 			end
 			
 			def task_apply_pop
 				if @stack.pop
 					update_content_length
-					#window_content_changed
-					ui_refresh
+					ui_refresh_simple
 				end
 			end
 			
@@ -451,6 +452,21 @@ module TheFox
 			def window_content_changed
 				@window_tasks.content_changed
 				@window_timeline.content_changed
+			end
+			
+			def window_page_object
+				object = @window.page_object if !@window.nil?
+				
+				task = nil
+				track = nil
+				if object.is_a?(Task)
+					task = object
+				elsif object.is_a?(Track)
+					task = object.task
+					track = object
+				end
+				
+				[task, track]
 			end
 			
 			def write_all_data
@@ -543,32 +559,27 @@ module TheFox
 						# comment this line.
 						ui_refresh_all
 					when 10
-						object = @window.page_object if !@window.nil?
+						task, track = window_page_object
+						task_apply_replace_stack(task, track)
+					when '#'
+						task, * = window_page_object
 						
-						task = nil
-						if object.is_a?(Task)
-							task = object
-						elsif object.is_a?(Track)
-							task = object.task
-						end
+						track_description = ui_status_input('Track Description: ')
+						ui_status_text("Description: '#{track_description}'")
 						
-						if !task.nil?
-							task_apply_replace_stack(task)
-						end
+						track = Track.new
+						track.task = task
+						track.description = track_description
+						
+						task_apply_replace_stack(task, track)
+						#ui_status_text('OK')
 					when 'b', 'p'
-						object = @window.page_object if !@window.nil?
-						
-						task = nil
-						if object.is_a?(Task)
-							task = object
-						elsif object.is_a?(Track)
-							task = object.task
-						end
+						task, track = window_page_object
 						
 						if task.nil?
 							ui_status_text("Unrecognized object: #{object.class}")
 						else
-							task_apply_push(task)
+							task_apply_push(task, track)
 						end
 					when 'r'
 						ui_refresh_all
@@ -607,11 +618,11 @@ module TheFox
 					when 'x'
 						@stack.task.stop if @stack.has_task?
 						window_content_changed
-						ui_refresh
+						ui_refresh_simple
 					when 'c'
 						@stack.task.toggle if @stack.has_task?
 						window_content_changed
-						ui_refresh
+						ui_refresh_simple
 					when 'v'
 						task_apply_pop
 					when 'f'

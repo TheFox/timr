@@ -20,9 +20,10 @@ module TheFox
 					@has_cursor = false
 					[
 						'',
-						'#### NO TASKS YET ####',
+						'#### NO TRACKS YET ####',
 						'',
 						"Press 'n' to create a new task.",
+						"   Or 'h' to jump to the help page.",
 					]
 				else
 					@has_cursor = true

@@ -67,10 +67,16 @@ module TheFox
 				@status == :running
 			end
 			
+			def paused?
+				@status == :paused
+			end
+			
 			def status
 				case @status
 				when :running
 					?>
+				when :paused
+					?#
 				when :stop
 					?|
 				end
@@ -115,26 +121,61 @@ module TheFox
 				@timeline
 			end
 			
-			def start
+			def start(parent_track = nil)
+				create_new_track = false
+				
 				if running?
-					false
+					if !parent_track.nil?
+						if @track.description != parent_track.description
+							stop
+							create_new_track = true
+						end
+					end
+				elsif paused?
+					parent_track = @track
+					create_new_track = true
 				else
-					@track = Track.new(self)
+					create_new_track = true
+				end
+				
+				if create_new_track
+					@track = Track.new
+					if !parent_track.nil?
+						@track.parent = parent_track
+						@track.description = parent_track.description
+					end
+					
+					@track.task = self
+					@track.begin_time = Time.now
 					@timeline << @track
 					
 					@changed = true
-					@status = :running
-					true
+				end
+				
+				@status = :running
+				
+				create_new_track
+			end
+			
+			def pause
+				if !@track.nil?
+					@status = :paused
+					@changed = true
+					@track.end_time = Time.now
 				end
 			end
 			
 			def stop
-				if running? && !@track.nil?
-					@changed = true
-					@track.end_time = Time.now
+				if !@track.nil?
+					if running?
+						@changed = true
+						@track.end_time = Time.now
+					end
+					
 					@track = nil
 					@timeline_diff_total = nil
 				end
+				
 				@status = :stop
 			end
 			
@@ -147,7 +188,11 @@ module TheFox
 			end
 			
 			def to_s
-				name
+				track_description = ''
+				if has_track? && !@track.description.nil? && @track.description.to_s.length > 0
+					track_description = ": #{@track.description}"
+				end
+				'%s%s' % [name, track_description]
 			end
 			
 			def to_list_s
