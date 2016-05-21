@@ -25,7 +25,7 @@ opts = OptionParser.new do |o|
 		@options[:config_path] = File.expand_path(path)
 	end
 	
-	o.on_tail('-v', '--version', 'Show version.') do
+	o.on_tail('-V', '--version', 'Show version.') do
 		puts "#{TheFox::Timr::NAME} #{TheFox::Timr::VERSION} (#{TheFox::Timr::DATE})"
 		puts "#{TheFox::Timr::HOMEPAGE}"
 		exit
