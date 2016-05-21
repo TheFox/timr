@@ -164,8 +164,10 @@ module TheFox
 						abort = true
 						break
 					when Curses::Key::BACKSPACE
-						Curses.stdscr.delch
-						input = input[0..-2]
+						if input.length > 0
+							Curses.stdscr.delch
+							input = input[0..-2]
+						end
 					when 10
 						break
 					when nil
