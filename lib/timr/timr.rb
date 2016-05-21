@@ -130,6 +130,7 @@ module TheFox
 				end
 			end
 			
+			# This is the line on the bottom of the screen.
 			def ui_status_text(text = nil, attrn = Curses::A_NORMAL)
 				line_nr = Curses.lines - 1
 				
@@ -148,6 +149,7 @@ module TheFox
 				ui_status_text(text, Curses.color_pair(Curses::COLOR_RED) | Curses::A_BOLD)
 			end
 			
+			# Use the Status Text line to get an input from user.
 			def ui_status_input(text)
 				Curses.echo
 				Curses.timeout = -1
@@ -188,6 +190,8 @@ module TheFox
 				input
 			end
 			
+			# The second line from the bottom:
+			# Show current Track status, Track Time Difference, Task Time Total.
 			def ui_status_line(init = false)
 				line_nr = Curses.lines - 2
 				
