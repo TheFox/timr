@@ -550,7 +550,7 @@ module TheFox
 							task = object.task
 						end
 						
-						if !task.nil? # && @stack.task != task
+						if !task.nil?
 							task_apply_replace_stack(task)
 						end
 					when 'b', 'p'
