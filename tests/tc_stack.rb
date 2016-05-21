@@ -64,9 +64,9 @@ class TestStack < MiniTest::Test
 		# if !old.nil?
 		pop_res = stack.pop
 		assert_equal(false, pop_res)
-		
-		
-		# Pop All
+	end
+	
+	def test_pop_all
 		task3 = TheFox::Timr::Task.new
 		task3.name = 'task3'
 		task4 = TheFox::Timr::Task.new
