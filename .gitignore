@@ -1,7 +1,8 @@
-CHANGELOG-*.txt
 /.bundle/
 .setup
 /bin/dev
+CHANGELOG-*.txt
+Gemfile.lock
 /releases/
 README.html
 /tmp/
