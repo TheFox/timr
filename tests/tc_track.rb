@@ -38,6 +38,7 @@ class TestTrack < MiniTest::Test
 		h = track.to_h
 		assert_equal(nil, h['b'])
 		assert_equal(nil, h['e'])
+		assert_equal(nil, h['d'])
 		
 		track.begin_time = Time.parse('1990-02-21 09:45')
 		h = track.to_h
@@ -46,15 +47,18 @@ class TestTrack < MiniTest::Test
 		
 		track.begin_time = Time.parse('1989-10-19 12:59')
 		track.end_time   = Time.parse('2012-12-14 20:45')
+		track.description = 'hello world'
 		h = track.to_h
 		assert_equal('1989-10-19T11:59:00+0000', h['b'])
 		assert_equal('2012-12-14T19:45:00+0000', h['e'])
+		assert_equal('hello world', h['d'])
 		
 		track.begin_time = Time.parse('2013-11-23 23:00')
 		track.end_time   = Time.parse('2013-11-24 09:00')
 		h = track.to_h
 		assert_equal('2013-11-23T22:00:00+0000', h['b'])
 		assert_equal('2013-11-24T08:00:00+0000', h['e'])
+		assert_equal('hello world', h['d'])
 	end
 	
 	def test_to_list_s
@@ -69,6 +73,9 @@ class TestTrack < MiniTest::Test
 		track.begin_time = Time.parse('1987-06-11 12:00:00')
 		track.end_time   = Time.parse('1987-06-12 23:00:00')
 		assert_equal('1987-06-11 12:00 - 23:00 1987-06-12    task1', track.to_list_s)
+		
+		track.description = 'hello world'
+		assert_equal('1987-06-11 12:00 - 23:00 1987-06-12    task1: hello world', track.to_list_s)
 	end
 	
 	def test_from_h
@@ -79,8 +86,10 @@ class TestTrack < MiniTest::Test
 		track = TheFox::Timr::Track.from_h({
 			'b' => '1986-06-18 12:34:56+0000',
 			'e' => '2014-11-11 19:05:12+0000',
+			'd' => 'hello world',
 		})
 		assert_equal('1986-06-18 14:34:56', track.begin_time.strftime('%Y-%m-%d %H:%M:%S'))
 		assert_equal('2014-11-11 20:05:12',   track.end_time.strftime('%Y-%m-%d %H:%M:%S'))
+		assert_equal('hello world', track.description)
 	end
 end

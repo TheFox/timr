@@ -11,6 +11,7 @@ module TheFox
 				@task = task
 				@begin_time = begin_time
 				@end_time = end_time
+				@description = nil
 			end
 			
 			def task
@@ -43,6 +44,14 @@ module TheFox
 				end
 			end
 			
+			def description
+				@description
+			end
+			
+			def description=(description)
+				@description = description == '' ? nil : description
+			end
+			
 			def diff
 				if !@begin_time.nil? && !@end_time.nil?
 					(@end_time - @begin_time).abs.to_i
@@ -53,11 +62,13 @@ module TheFox
 			
 			def to_h
 				h = {
-					'b' => nil,
-					'e' => nil,
+					'b' => nil, # begin time
+					'e' => nil, # end time
+					#'d' => nil, # description
 				}
 				h['b'] = @begin_time.utc.strftime(TIME_FORMAT_FILE) if !@begin_time.nil?
 				h['e'] = @end_time.utc.strftime(TIME_FORMAT_FILE) if !@end_time.nil?
+				h['d'] = @description if !@description.nil?
 				h
 			end
 			
@@ -86,13 +97,21 @@ module TheFox
 					task_name = @task.to_list_s
 				end
 				
-				'%10s %5s - %5s %10s    %s' % [begin_date_s, @begin_time.localtime.strftime('%R'), end_time_s, end_date_s, task_name]
+				description = ''
+				if !@description.nil? && @description.length > 0
+					description = ": #{@description}"
+				end
+				
+				'%10s %5s - %5s %10s    %s%s' % [
+					begin_date_s, @begin_time.localtime.strftime('%R'), end_time_s, end_date_s,
+					task_name, description]
 			end
 			
 			def self.from_h(task = nil, h)
 				t = Track.new(task, nil)
 				t.begin_time = Time.parse(h['b']) if h.has_key?('b')
 				t.end_time   = Time.parse(h['e']) if h.has_key?('e')
+				t.description = h['d'] if h.has_key?('d')
 				t
 			end
 			

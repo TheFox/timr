@@ -20,7 +20,7 @@ class TestTask < MiniTest::Test
 		assert_equal(false, File.exist?(file_path))
 		
 		task1.name = 'task1'
-		task1.description = 'description2'
+		task1.description = 'hello world'
 		file_path = task1.save_to_file('tmp')
 		assert_equal(true, File.exist?(file_path))
 		
@@ -29,7 +29,7 @@ class TestTask < MiniTest::Test
 		
 		assert_equal(task1.id, task2.id)
 		assert_equal('task1', task2.name)
-		assert_equal('description2', task2.description)
+		assert_equal('hello world', task2.description)
 		
 		FileUtils.rm_r(file_path)
 	end
