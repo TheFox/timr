@@ -74,6 +74,8 @@ class TestStack < MiniTest::Test
 		task5 = TheFox::Timr::Task.new
 		task5.name = 'task5'
 		
+		stack = TheFox::Timr::Stack.new
+		
 		stack.push(task3)
 		stack.push(task4)
 		assert_equal(2, stack.length)
@@ -84,13 +86,24 @@ class TestStack < MiniTest::Test
 		pop_all_res = stack.pop_all(task5)
 		assert_equal(false, pop_all_res)
 		assert_equal(1, stack.length)
-		
 		assert_equal(false, task3.running?)
 		assert_equal(false, task4.running?)
 		assert_equal(true, task5.running?)
 		
+		task5_track = task5.track
+		pop_all_res = stack.pop_all(task5)
+		assert_equal(false, pop_all_res)
+		assert_equal(task5_track, task5.track)
+		assert_equal(false, task3.running?)
+		assert_equal(false, task4.running?)
+		assert_equal(true, task5.running?)
+		
+		# Pop All with no new Task.
 		pop_all_res = stack.pop_all
 		assert_equal(true, pop_all_res)
 		assert_equal(0, stack.length)
+		assert_equal(false, task3.running?)
+		assert_equal(false, task4.running?)
+		assert_equal(false, task5.running?)
 	end
 end

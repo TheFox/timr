@@ -42,7 +42,9 @@ module TheFox
 			end
 			
 			def pop_all(new_task = nil)
-				if @task != new_task
+				if @task == new_task
+					@task.start
+				else
 					@tasks.each do |task|
 						task.stop
 					end
@@ -53,8 +55,6 @@ module TheFox
 						push(new_task)
 					end
 					true
-				else
-					false
 				end
 			end
 			
