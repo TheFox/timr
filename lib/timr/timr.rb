@@ -34,6 +34,7 @@ module TheFox
 					},
 				}
 				#@ui_window_refresh_last = nil
+				#@ui_status_line_last = nil
 				
 				config_read
 				init_dirs
@@ -195,6 +196,70 @@ module TheFox
 			def ui_status_line(init = false)
 				line_nr = Curses.lines - 2
 				
+				status_s = ''
+				track_begin_time_s = ''
+				
+				run_time_track_str = ''
+				run_time_track_h = 0
+				run_time_track_m = 0
+				run_time_track_s = 0
+				
+				run_time_total_str = ''
+				run_time_total_h = 0
+				run_time_total_m = 0
+				run_time_total_s = 0
+				
+				time_s = ''
+				
+				stack_has_task = @stack.has_task?.freeze
+				if stack_has_task
+					status_s = @stack.task.status
+					
+					track_begin_time_s = '--:--'
+					if @stack.task.has_track?
+						track_begin_time_s = @stack.task.track.begin_time.strftime('%R')
+					end
+					
+					run_time_track_h, run_time_track_m, run_time_track_s = @stack.task.run_time_track
+					run_time_total_h, run_time_total_m, run_time_total_s = @stack.task.run_time_total
+				else
+					status_s = TASK_NO_TASK_LOADED_CHAR
+				end
+				
+				if Curses.cols > MIN_COLS
+					if stack_has_task
+						run_time_track_str = '%2d:%02d:%02d' % [run_time_track_h, run_time_track_m, run_time_track_s]
+						run_time_total_str = '%2d:%02d:%02d' % [run_time_total_h, run_time_total_m, run_time_total_s]
+					end
+					
+					time_format = @config['clock']['default']
+					if Curses.cols <= 50
+						if stack_has_task
+							run_time_track_str = '%2d:%02d' % [run_time_track_h, run_time_track_m]
+						end
+						run_time_total_str = ''
+						
+						time_format = nil
+					elsif Curses.cols <= 60
+						if stack_has_task
+							run_time_track_str = '%2d:%02d' % [run_time_track_h, run_time_track_m]
+							run_time_total_str = '%2d:%02d' % [run_time_total_h, run_time_total_m]
+						end
+						
+						time_format = @config['clock']['short']
+					elsif Curses.cols > 80
+						time_format = @config['clock']['large']
+					end
+					if !time_format.nil?
+						time_s = Time.now.strftime(time_format)
+					end
+				end
+				
+				line = "#{status_s} #{track_begin_time_s} #{run_time_track_str} #{run_time_total_str}"
+				
+				rest = Curses.cols - COL - line.length - time_s.length - 1
+				line += ' ' * rest + time_s
+				
 				Curses.attron(Curses.color_pair(Curses::COLOR_GREEN) | Curses::A_NORMAL) do
 					if init
 						Curses.setpos(line_nr, 0)
@@ -203,35 +268,7 @@ module TheFox
 					end
 					
 					Curses.setpos(line_nr, COL)
-					if @stack.has_task?
-						status = @stack.task.status
-						track_begin_time_s = '--:--'
-						if @stack.task.has_track?
-							track_begin_time_s = @stack.task.track.begin_time.strftime('%R')
-						end
-						run_time_track = '%4d:%02d:%02d' % @stack.task.run_time_track
-						run_time_total = '%4d:%02d:%02d' % @stack.task.run_time_total
-						
-						Curses.addstr("#{status} #{track_begin_time_s} #{run_time_track} #{run_time_total}")
-					else
-						Curses.addstr(TASK_NO_TASK_LOADED_CHAR)
-					end
-					
-					if Curses.cols > MIN_COLS
-						time_format = @config['clock']['default']
-						if Curses.cols <= 50
-							time_format = nil
-						elsif Curses.cols <= 60
-							time_format = @config['clock']['short']
-						elsif Curses.cols > 80
-							time_format = @config['clock']['large']
-						end
-						if !time_format.nil?
-							time_str = Time.now.strftime(time_format)
-							Curses.setpos(line_nr, Curses.cols - time_str.length - 1)
-							Curses.addstr(time_str)
-						end
-					end
+					Curses.addstr(line)
 				end
 				
 				Curses.refresh
