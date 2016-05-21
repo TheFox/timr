@@ -116,12 +116,15 @@ module TheFox
 			end
 			
 			def start
-				if !running?
+				@status = :running
+				if running?
+					false
+				else
 					@changed = true
 					@track = Track.new(self)
 					@timeline << @track
+					true
 				end
-				@status = :running
 			end
 			
 			def stop

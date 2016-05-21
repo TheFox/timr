@@ -53,7 +53,8 @@ class TestTask < MiniTest::Test
 		assert_equal(false, task1.has_track?)
 		assert_equal(0, task1.timeline.length)
 		
-		task1.start
+		start_res = task1.start
+		assert_equal(true, start_res)
 		assert_equal(true, task1.has_track?)
 		assert_equal(1, task1.timeline.length)
 		
@@ -61,7 +62,13 @@ class TestTask < MiniTest::Test
 		assert_equal(false, task1.has_track?)
 		assert_equal(1, task1.timeline.length)
 		
-		task1.start
+		start_res = task1.start
+		assert_equal(true, start_res)
+		assert_equal(true, task1.has_track?)
+		assert_equal(2, task1.timeline.length)
+		
+		start_res = task1.start
+		assert_equal(false, start_res)
 		assert_equal(true, task1.has_track?)
 		assert_equal(2, task1.timeline.length)
 		
