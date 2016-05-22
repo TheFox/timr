@@ -76,9 +76,9 @@ module TheFox
 				when :running
 					?>
 				when :paused
-					?#
-				when :stop
 					?|
+				when :stop
+					?.
 				end
 			end
 			
@@ -162,6 +162,7 @@ module TheFox
 					@status = :paused
 					@changed = true
 					@track.end_time = Time.now
+					@timeline_diff_total = nil
 				end
 			end
 			
@@ -181,7 +182,7 @@ module TheFox
 			
 			def toggle
 				if running?
-					stop
+					pause
 				else
 					start
 				end
@@ -222,7 +223,13 @@ module TheFox
 				# Cache all other tracks.
 				if @timeline_diff_total.nil?
 					@timeline_diff_total = @timeline
-						.select{ |track| track != @track }
+						.select{ |track|
+							if running?
+								track != @track
+							else
+								true
+							end
+						}
 						.map{ |track| track.diff }
 						.inject(:+)
 				end
@@ -232,8 +239,8 @@ module TheFox
 				seconds = 0
 				
 				track_diff = 0
-				if running? && has_track?
-					track_diff = (end_time - @track.begin_time).to_i.abs
+				if running?
+					track_diff = @track.diff(end_time)
 				end
 				
 				diff = @timeline_diff_total.to_i + track_diff

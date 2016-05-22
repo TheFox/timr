@@ -43,7 +43,7 @@ class TestStack < MiniTest::Test
 		assert_equal(2, stack1.size)
 		assert_equal(true, task2.running?)
 		assert_equal(false, task1.running?)
-		assert_equal(['# task1', '* task2'], stack1.tasks_texts)
+		assert_equal(['| task1', '* task2'], stack1.tasks_texts)
 		
 		# if !@tasks.include?(task)
 		push_res = stack1.push(task2)

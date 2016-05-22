@@ -637,7 +637,7 @@ module TheFox
 							ui_status_text("Task '#{task_name}' created.")
 						end
 					when 'x'
-						@stack.task.stop if @stack.has_task?
+						@stack.task.pause if @stack.has_task?
 						window_content_changed
 						ui_refresh_simple
 					when 'c'

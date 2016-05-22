@@ -40,7 +40,7 @@ class TestTask < MiniTest::Test
 	def test_status
 		task1 = Task.new
 		assert_equal(false, task1.running?)
-		assert_equal(?|, task1.status)
+		assert_equal(?., task1.status)
 		
 		task1.start
 		assert_equal(true, task1.running?)
@@ -48,7 +48,7 @@ class TestTask < MiniTest::Test
 		
 		task1.stop
 		assert_equal(false, task1.running?)
-		assert_equal(?|, task1.status)
+		assert_equal(?., task1.status)
 		
 		task1.start
 		assert_equal(true, task1.running?)
@@ -57,11 +57,11 @@ class TestTask < MiniTest::Test
 		task1.pause
 		assert_equal(false, task1.running?)
 		assert_equal(true, task1.paused?)
-		assert_equal(?#, task1.status)
+		assert_equal(?|, task1.status)
 		
 		task1.stop
 		assert_equal(false, task1.running?)
-		assert_equal(?|, task1.status)
+		assert_equal(?., task1.status)
 	end
 	
 	def test_start_stop
@@ -102,7 +102,7 @@ class TestTask < MiniTest::Test
 		
 		task1.toggle
 		assert_equal(false, task1.running?)
-		assert_equal(false, task1.has_track?)
+		assert_equal(true, task1.has_track?)
 		assert_equal(3, task1.timeline.length)
 		
 		# Track
@@ -145,12 +145,12 @@ class TestTask < MiniTest::Test
 	
 	def test_run_time_total
 		task1 = Task.new
-		task1.toggle
-		task1.toggle
-		task1.toggle
-		task1.toggle
-		task1.toggle
-		task1.toggle
+		task1.toggle # running
+		task1.toggle # paused
+		task1.toggle # running
+		task1.toggle # paused
+		task1.toggle # running
+		task1.toggle # paused
 		
 		timeline = task1.timeline
 		timeline[0].begin_time = Time.parse('1986-11-20 01:01:01')

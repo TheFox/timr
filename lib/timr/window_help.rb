@@ -10,8 +10,8 @@ module TheFox
 					'',
 					'         n .. Create a new Task and start',
 					'         t .. Create a new Task',
-					'         c .. Current Task: Start/Continue',
-					'         x .. Current Task: Stop',
+					'         c .. Current Task: Toggle Start/Continue',
+					'         x .. Current Task: Pause',
 					'         v .. Current Task: Stop and Pop from Stack',
 					'         f .. Stop and deselect all Tasks on the Stack',
 					'      p, b .. Push and start selected Task.',
@@ -29,7 +29,8 @@ module TheFox
 					'Current Task Status',
 					'',
 					"         #{TASK_NO_TASK_LOADED_CHAR} .. No Task loaded.",
-					'         | .. Task stopped.',
+					'         . .. Task is stopped.',
+					'         | .. Task is paused.',
 					'         > .. Task is running.',
 				]
 			end

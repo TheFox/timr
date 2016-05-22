@@ -84,9 +84,11 @@ module TheFox
 				@description
 			end
 			
-			def diff
-				if !@begin_time.nil? && !@end_time.nil?
-					(@end_time - @begin_time).abs.to_i
+			def diff(end_time = nil)
+				end_time = @end_time if !@end_time.nil?
+				
+				if !@begin_time.nil? && !end_time.nil?
+					(end_time - @begin_time).abs.to_i
 				else
 					0
 				end
