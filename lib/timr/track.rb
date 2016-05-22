@@ -92,6 +92,20 @@ module TheFox
 				end
 			end
 			
+			def name
+				name_s = ''
+				if !@task.nil?
+					name_s += @task.to_s
+				end
+				if !@description.nil? && @description.length > 0
+					if name_s.length > 0
+						name_s += ': '
+					end
+					name_s += @description
+				end
+				name_s
+			end
+			
 			def to_h
 				h = {
 					'id' => @id,
@@ -133,20 +147,8 @@ module TheFox
 					end_date_s = @end_time.localtime.strftime('%F') if !@end_time.nil?
 				end
 				
-				task_name = ''
-				if !@task.nil?
-					task_name = @task.to_list_s
-				end
-				#task_name = @id[0..4]
-				
-				descr_s = ''
-				if !@description.nil? && @description.length > 0
-					descr_s = ": #{@description}"
-				end
-				
-				'%10s %5s - %5s %10s    %s%s' % [
-					begin_date_s, @begin_time.localtime.strftime('%R'), end_time_s, end_date_s,
-					task_name, descr_s]
+				'%10s %5s - %5s %10s    %s' % [
+					begin_date_s, @begin_time.localtime.strftime('%R'), end_time_s, end_date_s, name]
 			end
 			
 			def self.from_h(task = nil, h)

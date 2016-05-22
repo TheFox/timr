@@ -654,7 +654,7 @@ module TheFox
 						ui_window_show(@window_timeline)
 					when '2'
 						ui_window_show(@window_tasks)
-					when '3' # Test Windows
+					when 'z' # Test Windows
 						ui_window_show(@window_test)
 					when 'w'
 						tasks_save(true)

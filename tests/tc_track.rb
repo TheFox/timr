@@ -53,6 +53,23 @@ class TestTrack < MiniTest::Test
 		assert_equal(Fixnum, track1.diff.class)
 	end
 	
+	def test_name
+		task1 = Task.new
+		task1.name = 'task1'
+		
+		track1 = Track.new
+		track1.description = 'hello world1'
+		
+		task1.start(track1)
+		assert_equal('hello world1', track1.name)
+		
+		track1.task = task1
+		assert_equal('task1: hello world1', track1.name)
+		
+		task1.stop
+		assert_equal('task1: hello world1', track1.name)
+	end
+	
 	def test_to_h
 		track1 = Track.new
 		

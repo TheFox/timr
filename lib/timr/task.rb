@@ -92,7 +92,7 @@ module TheFox
 			end
 			
 			def name
-				@meta['name']
+				@meta['name'].to_s
 			end
 			
 			def name=(name)
