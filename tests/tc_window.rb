@@ -7,14 +7,17 @@ require 'timr'
 
 
 class TestWindow < MiniTest::Test
+	
+	include TheFox::Timr
+	
 	def test_class_name
-		window1 = TheFox::Timr::Window.new
+		window1 = Window.new
 		
 		assert_equal('TheFox::Timr::Window', window1.class.to_s)
 	end
 	
 	def test_content_refresh
-		window1 = TheFox::Timr::Window.new
+		window1 = Window.new
 		assert_equal(1, window1.content_refreshes)
 		
 		window1.content_length = 10
@@ -35,7 +38,7 @@ class TestWindow < MiniTest::Test
 	end
 	
 	def test_page_refreshes
-		window1 = TheFox::Timr::Window.new
+		window1 = Window.new
 		assert_equal(0, window1.page_refreshes)
 		
 		window1.content_changed
@@ -45,7 +48,7 @@ class TestWindow < MiniTest::Test
 	end
 	
 	def test_page
-		window1 = TheFox::Timr::TestWindow.new
+		window1 = TestWindow.new
 		window1.content_length = 3
 		window1.content_refresh
 		page = window1.page.map{ |page_item| page_item[0..7] }
@@ -60,7 +63,7 @@ class TestWindow < MiniTest::Test
 	end
 	
 	def test_page_object
-		window1 = TheFox::Timr::TestWindow.new
+		window1 = TestWindow.new
 		assert_equal(1, window1.cursor)
 		
 		window1.content_length = 3
@@ -72,7 +75,7 @@ class TestWindow < MiniTest::Test
 	end
 	
 	def test_has_next_page
-		window1 = TheFox::Timr::TestWindow.new
+		window1 = TestWindow.new
 		window1.content_length = 3
 		window1.content_refresh
 		assert_equal(true, window1.next_page?)
@@ -89,7 +92,7 @@ class TestWindow < MiniTest::Test
 	end
 	
 	def test_has_previous_page
-		window1 = TheFox::Timr::TestWindow.new
+		window1 = TestWindow.new
 		window1.content_length = 3
 		window1.content_refresh
 		assert_equal(false, window1.previous_page?)
@@ -100,7 +103,7 @@ class TestWindow < MiniTest::Test
 	end
 	
 	def test_jmp_next_previous_page
-		window1 = TheFox::Timr::TestWindow.new
+		window1 = TestWindow.new
 		window1.content_length = 3
 		window1.content_refresh
 		
@@ -303,7 +306,7 @@ class TestWindow < MiniTest::Test
 	end
 	
 	def test_cursor_border_top_bottom
-		window1 = TheFox::Timr::TestWindow.new
+		window1 = TestWindow.new
 		window1.content_length = 7
 		window1.content_refresh
 		assert_equal(1, window1.cursor_border_top)
@@ -343,7 +346,7 @@ class TestWindow < MiniTest::Test
 	end
 	
 	def test_cursor_on_inner_range_multiple_pages
-		window1 = TheFox::Timr::TestWindow.new
+		window1 = TestWindow.new
 		window1.content_length = 7
 		window1.content_refresh
 		assert_equal(true, window1.cursor_on_inner_range?)
@@ -412,7 +415,7 @@ class TestWindow < MiniTest::Test
 	end
 	
 	def test_cursor_on_inner_range_one_page
-		window1 = TheFox::Timr::TestWindow.new
+		window1 = TestWindow.new
 		window1.content_length = 35
 		window1.content_refresh
 		assert_equal(true, window1.cursor_on_inner_range?)

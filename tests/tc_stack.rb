@@ -5,24 +5,27 @@ require 'timr'
 
 
 class TestStack < MiniTest::Test
+	
+	include TheFox::Timr
+	
 	def test_class_name
-		stack1 = TheFox::Timr::Stack.new
+		stack1 = Stack.new
 		
 		assert_equal('TheFox::Timr::Stack', stack1.class.to_s)
 	end
 	
 	def test_has_task
-		stack1 = TheFox::Timr::Stack.new
+		stack1 = Stack.new
 		assert_equal(false, stack1.has_task?)
 	end
 	
 	def test_push_pop
-		task1 = TheFox::Timr::Task.new
+		task1 = Task.new
 		task1.name = 'task1'
-		task2 = TheFox::Timr::Task.new
+		task2 = Task.new
 		task2.name = 'task2'
 		
-		stack1 = TheFox::Timr::Stack.new
+		stack1 = Stack.new
 		assert_equal([], stack1.tasks_texts)
 		assert_equal(nil, stack1.task)
 		assert_equal(0, stack1.size)
@@ -67,14 +70,14 @@ class TestStack < MiniTest::Test
 	end
 	
 	def test_pop_all
-		task3 = TheFox::Timr::Task.new
+		task3 = Task.new
 		#task3.name = 'task3'
-		task4 = TheFox::Timr::Task.new
+		task4 = Task.new
 		#task4.name = 'task4'
-		task5 = TheFox::Timr::Task.new
+		task5 = Task.new
 		#task5.name = 'task5'
 		
-		stack1 = TheFox::Timr::Stack.new
+		stack1 = Stack.new
 		
 		stack1.push(task3)
 		assert_equal(true, task3.running?)

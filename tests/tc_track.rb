@@ -7,25 +7,28 @@ require 'timr'
 
 
 class TestTrack < MiniTest::Test
+	
+	include TheFox::Timr
+	
 	def test_class_name
-		track1 = TheFox::Timr::Track.new
+		track1 = Track.new
 		
 		assert_equal('TheFox::Timr::Track', track1.class.to_s)
 	end
 	
 	def test_basic
-		track1 = TheFox::Timr::Track.new
+		track1 = Track.new
 		assert_equal(nil, track1.begin_time)
 		assert_equal(nil, track1.end_time)
 	end
 	
 	def test_description
-		track1 = TheFox::Timr::Track.new
+		track1 = Track.new
 		assert_equal(nil, track1.description)
 		
 		track1.description = 'hello world1'
 		
-		track2 = TheFox::Timr::Track.new
+		track2 = Track.new
 		assert_equal(nil, track2.description)
 		
 		track2.parent = track1
@@ -36,7 +39,7 @@ class TestTrack < MiniTest::Test
 	end
 	
 	def test_diff
-		track1 = TheFox::Timr::Track.new
+		track1 = Track.new
 		assert_equal(0, track1.diff)
 		
 		track1.begin_time = Time.parse('1986-04-08 13:37:02')
@@ -51,7 +54,7 @@ class TestTrack < MiniTest::Test
 	end
 	
 	def test_to_h
-		track1 = TheFox::Timr::Track.new
+		track1 = Track.new
 		
 		h = track1.to_h
 		assert_equal(false, h['id'].nil?)
@@ -82,13 +85,13 @@ class TestTrack < MiniTest::Test
 	end
 	
 	def test_to_list_s
-		track1 = TheFox::Timr::Track.new
+		track1 = Track.new
 		track1.begin_time = Time.parse('1990-08-29 12:34:56')
 		assert_equal('1990-08-29 12:34 - xx:xx               ', track1.to_list_s)
 		
-		task1 = TheFox::Timr::Task.new
+		task1 = Task.new
 		task1.name = 'task1'
-		track1 = TheFox::Timr::Track.new
+		track1 = Track.new
 		track1.begin_time = Time.parse('1990-08-29 12:34:56')
 		track1.task = task1
 		assert_equal('1990-08-29 12:34 - xx:xx               task1', track1.to_list_s)
@@ -102,11 +105,11 @@ class TestTrack < MiniTest::Test
 	end
 	
 	def test_from_h
-		track1 = TheFox::Timr::Track.from_h(nil, {})
+		track1 = Track.from_h(nil, {})
 		assert_equal(nil, track1.begin_time)
 		assert_equal(nil, track1.end_time)
 		
-		track1 = TheFox::Timr::Track.from_h(nil, {
+		track1 = Track.from_h(nil, {
 			'id' => 'abc',
 			'b' => '1986-06-18 12:34:56+0000',
 			'e' => '2014-11-11 19:05:12+0000',

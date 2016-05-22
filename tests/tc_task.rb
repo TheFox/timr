@@ -7,14 +7,17 @@ require 'timr'
 
 
 class TestTask < MiniTest::Test
+	
+	include TheFox::Timr
+	
 	def test_class_name
-		task1 = TheFox::Timr::Task.new
+		task1 = Task.new
 		
 		assert_equal('TheFox::Timr::Task', task1.class.to_s)
 	end
 	
 	def test_save_load
-		task1 = TheFox::Timr::Task.new
+		task1 = Task.new
 		
 		file_path = task1.save_to_file('tmp')
 		assert_equal(false, File.exist?(file_path))
@@ -24,7 +27,7 @@ class TestTask < MiniTest::Test
 		file_path = task1.save_to_file('tmp')
 		assert_equal(true, File.exist?(file_path))
 		
-		task2 = TheFox::Timr::Task.new
+		task2 = Task.new
 		task2.load_from_file(file_path)
 		
 		assert_equal(task1.id, task2.id)
@@ -35,7 +38,7 @@ class TestTask < MiniTest::Test
 	end
 	
 	def test_status
-		task1 = TheFox::Timr::Task.new
+		task1 = Task.new
 		assert_equal(false, task1.running?)
 		assert_equal(?|, task1.status)
 		
@@ -62,7 +65,7 @@ class TestTask < MiniTest::Test
 	end
 	
 	def test_start_stop
-		task1 = TheFox::Timr::Task.new
+		task1 = Task.new
 		assert_equal(false, task1.running?)
 		assert_equal(false, task1.has_track?)
 		assert_equal(0, task1.timeline.length)
@@ -105,9 +108,9 @@ class TestTask < MiniTest::Test
 		# Track
 		assert_equal(true, task1.start)
 		
-		track1 = TheFox::Timr::Track.new
+		track1 = Track.new
 		track1.description = 'hello world1'
-		track2 = TheFox::Timr::Track.new
+		track2 = Track.new
 		track2.description = 'hello world2'
 		
 		assert_equal(true, task1.start(track1))
@@ -116,13 +119,13 @@ class TestTask < MiniTest::Test
 	end
 	
 	def test_to_s
-		task1 = TheFox::Timr::Task.new
+		task1 = Task.new
 		assert_equal('', task1.to_s)
 		
 		task1.name = 'task1'
 		assert_equal('task1', task1.to_s)
 		
-		track1 = TheFox::Timr::Track.new
+		track1 = Track.new
 		track1.description = 'hello world1'
 		
 		task1.start(track1)
@@ -133,7 +136,7 @@ class TestTask < MiniTest::Test
 	end
 	
 	def test_run_time_track
-		task1 = TheFox::Timr::Task.new
+		task1 = Task.new
 		
 		task1.start
 		task1.track.begin_time = Time.parse('1987-02-21 09:58:59')
@@ -141,7 +144,7 @@ class TestTask < MiniTest::Test
 	end
 	
 	def test_run_time_total
-		task1 = TheFox::Timr::Task.new
+		task1 = Task.new
 		task1.toggle
 		task1.toggle
 		task1.toggle
