@@ -132,7 +132,7 @@ module TheFox
 						end
 					end
 				elsif paused?
-					parent_track = @track
+					parent_track = @track if parent_track.nil?
 					create_new_track = true
 				else
 					create_new_track = true

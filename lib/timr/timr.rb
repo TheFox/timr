@@ -537,6 +537,12 @@ module TheFox
 						ui_refresh_all
 					when 10
 						task, track = window_page_object
+						
+						# if track.nil?
+						# 	track = Track.new
+						# 	track.task = task
+						# end
+						
 						task_apply_replace_stack(task, track)
 					when '#'
 						task, * = window_page_object
