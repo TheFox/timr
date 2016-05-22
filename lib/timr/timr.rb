@@ -587,14 +587,13 @@ module TheFox
 						task, * = window_page_object
 						
 						track_description = ui_status_input('Track Description: ')
-						ui_status_text("Description: '#{track_description}'")
 						
 						track = Track.new
 						track.task = task
 						track.description = track_description
 						
 						task_apply_replace_stack(task, track)
-						#ui_status_text('OK')
+						ui_status_text('OK')
 					when 'b', 'p'
 						task, track = window_page_object
 						
