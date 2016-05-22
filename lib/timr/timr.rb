@@ -298,22 +298,6 @@ module TheFox
 				end
 			end
 			
-			def ui_window_refresh(lines)
-				ui_window_refresh_all
-				
-				# if !@window.nil?
-				# 	simple_refresh = @window.cursor_on_inner_range?
-					
-				# 	if !simple_refresh || simple_refresh != @ui_window_refresh_last
-				# 		ui_window_refresh_all
-				# 	else
-				# 		ui_window_refresh_simple(lines)
-				# 	end
-					
-				# 	@ui_window_refresh_last = simple_refresh
-				# end
-			end
-			
 			def ui_window_refresh_all
 				if !@window.nil?
 					content_line_nr = 1
@@ -559,7 +543,7 @@ module TheFox
 							# 	ui_status_text('DEBUG: %03d C=%03d L=%03d pr=%03d cr=%03d %02d %02d %s %s' % [@window.cursor, ui_content_length, @window.current_line, @window.page_refreshes, @window.content_refreshes, @window.cursor_border_top, @window.cursor_border_bottom, simple_refresh_b ? 'SIMPLE' : 'FULL', simple_refresh_a ? 'SIMPLE' : 'FULL'])
 							#end
 							
-							ui_window_refresh(1)
+							ui_window_refresh_all
 						end
 					when Curses::Key::UP
 						if !@window.nil? && @window.has_cursor?
@@ -573,7 +557,7 @@ module TheFox
 							# 	ui_status_text('DEBUG: %03d C=%03d L=%03d pr=%03d cr=%03d %02d %02d %s %s' % [@window.cursor, ui_content_length, @window.current_line, @window.page_refreshes, @window.content_refreshes, @window.cursor_border_top, @window.cursor_border_bottom, simple_refresh_b ? 'SIMPLE' : 'FULL', simple_refresh_a ? 'SIMPLE' : 'FULL'])
 							# end
 							
-							ui_window_refresh(-1)
+							ui_window_refresh_all
 						end
 					when Curses::Key::HOME
 						@window.first_page if !@window.nil?
