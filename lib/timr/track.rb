@@ -76,12 +76,12 @@ module TheFox
 				end
 			end
 			
-			def description
-				@description
+			def description=(description)
+				@description = description == '' ? nil : description
 			end
 			
-			def description=(descr_s)
-				@description = descr_s == '' ? nil : descr_s
+			def description
+				@description
 			end
 			
 			def diff
