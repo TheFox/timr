@@ -158,7 +158,7 @@ module TheFox
 			end
 			
 			def pause
-				if !@track.nil?
+				if running? && !@track.nil?
 					@status = :paused
 					@changed = true
 					@track.end_time = Time.now
@@ -204,7 +204,7 @@ module TheFox
 				minutes = 0
 				seconds = 0
 				
-				if !@track.nil?
+				if running? && has_track?
 					diff = (end_time - @track.begin_time).to_i.abs
 					hours = diff / 3600
 					
@@ -232,7 +232,7 @@ module TheFox
 				seconds = 0
 				
 				track_diff = 0
-				if !@track.nil?
+				if running? && has_track?
 					track_diff = (end_time - @track.begin_time).to_i.abs
 				end
 				

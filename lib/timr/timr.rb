@@ -213,7 +213,7 @@ module TheFox
 					status_s = @stack.task.status
 					
 					track_begin_time_s = '--:--'
-					if @stack.task.has_track?
+					if @stack.task.running? && @stack.task.has_track?
 						track_begin_time_s = @stack.task.track.begin_time.strftime('%R')
 					end
 					
