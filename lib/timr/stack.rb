@@ -25,7 +25,11 @@ module TheFox
 				@tasks.map{ |task|
 					status = task.status
 					status = '*' if task == @task
-					"#{status} #{task}"
+					
+					task_name = task.to_s
+					task_name = task.track.name if task.has_track?
+					
+					"#{status} #{task_name}"
 				}
 			end
 			
