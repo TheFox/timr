@@ -101,24 +101,25 @@ class TestTrack < MiniTest::Test
 		assert_equal('hello world2', h['d'])
 	end
 	
-	def test_to_list_s
+	def test_to_s
 		track1 = Track.new
 		track1.begin_time = Time.parse('1990-08-29 12:34:56')
-		assert_equal('1990-08-29 12:34 - xx:xx               ', track1.to_list_s)
+		assert_equal('1990-08-29 12:34 - xx:xx               ', track1.to_s)
 		
 		task1 = Task.new
 		task1.name = 'task1'
+		
 		track1 = Track.new
 		track1.begin_time = Time.parse('1990-08-29 12:34:56')
 		track1.task = task1
-		assert_equal('1990-08-29 12:34 - xx:xx               task1', track1.to_list_s)
+		assert_equal('1990-08-29 12:34 - xx:xx               task1', track1.to_s)
 		
 		track1.begin_time = Time.parse('1987-06-11 12:00:00')
 		track1.end_time   = Time.parse('1987-06-12 23:00:00')
-		assert_equal('1987-06-11 12:00 - 23:00 1987-06-12    task1', track1.to_list_s)
+		assert_equal('1987-06-11 12:00 - 23:00 1987-06-12    task1', track1.to_s)
 		
 		track1.description = 'hello world'
-		assert_equal('1987-06-11 12:00 - 23:00 1987-06-12    task1: hello world', track1.to_list_s)
+		assert_equal('1987-06-11 12:00 - 23:00 1987-06-12    task1: hello world', track1.to_s)
 	end
 	
 	def test_from_h

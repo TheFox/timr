@@ -129,7 +129,7 @@ class TestTask < MiniTest::Test
 		track1.description = 'hello world1'
 		
 		task1.start(track1)
-		assert_equal('task1: hello world1', task1.to_s)
+		assert_equal('task1', task1.to_s)
 		
 		task1.stop
 		assert_equal('task1', task1.to_s)

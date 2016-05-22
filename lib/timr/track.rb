@@ -130,10 +130,6 @@ module TheFox
 			end
 			
 			def to_s
-				@id
-			end
-			
-			def to_list_s
 				end_date = nil
 				end_time_s = 'xx:xx'
 				if !@end_time.nil?

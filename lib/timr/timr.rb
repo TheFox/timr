@@ -301,12 +301,7 @@ module TheFox
 					@window.content_refresh
 					max_line_len = Curses.cols - 2
 					@window.page.each do |line_object|
-						line_text = ''
-						if line_object.is_a?(Task) || line_object.is_a?(Track)
-							line_text = line_object.to_list_s
-						else
-							line_text = line_object.to_s
-						end
+						line_text = line_object.to_s
 						
 						if line_text.length > max_line_len
 							range = 0..-(line_text.length - max_line_len + 4)
@@ -348,13 +343,7 @@ module TheFox
 				
 				old_cursor = @window.cursor + (lines * -1)
 				old_line_object = @window.page[old_cursor - 1]
-				
-				old_line_text = ''
-				if old_line_object.is_a?(Task) || old_line_object.is_a?(Track)
-					old_line_text = old_line_object.to_list_s
-				else
-					old_line_text = old_line_object.to_s
-				end
+				old_line_text = old_line_object.to_s
 				
 				if old_line_text.length > max_line_len
 					range = 0..-(line_text.length - max_line_len + 4)
@@ -364,13 +353,7 @@ module TheFox
 				
 				new_cursor = @window.cursor
 				new_line_object = @window.page[new_cursor - 1]
-				
-				new_line_text = ''
-				if new_line_object.is_a?(Task) || new_line_object.is_a?(Track)
-					new_line_text = new_line_object.to_list_s
-				else
-					new_line_text = new_line_object.to_s
-				end
+				new_line_text = new_line_object.to_s
 				
 				if new_line_text.length > max_line_len
 					range = 0..-(line_text.length - max_line_len + 4)

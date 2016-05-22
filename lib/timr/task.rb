@@ -189,14 +189,6 @@ module TheFox
 			end
 			
 			def to_s
-				track_description = ''
-				if has_track? && !@track.description.nil? && @track.description.to_s.length > 0
-					track_description = ": #{@track.description}"
-				end
-				'%s%s' % [name, track_description]
-			end
-			
-			def to_list_s
 				name
 			end
 			
