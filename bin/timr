@@ -44,6 +44,7 @@ timr = TheFox::Timr::Timr.new(@options[:dir], @options[:config_path])
 begin
 	timr.run
 rescue Exception => e
-	timr.close
 	raise e
+ensure
+	timr.close
 end
