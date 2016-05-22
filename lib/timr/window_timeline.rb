@@ -4,19 +4,8 @@ module TheFox
 		
 		class TimelineWindow < Window
 			
-			@tasks = nil
-			
-			def setup
-				@tasks = nil
-			end
-			
-			def tasks=(tasks)
-				content_changed
-				@tasks = tasks
-			end
-			
 			def content
-				if @tasks.nil? || @tasks.length == 0
+				if @data.nil? || @data.length == 0
 					@has_cursor = false
 					[
 						'',
@@ -27,7 +16,7 @@ module TheFox
 					]
 				else
 					@has_cursor = true
-					@tasks
+					@data
 						.map{ |task_id, task|
 							task.timeline
 						}

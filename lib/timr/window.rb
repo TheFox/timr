@@ -4,7 +4,8 @@ module TheFox
 		
 		class Window
 			
-			def initialize
+			def initialize(data = [])
+				@data = data
 				@content_length = 0
 				@current_line = 0
 				@cursor = 1
@@ -30,8 +31,13 @@ module TheFox
 				@content_length = content_length
 			end
 			
+			def content=(data)
+				@content_changed = true
+				@data = data
+			end
+			
 			def content
-				[]
+				@data
 			end
 			
 			def content_changed

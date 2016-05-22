@@ -4,8 +4,8 @@ module TheFox
 		
 		class HelpWindow < Window
 			
-			def content
-				[
+			def setup
+				@data = [
 					'#### Help ####',
 					'',
 					'         n .. Create a new Task and start',

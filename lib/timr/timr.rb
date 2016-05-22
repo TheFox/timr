@@ -44,11 +44,8 @@ module TheFox
 				@window_help = HelpWindow.new
 				@window_test = TestWindow.new
 				
-				@window_tasks = TasksWindow.new
-				@window_tasks.tasks = @tasks
-				
-				@window_timeline = TimelineWindow.new
-				@window_timeline.tasks = @tasks
+				@window_tasks = TasksWindow.new(@tasks)
+				@window_timeline = TimelineWindow.new(@tasks)
 			end
 			
 			def config_read(path = @config_path)
