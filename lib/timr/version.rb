@@ -2,7 +2,7 @@
 module TheFox
 	module Timr
 		NAME = 'Timr'
-		VERSION = '0.3.0-dev.3'
+		VERSION = '0.3.0-dev.4'
 		DATE = '2016-05-22'
 		HOMEPAGE = 'https://github.com/TheFox/timr'
 		
