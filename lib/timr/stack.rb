@@ -47,13 +47,8 @@ module TheFox
 			
 			def pop_all(new_task = nil, parent_track = nil)
 				if @task == new_task
-					#puts 'tasks =='
-					x = @task.start(parent_track)
-					#puts "return #{x}"
-					#puts
-					x
+					@task.start(parent_track)
 				else
-					#puts 'stop all tasks'
 					@tasks.each do |task|
 						task.stop
 					end

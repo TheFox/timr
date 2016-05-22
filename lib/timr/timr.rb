@@ -337,34 +337,6 @@ module TheFox
 				Curses.refresh
 			end
 			
-			def ui_window_refresh_simple(lines)
-				max_line_len = Curses.cols - 2
-				
-				
-				old_cursor = @window.cursor + (lines * -1)
-				old_line_object = @window.page[old_cursor - 1]
-				old_line_text = old_line_object.to_s
-				
-				if old_line_text.length > max_line_len
-					range = 0..-(line_text.length - max_line_len + 4)
-					old_line_text = "#{old_line_text[range]}..."
-				end
-				
-				
-				new_cursor = @window.cursor
-				new_line_object = @window.page[new_cursor - 1]
-				new_line_text = new_line_object.to_s
-				
-				if new_line_text.length > max_line_len
-					range = 0..-(line_text.length - max_line_len + 4)
-					new_line_text = "#{new_line_text[range]}..."
-				end
-				
-				ui_content_line(old_cursor, old_line_text)
-				ui_content_line(@window.cursor, new_line_text)
-				Curses.refresh
-			end
-			
 			def ui_content_length
 				Curses.lines - RESERVED_LINES - @stack.size
 			end
