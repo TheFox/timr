@@ -139,6 +139,8 @@ module TheFox
 				end
 				
 				if create_new_track
+					@changed = true
+					
 					@track = Track.new
 					if !parent_track.nil?
 						@track.parent = parent_track
@@ -148,8 +150,6 @@ module TheFox
 					@track.task = self
 					@track.begin_time = Time.now
 					@timeline << @track
-					
-					@changed = true
 				end
 				
 				@status = :running
