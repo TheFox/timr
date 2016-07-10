@@ -118,6 +118,28 @@ class TestTask < MiniTest::Test
 		assert_equal(true, task1.start(track2))
 	end
 	
+	def test_remove_track
+		task1 = Task.new
+		
+		task1.start
+		#track1 = task1.track
+		task1.stop
+		assert_equal(1, task1.timeline.length)
+		
+		task1.start
+		track2 = task1.track
+		task1.stop
+		assert_equal(2, task1.timeline.length)
+		
+		task1.start
+		#track3 = task1.track
+		task1.stop
+		assert_equal(3, task1.timeline.length)
+		
+		task1.remove_track(track2)
+		assert_equal(2, task1.timeline.length)
+	end
+	
 	def test_to_s
 		task1 = Task.new
 		assert_equal('', task1.to_s)

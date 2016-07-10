@@ -148,7 +148,7 @@ module TheFox
 			end
 			
 			# Use the Status Text line to get an input from user.
-			def ui_status_input(text)
+			def ui_status_input(text, max_input_length = nil)
 				Curses.echo
 				Curses.timeout = -1
 				Curses.curs_set(1)
@@ -175,6 +175,9 @@ module TheFox
 						#sleep TIMEOUT.to_f / 1000
 					else
 						input += key_pressed.to_s
+						if !max_input_length.nil? && input.length >= max_input_length
+							break
+						end
 					end
 				end
 				if abort
@@ -186,6 +189,10 @@ module TheFox
 				Curses.curs_set(0)
 				
 				input
+			end
+			
+			def ui_status_input_yn(text)
+				ui_status_input(text, 1).downcase == 'y'
 			end
 			
 			# The second line from the bottom:
@@ -527,6 +534,36 @@ module TheFox
 						# end
 						
 						ui_window_refresh_all
+					when Curses::Key::DC
+						task, track = window_page_object
+						
+						if track.nil?
+							# Remove Task
+							
+							if ui_status_input_yn("Really want to delete Task '#{task}'? [yN] ")
+								FileUtils.rm(task.file_path(@data_dir_path))
+								@tasks.delete(task.id)
+								ui_status_text("Task '#{task}' deleted.")
+							else
+								ui_status_text("Aborted.")
+							end
+						else
+							# Remove Track
+							
+							task.remove_track(track)
+							task.save_to_file(@data_dir_path)
+							ui_status_text("Track '#{track.name}' deleted.")
+						end
+						
+						# @TODOs
+						# wenn aktueller track in stack, von stack entfernen.
+						
+						update_content_length
+						window_content_changed
+						ui_stack_lines_refresh
+						ui_window_refresh_all
+						
+						#ui_status_text("Del '#{task.class}' '#{track.class}'")
 					when Curses::Key::RESIZE
 						update_content_length
 						ui_status_text("Window size: #{Curses.cols}x#{Curses.lines}")

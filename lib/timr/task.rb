@@ -42,7 +42,7 @@ module TheFox
 			end
 			
 			def save_to_file(basepath)
-				path = File.expand_path("task_#{@meta['id']}.yml", basepath)
+				path = file_path(basepath)
 				
 				if @changed || !@track.nil?
 					timeline_c = @timeline
@@ -61,6 +61,10 @@ module TheFox
 				end
 				
 				path
+			end
+			
+			def file_path(basepath)
+				File.expand_path("task_#{@meta['id']}.yml", basepath)
 			end
 			
 			def running?
@@ -186,6 +190,11 @@ module TheFox
 				else
 					start
 				end
+			end
+			
+			def remove_track(track)
+				@changed = true
+				@timeline.delete(track)
 			end
 			
 			def to_s
