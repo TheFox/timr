@@ -6,12 +6,13 @@ require 'uuid'
 module TheFox
 	module Timr
 		
-		class Task
+		class Task < TheFox::TermKit::Model
 			
 			def initialize(path = nil)
-				# Status
-				#  :running
-				#  :stop
+				super()
+				
+				#puts 'Task initialize'
+				
 				@status = :stop
 				@changed = false
 				
@@ -41,16 +42,14 @@ module TheFox
 					}
 			end
 			
-			def save_to_file(basepath)
-				path = file_path(basepath)
-				
+			def save_to_file(path)
 				if @changed || !@track.nil?
 					timeline_c = @timeline
-						.map{ |track|
+						.map do |track|
 							h = track.to_h
 							h['e'] = Time.now.utc.strftime(TIME_FORMAT_FILE) if !h.has_key?('e') || h['e'].nil?
 							h
-						}
+						end
 					
 					store = YAML::Store.new(path)
 					store.transaction do
@@ -61,10 +60,6 @@ module TheFox
 				end
 				
 				path
-			end
-			
-			def file_path(basepath)
-				File.expand_path("task_#{@meta['id']}.yml", basepath)
 			end
 			
 			def running?
@@ -224,13 +219,13 @@ module TheFox
 				# Cache all other tracks.
 				if @timeline_diff_total.nil?
 					@timeline_diff_total = @timeline
-						.select{ |track|
+						.select do |track|
 							if running?
 								track != @track
 							else
 								true
 							end
-						}
+						end
 						.map{ |track| track.diff }
 						.inject(:+)
 				end

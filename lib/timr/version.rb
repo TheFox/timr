@@ -3,12 +3,11 @@ module TheFox
 	module Timr
 		NAME = 'Timr'
 		VERSION = '0.4.0-dev.2'
-		DATE = '2016-07-10'
+		DATE = '2016-07-17'
 		HOMEPAGE = 'https://github.com/TheFox/timr'
 		
 		COL = 1
 		MIN_COLS = 20
-		TIMEOUT = 250
 		
 		# Reserved Lines
 		# - Title

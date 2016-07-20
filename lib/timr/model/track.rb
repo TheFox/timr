@@ -6,9 +6,13 @@ require 'thefox-ext'
 module TheFox
 	module Timr
 		
-		class Track
+		class Track < TheFox::TermKit::Model
 			
 			def initialize
+				super()
+				
+				#puts 'Track initialize'
+				
 				@id = UUID.new.generate
 				@parent = nil
 				@parent_id = nil

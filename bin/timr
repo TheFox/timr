@@ -2,27 +2,28 @@
 # coding: UTF-8
 
 require 'optparse'
+require 'termkit'
 require 'timr'
 
 
 @options = {
-	:dir => nil,
-	:config_path => "#{Dir.home}/.timr/timr.conf",
+	'base_dir_path' => nil,
+	'config_path' => "#{Dir.home}/.timr/timr.conf",
 }
 opts = OptionParser.new do |o|
 	o.banner = 'Usage: timr [options]'
 	o.separator('')
 	
 	o.on('-d', '--dir <path>', 'Path to a timr directory.') do |path|
-		@options[:dir] = path
+		@options['base_dir_path'] = File.expand_path(path)
 	end
 	
 	o.on('-p', '--project <name>', 'Project Name: use ~/.timr/projects/NAME as path.') do |name|
-		@options[:dir] = File.expand_path(name, "#{Dir.home}/.timr/projects")
+		@options['base_dir_path'] = File.expand_path(name, "#{Dir.home}/.timr/projects")
 	end
 	
 	o.on('-c', '--config <path>', 'Path to config file. Default: ~/.timr/timr.conf') do |path|
-		@options[:config_path] = File.expand_path(path)
+		@options['config_path'] = File.expand_path(path)
 	end
 	
 	o.on_tail('-V', '--version', 'Show version.') do
@@ -40,11 +41,11 @@ end
 ARGV << '-h' if ARGV.count == 0
 opts.parse(ARGV)
 
-timr = TheFox::Timr::Timr.new(@options[:dir], @options[:config_path])
+timr = TheFox::Timr::Timr.new(@options)
 begin
 	timr.run
 rescue Exception => e
 	raise e
 ensure
-	timr.close
+	timr.terminate
 end

@@ -1,10 +1,16 @@
 
+require 'termkit'
+
 module TheFox
 	module Timr
 		
-		class Stack
+		class Stack < TheFox::TermKit::Model
 			
 			def initialize
+				super()
+				
+				#puts 'Stack initialize'
+				
 				@tasks = []
 				@task = nil
 			end
@@ -22,7 +28,7 @@ module TheFox
 			end
 			
 			def tasks_texts
-				@tasks.map{ |task|
+				@tasks.map do |task|
 					status = task.status
 					status = '*' if task == @task
 					
@@ -30,7 +36,7 @@ module TheFox
 					task_name = task.track.name if task.has_track?
 					
 					"#{status} #{task_name}"
-				}
+				end
 			end
 			
 			def pop

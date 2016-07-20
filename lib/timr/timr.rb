@@ -1,7 +1,6 @@
 
-require 'curses'
 require 'time'
-require 'fileutils'
+
 require 'yaml/store'
 require 'thefox-ext'
 
@@ -24,21 +23,11 @@ module TheFox
 				puts "config: #{@config_path}"
 				
 				@stack = Stack.new
-				@tasks = {}
-				@last_write = nil
-				@config = {
-					'clock' => {
-						'default' => '%F %R',
-						'large' => '%F %T',
-						'short' => '%R',
-					},
-				}
+				
+				
+				
 				#@ui_window_refresh_last = nil
 				#@ui_status_line_last = nil
-				
-				config_read
-				init_dirs
-				tasks_load
 				
 				@window = nil
 				@window_help = HelpWindow.new
@@ -48,69 +37,7 @@ module TheFox
 				@window_timeline = TimelineWindow.new(@tasks)
 			end
 			
-			def config_read(path = @config_path)
-				if !path.nil? && File.exist?(path)
-					content = YAML::load_file(path)
-					if content
-						@config.merge_recursive!(content)
-					end
-				end
-			end
 			
-			def init_dirs
-				if !Dir.exist?(@base_dir_path)
-					FileUtils.mkdir_p(@base_dir_path)
-				end
-				if !Dir.exist?(@data_dir_path)
-					FileUtils.mkdir_p(@data_dir_path)
-				end
-			end
-			
-			def tasks_load
-				Dir.chdir(@data_dir_path) do
-					Dir['task_*.yml'].each do |file_name|
-						#puts "file: '#{file_name}'"
-						task = Task.new(file_name)
-						@tasks[task.id] = task
-					end
-				end
-			end
-			
-			def tasks_stop
-				@tasks.each do |task_id, task|
-					task.stop
-				end
-			end
-			
-			def tasks_save(print_status = false)
-				@last_write = Time.now
-				if print_status
-					ui_status_text("Store files ... #{Time.now.strftime('%T')}")
-				end
-				Dir.chdir(@data_dir_path) do
-					@tasks.each do |task_id, task|
-						task.save_to_file('.')
-					end
-				end
-				if print_status
-					ui_status_text("Files stored. #{Time.now.strftime('%T')}")
-				end
-			end
-			
-			def ui_init_curses
-				Curses.noecho
-				Curses.timeout = TIMEOUT
-				Curses.curs_set(0)
-				Curses.init_screen
-				Curses.start_color
-				Curses.use_default_colors
-				Curses.crmode
-				Curses.stdscr.keypad(true)
-				
-				Curses.init_pair(Curses::COLOR_BLUE, Curses::COLOR_WHITE, Curses::COLOR_BLUE)
-				Curses.init_pair(Curses::COLOR_RED, Curses::COLOR_WHITE, Curses::COLOR_RED)
-				Curses.init_pair(Curses::COLOR_GREEN, Curses::COLOR_BLACK, Curses::COLOR_GREEN)
-			end
 			
 			def ui_title_line
 				title = "#{NAME} #{VERSION} -- #{@base_dir_name}"
@@ -464,7 +391,6 @@ module TheFox
 			end
 			
 			def run
-				ui_init_curses
 				update_content_length
 				ui_title_line
 				ui_status_line(true)
@@ -666,17 +592,6 @@ module TheFox
 						ui_status_text_error("Invalid key '#{key_pressed}' (#{Curses.keyname(key_pressed)})")
 					end
 				end
-			end
-			
-			def close
-				Curses.stdscr.clear
-				Curses.stdscr.refresh
-				Curses.stdscr.close
-				
-				Curses.close_screen
-				
-				tasks_stop
-				tasks_save
 			end
 			
 		end

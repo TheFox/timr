@@ -9,4 +9,4 @@ dev:
 
 .PHONY: test
 test:
-	RUBYOPT=-w TZ=Europe/Vienna $(BUNDLER) exec ./tests/ts_all.rb
+	RUBYOPT=-w TZ=Europe/Vienna $(BUNDLER) exec ./tests/ts_all.rb -v
