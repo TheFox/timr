@@ -8,24 +8,23 @@ module TheFox
 				#Curses.setpos(3, 0)
 				#Curses.addstr("APP  CONTROLLER: #{event.key}    #{event.class}")
 				
-				case event.key
-				when ?w, 3, 4
-					#puts "#{self.class} #{event.key}"
-					Curses.setpos(2, 0)
-					Curses.addstr("HANDLED: #{event.key}   ")
-				when ?q
-					#puts "#{self.class} #{event.key}"
+				if event.is_a?(TheFox::TermKit::KeyEvent)
+					Curses.setpos(1, 0)
+					Curses.addstr("APP  HANDLED: #{event.key}   ")
 					
-					@app.terminate
-				else
-					case event.key.ord
-					when 3, 4
+					case event.key
+					when ?w, 3, 4
+						#puts "#{self.class} #{event.key}"
+						
+					when ?q
 						#puts "#{self.class} #{event.key}"
 						
 						@app.terminate
 					else
-						raise TheFox::TermKit::UnhandledKeyEventException.new(event), "Unhandled event: #{event}"
+						raise TheFox::TermKit::Exception::UnhandledKeyEventException.new(event), "Unhandled event: #{event}"
 					end
+				else
+					raise TheFox::TermKit::Exception::UnhandledEventException.new(event), "Unhandled event: #{event}"
 				end
 			end
 			

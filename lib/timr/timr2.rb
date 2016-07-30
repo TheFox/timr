@@ -47,12 +47,12 @@ module TheFox
 				#active_controller(@containerController)
 				
 				@appController = TheFox::Timr::AppController.new(self)
-				#@timelineController = TheFox::Timr::TimelineController.new(self)
-				#@tasksController = TheFox::Timr::TasksController.new(self)
-				@helpController = TheFox::Timr::HelpController.new
+				#@timelineViewController = TheFox::Timr::TimelineViewController.new(self)
+				#@tasksViewController = TheFox::Timr::TasksViewController.new(self)
+				@helpViewController = TheFox::Timr::HelpViewController.new
 				
 				set_app_controller(@appController)
-				set_active_controller(@helpController)
+				set_active_controller(@helpViewController)
 			end
 			
 			def run_cycle
@@ -79,7 +79,7 @@ module TheFox
 					content = YAML::load_file(@config_path)
 					#pp content
 					@config.merge_recursive!(content)
-				rescue Exception => e
+				rescue Exception # => e
 					#puts "Task Manager WARNING: #{e}"
 				end
 				

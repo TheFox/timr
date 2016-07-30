@@ -1,10 +1,10 @@
 
 module TheFox
 	module Timr
-		NAME = 'Timr'
-		VERSION = '0.4.0-dev.2'
-		DATE = '2016-07-17'
-		HOMEPAGE = 'https://github.com/TheFox/timr'
+		NAME = 'Timr'.freeze
+		VERSION = '0.4.0-dev.2'.freeze
+		DATE = '2016-07-17'.freeze
+		HOMEPAGE = 'https://github.com/TheFox/timr'.freeze
 		
 		COL = 1
 		MIN_COLS = 20
@@ -15,7 +15,7 @@ module TheFox
 		# - Status Text Line
 		RESERVED_LINES = 3
 		
-		TIME_FORMAT_FILE = '%FT%T%z'
+		TIME_FORMAT_FILE = '%FT%T%z'.freeze
 		
 		TASK_NO_TASK_LOADED_CHAR = ?-
 	end

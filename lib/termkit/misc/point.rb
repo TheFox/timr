@@ -4,13 +4,21 @@ module TheFox
 		
 		class Point
 			
-			def initialize(x = 0, y = 0)
+			def initialize(x = nil, y = nil)
 				@x = x
 				@y = y
 			end
 			
+			def x=(x)
+				@x = x
+			end
+			
 			def x
 				@x
+			end
+			
+			def y=(y)
+				@y = y
 			end
 			
 			def y

@@ -2,7 +2,7 @@
 module TheFox
 	module Timr
 		
-		class TasksController < TheFox::TermKit::Controller
+		class TasksController < TheFox::TermKit::ViewController
 			
 			def initialize_x
 				super()

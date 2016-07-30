@@ -5,7 +5,7 @@ require 'timr/model/stack'
 require 'timr/model/task'
 require 'timr/model/track'
 
-require 'timr/view/view_table_cell_header'
+require 'timr/view/view_title'
 
 #require 'timr/controller/container'
 require 'timr/controller/app'

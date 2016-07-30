@@ -6,7 +6,7 @@ module TheFox
 			
 			def initialize(start_x, content)
 				@start_x = start_x
-				@content = content
+				@content = content.clone
 			end
 			
 			def start_x

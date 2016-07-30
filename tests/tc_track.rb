@@ -2,19 +2,13 @@
 
 require 'minitest/autorun'
 require 'time'
-require 'fileutils'
+#require 'fileutils'
 require 'timr'
 
 
 class TestTrack < MiniTest::Test
 	
 	include TheFox::Timr
-	
-	def test_class_name
-		track1 = Track.new
-		
-		assert_equal('TheFox::Timr::Track', track1.class.to_s)
-	end
 	
 	def test_basic
 		track1 = Track.new

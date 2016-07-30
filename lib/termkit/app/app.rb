@@ -5,7 +5,7 @@ module TheFox
 		class App
 			
 			def initialize
-				#puts 'App initialize'
+				#puts 'App->initialize'
 				
 				@exit = false
 				#@run_cycle_sleep = 0.1
@@ -29,7 +29,7 @@ module TheFox
 			
 			def terminate
 				if !@exit
-					puts 'App terminate'
+					puts 'App->terminate'
 					
 					@exit = true
 					
@@ -40,7 +40,7 @@ module TheFox
 			protected
 			
 			def app_will_terminate
-				#puts 'App app_will_terminate'
+				#puts 'App->app_will_terminate'
 			end
 			
 		end

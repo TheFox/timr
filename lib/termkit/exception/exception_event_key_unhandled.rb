@@ -1,9 +1,11 @@
 
 module TheFox
 	module TermKit
-		
-		class UnhandledKeyEventException < UnhandledEventException
+		module Exception
+			
+			class UnhandledKeyEventException < UnhandledEventException
+			end
+			
 		end
-		
 	end
 end

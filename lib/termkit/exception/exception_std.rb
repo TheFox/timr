@@ -1,9 +1,11 @@
 
 module TheFox
 	module TermKit
-		
-		class StdException < ::StandardError
+		module Exception
+			
+			class StdException < ::StandardError
+			end
+			
 		end
-		
 	end
 end

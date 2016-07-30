@@ -5,7 +5,9 @@ module TheFox
 		class CellTableView < View
 			
 			def initialize
-				#puts 'CellTableView initialize'
+				super()
+				
+				#puts 'CellTableView->initialize'
 			end
 			
 		end

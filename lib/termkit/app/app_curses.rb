@@ -17,7 +17,7 @@ module TheFox
 				
 				super()
 				
-				#puts 'CursesApp initialize'
+				#puts 'CursesApp->initialize'
 			end
 			
 			def curses_timeout=(curses_timeout)
@@ -28,22 +28,30 @@ module TheFox
 			def run_cycle
 				super()
 				
-				#puts 'CursesApp run_cycle'
+				#puts 'CursesApp->run_cycle'
 				
 				handle_user_input
 			end
 			
-			def print_line(point, content)
+			def draw_line(point, content)
 				Curses.setpos(point.y, point.x)
 				Curses.addstr(content)
+			end
+			
+			def ui_max_x
+				Curses.cols
+			end
+			
+			def ui_max_y
+				Curses.rows
 			end
 			
 			protected
 			
 			def ui_init
-				#puts "CursesApp ui_init '#{@curses_timeout}'"
+				#puts "CursesApp->ui_init '#{@curses_timeout}'"
 				
-				raise 'ui already inited' if @ui_inited
+				raise 'ui already initialized' if @ui_inited
 				@ui_inited = true
 				
 				super()
@@ -67,9 +75,7 @@ module TheFox
 			end
 			
 			def ui_close
-				puts "CursesApp ui_close"
-				#puts "CursesApp ui_close: #{Curses.stdscr}"
-				#puts "CursesApp ui_close: #{Curses.stdscr.class}"
+				#puts "CursesApp->ui_close"
 				
 				raise 'ui already closed' if @ui_closed
 				@ui_closed = true
@@ -84,15 +90,12 @@ module TheFox
 				Curses.stdscr.refresh
 				Curses.stdscr.close
 				Curses.close_screen
-				
-				#super()
 			end
 			
 			private
 			
 			def handle_user_input
-				key = Curses.getch
-				key_down(key)
+				key_down(Curses.getch)
 				#key_down(IO.console.getch)
 			end
 			

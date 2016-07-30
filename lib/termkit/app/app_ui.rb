@@ -9,6 +9,7 @@ module TheFox
 				
 				#puts 'UIApp initialize'
 				
+				@render_count = 0
 				@app_controller = nil
 				@active_controller = nil
 				
@@ -18,22 +19,14 @@ module TheFox
 			def run_cycle
 				super()
 				
-				#puts 'UIApp run_cycle'
+				#puts 'UIApp->run_cycle'
 				
 				render
 			end
 			
-			# def terminate
-			# 	puts 'UIApp terminate'
-				
-			# 	ui_close
-				
-			# 	super()
-			# end
-			
 			def set_app_controller(app_controller)
 				if !app_controller.is_a?(AppController)
-					raise "app_controller is wrong class: #{app_controller.class}"
+					raise ArgumentError, "Argument is not a AppController -- #{app_controller.class} given"
 				end
 				
 				@app_controller = app_controller
@@ -41,7 +34,7 @@ module TheFox
 			
 			def set_active_controller(active_controller)
 				if !active_controller.is_a?(ViewController)
-					raise "active_controller is wrong class: #{active_controller.class}"
+					raise ArgumentError, "Argument is not a ViewController -- #{active_controller.class} given"
 				end
 				
 				if !@active_controller.nil?
@@ -53,12 +46,28 @@ module TheFox
 			end
 			
 			def render
-				@active_controller.render_view
+				#sleep 1 # @TODO: remove this line
+				@render_count += 1
+				draw_line(Point.new(0, 0), "RENDER: #{@render_count}")
+				if !@active_controller.nil?
+					@active_controller.render.each do |y_pos, row|
+						row.each do |vcontent|
+							draw_line(Point.new(vcontent.start_x, y_pos), vcontent.content)
+						end
+					end
+				end
+			end
+			
+			def draw_line(point, content)
 				
 			end
 			
-			def print_line(point, content)
-				
+			def ui_max_x
+				-1
+			end
+			
+			def ui_max_y
+				-1
 			end
 			
 			protected
@@ -84,14 +93,15 @@ module TheFox
 					
 					begin
 						@active_controller.handle_event(event)
-					rescue UnhandledKeyEventException => e
+					rescue Exception::UnhandledKeyEventException => e
 						if @app_controller.nil?
 							raise e
 						end
 						
 						@app_controller.handle_event(e.event)
+					rescue Exception::UnhandledEventException => e
+						draw_line(Point.new(0, 0), 'UnhandledEventException')
 					end
-					
 				end
 			end
 			

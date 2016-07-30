@@ -4,22 +4,22 @@ module TheFox
 		
 		class ViewController < Controller
 			
-			def initialize(view)
+			def initialize(view = nil)
 				if !view.is_a?(View)
-					raise "view is of wrong class: #{view.class}"
+					raise ArgumentError, "Argument is not a View -- #{view.class} given"
 				end
 				
 				super()
 				
 				@view = view
-				@view_needs_rendering = false
+				@view_needs_rendering = true
 				#puts 'AppController initialize'
 			end
 			
 			def active
 				super()
 				
-				render_view
+				#render
 			end
 			
 			def inactive
@@ -28,11 +28,13 @@ module TheFox
 				
 			end
 			
-			def render_view
-				if is_active? # && @view_needs_rendering
+			def render
+				if is_active? && @view_needs_rendering
 					@view_needs_rendering = false
 					
-					
+					@view.render
+				else
+					[]
 				end
 			end
 			

@@ -6,14 +6,14 @@ module TheFox
 			
 			def initialize(app)
 				if !app.is_a?(App)
-					raise "app is wrong class: #{app.class}"
+					raise ArgumentError, "Argument is not a App -- #{app.class} given"
 				end
 				
 				super()
 				
 				@app = app
 				
-				#puts 'AppController initialize'
+				#puts 'AppController->initialize'
 			end
 			
 		end

@@ -8,12 +8,6 @@ class TestStack < MiniTest::Test
 	
 	include TheFox::Timr
 	
-	def test_class_name
-		stack1 = Stack.new
-		
-		assert_equal('TheFox::Timr::Stack', stack1.class.to_s)
-	end
-	
 	def test_has_task
 		stack1 = Stack.new
 		assert_equal(false, stack1.has_task?)

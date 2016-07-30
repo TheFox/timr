@@ -19,12 +19,14 @@ class TestTask < MiniTest::Test
 	def test_save_load
 		task1 = Task.new
 		
-		file_path = task1.save_to_file('tmp')
+		file_path = task1.save_to_file('tmp/task1.yml')
+		assert_equal('tmp/task1.yml', file_path)
 		assert_equal(false, File.exist?(file_path))
 		
 		task1.name = 'task1'
 		task1.description = 'hello world1'
-		file_path = task1.save_to_file('tmp')
+		file_path = task1.save_to_file('tmp/task1.yml')
+		assert_equal('tmp/task1.yml', file_path)
 		assert_equal(true, File.exist?(file_path))
 		
 		task2 = Task.new

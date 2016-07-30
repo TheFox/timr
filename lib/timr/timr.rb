@@ -481,8 +481,7 @@ module TheFox
 							ui_status_text("Track '#{track.name}' deleted.")
 						end
 						
-						# @TODOs
-						# wenn aktueller track in stack, von stack entfernen.
+						# @TODO: wenn aktueller track in stack, von stack entfernen.
 						
 						update_content_length
 						window_content_changed

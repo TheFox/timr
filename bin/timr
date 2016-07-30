@@ -5,7 +5,6 @@ require 'optparse'
 require 'termkit'
 require 'timr'
 
-
 @options = {
 	'base_dir_path' => nil,
 	'config_path' => "#{Dir.home}/.timr/timr.conf",
