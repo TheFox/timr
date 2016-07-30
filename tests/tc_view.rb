@@ -188,20 +188,18 @@ class TestView < MiniTest::Test
 		view2.draw_point(Point.new(5, 1), ?J)
 		view1.add_subview(view2)
 		
-		#pp view1.to_s
-		
 		# assert_equal("ABC\nDEFGHI\nEFGHIJ", view1.to_s)
 		# assert_equal("ABC\nDEFGHI\nEFGHIJ", view1.to_s_rect)
 		# assert_equal("ABC\nDEFGHI\nEFGHIJ", view1.to_s_rect(Rect.new))
 		
-		# assert_equal("ABC", view1.to_s_rect(Rect.new(0, 0, 3, 1)))
-		assert_equal("ABC\nDEF", view1.to_s_rect(Rect.new(0, 0, 3, 2)))
+		#assert_equal("ABC", view1.to_s_rect(Rect.new(0, 0, 3, 1)))
+		#assert_equal("ABC\nDEF", view1.to_s_rect(Rect.new(0, 0, 3, 2)))
 		#assert_equal("DEF", view1.to_s_rect(Rect.new(0, 1, 3, 1)))
 		#assert_equal("EF", view1.to_s_rect(Rect.new(1, 1, 2, 1)))
-		#assert_equal("EFG", view1.to_s_rect(Rect.new(1, 1, 3, 1)))
-		#assert_equal("F", view1.to_s_rect(Rect.new(2, 1, 1, 1)))
-		#assert_equal("FGH", view1.to_s_rect(Rect.new(2, 1, 3, 1)))
-		#assert_equal("FGH\nGHI", view1.to_s_rect(Rect.new(2, 1, 3, 2)))
+		# assert_equal("EFG", view1.to_s_rect(Rect.new(1, 1, 3, 1)))
+		# assert_equal("F", view1.to_s_rect(Rect.new(2, 1, 1, 1)))
+		# assert_equal("FGH", view1.to_s_rect(Rect.new(2, 1, 3, 1)))
+		# assert_equal("FGH\nGHI", view1.to_s_rect(Rect.new(2, 1, 3, 2)))
 		
 		
 		# view3 = View.new('view3')
@@ -230,6 +228,7 @@ class TestView < MiniTest::Test
 		view1.draw_point(Point.new(0, 0), ?A)
 		view1.draw_point(Point.new(1, 0), ?B)
 		view1.draw_point(Point.new(2, 0), ?C)
+		view1.draw_point(Point.new(5, 0), ?D)
 		
 		view2 = View.new('view2')
 		view2.is_visible = true
@@ -249,15 +248,63 @@ class TestView < MiniTest::Test
 		view2.draw_point(Point.new(5, 1), ?J)
 		view1.add_subview(view2)
 		
-		assert_equal("FGH\nGHI", view1.to_s_rect(Rect.new(4, 1, 3, 2)))
-		assert_equal("ABC\n  D", view1.to_s_rect(Rect.new(0, 0, 3, 2)))
-		assert_equal("ABC\n  D\n  E", view1.to_s_rect(Rect.new(0, 0, 3, 3)))
-		assert_equal("ABC\n  DE\n  EF", view1.to_s_rect(Rect.new(0, 0, 4, 3)))
-		assert_equal("DE\nEF", view1.to_s_rect(Rect.new(2, 1, 2, 2)))
-		assert_equal("ABC\n  DEF\n  EFG", view1.to_s_rect(Rect.new(0, 0, 5, 3)))
+		view3 = View.new('view3')
+		view3.is_visible = true
+		view3.position = TheFox::TermKit::Point.new(5, 0)
+		view3.draw_point(Point.new(1, 0), ?A)
+		#view1.add_subview(view3)
+		
+		pp view1.to_s_rect(Rect.new(4, 0, 3, 3))
+		
+		#assert_equal(" D\nFGH\nGHI", view1.to_s_rect(Rect.new(4, 0, 3, 3)))
+		#assert_equal("FGH\nGHI", view1.to_s_rect(Rect.new(4, 1, 3, 2)))
+		
+		#assert_equal("GHI", view1.to_s_rect(Rect.new(4, 2, 3, 1)))
+		#assert_equal("EF", view1.to_s_rect(Rect.new(1, 2, 3, 1)))
+		
+		# assert_equal("ABC\n  D", view1.to_s_rect(Rect.new(0, 0, 3, 2)))
+		# assert_equal("ABC\n  D\n  E", view1.to_s_rect(Rect.new(0, 0, 3, 3)))
+		# assert_equal("ABC\n  DE\n  EF", view1.to_s_rect(Rect.new(0, 0, 4, 3)))
+		# assert_equal("DE\nEF", view1.to_s_rect(Rect.new(2, 1, 2, 2)))
+		# assert_equal("ABC\n  DEF\n  EFG", view1.to_s_rect(Rect.new(0, 0, 5, 3)))
 	end
 	
 	def test_render_subview_area3
+		view1 = View.new('view1')
+		view1.is_visible = true
+		view1.draw_point(Point.new(0, 0), ?A)
+		view1.draw_point(Point.new(1, 0), ?B)
+		view1.draw_point(Point.new(2, 0), ?C)
+		view1.draw_point(Point.new(5, 0), ?D)
+		view1.draw_point(Point.new(4, 1), ?x)
+		view1.draw_point(Point.new(5, 1), ?y)
+		view1.draw_point(Point.new(6, 1), ?z)
+		
+		view2 = View.new('view2')
+		view2.is_visible = true
+		view2.position = TheFox::TermKit::Point.new(3, 2)
+		view2.draw_point(Point.new(0, 0), ?D)
+		view2.draw_point(Point.new(1, 0), ?E)
+		view2.draw_point(Point.new(2, 0), ?F)
+		view2.draw_point(Point.new(3, 0), ?G)
+		view2.draw_point(Point.new(4, 0), ?H)
+		view2.draw_point(Point.new(5, 0), ?I)
+		
+		view2.draw_point(Point.new(0, 1), ?E)
+		view2.draw_point(Point.new(1, 1), ?F)
+		view2.draw_point(Point.new(2, 1), ?G)
+		view2.draw_point(Point.new(3, 1), ?H)
+		view2.draw_point(Point.new(4, 1), ?I)
+		view2.draw_point(Point.new(5, 1), ?J)
+		view1.add_subview(view2)
+		
+		#pp view1.to_s_rect(Rect.new(4, 1, 3, 3))
+		
+		assert_equal("DEF\nEFG", view1.to_s_rect(Rect.new(2, 2, 4, 5)))
+		
+	end
+	
+	def test_xrender_subview_area4
 		view1 = View.new('view1')
 		view1.is_visible = true
 		view1.draw_point(Point.new(0, 0), ?A)

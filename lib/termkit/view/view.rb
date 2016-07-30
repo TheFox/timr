@@ -12,6 +12,7 @@ module TheFox
 				@name = name
 				@is_visible = false
 				@position = Point.new(0, 0)
+				@size = nil
 				@grid = {}
 				@subviews = []
 			end
@@ -28,6 +29,14 @@ module TheFox
 				@position
 			end
 			
+			def size
+				width = @grid.map{ |y, row| row.keys.max }.max + 1
+				height = @grid.keys.max + 1
+				puts "width #{width}"
+				# puts "height #{height}"
+				Size.new(width, height)
+			end
+			
 			def grid
 				@grid
 			end
@@ -38,8 +47,8 @@ module TheFox
 				if area.nil?
 					@grid.each do |y_pos, row|
 						tmp_grid[y_pos] = {}
-						row.sort.each do |x_pos, content|
-							puts '' + ('  ' * level) + "-> tg A #{x_pos}:#{y_pos} = '#{content}'"
+						row.each do |x_pos, content|
+							#puts '' + ('  ' * level) + "-> tg A #{x_pos}:#{y_pos} = '#{content}'"
 							tmp_grid[y_pos][x_pos] = content.clone
 						end
 					end
@@ -53,10 +62,10 @@ module TheFox
 								tmp_grid[y_pos_abs] = {}
 							end
 							
-							row.sort.each do |x_pos, content|
+							row.each do |x_pos, content|
 								x_pos_abs = x_pos + subview.position.x
 								
-								puts '' + ('  ' * level) + "-> sv A #{x_pos_abs}:#{y_pos_abs} (#{x_pos}:#{y_pos}) = '#{content}'"
+								#puts '' + ('  ' * level) + "-> sv A #{x_pos_abs}:#{y_pos_abs} (#{x_pos}:#{y_pos}) = '#{content}'"
 								
 								tmp_grid[y_pos_abs][x_pos_abs] = content
 							end
@@ -74,32 +83,149 @@ module TheFox
 						y_range.each do |y_pos|
 							row = @grid[y_pos]
 							
-							puts "y #{y_pos} #{row}"
+							#puts '' + ('  ' * level) + "y #{y_pos}"
 							
 							if row
 								x_range.each do |x_pos|
 									content = row[x_pos]
 									
-									puts '' + ('  ' * level) + "-> tg B #{x_pos}:#{y_pos} = '#{content}'"
-									
-									if !tmp_grid[y_pos]
-										tmp_grid[y_pos] = tmp_grid_row = {}
+									if content
+										#puts '' + ('  ' * level) + "-> tg B #{x_pos}:#{y_pos} = '#{content}'"
+										
+										if !tmp_grid[y_pos]
+											tmp_grid[y_pos] = tmp_grid_row = {}
+										end
+										
+										tmp_grid_row[x_pos] = content.clone
 									end
-									
-									tmp_grid_row[x_pos] = content.clone
 								end
 							end
 						end
 						
+						#puts '' + ('  ' * level) + "area #{area.x}:#{area.y} #{area.width}:#{area.height}"
+						puts '' + ('  ' * level) + "area #{area}"
+						
 						@subviews.each do |subview|
+							puts '' + ('  ' * level) + "subview  #{subview.position.x}:#{subview.position.y}"
+							
+							
+							
+							sub_rect_x = area.x - subview.position.x
+							sub_rect_width = area.size.width
+							if sub_rect_x < 0
+								#sub_rect_width += sub_rect_x
+								sub_rect_x = 0
+							end
+							
+							sub_rect_y = area.y - subview.position.y
+							sub_rect_height = area.size.height
+							if sub_rect_y < 0
+								#sub_rect_width += sub_rect_y
+								sub_rect_y = 0
+							end
+							
+							sub_rect = nil
+							#sub_rect = Rect.new(sub_rect_x, sub_rect_y, sub_rect_width, sub_rect_height)
+							puts '' + ('  ' * level) + "sub_rect #{sub_rect_x}:#{sub_rect_y} #{sub_rect_width}:#{sub_rect_height}"
+							
+							tmp_rect = Rect.new
+							tmp_rect.origin = subview.position
+							tmp_rect.size = subview.size
+							puts '' + ('  ' * level) + "tmp_rect '#{tmp_rect}'"
+							
+							sub_rect = area & tmp_rect
+							#sub_rect = tmp_rect & area
+							puts '' + ('  ' * level) + "sub_rect A '#{sub_rect}'"
+							
+							#sub_rect = nil
+							
+							if sub_rect
+								sub_rect = sub_rect - tmp_rect
+								puts '' + ('  ' * level) + "sub_rect B '#{sub_rect}'"
+							end
+							
+							if sub_rect
+								puts '' + ('  ' * level) + "sub_rect ok"
+								
+								tmp_grid_row = nil
+								sub_grid = subview.grid_recursive(sub_rect, level + 1)
+								sub_grid.each do |y_pos, row|
+									
+									#y_pos_abs = y_pos
+									y_pos_abs = y_pos + subview.position.y
+									#y_pos_abs = y_pos + subview.position.y - area.origin.y
+									
+									puts '' + ('  ' * level) + "-> sg y #{y_pos} -> #{y_pos_abs}"
+									
+									row.each do |x_pos, content|
+										
+										#x_pos_abs = x_pos
+										x_pos_abs = x_pos + subview.position.x
+										#x_pos_abs = x_pos + subview.position.x - area.origin.x
+										
+										puts '' + ('  ' * level) + "-> sg x #{x_pos} -> #{x_pos_abs} #{content}"
+										
+										if !tmp_grid[y_pos_abs]
+											tmp_grid[y_pos_abs] = tmp_grid_row = {}
+										end
+										
+										tmp_grid_row[x_pos_abs] = content.clone
+										
+									end
+								end
+							end
 							
 						end
 						
-						pp tmp_grid
+						#pp tmp_grid
+						
+						tmp_grid2_x_offset = tmp_grid.map{ |y, row| row.keys.min }.min
+						tmp_grid2_y_offset = tmp_grid.keys.min
+						
+						#puts "tmp_grid2_x_offset #{tmp_grid2_x_offset}"
+						
+						#puts "tmp_grid2_y_offset #{tmp_grid2_y_offset}"
+						
+						tmp_grid2 = {}
+						tmp_grid.sort.each do |y_pos, row|
+							if tmp_grid2_y_offset.nil?
+								tmp_grid2_y_offset = y_pos
+							end
+							
+							y_pos_abs = y_pos - tmp_grid2_y_offset
+							
+							row.sort.each do |x_pos, content|
+								if tmp_grid2_x_offset.nil?
+									tmp_grid2_x_offset = x_pos
+								end
+								
+								x_pos_abs = x_pos - tmp_grid2_x_offset
+								
+								
+								#puts '' + ('  ' * level) + "grid2 #{x_pos_abs}:#{y_pos_abs} #{content}"
+								
+								if !tmp_grid2[y_pos_abs]
+									tmp_grid2[y_pos_abs] = {}
+								end
+								
+								tmp_grid2[y_pos_abs][x_pos_abs] = content
+							end
+						end
+						
+						tmp_grid = tmp_grid2
+						pp tmp_grid2
+						
 					end
 				end
 				
+				#pp tmp_grid # if level == 0
+				
 				tmp_grid
+				
+				
+				
+				
+				
 			end
 			
 			def grid_recursive1(area = nil, level = 0)
