@@ -211,24 +211,24 @@ module TheFox
 							y = obj.y
 							height = nil
 							if yMaxIsLt
-								puts "& sub Y A: yMaxIsLt"
+								#puts "& sub Y A: yMaxIsLt"
 								height = obj.height
 							else
-								puts "height = #{self.height} - (#{obj.y} - #{self.y})"
+								#puts "height = #{self.height} - (#{obj.y} - #{self.y})"
 								height = self.height - (obj.y - self.y)
 							end
-							puts "& sub Y A: '#{y}' '#{height}'"
+							#puts "& sub Y A: '#{y}' '#{height}'"
 						elsif yEndIsInner
 							y = self.y
 							height = obj.y_max - self.y + 1
-							puts "& sub Y B: '#{y}' '#{height}'"
+							#puts "& sub Y B: '#{y}' '#{height}'"
 						elsif yIsOversize
 							y = self.y
 							height = self.height
-							puts "& sub Y C: '#{y}' '#{height}'"
+							#puts "& sub Y C: '#{y}' '#{height}'"
 						end
 						
-						puts "& new rect: '#{x}' '#{y}' '#{width}' '#{height}'"
+						#puts "& new rect: '#{x}' '#{y}' '#{width}' '#{height}'"
 						if !x.nil? && !y.nil? && !width.nil? && !height.nil?
 							Rect.new(x, y, width, height)
 						end
@@ -249,15 +249,15 @@ module TheFox
 					
 					x = self.x - obj.x
 					y = self.y - obj.y
-					width = self.width
-					height = self.height
+					#width = self.width
+					#height = self.height
 					
-					puts "x #{self.x} #{obj.x} #{x}"
-					puts "y #{self.y} #{obj.y} #{y}"
-					puts "width #{self.width} #{obj.width} #{width}"
-					puts "height #{self.height} #{obj.height} #{height}"
+					#puts "Rect - x      #{self.x} #{obj.x}   #{x}"
+					#puts "Rect - y      #{self.y} #{obj.y}   #{y}"
+					#puts "Rect - width  #{self.width} #{obj.width}   #{width}"
+					#puts "Rect - height #{self.height} #{obj.height}   #{height}"
 					
-					puts "- new rect: '#{x}' '#{y}' '#{width}' '#{height}'"
+					#puts "Rect - new rect: '#{x}' '#{y}' '#{width}' '#{height}'"
 					if !x.nil? && !y.nil? # && !width.nil? && !height.nil?
 						Rect.new(x, y, width, height)
 					end
