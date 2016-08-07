@@ -2,18 +2,18 @@
 module TheFox
 	module Timr
 		NAME = 'Timr'.freeze
-		VERSION = '0.4.0-dev.2'.freeze
-		DATE = '2016-07-17'.freeze
+		VERSION = '0.4.0-dev.3'.freeze
+		DATE = '2016-08-07'.freeze
 		HOMEPAGE = 'https://github.com/TheFox/timr'.freeze
 		
-		COL = 1
-		MIN_COLS = 20
+		#COL = 1
+		#MIN_COLS = 20
 		
 		# Reserved Lines
 		# - Title
 		# - Status Time Line
 		# - Status Text Line
-		RESERVED_LINES = 3
+		#RESERVED_LINES = 3
 		
 		TIME_FORMAT_FILE = '%FT%T%z'.freeze
 		

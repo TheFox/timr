@@ -4,10 +4,10 @@ module TheFox
 		
 		class CellTableView < View
 			
-			def initialize
+			def initialize(subview)
 				super()
 				
-				#puts 'CellTableView->initialize'
+				add_subview(subview)
 			end
 			
 		end

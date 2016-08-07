@@ -9,12 +9,17 @@ module TheFox
 			def initialize(name = nil)
 				#puts 'View->initialize'
 				
-				@name = name
+				@name = name # FOR DEBUG ONLY
 				@is_visible = false
 				@position = Point.new(0, 0)
 				@size = nil
 				@grid = {}
+				grid_clear
 				@subviews = []
+			end
+			
+			def name
+				@name
 			end
 			
 			def is_visible=(is_visible)
@@ -25,20 +30,97 @@ module TheFox
 				@is_visible
 			end
 			
+			def position=(point)
+				if !point.is_a?(Point)
+					raise ArgumentError, "Argument is not a Point -- #{point.class} given"
+				end
+				
+				@position = point
+			end
+			
 			def position
 				@position
 			end
 			
+			def size=(size)
+				@size = size
+			end
+			
 			def size
-				width = @grid.map{ |y, row| row.keys.max }.max + 1
-				height = @grid.keys.max + 1
+				@size
+			end
+			
+			def bounds
+				width = nil
+				height = nil
+				
+				if @grid.keys.count > 0
+					width = @grid.map{ |y, row|
+						if row.keys.count > 0
+							row.keys.max
+						else
+							0
+						end
+					}.max + 1
+					height = @grid.keys.nil? ? nil : @grid.keys.max + 1
+				end
+				
 				#puts "width #{width}"
-				# puts "height #{height}"
+				#puts "height #{height}"
+				
 				Size.new(width, height)
+			end
+			
+			def height(level = 0)
+				keys = @grid.keys
+				if keys.nil?
+					0
+				else
+					grid_min = 0
+					grid_max = 0
+					if keys.count > 0
+						grid_min = keys.min
+						grid_max = keys.max
+					end
+					
+					#puts '' + ("\t" * level) + "keys: #{keys}"
+					#puts '' + ("\t" * level) + "grid_min: #{grid_min}"
+					#puts '' + ("\t" * level) + "grid_max: #{grid_max}"
+					
+					@subviews.each do |subview|
+						subview_h = subview.height(level + 1)
+						subview_y_pos = subview.position.y.nil? ? 0 : subview.position.y
+						subview_h_abs_min = subview_y_pos
+						subview_h_abs_max = subview_h + subview_y_pos
+						
+						#puts '' + ("\t" * level) + "subview: '#{subview.name}'   h=#{subview_h} y=#{subview.position.y} abs_min=#{subview_h_abs_min} abs_max=#{subview_h_abs_max} grid_min=#{grid_min} grid_max=#{grid_max}"
+						
+						if subview_h_abs_min < grid_min
+							grid_min = subview_h_abs_min
+							#puts '' + ("\t" * level) + "new grid_min: #{grid_min}"
+						end
+						if subview_h_abs_max > grid_max
+							grid_max = subview_h_abs_max - 1
+							#puts '' + ("\t" * level) + "new grid_max: #{grid_max}"
+						end
+					end
+					
+					grid_max - grid_min + 1
+				end
 			end
 			
 			def grid
 				@grid
+			end
+			
+			def grid_clear
+				@grid = {}
+			end
+			
+			def grid_clear_recursive
+				@subviews.each do |subview|
+					subview.grid_clear
+				end
 			end
 			
 			def grid_recursive(area = nil, level = 0)
@@ -86,26 +168,57 @@ module TheFox
 						
 						#puts '' + ("\t" * level) + "area #{area}"
 						
-						y_range = area.origin.y..area.y_max
-						x_range = area.origin.x..area.x_max
+						#y_range = area.origin.y..area.y_max
+						#x_range = area.origin.x..area.x_max
 						
-						y_range.each do |y_pos|
-							row = @grid[y_pos]
+						#puts "x_range '#{x_range}'"
+						
+						if @grid.keys.count > 0
+							y_range_min = area.origin.y
+							y_range_max = area.y_max
+							if y_range_max.nil?
+								#puts "y_range_max is nil"
+								y_range_max = @grid.keys.max
+							end
+							y_range = y_range_min..y_range_max
 							
-							#puts '' + ("\t" * level) + "y #{y_pos}"
+							x_range_min = area.origin.x
+							x_range_max = area.x_max
+							x_range_max_dyn = x_range_max.nil?
 							
-							if row
-								x_range.each do |x_pos|
-									content = row[x_pos]
-									
-									if content
-										#puts '' + ("\t" * level) + "-> tg B #{x_pos}:#{y_pos} = '#{content}'"
-										
-										if !tmp_grid[y_pos]
-											tmp_grid[y_pos] = {}
+							#puts "start x_range_max: #{x_range_max}"
+							
+							y_range.each do |y_pos|
+								row = @grid[y_pos]
+								
+								#puts '' + ("\t" * level) + "y #{y_pos}"
+								
+								if row && row.keys.count > 0
+									if x_range_max_dyn
+										row_max = row.keys.max
+										if x_range_max.nil?
+											x_range_max = row_max
+										else
+											if row_max > x_range_max
+												x_range_max = row_max
+											end
 										end
+									end
+									
+									#puts "real x range     : #{x_range_min} #{x_range_max}"
+									
+									(x_range_min..x_range_max).each do |x_pos|
+										content = row[x_pos]
 										
-										tmp_grid[y_pos][x_pos] = content.clone
+										if content
+											#puts '' + ("\t" * level) + "-> tg B #{x_pos}:#{y_pos} = '#{content}'"
+											
+											if !tmp_grid[y_pos]
+												tmp_grid[y_pos] = {}
+											end
+											
+											tmp_grid[y_pos][x_pos] = content.clone
+										end
 									end
 								end
 							end
@@ -128,26 +241,37 @@ module TheFox
 							
 							tmp_rect = Rect.new
 							tmp_rect.origin = subview.position
-							tmp_rect.size = subview.size
+							tmp_rect.size = subview.bounds
 							
 							sub_rect = area & tmp_rect
 							
 							if sub_rect
-								#puts '' + ("\t" * level) + "sub rect A: #{sub_rect}"
-								#puts '' + ("\t" * level) + "tmp rect A: #{tmp_rect}"
 								sub_rect = sub_rect - tmp_rect
-								#sub_rect.size = subview.size
-								#puts '' + ("\t" * level) + "sub rect B offset X: #{area.x - subview.position.x}"
-								#puts '' + ("\t" * level) + "sub rect B offset Y: #{area.y - subview.position.y}"
-								sub_rect.size = Size.new(area.width + area.x - subview.position.x, area.height + area.y - subview.position.y)
-								if sub_rect.size.width > area.width
-									sub_rect.size.width = area.width
+								
+								#puts "sub_rect w: '#{area.width}' N=#{area.width.nil?}"
+								#puts "sub_rect x: '#{area.x}' N=#{area.x.nil?}"
+								
+								size_width = nil
+								if !area.width.nil?
+									size_width = area.width + area.x - subview.position.x
+									if size_width > area.width
+										size_width = area.width
+									end
 								end
-								if sub_rect.size.height > area.height
-									sub_rect.size.height = area.height
+								
+								size_height = nil
+								if !area.height.nil?
+									size_height = area.height + area.y - subview.position.y
+									if size_height > area.height
+										size_height = area.height
+									end
 								end
-								#puts '' + ("\t" * level) + "sub rect B: #{sub_rect}"
-								#puts '' + ("\t" * level) + "tmp rect B: #{tmp_rect}"
+								
+								#puts "size_width : '#{size_width}' N=#{size_width.nil?}"
+								#puts "size_height: '#{size_height}' N=#{size_height.nil?}"
+								#puts
+								
+								sub_rect.size = Size.new(size_width, size_height)
 							end
 							
 							if sub_rect
@@ -206,14 +330,6 @@ module TheFox
 				tmp_grid
 			end
 			
-			def position=(point)
-				if !point.is_a?(Point)
-					raise ArgumentError, "Argument is not a Point -- #{point.class} given"
-				end
-				
-				@position = point
-			end
-			
 			def add_subview(subview)
 				if !subview.is_a?(View)
 					raise ArgumentError, "Argument is not a View -- #{subview.class} given"
@@ -236,6 +352,14 @@ module TheFox
 			def render(area = nil)
 				rows = {}
 				if @is_visible
+					
+					if area.nil? && !@size.nil?
+						#puts "size: #{@size}"
+						
+						area = Rect.new(0, 0)
+						area.size = @size
+					end
+					
 					grid_recursive(area).sort.each do |y_pos, row|
 						x_pos_prev = 0
 						current_block = nil

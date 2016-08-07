@@ -16,6 +16,10 @@ module TheFox
 				#puts 'AppController initialize'
 			end
 			
+			def view
+				@view
+			end
+			
 			def active
 				super()
 				

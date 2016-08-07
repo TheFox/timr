@@ -46,20 +46,27 @@ module TheFox
 			end
 			
 			def render
-				#sleep 1 # @TODO: remove this line
+				sleep 1 # @TODO: remove this line
 				@render_count += 1
 				draw_line(Point.new(0, 0), "RENDER: #{@render_count}")
 				if !@active_controller.nil?
 					@active_controller.render.each do |y_pos, row|
+						draw_line(Point.new(0, 1), "ROW: #{y_pos}"); ui_refresh
+						
 						row.each do |vcontent|
 							draw_line(Point.new(vcontent.start_x, y_pos), vcontent.content)
 						end
 					end
 				end
+				ui_refresh
 			end
 			
 			def draw_line(point, content)
-				
+				raise NotImplementedError
+			end
+			
+			def ui_refresh
+				raise NotImplementedError
 			end
 			
 			def ui_max_x

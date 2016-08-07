@@ -89,6 +89,8 @@ module TheFox
 						xIsLt = obj.x < self.x
 						
 						if obj.x_max.nil?
+							#puts "obj.x_max.nil? YES"
+							
 							xMaxIsGt = true
 							xMaxIsLt = false
 							
@@ -102,13 +104,19 @@ module TheFox
 							
 							xMaxToXIsEqOrGt = true
 						else
+							#puts "obj.x_max.nil? NO"
+							
 							if self.x_max.nil?
+								#puts "self.x_max.nil? YES"
+								
 								xMaxIsGt = false
 								xMaxIsLt = true
 								
 								xMaxIsEqOrLt = true
 								xToXmaxIsEqOrLt = true
 							else
+								#puts "self.x_max.nil? NO"
+								
 								xMaxIsGt = obj.x_max > self.x_max
 								xMaxIsLt = obj.x_max < self.x_max
 								
@@ -117,6 +125,7 @@ module TheFox
 							end
 							
 							xMaxToXIsEqOrGt = obj.x_max >= self.x
+							#puts "xMaxToXIsEqOrGt #{xMaxToXIsEqOrGt}"
 						end
 						
 						
@@ -172,8 +181,8 @@ module TheFox
 						yEndIsInner = yMaxToYIsEqOrGt && yMaxIsEqOrLt
 						#puts "yEndIsInner #{yEndIsInner}"
 						
-						# puts "xIsLt #{xIsLt}"
-						# puts "xMaxIsGt #{xMaxIsGt}"
+						#puts "xIsLt #{xIsLt}"
+						#puts "xMaxIsGt #{xMaxIsGt}"
 						
 						xIsOversize = xIsLt && xMaxIsGt
 						yIsOversize = yIsLt && yMaxIsGt
@@ -185,21 +194,34 @@ module TheFox
 						x = nil
 						width = nil
 						if xBeginIsInner
+							#puts "begin is inner"
+							
 							x = obj.x
 							width = nil
 							if xMaxIsLt
 								#puts "& sub X A: xMaxIsLt #{width}"
-								#width -= self.x_max - obj.x_max
+								
 								width = obj.width
 							else
-								width = self.width - (obj.x - self.y)
+								#puts "& sub X A: not xMaxIsLt #{width}"
+								
+								if !self.width.nil?
+									width = self.width - (obj.x - self.y)
+								end
 							end
 							#puts "& sub X A: '#{x}' '#{width}'"
 						elsif xEndIsInner
+							#puts "end is inner '#{obj.x_max}'"
+							
 							x = self.x
-							width = obj.x_max - self.x + 1
-							#puts "& sub X B: '#{x}' '#{width}' (#{obj.x_max} - #{self.x} + 1)"
+							if !obj.x_max.nil?
+								width = obj.x_max - self.x + 1
+							end
+							
+							#puts "& sub X B: '#{x}' '#{width}'"
 						elsif xIsOversize
+							#puts "oversize"
+							
 							x = self.x
 							width = self.width
 							#puts "& sub X C: '#{x}' '#{width}'"
@@ -215,12 +237,19 @@ module TheFox
 								height = obj.height
 							else
 								#puts "height = #{self.height} - (#{obj.y} - #{self.y})"
-								height = self.height - (obj.y - self.y)
+								
+								if !self.height.nil?
+									height = self.height - (obj.y - self.y)
+								end
 							end
 							#puts "& sub Y A: '#{y}' '#{height}'"
 						elsif yEndIsInner
 							y = self.y
-							height = obj.y_max - self.y + 1
+							
+							if !obj.y_max.nil?
+								height = obj.y_max - self.y + 1
+							end
+							
 							#puts "& sub Y B: '#{y}' '#{height}'"
 						elsif yIsOversize
 							y = self.y
@@ -229,7 +258,7 @@ module TheFox
 						end
 						
 						#puts "& new rect: '#{x}' '#{y}' '#{width}' '#{height}'"
-						if !x.nil? && !y.nil? && !width.nil? && !height.nil?
+						if !x.nil? && !y.nil?
 							Rect.new(x, y, width, height)
 						end
 					end

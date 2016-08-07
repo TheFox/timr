@@ -329,4 +329,160 @@ class TestView < MiniTest::Test
 		assert_equal("ABC", view1.to_s_rect(Rect.new(0, 0, 3, 2)))
 	end
 	
+	def test_render_size1
+		view1 = View.new('view1')
+		view1.is_visible = true
+		
+		view1.draw_point(Point.new(0, 0), ?A)
+		view1.draw_point(Point.new(1, 0), ?B)
+		view1.draw_point(Point.new(2, 0), ?C)
+		view1.draw_point(Point.new(3, 0), ?D)
+		
+		view1.draw_point(Point.new(0, 1), ?B)
+		view1.draw_point(Point.new(1, 1), ?C)
+		view1.draw_point(Point.new(2, 1), ?D)
+		view1.draw_point(Point.new(3, 1), ?E)
+		
+		view1.draw_point(Point.new(0, 2), ?C)
+		view1.draw_point(Point.new(1, 2), ?D)
+		view1.draw_point(Point.new(2, 2), ?E)
+		view1.draw_point(Point.new(3, 2), ?F)
+		
+		view1.draw_point(Point.new(0, 3), ?D)
+		view1.draw_point(Point.new(1, 3), ?E)
+		view1.draw_point(Point.new(2, 3), ?F)
+		view1.draw_point(Point.new(3, 3), ?G)
+		
+		assert_equal("ABCD\nBCDE\nCDEF\nDEFG", view1.to_s)
+		
+		view1.size = TheFox::TermKit::Size.new(3, 2)
+		assert_equal("ABC\nBCD", view1.to_s)
+	end
+	
+	def test_render_size2
+		view1 = View.new('view1')
+		view1.is_visible = true
+		
+		view1.draw_point(Point.new(0, 0), ?A)
+		view1.draw_point(Point.new(1, 0), ?B)
+		view1.draw_point(Point.new(2, 0), ?C)
+		view1.draw_point(Point.new(3, 0), ?D)
+		
+		view1.draw_point(Point.new(0, 1), ?B)
+		view1.draw_point(Point.new(1, 1), ?C)
+		view1.draw_point(Point.new(2, 1), ?D)
+		view1.draw_point(Point.new(3, 1), ?E)
+		
+		assert_equal("ABCD\nBCDE", view1.to_s)
+		
+		view1.size = TheFox::TermKit::Size.new(3, 2)
+		assert_equal("ABC\nBCD", view1.to_s)
+		
+		
+		view2 = View.new('view2')
+		view2.is_visible = true
+		view2.position = TheFox::TermKit::Point.new(3, 1)
+		view2.draw_point(Point.new(0, 0), ?A)
+		view2.draw_point(Point.new(1, 0), ?B)
+		view2.draw_point(Point.new(2, 0), ?C)
+		view2.draw_point(Point.new(3, 0), ?D)
+		view2.draw_point(Point.new(0, 1), ?B)
+		view2.draw_point(Point.new(1, 1), ?C)
+		view2.draw_point(Point.new(2, 1), ?D)
+		view2.draw_point(Point.new(3, 1), ?E)
+		view1.add_subview(view2)
+		
+		
+		view1.size = TheFox::TermKit::Size.new(nil, 2)
+		assert_equal("ABCD\nBCDABCD", view1.to_s)
+		
+		view1.size = TheFox::TermKit::Size.new(5, nil)
+		assert_equal("ABCD\nBCDAB\n   BC", view1.to_s)
+	end
+	
+	def test_height1
+		view1 = View.new('view1')
+		view1.is_visible = true
+		
+		view1.draw_point(Point.new(0, 0), ?A)
+		view1.draw_point(Point.new(1, 0), ?B)
+		view1.draw_point(Point.new(2, 0), ?C)
+		view1.draw_point(Point.new(3, 0), ?D)
+		assert_equal(1, view1.height)
+		
+		view1.draw_point(Point.new(0, 1), ?B)
+		view1.draw_point(Point.new(1, 1), ?C)
+		view1.draw_point(Point.new(2, 1), ?D)
+		view1.draw_point(Point.new(3, 1), ?E)
+		assert_equal(2, view1.height)
+		
+		view1.draw_point(Point.new(0, 2), ?C)
+		view1.draw_point(Point.new(1, 2), ?D)
+		view1.draw_point(Point.new(2, 2), ?E)
+		view1.draw_point(Point.new(3, 2), ?F)
+		assert_equal(3, view1.height)
+		
+		view1.draw_point(Point.new(0, 3), ?D)
+		view1.draw_point(Point.new(1, 3), ?E)
+		view1.draw_point(Point.new(2, 3), ?F)
+		view1.draw_point(Point.new(3, 3), ?G)
+		assert_equal(4, view1.height)
+		
+		
+		view2 = View.new('view2')
+		view2.is_visible = true
+		view2.position = TheFox::TermKit::Point.new(3, 1)
+		view2.draw_point(Point.new(0, 0), ?A)
+		view2.draw_point(Point.new(1, 0), ?B)
+		view2.draw_point(Point.new(2, 0), ?C)
+		view2.draw_point(Point.new(3, 0), ?D)
+		view1.add_subview(view2)
+		
+		assert_equal(4, view1.height)
+		
+		view2.position = TheFox::TermKit::Point.new(3, 5)
+		assert_equal(6, view1.height)
+	end
+	
+	def test_height2
+		view1 = View.new('view1')
+		view1.is_visible = true
+		
+		view1.draw_point(Point.new(0, 2), ?A)
+		view1.draw_point(Point.new(1, 2), ?B)
+		view1.draw_point(Point.new(2, 2), ?C)
+		view1.draw_point(Point.new(3, 2), ?D)
+		assert_equal(1, view1.height)
+		
+		view1.draw_point(Point.new(0, 3), ?B)
+		view1.draw_point(Point.new(1, 3), ?C)
+		view1.draw_point(Point.new(2, 3), ?D)
+		view1.draw_point(Point.new(3, 3), ?E)
+		assert_equal(2, view1.height)
+		
+		view1.draw_point(Point.new(0, 4), ?C)
+		view1.draw_point(Point.new(1, 4), ?D)
+		view1.draw_point(Point.new(2, 4), ?E)
+		view1.draw_point(Point.new(3, 4), ?F)
+		assert_equal(3, view1.height)
+		
+		view1.draw_point(Point.new(0, 5), ?D)
+		view1.draw_point(Point.new(1, 5), ?E)
+		view1.draw_point(Point.new(2, 5), ?F)
+		view1.draw_point(Point.new(3, 5), ?G)
+		assert_equal(4, view1.height)
+		
+		
+		view2 = View.new('view2')
+		view2.is_visible = true
+		view2.position = TheFox::TermKit::Point.new(3, 1)
+		view2.draw_point(Point.new(0, 0), ?A)
+		view2.draw_point(Point.new(1, 0), ?B)
+		view2.draw_point(Point.new(2, 0), ?C)
+		view2.draw_point(Point.new(3, 0), ?D)
+		view1.add_subview(view2)
+		
+		assert_equal(5, view1.height)
+	end
+	
 end

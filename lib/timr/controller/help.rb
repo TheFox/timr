@@ -17,11 +17,20 @@ module TheFox
 				#super(view1)
 				
 				header = TitleView.new
+				header.is_visible = true
+				#header.position = TheFox::TermKit::Point.new(1, 1)
 				
-				table_view = TheFox::TermKit::TableView.new
+				#table_view = TheFox::TermKit::TableView.new
+				table_view = HelpTableView.new
+				table_view.is_visible = true
+				table_view.position = TheFox::TermKit::Point.new(0, 10)
 				table_view.header_cell_view = header
 				
-				@main_view_controller = TheFox::TermKit::ViewController.new(table_view)
+				view = TheFox::TermKit::View.new
+				view.is_visible = true
+				view.add_subview(table_view)
+				
+				@main_view_controller = TheFox::TermKit::ViewController.new(view)
 			end
 			
 			def active
@@ -36,6 +45,12 @@ module TheFox
 				@main_view_controller.inactive
 			end
 			
+			def render
+				super()
+				
+				@main_view_controller.render
+			end
+			
 			def handle_event(event)
 				#Curses.setpos(1, 0)
 				#Curses.addstr("HELP CONTROLLER: #{event.key}    #{event.class}")
@@ -46,6 +61,11 @@ module TheFox
 						#puts "#{self.class} #{event.key}"
 						Curses.setpos(2, 0)
 						Curses.addstr("HELP HANDLED: #{event.key}   ")
+					when 'x'
+						Curses.setpos(2, 0)
+						Curses.addstr("HELP HANDLED: #{event.key}   ")
+						
+						@main_view_controller.view.is_visible = false
 					else
 						raise TheFox::TermKit::Exception::UnhandledKeyEventException.new(event), "Unhandled event: #{event}"
 					end

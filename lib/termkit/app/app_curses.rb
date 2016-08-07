@@ -38,6 +38,10 @@ module TheFox
 				Curses.addstr(content)
 			end
 			
+			def ui_refresh
+				Curses.refresh
+			end
+			
 			def ui_max_x
 				Curses.cols
 			end

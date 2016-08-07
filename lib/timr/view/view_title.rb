@@ -5,7 +5,7 @@ module TheFox
 		class TitleView < TheFox::TermKit::TextView
 			
 			def initialize
-				super("#{NAME} #{VERSION}")
+				super("#{NAME} #{VERSION}\n--test")
 			end
 			
 		end

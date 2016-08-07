@@ -107,38 +107,67 @@ class TestRect < MiniTest::Test
 		end
 	end
 	
-	def test_bitwise_and
+	def test_bitwise_and_exact
 		# Exact
 		assert_equal(Rect.new(0, 0, 10, 5), Rect.new(0, 0, 10, 5) & Rect.new(0, 0, 10, 5))
 		assert_equal(Rect.new(1, 2, 3, 4), Rect.new(1, 2, 3, 4) & Rect.new(1, 2, 3, 4))
-		
+	end
+	
+	def test_bitwise_and_inner_sub_rect
 		# Inner Sub Rect
 		assert_equal(Rect.new(2, 2, 5, 5), Rect.new(0, 0, 10, 10) & Rect.new(2, 2, 5, 5))
 		assert_equal(Rect.new(2, 2, 4, 4), Rect.new(0, 0, 10, 10) & Rect.new(2, 2, 4, 4))
 		assert_equal(Rect.new(2, 3, 4, 5), Rect.new(1, 2, 15, 20) & Rect.new(2, 3, 4, 5))
-		
+	end
+	
+	def test_bitwise_and_out_right
 		# Out Right
 		assert_equal(Rect.new(7, 7, 3, 3), Rect.new(5, 5, 5, 5) & Rect.new(7, 7, 5, 5))
 		assert_equal(Rect.new(9, 9, 1, 1), Rect.new(5, 5, 5, 5) & Rect.new(9, 9, 2, 2)) # Edge
 		assert_equal(Rect.new(7, 7, 3, 3), Rect.new(5, 5, 5, 5) & Rect.new(7, 7, 5, 3)) # X Out
 		assert_equal(Rect.new(7, 7, 3, 3), Rect.new(5, 5, 5, 5) & Rect.new(7, 7, 3, 5)) # Y Out
-		
+	end
+	
+	def test_bitwise_and_out_left
 		# Out Left
 		assert_equal(Rect.new(5, 5, 3, 3), Rect.new(5, 5, 5, 5) & Rect.new(3, 3, 5, 5))
 		assert_equal(Rect.new(5, 5, 1, 1), Rect.new(5, 5, 5, 5) & Rect.new(3, 3, 3, 3)) # Edge
 		assert_equal(Rect.new(5, 5, 3, 5), Rect.new(5, 5, 5, 5) & Rect.new(3, 3, 5, 7)) # X Out
 		assert_equal(Rect.new(5, 5, 5, 3), Rect.new(5, 5, 5, 5) & Rect.new(3, 3, 7, 5)) # Y Out
-		
-		# # Oversize
+	end
+	
+	def test_bitwise_and_oversize
+		# Oversize
 		assert_equal(Rect.new(5, 5, 5, 5), Rect.new(5, 5, 5, 5) & Rect.new(2, 2, 11, 11))
 		assert_equal(Rect.new(5, 5, 5, 2), Rect.new(5, 5, 5, 5) & Rect.new(2, 2, 11, 5)) # X
 		assert_equal(Rect.new(5, 5, 2, 5), Rect.new(5, 5, 5, 5) & Rect.new(2, 2, 5, 11)) # Y
+	end
+	
+	def test_bitwise_and_unspecific_end
+		# Unspecific End
 		
-		# # Unspecific End
-		assert_equal(Rect.new(5, 5, 5, 5), Rect.new(5, 5, 5, 5) & Rect.new(2, 2))
-		assert_equal(Rect.new(5, 5, 5, 2), Rect.new(5, 5, 5, 5) & Rect.new(2, 2, nil, 5)) # width
-		assert_equal(Rect.new(5, 5, 2, 5), Rect.new(5, 5, 5, 5) & Rect.new(2, 2, 5, nil)) # height
-		
+		[
+			
+			[ [5, 5, 5, 5], [2, 2, nil, nil], [5, 5, 5, 5] ],
+			[ [5, 5, 5, 5], [2, 2, nil,   5], [5, 5, 5, 2] ],
+			[ [5, 5, 5, 5], [2, 2,   5, nil], [5, 5, 2, 5] ],
+			
+			[ [5, 5, nil, nil], [2, 2, 5, 5], [5, 5, 2, 2] ],
+			[ [2, 2, nil, nil], [3, 3, 5, 5], [3, 3, 5, 5] ],
+			
+			[ [5, 5, nil, nil], [2, 2, nil, nil], [5, 5, nil, nil] ],
+			[ [2, 2, nil, nil], [3, 3, nil, nil], [3, 3, nil, nil] ],
+			
+		].each do |set|
+			rect1 = Rect.new(set[0][0], set[0][1], set[0][2], set[0][3])
+			rect2 = Rect.new(set[1][0], set[1][1], set[1][2], set[1][3])
+			expt = Rect.new(set[2][0], set[2][1], set[2][2], set[2][3])
+			
+			assert_equal(expt, rect1 & rect2)
+		end
+	end
+	
+	def test_bitwise_and_not_a_sub_rect
 		# Not a Sub Rect
 		assert_equal(nil, Rect.new(0, 0, 5, 5) & Rect.new(20, 20, 5, 5))
 		assert_equal(nil, Rect.new(5, 5, 5, 5) & Rect.new(20, 5, 5, 5))
@@ -151,10 +180,6 @@ class TestRect < MiniTest::Test
 		assert_raises NotImplementedError do
 			rect1 - 21
 		end
-	end
-	
-	def test_sub
-		
 	end
 	
 end

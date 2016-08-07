@@ -9,7 +9,7 @@ module TheFox
 				
 				#puts 'TextView->initialize'
 				
-				process_text(text)
+				draw_text(text)
 			end
 			
 			def text=(text)
@@ -17,12 +17,12 @@ module TheFox
 					raise ArgumentError, "Argument is not a String -- #{text.class} given"
 				end
 				
-				process_text(text)
+				draw_text(text)
 			end
 			
 			private
 			
-			def process_text(text)
+			def draw_text(text)
 				@text = text
 				if !@text.nil?
 					y = 0
