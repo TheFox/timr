@@ -485,4 +485,105 @@ class TestView < MiniTest::Test
 		assert_equal(5, view1.height)
 	end
 	
+	def test_redraw
+		view1 = View.new('view1')
+		view1.is_visible = true
+		
+		view1.draw_point(Point.new(0, 0), ?A)
+		view1.draw_point(Point.new(1, 0), ?B)
+		view1.draw_point(Point.new(2, 0), ?C)
+		view1.draw_point(Point.new(3, 0), ?D)
+		
+		view2 = View.new('view2')
+		view2.is_visible = true
+		view2.position = TheFox::TermKit::Point.new(2, 0)
+		view2.draw_point(Point.new(0, 0), ?W)
+		view2.draw_point(Point.new(1, 0), ?X)
+		view2.draw_point(Point.new(2, 0), ?Y)
+		view2.draw_point(Point.new(3, 0), ?Z)
+		view1.add_subview(view2)
+		
+		assert_equal('ABWXYZ', view1.to_s)
+		
+		view2.is_visible = false
+		
+		# At the first time re-draw with spaces.
+		#assert_equal('ABCD  ', view1.to_s)
+		
+		# At the second time don't draw spaces anymore.
+		#assert_equal('ABCD', view1.to_s)
+	end
+	
+	def test_negative_position
+		view1 = View.new('view1')
+		view1.is_visible = true
+		
+		view1.draw_point(Point.new(0, 0), ?A)
+		view1.draw_point(Point.new(1, 0), ?B)
+		view1.draw_point(Point.new(2, 0), ?C)
+		view1.draw_point(Point.new(3, 0), ?D)
+		
+		view2 = View.new('view2')
+		view2.is_visible = true
+		view2.position = TheFox::TermKit::Point.new(-1, -1)
+		view2.draw_point(Point.new(0, 0), ?X)
+		view2.draw_point(Point.new(1, 0), ?Y)
+		view2.draw_point(Point.new(2, 0), ?Z)
+		view2.draw_point(Point.new(0, 1), ?W)
+		view2.draw_point(Point.new(1, 1), ?X)
+		view2.draw_point(Point.new(2, 1), ?Y)
+		view1.add_subview(view2)
+		
+		assert_equal('XYCD', view1.to_s_rect(Rect.new(0, 0)))
+	end
+	
+	def test_offset1
+		view1 = View.new('view1')
+		view1.is_visible = true
+		view1.draw_point(Point.new(0, 0), ?A)
+		view1.draw_point(Point.new(1, 0), ?B)
+		view1.draw_point(Point.new(2, 0), ?C)
+		view1.draw_point(Point.new(3, 0), ?D)
+		
+		view2 = View.new('view2')
+		view2.is_visible = true
+		view2.position = TheFox::TermKit::Point.new(1, 1)
+		view2.draw_point(Point.new(0, 0), ?X)
+		view2.draw_point(Point.new(1, 0), ?Y)
+		view2.draw_point(Point.new(2, 0), ?Z)
+		view2.draw_point(Point.new(0, 1), ?W)
+		view2.draw_point(Point.new(1, 1), ?X)
+		view2.draw_point(Point.new(2, 1), ?Y)
+		view1.add_subview(view2)
+		
+		#puts view1.to_s
+		
+		view2.offset = Point.new(0, 1)
+		#puts view1.to_s
+		assert_equal("ABCD\n WXY", view1.to_s)
+	end
+	
+	def test_offset2
+		view1 = View.new('view1')
+		view1.is_visible = true
+		view1.draw_point(Point.new(0, 0), ?A)
+		view1.draw_point(Point.new(1, 0), ?B)
+		view1.draw_point(Point.new(2, 0), ?C)
+		view1.draw_point(Point.new(3, 0), ?D)
+		
+		view2 = View.new('view2')
+		view2.is_visible = true
+		view2.position = TheFox::TermKit::Point.new(1, 1)
+		view2.draw_point(Point.new(0, 0), ?X)
+		view2.draw_point(Point.new(1, 0), ?Y)
+		view2.draw_point(Point.new(2, 0), ?Z)
+		view2.draw_point(Point.new(0, 1), ?W)
+		view2.draw_point(Point.new(1, 1), ?X)
+		view2.draw_point(Point.new(2, 1), ?Y)
+		view1.add_subview(view2)
+		
+		view2.offset = Point.new(0, 1)
+		assert_equal("BC\nWX", view1.to_s_rect(Rect.new(1, 0, 2)))
+	end
+	
 end

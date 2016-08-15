@@ -296,7 +296,9 @@ module TheFox
 			end
 			
 			def to_s
-				"#<#{self.class} #{x}:#{y} #{width}:#{height}>"
+				w_s = width.nil? ? 'NIL' : width
+				h_s = height.nil? ? 'NIL' : height
+				"#<#{self.class} #{x}:#{y} #{w_s}:#{h_s}>"
 			end
 		end
 		

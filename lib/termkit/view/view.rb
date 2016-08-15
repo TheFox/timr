@@ -12,10 +12,15 @@ module TheFox
 				@name = name # FOR DEBUG ONLY
 				@is_visible = false
 				@position = Point.new(0, 0)
+				@offset = nil
 				@size = nil
 				@grid = {}
 				grid_clear
 				@subviews = []
+			end
+			
+			def name=(name)
+				@name = name
 			end
 			
 			def name
@@ -40,6 +45,14 @@ module TheFox
 			
 			def position
 				@position
+			end
+			
+			def offset=(offset)
+				@offset = offset
+			end
+			
+			def offset
+				@offset
 			end
 			
 			def size=(size)
@@ -126,31 +139,78 @@ module TheFox
 			def grid_recursive(area = nil, level = 0)
 				tmp_grid = {}
 				
+				#puts "grid_recursive '#{@name}' #{level} o=#{@offset.nil? ? 'N' : 'OK'}"
+				
+				if area.nil?
+					#puts "grid_recursive '#{@name}', area is nil"
+					
+					if !@offset.nil? || !@size.nil?
+						area = Rect.new(0, 0)
+						if !@offset.nil?
+							#puts "grid_recursive '#{@name}', set offset: #{@offset}"
+							area.origin = @offset
+						else
+							#puts "grid_recursive '#{@name}', offset is nil"
+						end
+						if !@size.nil?
+							#puts "grid_recursive '#{@name}', set size: #{@size}"
+							area.size = @size
+						else
+							#puts "grid_recursive '#{@name}', size is nil"
+						end
+					else
+						#puts "grid_recursive '#{@name}', offset & size are nil"
+					end
+				else
+					#puts "grid_recursive '#{@name}', area #{area} #{@offset}"
+					
+					if !@offset.nil?
+						#puts "grid_recursive '#{@name}', set offset: #{@offset}"
+						area.origin = @offset
+					end
+				end
+				
+				
+				#puts "grid_recursive '#{@name}' a=#{area.nil? ? 'NIL' : 'OK'}"
+				
+				
+				
 				if area.nil?
 					#puts '' + ("\t" * level) + 'create temp grid'
 					
-					@grid.each do |y_pos, row|
-						tmp_grid[y_pos] = {}
-						row.each do |x_pos, content|
-							#puts '' + ("\t" * level) + "-> tg A #{x_pos}:#{y_pos} = '#{content}'"
-							tmp_grid[y_pos][x_pos] = content.clone
+					if @is_visible
+						@grid.each do |y_pos, row|
+							tmp_grid[y_pos] = {}
+							row.each do |x_pos, content|
+								#puts '' + ("\t" * level) + "-> tg A #{x_pos}:#{y_pos} = '#{content}'"
+								tmp_grid[y_pos][x_pos] = content.clone
+							end
 						end
 					end
 					
 					#puts '' + ("\t" * level) + 'temp grid A'
 					#pp tmp_grid
 					
-					@subviews.each do |subview|
+					@subviews.select{ |subview| subview.is_visible? }.each do |subview|
+						x_offset = 0
+						y_offset = 0
+						if !subview.offset.nil?
+							x_offset = subview.offset.x
+							y_offset = subview.offset.y
+						end
+						
 						sub_grid = subview.grid_recursive(nil, level + 1)
 						sub_grid.each do |y_pos, row|
-							y_pos_abs = y_pos + subview.position.y
+							#y_pos_abs = y_pos + subview.position.y
+							y_pos_abs = y_pos + subview.position.y - y_offset
 							
 							if !tmp_grid[y_pos_abs]
 								tmp_grid[y_pos_abs] = {}
 							end
 							
 							row.each do |x_pos, content|
-								x_pos_abs = x_pos + subview.position.x
+								#x_pos_abs = x_pos + subview.position.x
+								x_pos_abs = x_pos + subview.position.x - x_offset
 								
 								#puts '' + ("\t" * level) + "-> sv A #{x_pos_abs}:#{y_pos_abs} (#{x_pos}:#{y_pos}) = '#{content}'"
 								
@@ -173,7 +233,7 @@ module TheFox
 						
 						#puts "x_range '#{x_range}'"
 						
-						if @grid.keys.count > 0
+						if @is_visible && @grid.keys.count > 0
 							y_range_min = area.origin.y
 							y_range_max = area.y_max
 							if y_range_max.nil?
@@ -226,7 +286,25 @@ module TheFox
 						
 						#puts '' + ("\t" * level) + "temp grid C: #{tmp_grid}"
 						
-						@subviews.each do |subview|
+						# x_offset = 0
+						# y_offset = 0
+						# if !@offset.nil?
+						# 	x_offset = @offset.x
+						# 	y_offset = @offset.y
+						# end
+						# puts "grid_recursive '#{@name}' offset #{x_offset}:#{y_offset}"
+						
+						#puts "grid_recursive '#{@name}' subviews #{@subviews.count}"
+						@subviews.select{ |subview| subview.is_visible? }.each do |subview|
+							subview_x_offset = 0
+							subview_y_offset = 0
+							if !subview.offset.nil?
+								subview_x_offset = subview.offset.x
+								subview_y_offset = subview.offset.y
+							end
+							
+							#puts "grid_recursive '#{@name}' subview offset #{subview_x_offset}:#{subview_y_offset}"
+							
 							sub_rect_x = area.x - subview.position.x
 							sub_rect_width = area.size.width
 							if sub_rect_x < 0
@@ -246,6 +324,7 @@ module TheFox
 							sub_rect = area & tmp_rect
 							
 							if sub_rect
+								#puts "grid_recursive '#{@name}' sub_rect A OK"
 								sub_rect = sub_rect - tmp_rect
 								
 								#puts "sub_rect w: '#{area.width}' N=#{area.width.nil?}"
@@ -272,19 +351,22 @@ module TheFox
 								#puts
 								
 								sub_rect.size = Size.new(size_width, size_height)
+							else
+								#puts "grid_recursive '#{@name}' sub_rect A failed"
 							end
 							
 							if sub_rect
+								
 								sub_grid = subview.grid_recursive(sub_rect, level + 1)
 								sub_grid.each do |y_pos, row|
 									
-									#y_pos_abs = y_pos
-									y_pos_abs = y_pos + subview.position.y
+									#y_pos_abs = y_pos + subview.position.y
+									y_pos_abs = y_pos + subview.position.y - subview_y_offset
 									
 									row.each do |x_pos, content|
 										
-										#x_pos_abs = x_pos
-										x_pos_abs = x_pos + subview.position.x
+										#x_pos_abs = x_pos + subview.position.x
+										x_pos_abs = x_pos + subview.position.x - subview_x_offset
 										
 										if !tmp_grid[y_pos_abs]
 											tmp_grid[y_pos_abs] = {}
@@ -306,9 +388,11 @@ module TheFox
 							tmp_grid2 = {}
 							tmp_grid.each do |y_pos, row|
 								y_pos_abs = y_pos - area.origin.y
+								#y_pos_abs = y_pos - area.origin.y - y_offset
 								
 								row.each do |x_pos, content|
 									x_pos_abs = x_pos - area.origin.x
+									#x_pos_abs = x_pos - area.origin.x - x_offset
 									
 									#puts '' + ("\t" * level) + "  -> grid2 #{x_pos_abs}:#{y_pos_abs} #{content}"
 									
@@ -350,15 +434,17 @@ module TheFox
 			end
 			
 			def render(area = nil)
+				#puts "render '#{@name}' a=#{area.nil? ? 'N' : 'OK'}"
+				
 				rows = {}
 				if @is_visible
 					
-					if area.nil? && !@size.nil?
-						#puts "size: #{@size}"
-						
-						area = Rect.new(0, 0)
-						area.size = @size
-					end
+					# if area.nil? && !@size.nil?
+					# 	area = Rect.new(0, 0)
+					# 	if !@size.nil?
+					# 		area.size = @size
+					# 	end
+					# end
 					
 					grid_recursive(area).sort.each do |y_pos, row|
 						x_pos_prev = 0

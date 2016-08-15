@@ -5,7 +5,7 @@ module TheFox
 		class TextView < View
 			
 			def initialize(text = nil)
-				super()
+				super("text_view")
 				
 				#puts 'TextView->initialize'
 				
