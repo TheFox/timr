@@ -46,15 +46,22 @@ module TheFox
 			end
 			
 			def render
+				logger.debug('--- RENDER ---')
+				
 				sleep 1 # @TODO: remove this line
+				
 				@render_count += 1
 				draw_line(Point.new(0, 0), "RENDER: #{@render_count}")
 				if !@active_controller.nil?
 					@active_controller.render.each do |y_pos, row|
-						draw_line(Point.new(0, 1), "ROW: #{y_pos}"); ui_refresh
-						
-						row.each do |vcontent|
-							draw_line(Point.new(vcontent.start_x, y_pos), vcontent.content)
+						row.each do |x_pos, content|
+							sleep 0.1 # @TODO: remove this line
+							
+							logger.debug("RENDER #{x_pos}:#{y_pos}: '#{content}'")
+							
+							draw_point(Point.new(x_pos, y_pos), content)
+							
+							ui_refresh
 						end
 					end
 				end
@@ -62,6 +69,10 @@ module TheFox
 			end
 			
 			def draw_line(point, content)
+				raise NotImplementedError
+			end
+			
+			def draw_point(point, content)
 				raise NotImplementedError
 			end
 			

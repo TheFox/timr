@@ -22,18 +22,11 @@ class TestTextView < MiniTest::Test
 	def test_render
 		view1 = TextView.new('hello world')
 		view1.is_visible = true
-		rendered = view1.render
 		
-		rendered_row = rendered[0]
-		assert_equal('hello world', rendered_row[0].content)
+		assert_equal('hello world', view1.to_s)
 		
 		view1.text = "hello world\n LINE2"
-		
-		rendered = view1.render
-		rendered_row = rendered[0]
-		assert_equal('hello world', rendered_row[0].content)
-		rendered_row = rendered[1]
-		assert_equal(' LINE2', rendered_row[0].content)
+		assert_equal("hello world\n LINE2", view1.to_s)
 	end
 	
 end

@@ -9,8 +9,8 @@ module TheFox
 				#Curses.addstr("APP  CONTROLLER: #{event.key}    #{event.class}")
 				
 				if event.is_a?(TheFox::TermKit::KeyEvent)
-					Curses.setpos(1, 0)
-					Curses.addstr("APP  HANDLED: #{event.key}   ")
+					#Curses.setpos(1, 0)
+					#Curses.addstr("APP  HANDLED: #{event.key}   ")
 					
 					case event.key
 					when ?w, 3, 4

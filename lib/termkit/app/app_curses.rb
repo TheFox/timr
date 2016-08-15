@@ -34,6 +34,10 @@ module TheFox
 			end
 			
 			def draw_line(point, content)
+				draw_point(point, content)
+			end
+			
+			def draw_point(point, content)
 				Curses.setpos(point.y, point.x)
 				Curses.addstr(content)
 			end

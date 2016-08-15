@@ -1,14 +1,24 @@
 
+require 'logger'
+
 module TheFox
 	module TermKit
 		
 		class App
 			
 			def initialize
-				#puts 'App->initialize'
-				
 				@exit = false
-				#@run_cycle_sleep = 0.1
+				
+				@logger = Logger.new('termkit_app.log')
+				@logger.level = Logger::DEBUG
+			end
+			
+			def logger=(logger)
+				@logger = logger
+			end
+			
+			def logger
+				@logger
 			end
 			
 			def run
@@ -29,7 +39,7 @@ module TheFox
 			
 			def terminate
 				if !@exit
-					puts 'App->terminate'
+					#puts 'App->terminate'
 					
 					@exit = true
 					

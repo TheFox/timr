@@ -8,16 +8,23 @@ module TheFox
 				#puts 'Controller initialize'
 				
 				@is_active = false
-				#@child_controllers = []
-				#@child_views = []
+				@subcontrollers = []
 			end
 			
 			def active
 				@is_active = true
+				
+				@subcontrollers.each do |subcontroller|
+					subcontroller.active
+				end
 			end
 			
 			def inactive
 				@is_active = false
+				
+				@subcontrollers.each do |subcontroller|
+					subcontroller.inactive
+				end
 			end
 			
 			def is_active?
@@ -26,6 +33,25 @@ module TheFox
 			
 			def handle_event(event)
 				#puts "Controller handle_event: #{event.class}"
+			end
+			
+			def add_subcontroller(subcontroller)
+				if !subcontroller.is_a?(Controller)
+					raise ArgumentError, "Argument is not a Controller -- #{subcontroller.class} given"
+				end
+				if !@subcontrollers.is_a?(Array)
+					raise Exception::ParentClassNotInitializedException, "@subcontrollers is not an Array -- #{@subcontrollers.class} given"
+				end
+				
+				@subcontrollers.push(subcontroller)
+			end
+			
+			def remove_subcontroller(subcontroller)
+				@subcontrollers.delete(subcontroller)
+			end
+			
+			def subcontrollers
+				@subcontrollers
 			end
 			
 		end

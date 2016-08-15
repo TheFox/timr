@@ -2,7 +2,6 @@
 
 require 'minitest/autorun'
 require 'termkit'
-require 'pp'
 
 
 class TestView < MiniTest::Test
@@ -16,7 +15,7 @@ class TestView < MiniTest::Test
 		end
 	end
 	
-	def test_render
+	def test_render1
 		view1 = View.new
 		assert_equal({}, view1.render)
 		
@@ -36,20 +35,18 @@ class TestView < MiniTest::Test
 			rendered = view1.render
 			
 			rendered_row = rendered[0]
-			assert_equal("xy", rendered_row[0].content)
-			assert_equal(0, rendered_row[0].start_x)
-			assert_equal("z", rendered_row[1].content)
-			assert_equal(3, rendered_row[1].start_x)
+			assert_equal('x', rendered_row[0])
+			assert_equal('y', rendered_row[1])
+			assert_equal('z', rendered_row[3])
 			
 			rendered_row = rendered[2]
-			assert_equal("A", rendered_row[0].content)
-			assert_equal(0, rendered_row[0].start_x)
-			assert_equal("BC", rendered_row[1].content)
-			assert_equal(2, rendered_row[1].start_x)
+			assert_equal('A', rendered_row[0])
+			assert_equal('B', rendered_row[2])
+			assert_equal('C', rendered_row[3])
 		end
 	end
 	
-	def test_to_s1
+	def test_render2
 		view1 = View.new
 		view1.is_visible = true
 		
@@ -69,18 +66,31 @@ class TestView < MiniTest::Test
 		view1.draw_point(Point.new(2, 4), ?Y)
 		view1.draw_point(Point.new(3, 4), ?Z)
 		
-		assert_equal("xy z\n A  BC\n1 23\n\nX YZ", view1.to_s)
-	end
-	
-	def test_to_s2
-		view1 = View.new
-		view1.is_visible = true
 		
-		view1.draw_point(Point.new(1, 1), ?A)
-		view1.draw_point(Point.new(4, 1), ?B)
-		view1.draw_point(Point.new(5, 1), ?C)
+		rendered = view1.render
 		
-		assert_equal("\n A  BC", view1.to_s)
+		rendered_row = rendered[0]
+		assert_equal('x', rendered_row[0])
+		assert_equal('y', rendered_row[1])
+		assert_equal('z', rendered_row[3])
+		
+		rendered_row = rendered[1]
+		assert_equal('A', rendered_row[1])
+		assert_equal('B', rendered_row[4])
+		assert_equal('C', rendered_row[5])
+		
+		rendered_row = rendered[2]
+		assert_equal('1', rendered_row[0])
+		assert_equal('2', rendered_row[2])
+		assert_equal('3', rendered_row[3])
+		
+		rendered_row = rendered[3]
+		assert_equal(nil, rendered_row)
+		
+		rendered_row = rendered[4]
+		assert_equal('X', rendered_row[0])
+		assert_equal('Y', rendered_row[2])
+		assert_equal('Z', rendered_row[3])
 	end
 	
 	def test_add_subview_exception
@@ -112,6 +122,8 @@ class TestView < MiniTest::Test
 	def test_render_subview
 		view1 = View.new
 		view1.is_visible = true
+		view1.draw_point(Point.new(5, 1), ?I)
+		
 		view1.draw_point(Point.new(0, 0), ?A)
 		view1.draw_point(Point.new(1, 0), ?B)
 		view1.draw_point(Point.new(2, 0), ?C)
@@ -121,7 +133,6 @@ class TestView < MiniTest::Test
 		view1.draw_point(Point.new(2, 1), ?F)
 		view1.draw_point(Point.new(3, 1), ?G)
 		view1.draw_point(Point.new(4, 1), ?H)
-		view1.draw_point(Point.new(5, 1), ?I)
 		
 		view2 = View.new
 		view2.is_visible = true
@@ -135,7 +146,7 @@ class TestView < MiniTest::Test
 		
 		view2.position = TheFox::TermKit::Point.new(7, 1)
 		view2.draw_point(Point.new(0, 0), ?x)
-		assert_equal("ABC\nDEFGHI xYZ", view1.to_s)
+		assert_equal("ABC\nDEFGHIxYZ", view1.to_s)
 		
 		view2.position = TheFox::TermKit::Point.new(3, 1)
 		assert_equal("ABC\nDEFxYZ", view1.to_s)
@@ -150,7 +161,7 @@ class TestView < MiniTest::Test
 		assert_equal("ABC\nxYZGHI", view1.to_s)
 		
 		view2.position = TheFox::TermKit::Point.new(1, 2)
-		assert_equal("ABC\nDEFGHI\n xYZ", view1.to_s)
+		assert_equal("ABC\nDEFGHI\nxYZ", view1.to_s)
 		
 		view3 = View.new
 		view3.is_visible = true
@@ -160,7 +171,7 @@ class TestView < MiniTest::Test
 		view3.draw_point(Point.new(2, 0), ?3)
 		view1.add_subview(view3)
 		
-		assert_equal("ABC\nD123HI\n xYZ", view1.to_s)
+		assert_equal("ABC\nD123HI\nxYZ", view1.to_s)
 	end
 	
 	def test_render_subview_area1
@@ -255,18 +266,18 @@ class TestView < MiniTest::Test
 		#view1.add_subview(view3)
 		
 		
-		assert_equal(" D\nFGH\nGHI", view1.to_s_rect(Rect.new(4, 0, 3, 3)))
+		assert_equal("D\nFGH\nGHI", view1.to_s_rect(Rect.new(4, 0, 3, 3)))
 		assert_equal("FGH\nGHI", view1.to_s_rect(Rect.new(4, 1, 3, 2)))
 		
-		assert_equal("GHI", view1.to_s_rect(Rect.new(4, 2, 3, 1)))
-		assert_equal(" EF", view1.to_s_rect(Rect.new(1, 2, 3, 1)))
-		assert_equal("  E", view1.to_s_rect(Rect.new(0, 2, 3, 1)))
+		assert_equal('GHI', view1.to_s_rect(Rect.new(4, 2, 3, 1)))
+		assert_equal('EF', view1.to_s_rect(Rect.new(1, 2, 3, 1)))
+		assert_equal('E', view1.to_s_rect(Rect.new(0, 2, 3, 1)))
 		
-		assert_equal("ABC\n  D", view1.to_s_rect(Rect.new(0, 0, 3, 2)))
-		assert_equal("ABC\n  D\n  E", view1.to_s_rect(Rect.new(0, 0, 3, 3)))
-		assert_equal("ABC\n  DE\n  EF", view1.to_s_rect(Rect.new(0, 0, 4, 3)))
+		assert_equal("ABC\nD", view1.to_s_rect(Rect.new(0, 0, 3, 2)))
+		assert_equal("ABC\nD\nE", view1.to_s_rect(Rect.new(0, 0, 3, 3)))
+		assert_equal("ABC\nDE\nEF", view1.to_s_rect(Rect.new(0, 0, 4, 3)))
 		assert_equal("DE\nEF", view1.to_s_rect(Rect.new(2, 1, 2, 2)))
-		assert_equal("ABC\n  DEF\n  EFG", view1.to_s_rect(Rect.new(0, 0, 5, 3)))
+		assert_equal("ABC\nDEF\nEFG", view1.to_s_rect(Rect.new(0, 0, 5, 3)))
 	end
 	
 	def test_render_subview_area3
@@ -298,7 +309,7 @@ class TestView < MiniTest::Test
 		view2.draw_point(Point.new(5, 1), ?J)
 		view1.add_subview(view2)
 		
-		assert_equal(" DEF\n EFG", view1.to_s_rect(Rect.new(2, 2, 4, 5)))
+		assert_equal("DEF\nEFG", view1.to_s_rect(Rect.new(2, 2, 4, 5)))
 	end
 	
 	def test_render_subview_area4
@@ -326,7 +337,7 @@ class TestView < MiniTest::Test
 		view2.draw_point(Point.new(5, 1), ?J)
 		view1.add_subview(view2)
 		
-		assert_equal("ABC", view1.to_s_rect(Rect.new(0, 0, 3, 2)))
+		assert_equal('ABC', view1.to_s_rect(Rect.new(0, 0, 3, 2)))
 	end
 	
 	def test_render_size1
@@ -397,7 +408,7 @@ class TestView < MiniTest::Test
 		assert_equal("ABCD\nBCDABCD", view1.to_s)
 		
 		view1.size = TheFox::TermKit::Size.new(5, nil)
-		assert_equal("ABCD\nBCDAB\n   BC", view1.to_s)
+		assert_equal("ABCD\nBCDAB\nBC", view1.to_s)
 	end
 	
 	def test_height1
@@ -508,10 +519,10 @@ class TestView < MiniTest::Test
 		view2.is_visible = false
 		
 		# At the first time re-draw with spaces.
-		#assert_equal('ABCD  ', view1.to_s)
+		#assert_equal('ABCD  ', view1.to_s) # @TODO
 		
 		# At the second time don't draw spaces anymore.
-		#assert_equal('ABCD', view1.to_s)
+		#assert_equal('ABCD', view1.to_s) # @TODO
 	end
 	
 	def test_negative_position
@@ -560,7 +571,7 @@ class TestView < MiniTest::Test
 		
 		view2.offset = Point.new(0, 1)
 		#puts view1.to_s
-		assert_equal("ABCD\n WXY", view1.to_s)
+		assert_equal("ABCD\nWXY", view1.to_s)
 	end
 	
 	def test_offset2

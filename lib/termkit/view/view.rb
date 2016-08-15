@@ -122,56 +122,68 @@ module TheFox
 				end
 			end
 			
+			def draw_point(point, content)
+				if !point.is_a?(Point)
+					raise ArgumentError, "Argument is not a Point -- #{point.class} given"
+				end
+				
+				if @grid[point.y].nil?
+					@grid[point.y] = {}
+				end
+				
+				@grid[point.y][point.x] = content[0]
+			end
+			
 			def grid
 				@grid
 			end
 			
-			def grid_clear
+			def grid_clear(recursive = false)
 				@grid = {}
-			end
-			
-			def grid_clear_recursive
-				@subviews.each do |subview|
-					subview.grid_clear
+				
+				if recursive
+					@subviews.each do |subview|
+						subview.grid_clear(recursive)
+					end
 				end
 			end
 			
-			def grid_recursive(area = nil, level = 0)
+			def render(area = nil, level = 0)
 				tmp_grid = {}
 				
-				#puts "grid_recursive '#{@name}' #{level} o=#{@offset.nil? ? 'N' : 'OK'}"
+				#puts "grid_rec '#{@name}' #{level} o=#{@offset.nil? ? 'N' : 'OK'}"
 				
 				if area.nil?
-					#puts "grid_recursive '#{@name}', area is nil"
+					#puts "grid_rec '#{@name}', area is nil"
 					
 					if !@offset.nil? || !@size.nil?
 						area = Rect.new(0, 0)
 						if !@offset.nil?
-							#puts "grid_recursive '#{@name}', set offset: #{@offset}"
+							#puts "grid_rec '#{@name}', set offset: #{@offset}"
 							area.origin = @offset
 						else
-							#puts "grid_recursive '#{@name}', offset is nil"
+							#puts "grid_rec '#{@name}', offset is nil"
 						end
 						if !@size.nil?
-							#puts "grid_recursive '#{@name}', set size: #{@size}"
+							#puts "grid_rec '#{@name}', set size: #{@size}"
 							area.size = @size
 						else
-							#puts "grid_recursive '#{@name}', size is nil"
+							#puts "grid_rec '#{@name}', size is nil"
 						end
 					else
-						#puts "grid_recursive '#{@name}', offset & size are nil"
+						#puts "grid_rec '#{@name}', offset & size are nil"
 					end
 				else
-					#puts "grid_recursive '#{@name}', area #{area} #{@offset}"
+					#puts "grid_rec '#{@name}', area #{area} #{@offset}"
 					
 					if !@offset.nil?
-						#puts "grid_recursive '#{@name}', set offset: #{@offset}"
+						#puts "grid_rec '#{@name}', set offset: #{@offset}"
 						area.origin = @offset
 					end
 				end
 				
 				
-				#puts "grid_recursive '#{@name}' a=#{area.nil? ? 'NIL' : 'OK'}"
+				#puts "grid_rec '#{@name}' a=#{area.nil? ? 'NIL' : 'OK'}"
 				
 				
 				
@@ -199,7 +211,7 @@ module TheFox
 							y_offset = subview.offset.y
 						end
 						
-						sub_grid = subview.grid_recursive(nil, level + 1)
+						sub_grid = subview.render(nil, level + 1)
 						sub_grid.each do |y_pos, row|
 							#y_pos_abs = y_pos + subview.position.y
 							y_pos_abs = y_pos + subview.position.y - y_offset
@@ -223,7 +235,7 @@ module TheFox
 					#pp tmp_grid
 				else
 					if area.has_default_values?
-						tmp_grid = grid_recursive(nil, level + 1)
+						tmp_grid = render(nil, level + 1)
 					else
 						
 						#puts '' + ("\t" * level) + "area #{area}"
@@ -292,9 +304,9 @@ module TheFox
 						# 	x_offset = @offset.x
 						# 	y_offset = @offset.y
 						# end
-						# puts "grid_recursive '#{@name}' offset #{x_offset}:#{y_offset}"
+						# puts "grid_rec '#{@name}' offset #{x_offset}:#{y_offset}"
 						
-						#puts "grid_recursive '#{@name}' subviews #{@subviews.count}"
+						#puts "grid_rec '#{@name}' subviews #{@subviews.count}"
 						@subviews.select{ |subview| subview.is_visible? }.each do |subview|
 							subview_x_offset = 0
 							subview_y_offset = 0
@@ -303,7 +315,7 @@ module TheFox
 								subview_y_offset = subview.offset.y
 							end
 							
-							#puts "grid_recursive '#{@name}' subview offset #{subview_x_offset}:#{subview_y_offset}"
+							#puts "grid_rec '#{@name}' subview offset #{subview_x_offset}:#{subview_y_offset}"
 							
 							sub_rect_x = area.x - subview.position.x
 							sub_rect_width = area.size.width
@@ -324,7 +336,7 @@ module TheFox
 							sub_rect = area & tmp_rect
 							
 							if sub_rect
-								#puts "grid_recursive '#{@name}' sub_rect A OK"
+								#puts "grid_rec '#{@name}' sub_rect A OK"
 								sub_rect = sub_rect - tmp_rect
 								
 								#puts "sub_rect w: '#{area.width}' N=#{area.width.nil?}"
@@ -352,12 +364,12 @@ module TheFox
 								
 								sub_rect.size = Size.new(size_width, size_height)
 							else
-								#puts "grid_recursive '#{@name}' sub_rect A failed"
+								#puts "grid_rec '#{@name}' sub_rect A failed"
 							end
 							
 							if sub_rect
 								
-								sub_grid = subview.grid_recursive(sub_rect, level + 1)
+								sub_grid = subview.render(sub_rect, level + 1)
 								sub_grid.each do |y_pos, row|
 									
 									#y_pos_abs = y_pos + subview.position.y
@@ -433,81 +445,13 @@ module TheFox
 				@subviews
 			end
 			
-			def render(area = nil)
-				#puts "render '#{@name}' a=#{area.nil? ? 'N' : 'OK'}"
-				
-				rows = {}
-				if @is_visible
-					
-					# if area.nil? && !@size.nil?
-					# 	area = Rect.new(0, 0)
-					# 	if !@size.nil?
-					# 		area.size = @size
-					# 	end
-					# end
-					
-					grid_recursive(area).sort.each do |y_pos, row|
-						x_pos_prev = 0
-						current_block = nil
-						current_row = nil
-						row.sort.each do |x_pos, x_char|
-							if !current_block.nil? && x_pos == x_pos_prev + 1
-								current_block.append(x_char)
-							else
-								if !rows[y_pos]
-									rows[y_pos] = current_row = []
-								end
-								
-								current_block = ViewContent.new(x_pos, x_char)
-								current_row << current_block
-							end
-							
-							x_pos_prev = x_pos
-						end
-					end
-				end
-				#pp rows
-				rows.sort.to_h
-			end
-			
-			def draw_point(point, content)
-				if !point.is_a?(Point)
-					raise ArgumentError, "Argument is not a Point -- #{point.class} given"
-				end
-				
-				if @grid[point.y].nil?
-					@grid[point.y] = {}
-				end
-				
-				@grid[point.y][point.x] = content[0]
-			end
-			
 			def to_s
 				to_s_rect
 			end
 			
 			def to_s_rect(area = nil)
-				s = ''
-				y_pos_prev = 0
-				render(area).each do |y_pos, row|
-					y_diff = y_pos - y_pos_prev
-					if y_diff > 0
-						s << "\n" * y_diff
-					end
-					
-					x_pos_prev = -1
-					row.each do |vcontent|
-						x_diff = vcontent.start_x - x_pos_prev - 1
-						if x_diff > 0
-							s << ' ' * x_diff
-						end
-						s << vcontent.content
-						x_pos_prev = vcontent.start_x + vcontent.content.length - 1
-					end
-					
-					y_pos_prev = y_pos
-				end
-				s
+				rows = render(area)
+				rows.sort.to_h.map{ |y_pos, row| row.sort.to_h.values.join }.join("\n")
 			end
 			
 		end

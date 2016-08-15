@@ -9,8 +9,18 @@ class TestViewTable < MiniTest::Test
 	
 	include TheFox::TermKit
 	
-	def test_render
+	def test_render1
+		view1 = TableView.new('table_view1')
+		view1.is_visible = true
+		view1.table_data = ['zeile A', 'zeile B', "zeile Ca-\nzeile Cb-", 'zeile D-']
+		
+		#puts view1.to_s
+		assert_equal("zeile A\nzeile B\nzeile Ca-\nzeile Cb-\nzeile D-", view1.to_s)
+	end
+	
+	def test_render2
 		header1 = TheFox::TermKit::TextView.new('--HEADER A--')
+		header1.is_visible = true
 		
 		view1 = TableView.new('table_view1')
 		view1.is_visible = true
@@ -23,6 +33,7 @@ class TestViewTable < MiniTest::Test
 	
 	def test_size
 		header1 = TheFox::TermKit::TextView.new('--HEADER A--')
+		header1.is_visible = true
 		
 		view1 = TableView.new('table_view1')
 		view1.is_visible = true
@@ -36,8 +47,29 @@ class TestViewTable < MiniTest::Test
 		assert_equal("--HEADE\nzeile A\nzeile B\nzeile C\nzeile C\nzeile D", view1.to_s)
 	end
 	
-	def test_cursor_position
+	def test_cursor_position1
 		header1 = TheFox::TermKit::TextView.new("--HEADER A--\n--HEADER B--")
+		header1.is_visible = true
+		
+		view1 = TableView.new('table_view1')
+		view1.is_visible = true
+		view1.header_cell_view = header1
+		view1.table_data = [
+			'zeile A.',
+			'zeile B.',
+			'zeile Ca',
+		]
+		
+		view2 = TheFox::TermKit::View.new
+		view2.is_visible = true
+		view2.add_subview(view1)
+		
+		assert_equal("--HEADER A--\n--HEADER B--\nzeile A.\nzeile B.\nzeile Ca", view2.to_s)
+	end
+	
+	def test_cursor_position2
+		header1 = TheFox::TermKit::TextView.new("--HEADER A--\n--HEADER B--")
+		header1.is_visible = true
 		
 		view1 = TableView.new('table_view1')
 		view1.is_visible = true
@@ -153,10 +185,6 @@ class TestViewTable < MiniTest::Test
 		view1.cursor_position = 0
 		assert_equal(1, view1.cursor_position)
 		assert_equal("--HEADER A--\n--HEADER B--\nzeile A.\nzeile B.\nzeile Ca.\nzeile Cbbbbb.", view1.to_s)
-		
-		#puts view1.to_s
-		#puts
-		
 	end
 	
 end

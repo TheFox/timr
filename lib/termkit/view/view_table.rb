@@ -47,9 +47,11 @@ module TheFox
 				if !@header_cell_view.nil?
 					remove_subview(@header_cell_view)
 				end
+				
 				@header_cell_view = header_cell_view
 				add_subview(@header_cell_view)
 				@header_height = @header_cell_view.height
+				@page_height = @header_height
 				
 				if !@size.nil?
 					@page_height = @size.height - @header_height
@@ -97,14 +99,10 @@ module TheFox
 				@page_height_total = y_pos
 			end
 			
-			def render(area = nil)
+			def render(area = nil, level = 0)
 				render_cells
 				
-				# if area.nil?
-				# 	area = Rect.new(0, 0)
-				# end
-				
-				super(area)
+				super(area, level)
 			end
 			
 			def cursor_position=(cursor_position)
@@ -142,16 +140,18 @@ module TheFox
 				@cursor_position
 			end
 			
+			def move_cursor_down(steps = 1)
+				cursor_position = @cursor_position + steps
+			end
+			
+			def move_cursor_up(steps = 1)
+				cursor_position = @cursor_position - steps
+			end
+			
 			private
 			
 			def calc_page
-				# @page.each do |cell|
-				# 	#puts "hide: '#{cell.name}'"
-				# 	cell.is_visible = false
-				# end
-				
 				page_end_old = @page_begin + @page_height - 1
-				#puts "page old #{@page_begin} (#{@page_height}) #{page_end_old}"
 				
 				# -1 up
 				#  0 unchanged
@@ -182,13 +182,9 @@ module TheFox
 			def render_cells
 				y_pos = 0
 				
-				if !@header_cell_view.nil?
-					@header_cell_view.is_visible = true
+				if !@header_cell_view.nil? && @header_cell_view.is_visible?
 					y_pos += @header_cell_view.height + @header_cell_view.position.y
 				end
-				
-				#puts "render_cells y #{y_pos}"
-				#puts "render_cells p #{@page_begin}"
 				
 				@table.position = Point.new(0, y_pos)
 				@table.offset = Point.new(0, @page_begin - 1)
