@@ -5,22 +5,9 @@ module TheFox
 		class HelpViewController < TheFox::TermKit::ViewController
 			
 			def initialize
-				# view1 = TheFox::TermKit::TextView.new('HELLO WORLD')
-				# view1.is_visible = true
-				
-				# view2 = TheFox::TermKit::TextView.new('BBB')
-				# view2.position = TheFox::TermKit::Point.new(10, 5)
-				# view2.is_visible = true
-				
-				#view1.add_subview(view2)
-				
-				#super(view1)
-				
 				header = TitleView.new
 				header.is_visible = true
-				#header.position = TheFox::TermKit::Point.new(1, 1)
 				
-				#table_view = TheFox::TermKit::TableView.new
 				table_view = HelpTableView.new
 				table_view.is_visible = true
 				table_view.position = TheFox::TermKit::Point.new(0, 10)
@@ -31,18 +18,7 @@ module TheFox
 				view.add_subview(table_view)
 				
 				@main_view_controller = TheFox::TermKit::ViewController.new(view)
-			end
-			
-			def active
-				super()
-				
-				@main_view_controller.active
-			end
-			
-			def inactive
-				super()
-				
-				@main_view_controller.inactive
+				add_subcontroller(@main_view_controller)
 			end
 			
 			def render
