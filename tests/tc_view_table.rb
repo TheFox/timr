@@ -2,7 +2,6 @@
 
 require 'minitest/autorun'
 require 'termkit'
-require 'pp'
 
 
 class TestViewTable < MiniTest::Test

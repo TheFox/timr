@@ -1,5 +1,5 @@
 
-#require 'termkit/view/content_view'
+require 'termkit/view/content_view'
 
 require 'termkit/view/view'
 require 'termkit/view/view_text'

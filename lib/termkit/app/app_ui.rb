@@ -53,13 +53,17 @@ module TheFox
 				@render_count += 1
 				draw_line(Point.new(0, 0), "RENDER: #{@render_count}")
 				if !@active_controller.nil?
+					logger.debug('RENDER active_controller OK')
+					
 					@active_controller.render.each do |y_pos, row|
-						row.each do |x_pos, content|
+						row.each do |x_pos, view_content|
 							sleep 0.1 # @TODO: remove this line
 							
-							logger.debug("RENDER #{x_pos}:#{y_pos}: '#{content}'")
+							logger.debug("RENDER #{x_pos}:#{y_pos}: '#{view_content}'")
 							
-							draw_point(Point.new(x_pos, y_pos), content)
+							if view_content.needs_rendering
+								draw_point(Point.new(x_pos, y_pos), content.render)
+							end
 							
 							ui_refresh
 						end

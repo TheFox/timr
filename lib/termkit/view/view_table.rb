@@ -99,10 +99,10 @@ module TheFox
 				@page_height_total = y_pos
 			end
 			
-			def render(area = nil, level = 0)
+			def render(area = nil, rerender = false, level = 0)
 				render_cells
 				
-				super(area, level)
+				super(area, rerender, level)
 			end
 			
 			def cursor_position=(cursor_position)

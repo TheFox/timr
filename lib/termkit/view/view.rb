@@ -11,11 +11,15 @@ module TheFox
 				
 				@name = name # FOR DEBUG ONLY
 				@is_visible = false
+				@visibility_trend = 0
 				@position = Point.new(0, 0)
 				@offset = nil
 				@size = nil
 				@grid = {}
 				grid_clear
+				
+				@needs_rendering = true
+				@parent_view = nil
 				@subviews = []
 			end
 			
@@ -28,7 +32,16 @@ module TheFox
 			end
 			
 			def is_visible=(is_visible)
+				#puts "view '#{@name}' v=#{is_visible ? 'Y' : '-'}"
+				@visibility_trend = 0
+				if !@is_visible && is_visible
+					@visibility_trend = 1
+				elsif @is_visible && !is_visible
+					@visibility_trend = -1
+				end
+				
 				@is_visible = is_visible
+				self.needs_rendering = true
 			end
 			
 			def is_visible?
@@ -131,7 +144,18 @@ module TheFox
 					@grid[point.y] = {}
 				end
 				
-				@grid[point.y][point.x] = content[0]
+				view_content = nil
+				case content
+				when String
+					view_content = ViewContent.new(self, content)
+				when ViewContent
+					view_content = content
+				else
+					raise NotImplementedError, "Class '#{content.class}' not implemented yet"
+				end
+				
+				@grid[point.y][point.x] = view_content
+				self.needs_rendering = true
 			end
 			
 			def grid
@@ -146,64 +170,62 @@ module TheFox
 						subview.grid_clear(recursive)
 					end
 				end
+				
+				self.needs_rendering = true
 			end
 			
 			def render(area = nil, level = 0)
+				if !@is_visible && @visibility_trend == 0
+					return {}
+				end
+				
 				tmp_grid = {}
 				
-				#puts "grid_rec '#{@name}' #{level} o=#{@offset.nil? ? 'N' : 'OK'}"
-				
 				if area.nil?
-					#puts "grid_rec '#{@name}', area is nil"
-					
 					if !@offset.nil? || !@size.nil?
 						area = Rect.new(0, 0)
 						if !@offset.nil?
-							#puts "grid_rec '#{@name}', set offset: #{@offset}"
 							area.origin = @offset
-						else
-							#puts "grid_rec '#{@name}', offset is nil"
 						end
 						if !@size.nil?
-							#puts "grid_rec '#{@name}', set size: #{@size}"
 							area.size = @size
-						else
-							#puts "grid_rec '#{@name}', size is nil"
 						end
-					else
-						#puts "grid_rec '#{@name}', offset & size are nil"
 					end
 				else
-					#puts "grid_rec '#{@name}', area #{area} #{@offset}"
-					
 					if !@offset.nil?
-						#puts "grid_rec '#{@name}', set offset: #{@offset}"
 						area.origin = @offset
 					end
 				end
 				
-				
-				#puts "grid_rec '#{@name}' a=#{area.nil? ? 'NIL' : 'OK'}"
-				
-				
-				
 				if area.nil?
-					#puts '' + ("\t" * level) + 'create temp grid'
 					
-					if @is_visible
-						@grid.each do |y_pos, row|
-							tmp_grid[y_pos] = {}
-							row.each do |x_pos, content|
-								#puts '' + ("\t" * level) + "-> tg A #{x_pos}:#{y_pos} = '#{content}'"
-								tmp_grid[y_pos][x_pos] = content.clone
+					hide_view = @visibility_trend == -1
+					
+					render_grid = @visibility_trend != 0
+					
+					
+					puts "view '#{self.name}' a=#{render_grid ? 'Y' : '-'} v=#{@is_visible ? 'Y' : '-'} r=#{@needs_rendering ? 'Y' : '-'} h=#{hide_view ? 'Y' : '-'}"
+					
+					
+					
+					@grid.each do |y_pos, row|
+						tmp_grid[y_pos] = {}
+						row.each do |x_pos, content|
+							puts "view grid #{x_pos}:#{y_pos} c='#{content.char}'  cr=#{content.needs_rendering? ? 'Y' : '-'}"
+							if render_grid || content.needs_rendering?
+								content.hide = hide_view
+								
+								tmp_grid[y_pos][x_pos] = content
 							end
 						end
 					end
 					
-					#puts '' + ("\t" * level) + 'temp grid A'
-					#pp tmp_grid
+					puts "subviews #{@subview.nil? ? 0 : @subview.count}"
 					
-					@subviews.select{ |subview| subview.is_visible? }.each do |subview|
+					#@subviews.select{ |subview| subview.is_visible? }.each do |subview|
+					@subviews.each do |subview|
+						puts "subview '#{subview.name}' r=#{subview.needs_rendering? ? 'Y' : '-'}"
+						
 						x_offset = 0
 						y_offset = 0
 						if !subview.offset.nil?
@@ -213,7 +235,6 @@ module TheFox
 						
 						sub_grid = subview.render(nil, level + 1)
 						sub_grid.each do |y_pos, row|
-							#y_pos_abs = y_pos + subview.position.y
 							y_pos_abs = y_pos + subview.position.y - y_offset
 							
 							if !tmp_grid[y_pos_abs]
@@ -221,35 +242,26 @@ module TheFox
 							end
 							
 							row.each do |x_pos, content|
-								#x_pos_abs = x_pos + subview.position.x
 								x_pos_abs = x_pos + subview.position.x - x_offset
 								
-								#puts '' + ("\t" * level) + "-> sv A #{x_pos_abs}:#{y_pos_abs} (#{x_pos}:#{y_pos}) = '#{content}'"
+								is_set = tmp_grid[y_pos_abs] && tmp_grid[y_pos_abs][x_pos_abs]
+								nis_set = !tmp_grid[y_pos_abs] || !tmp_grid[y_pos_abs][x_pos_abs]
+								
+								puts "subview grid #{x_pos_abs}:#{y_pos_abs} c='#{content.char}' r=#{content.needs_rendering? ? 'Y' : '-'} s=#{is_set ? 'Y' : '-'}/#{nis_set ? 'Y' : '-'}"
 								
 								tmp_grid[y_pos_abs][x_pos_abs] = content
 							end
 						end
 					end
-					
-					#puts '' + ("\t" * level) + 'temp grid B'
-					#pp tmp_grid
 				else
 					if area.has_default_values?
 						tmp_grid = render(nil, level + 1)
 					else
 						
-						#puts '' + ("\t" * level) + "area #{area}"
-						
-						#y_range = area.origin.y..area.y_max
-						#x_range = area.origin.x..area.x_max
-						
-						#puts "x_range '#{x_range}'"
-						
-						if @is_visible && @grid.keys.count > 0
+						if @grid.keys.count > 0
 							y_range_min = area.origin.y
 							y_range_max = area.y_max
 							if y_range_max.nil?
-								#puts "y_range_max is nil"
 								y_range_max = @grid.keys.max
 							end
 							y_range = y_range_min..y_range_max
@@ -258,13 +270,8 @@ module TheFox
 							x_range_max = area.x_max
 							x_range_max_dyn = x_range_max.nil?
 							
-							#puts "start x_range_max: #{x_range_max}"
-							
 							y_range.each do |y_pos|
 								row = @grid[y_pos]
-								
-								#puts '' + ("\t" * level) + "y #{y_pos}"
-								
 								if row && row.keys.count > 0
 									if x_range_max_dyn
 										row_max = row.keys.max
@@ -277,13 +284,9 @@ module TheFox
 										end
 									end
 									
-									#puts "real x range     : #{x_range_min} #{x_range_max}"
-									
 									(x_range_min..x_range_max).each do |x_pos|
 										content = row[x_pos]
-										
 										if content
-											#puts '' + ("\t" * level) + "-> tg B #{x_pos}:#{y_pos} = '#{content}'"
 											
 											if !tmp_grid[y_pos]
 												tmp_grid[y_pos] = {}
@@ -295,18 +298,7 @@ module TheFox
 								end
 							end
 						end
-						
-						#puts '' + ("\t" * level) + "temp grid C: #{tmp_grid}"
-						
-						# x_offset = 0
-						# y_offset = 0
-						# if !@offset.nil?
-						# 	x_offset = @offset.x
-						# 	y_offset = @offset.y
-						# end
-						# puts "grid_rec '#{@name}' offset #{x_offset}:#{y_offset}"
-						
-						#puts "grid_rec '#{@name}' subviews #{@subviews.count}"
+							
 						@subviews.select{ |subview| subview.is_visible? }.each do |subview|
 							subview_x_offset = 0
 							subview_y_offset = 0
@@ -314,8 +306,6 @@ module TheFox
 								subview_x_offset = subview.offset.x
 								subview_y_offset = subview.offset.y
 							end
-							
-							#puts "grid_rec '#{@name}' subview offset #{subview_x_offset}:#{subview_y_offset}"
 							
 							sub_rect_x = area.x - subview.position.x
 							sub_rect_width = area.size.width
@@ -336,11 +326,7 @@ module TheFox
 							sub_rect = area & tmp_rect
 							
 							if sub_rect
-								#puts "grid_rec '#{@name}' sub_rect A OK"
 								sub_rect = sub_rect - tmp_rect
-								
-								#puts "sub_rect w: '#{area.width}' N=#{area.width.nil?}"
-								#puts "sub_rect x: '#{area.x}' N=#{area.x.nil?}"
 								
 								size_width = nil
 								if !area.width.nil?
@@ -358,26 +344,15 @@ module TheFox
 									end
 								end
 								
-								#puts "size_width : '#{size_width}' N=#{size_width.nil?}"
-								#puts "size_height: '#{size_height}' N=#{size_height.nil?}"
-								#puts
-								
 								sub_rect.size = Size.new(size_width, size_height)
-							else
-								#puts "grid_rec '#{@name}' sub_rect A failed"
 							end
 							
 							if sub_rect
-								
 								sub_grid = subview.render(sub_rect, level + 1)
 								sub_grid.each do |y_pos, row|
-									
-									#y_pos_abs = y_pos + subview.position.y
 									y_pos_abs = y_pos + subview.position.y - subview_y_offset
 									
 									row.each do |x_pos, content|
-										
-										#x_pos_abs = x_pos + subview.position.x
 										x_pos_abs = x_pos + subview.position.x - subview_x_offset
 										
 										if !tmp_grid[y_pos_abs]
@@ -385,28 +360,18 @@ module TheFox
 										end
 										
 										tmp_grid[y_pos_abs][x_pos_abs] = content.clone
-										
-										#puts '' + ("\t" * level) + "  -> sub_grid #{x_pos_abs}:#{y_pos_abs} #{content}"
 									end
 								end
 							end
 						end
 						
-						#puts '' + ("\t" * level) + "temp grid D: #{tmp_grid}"
-						
 						if level == 0
-							#puts '' + ("\t" * level) + "offset: #{area.origin.x}:#{area.origin.y}"
-							
 							tmp_grid2 = {}
 							tmp_grid.each do |y_pos, row|
 								y_pos_abs = y_pos - area.origin.y
-								#y_pos_abs = y_pos - area.origin.y - y_offset
 								
 								row.each do |x_pos, content|
 									x_pos_abs = x_pos - area.origin.x
-									#x_pos_abs = x_pos - area.origin.x - x_offset
-									
-									#puts '' + ("\t" * level) + "  -> grid2 #{x_pos_abs}:#{y_pos_abs} #{content}"
 									
 									if !tmp_grid2[y_pos_abs]
 										tmp_grid2[y_pos_abs] = {}
@@ -415,15 +380,33 @@ module TheFox
 									tmp_grid2[y_pos_abs][x_pos_abs] = content
 								end
 							end
-							
 							tmp_grid = tmp_grid2
 						end
 					end
 				end
 				
-				#puts '' + ("\t" * level) + "temp grid END: #{tmp_grid}"
+				@visibility_trend = 0
+				@needs_rendering = false
 				
 				tmp_grid
+			end
+			
+			def needs_rendering=(needs_rendering = true)
+				#puts "view '#{@name}' r=#{needs_rendering ? 'Y' : '-'}"
+				
+				@needs_rendering = needs_rendering
+				
+				if needs_rendering && !@parent_view.nil?
+					@parent_view.needs_rendering = true
+				end
+			end
+			
+			def needs_rendering?
+				@needs_rendering
+			end
+			
+			def parent_view=(parent_view)
+				@parent_view = parent_view
 			end
 			
 			def add_subview(subview)
@@ -434,11 +417,15 @@ module TheFox
 					raise Exception::ParentClassNotInitializedException, "@subviews is not an Array -- #{@subviews.class} given"
 				end
 				
+				subview.parent_view = self
 				@subviews.push(subview)
+				self.needs_rendering = true
 			end
 			
 			def remove_subview(subview)
+				subview.parent_view = nil
 				@subviews.delete(subview)
+				self.needs_rendering = true
 			end
 			
 			def subviews
@@ -451,7 +438,7 @@ module TheFox
 			
 			def to_s_rect(area = nil)
 				rows = render(area)
-				rows.sort.to_h.map{ |y_pos, row| row.sort.to_h.values.join }.join("\n")
+				rows.sort.to_h.map{ |y_pos, row| row.sort.to_h.values.map{ |view_content| view_content.render }.join }.join("\n")
 			end
 			
 		end

@@ -12,9 +12,6 @@ module TheFox
 				super()
 				
 				@view = view
-				@view_needs_rendering = true
-				
-				#puts 'AppController initialize'
 			end
 			
 			def view
@@ -22,9 +19,7 @@ module TheFox
 			end
 			
 			def render
-				if is_active? && @view_needs_rendering
-					@view_needs_rendering = false
-					
+				if is_active? && @view.needs_rendering
 					@view.render
 				else
 					[]

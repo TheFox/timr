@@ -2,6 +2,7 @@
 
 require 'minitest/autorun'
 require 'termkit'
+require 'pp'
 
 
 class TestView < MiniTest::Test
@@ -496,7 +497,60 @@ class TestView < MiniTest::Test
 		assert_equal(5, view1.height)
 	end
 	
-	def test_redraw
+	def test_redraw0
+		view1 = View.new('view1')
+		view1.is_visible = true
+		view1.draw_point(Point.new(0, 0), ?A)
+		view1.draw_point(Point.new(1, 0), ?B)
+		view1.draw_point(Point.new(2, 0), ?C)
+		view1.draw_point(Point.new(3, 0), ?D)
+		
+		assert_equal('ABCD', view1.to_s)
+		puts
+		assert_equal('', view1.to_s)
+		puts
+		
+		puts 'draw point'
+		view1.draw_point(Point.new(1, 0), ?b)
+		assert_equal('b', view1.to_s)
+		puts
+	end
+	
+	def test_redraw1
+		view1 = View.new('view1')
+		view1.draw_point(Point.new(0, 0), ?A)
+		view1.draw_point(Point.new(1, 0), ?B)
+		view1.draw_point(Point.new(2, 0), ?C)
+		view1.draw_point(Point.new(3, 0), ?D)
+		
+		assert_equal('', view1.to_s)
+		puts
+		
+		view1.is_visible = true
+		
+		assert_equal('ABCD', view1.to_s)
+		puts
+		assert_equal('', view1.to_s)
+		puts
+		
+		view1.is_visible = false
+		assert_equal('    ', view1.to_s)
+		puts
+		assert_equal('', view1.to_s)
+		puts
+		
+		view1.is_visible = true
+		assert_equal('ABCD', view1.to_s)
+		puts
+		assert_equal('', view1.to_s)
+		puts
+		
+		puts 'draw point'
+		view1.draw_point(Point.new(1, 0), ?b)
+		assert_equal('b', view1.to_s)
+	end
+	
+	def test_redraw2
 		view1 = View.new('view1')
 		view1.is_visible = true
 		
@@ -504,6 +558,11 @@ class TestView < MiniTest::Test
 		view1.draw_point(Point.new(1, 0), ?B)
 		view1.draw_point(Point.new(2, 0), ?C)
 		view1.draw_point(Point.new(3, 0), ?D)
+		
+		assert_equal('ABCD', view1.to_s)
+		puts
+		assert_equal('', view1.to_s)
+		puts
 		
 		view2 = View.new('view2')
 		view2.is_visible = true
@@ -514,15 +573,48 @@ class TestView < MiniTest::Test
 		view2.draw_point(Point.new(3, 0), ?Z)
 		view1.add_subview(view2)
 		
-		assert_equal('ABWXYZ', view1.to_s)
+		assert_equal('WXYZ', view1.to_s)
+		puts
+		assert_equal('', view1.to_s)
+		puts
+	end
+	
+	def test_redraw3
+		view1 = View.new('view1')
+		view1.is_visible = true
+		
+		view1.draw_point(Point.new(0, 0), ?A)
+		view1.draw_point(Point.new(1, 0), ?B)
+		view1.draw_point(Point.new(2, 0), ?C)
+		view1.draw_point(Point.new(3, 0), ?D)
+		
+		assert_equal('ABCD', view1.to_s)
+		puts
+		assert_equal('', view1.to_s)
+		puts
+		
+		view2 = View.new('view2')
+		view2.is_visible = true
+		view2.position = TheFox::TermKit::Point.new(2, 0)
+		view2.draw_point(Point.new(0, 0), ?W)
+		view2.draw_point(Point.new(1, 0), ?X)
+		view2.draw_point(Point.new(2, 0), ?Y)
+		view2.draw_point(Point.new(3, 0), ?Z)
+		view1.add_subview(view2)
+		
+		assert_equal('WXYZ', view1.to_s)
+		puts
+		assert_equal('', view1.to_s)
+		puts
 		
 		view2.is_visible = false
 		
 		# At the first time re-draw with spaces.
-		#assert_equal('ABCD  ', view1.to_s) # @TODO
+		assert_equal('ABCD  ', view1.to_s)
+		puts
 		
-		# At the second time don't draw spaces anymore.
-		#assert_equal('ABCD', view1.to_s) # @TODO
+		#assert_equal('', view1.to_s)
+		
 	end
 	
 	def test_negative_position
