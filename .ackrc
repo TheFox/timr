@@ -1,0 +1,7 @@
+
+--type=ruby
+--type=yaml
+
+--ignore-dir=.bundle
+--ignore-dir=releases
+--ignore-dir=tmp

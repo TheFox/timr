@@ -4,6 +4,8 @@ require 'thefox-ext'
 module TheFox
 	module TermKit
 		
+		##
+		# Base View class
 		class View
 			
 			def initialize(name = nil)
@@ -19,6 +21,7 @@ module TheFox
 				grid_clear
 				
 				@needs_rendering = true
+				@sub_needs_rendering = false
 				@parent_view = nil
 				@subviews = []
 			end
@@ -27,25 +30,42 @@ module TheFox
 				@name = name
 			end
 			
+			##
+			# The +name+ variable is only for debugging.
 			def name
 				@name
 			end
 			
 			def is_visible=(is_visible)
-				#puts "view '#{@name}' v=#{is_visible ? 'Y' : '-'}"
+				puts "view '#{@name}' vo=#{@is_visible ? 'Y' : 'n'} vn=#{is_visible ? 'Y' : 'n'}"
+				
 				@visibility_trend = 0
 				if !@is_visible && is_visible
 					@visibility_trend = 1
+					
+					@needs_rendering = true
 				elsif @is_visible && !is_visible
 					@visibility_trend = -1
+					
+					@needs_rendering = true
+					parent_sub_needs_rendering
 				end
 				
+				puts "view '#{@name}' t=#{@visibility_trend}"
+				
 				@is_visible = is_visible
-				self.needs_rendering = true
 			end
 			
 			def is_visible?
 				@is_visible
+			end
+			
+			def visibility_trend=(visibility_trend)
+				@visibility_trend = visibility_trend
+			end
+			
+			def visibility_trend?
+				@visibility_trend
 			end
 			
 			def position=(point)
@@ -155,7 +175,7 @@ module TheFox
 				end
 				
 				@grid[point.y][point.x] = view_content
-				self.needs_rendering = true
+				#@needs_rendering = true
 			end
 			
 			def grid
@@ -171,10 +191,26 @@ module TheFox
 					end
 				end
 				
-				self.needs_rendering = true
+				#@needs_rendering = true
 			end
 			
-			def render(area = nil, level = 0)
+			def grid_hide(hide, recursive = false)
+				#puts "view '#{@name}' h=#{hide ? 'Y' : 'n'} r=#{recursive ? 'Y' : 'n'}"
+				
+				@grid.each do |y_pos, row|
+					row.each do |x_pos, content|
+						content.hide = hide
+					end
+				end
+				
+				if recursive
+					@subviews.each do |subview|
+						subview.grid_hide(hide, recursive)
+					end
+				end
+			end
+			
+			def render(force = false, area = nil, level = 0)
 				if !@is_visible && @visibility_trend == 0
 					return {}
 				end
@@ -201,30 +237,36 @@ module TheFox
 					
 					hide_view = @visibility_trend == -1
 					
-					render_grid = @visibility_trend != 0
+					render_grid = @needs_rendering || @sub_needs_rendering
 					
 					
-					puts "view '#{self.name}' a=#{render_grid ? 'Y' : '-'} v=#{@is_visible ? 'Y' : '-'} r=#{@needs_rendering ? 'Y' : '-'} h=#{hide_view ? 'Y' : '-'}"
-					
-					
+					puts ("\t" * level) + "view '#{self.name}', render_grid=#{render_grid ? 'Y' : 'n'} visible=#{@is_visible ? 'Y' : 'n'} needs_rendering=#{@needs_rendering ? 'Y' : 'n'} sub_needs_rendering=#{@sub_needs_rendering ? 'Y' : 'n'} hide=#{hide_view ? 'Y' : 'n'}"
 					
 					@grid.each do |y_pos, row|
 						tmp_grid[y_pos] = {}
 						row.each do |x_pos, content|
-							puts "view grid #{x_pos}:#{y_pos} c='#{content.char}'  cr=#{content.needs_rendering? ? 'Y' : '-'}"
-							if render_grid || content.needs_rendering?
+							if force || render_grid || content.needs_rendering?
 								content.hide = hide_view
 								
 								tmp_grid[y_pos][x_pos] = content
+								
+								puts ("\t" * level) + "view '#{self.name}', #{x_pos}:#{y_pos} char='#{content.char}'  render=#{content.needs_rendering? ? 'Y' : 'n'} hide=#{content.hide ? 'Y' : 'n'}"
 							end
 						end
 					end
 					
-					puts "subviews #{@subview.nil? ? 0 : @subview.count}"
+					puts ("\t" * level) + "subviews: #{@subviews.nil? ? 0 : @subviews.count}   sub_needs_rendering=#{@sub_needs_rendering ? 'Y' : 'n'}"
 					
-					#@subviews.select{ |subview| subview.is_visible? }.each do |subview|
-					@subviews.each do |subview|
-						puts "subview '#{subview.name}' r=#{subview.needs_rendering? ? 'Y' : '-'}"
+					subviews_to_render = @subviews.select{ |subview|
+						if force
+							subview.is_visible?
+						else
+							subview.needs_rendering?
+						end
+					}
+					subviews_to_render.each do |subview|
+					
+						puts ("\t" * level) + "subview '#{subview.name}', render=#{subview.needs_rendering? ? 'Y' : 'n'} trend=#{subview.visibility_trend?}"
 						
 						x_offset = 0
 						y_offset = 0
@@ -233,7 +275,7 @@ module TheFox
 							y_offset = subview.offset.y
 						end
 						
-						sub_grid = subview.render(nil, level + 1)
+						sub_grid = subview.render(force, nil, level + 1)
 						sub_grid.each do |y_pos, row|
 							y_pos_abs = y_pos + subview.position.y - y_offset
 							
@@ -247,15 +289,32 @@ module TheFox
 								is_set = tmp_grid[y_pos_abs] && tmp_grid[y_pos_abs][x_pos_abs]
 								nis_set = !tmp_grid[y_pos_abs] || !tmp_grid[y_pos_abs][x_pos_abs]
 								
-								puts "subview grid #{x_pos_abs}:#{y_pos_abs} c='#{content.char}' r=#{content.needs_rendering? ? 'Y' : '-'} s=#{is_set ? 'Y' : '-'}/#{nis_set ? 'Y' : '-'}"
+								#puts ("\t" * level) + "subview '#{subview.name}', #{x_pos_abs}:#{y_pos_abs} char='#{content.char}' render=#{content.needs_rendering? ? 'Y' : 'n'} s=#{is_set ? 'Y' : 'n'}/#{nis_set ? 'Y' : 'n'}"
 								
-								tmp_grid[y_pos_abs][x_pos_abs] = content
+								
+								if subview.visibility_trend? == -1
+									if nis_set
+										puts ("\t" * level) + "subview '#{subview.name}', #{x_pos_abs}:#{y_pos_abs} char='#{content.char}' render=#{content.needs_rendering? ? 'Y' : 'n'} NO SET"
+										tmp_grid[y_pos_abs][x_pos_abs] = content
+									else
+										puts ("\t" * level) + "subview '#{subview.name}', #{x_pos_abs}:#{y_pos_abs} char='#{content.char}' render=#{content.needs_rendering? ? 'Y' : 'n'}    SET"
+									end
+								else
+									puts ("\t" * level) + "subview '#{subview.name}', #{x_pos_abs}:#{y_pos_abs} char='#{content.char}' render=#{content.needs_rendering? ? 'Y' : 'n'} DEFAULT"
+									tmp_grid[y_pos_abs][x_pos_abs] = content
+								end
+								
+								
+								#tmp_grid[y_pos_abs][x_pos_abs] = content
 							end
 						end
+						
+						subview.visibility_trend = 0
 					end
+					
 				else
 					if area.has_default_values?
-						tmp_grid = render(nil, level + 1)
+						tmp_grid = render(force, nil, level + 1)
 					else
 						
 						if @grid.keys.count > 0
@@ -348,7 +407,7 @@ module TheFox
 							end
 							
 							if sub_rect
-								sub_grid = subview.render(sub_rect, level + 1)
+								sub_grid = subview.render(force, sub_rect, level + 1)
 								sub_grid.each do |y_pos, row|
 									y_pos_abs = y_pos + subview.position.y - subview_y_offset
 									
@@ -385,24 +444,45 @@ module TheFox
 					end
 				end
 				
-				@visibility_trend = 0
+				if level == 0
+					@visibility_trend = 0
+				end
+				
 				@needs_rendering = false
+				@sub_needs_rendering = false
 				
 				tmp_grid
 			end
 			
-			def needs_rendering=(needs_rendering = true)
-				#puts "view '#{@name}' r=#{needs_rendering ? 'Y' : '-'}"
-				
+			def needs_rendering=(needs_rendering)
 				@needs_rendering = needs_rendering
-				
-				if needs_rendering && !@parent_view.nil?
-					@parent_view.needs_rendering = true
-				end
 			end
 			
+			##
+			# This view needs a rendering.
 			def needs_rendering?
 				@needs_rendering
+			end
+			
+			def sub_needs_rendering=(sub_needs_rendering)
+				@sub_needs_rendering = sub_needs_rendering
+			end
+			
+			##
+			# At least one of the subviews needs a rendering.
+			def sub_needs_rendering?
+				@sub_needs_rendering
+			end
+			
+			##
+			# Set the parent view the subview(s) needs a rendering.
+			def parent_sub_needs_rendering
+				puts "view '#{@name}' parent_sub_needs_rendering"
+				
+				if !@parent_view.nil? && !@parent_view.sub_needs_rendering?
+					@parent_view.sub_needs_rendering = true
+					@parent_view.parent_sub_needs_rendering
+				end
 			end
 			
 			def parent_view=(parent_view)
@@ -419,25 +499,22 @@ module TheFox
 				
 				subview.parent_view = self
 				@subviews.push(subview)
-				self.needs_rendering = true
 			end
 			
 			def remove_subview(subview)
-				subview.parent_view = nil
-				@subviews.delete(subview)
-				self.needs_rendering = true
+				raise NotImplementedError, "View.remove_subview() not implemented yet"
 			end
 			
 			def subviews
 				@subviews
 			end
 			
-			def to_s
-				to_s_rect
+			def to_s(force = false)
+				to_s_rect(force)
 			end
 			
-			def to_s_rect(area = nil)
-				rows = render(area)
+			def to_s_rect(force = false, area = nil)
+				rows = render(force, area)
 				rows.sort.to_h.map{ |y_pos, row| row.sort.to_h.values.map{ |view_content| view_content.render }.join }.join("\n")
 			end
 			

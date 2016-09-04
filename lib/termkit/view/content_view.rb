@@ -46,8 +46,10 @@ module TheFox
 				#puts "ViewContent render h=#{@hide ? 'Y' : '-'} c='#{@char}'"
 				@needs_rendering = false
 				
+				@char
+				
 				if @hide
-					@hide = false
+					#@hide = false
 					HIDE_CHAR
 				else
 					@char
