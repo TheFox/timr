@@ -2,6 +2,7 @@
 .setup
 /bin/dev
 CHANGELOG-*.txt
+/doc/
 Gemfile.lock
 /releases/
 README.html
