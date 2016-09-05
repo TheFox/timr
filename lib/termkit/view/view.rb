@@ -74,6 +74,9 @@ module TheFox
 				end
 				
 				@position = point
+				@needs_rendering = true
+				#@sub_needs_rendering = true
+				parent_sub_needs_rendering
 			end
 			
 			def position
@@ -175,7 +178,6 @@ module TheFox
 				end
 				
 				@grid[point.y][point.x] = view_content
-				#@needs_rendering = true
 			end
 			
 			def grid
@@ -190,8 +192,6 @@ module TheFox
 						subview.grid_clear(recursive)
 					end
 				end
-				
-				#@needs_rendering = true
 			end
 			
 			def grid_hide(hide, recursive = false)
@@ -301,6 +301,12 @@ module TheFox
 									end
 								else
 									puts ("\t" * level) + "subview '#{subview.name}', #{x_pos_abs}:#{y_pos_abs} char='#{content.char}' render=#{content.needs_rendering? ? 'Y' : 'n'} DEFAULT"
+									
+									
+									if tmp_grid[y_pos_abs][x_pos_abs]
+										
+									end
+									
 									tmp_grid[y_pos_abs][x_pos_abs] = content
 								end
 								

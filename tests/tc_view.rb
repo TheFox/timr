@@ -11,6 +11,65 @@ class TestView < MiniTest::Test
 	
 	include TheFox::TermKit
 	
+	def test_needs_rendering
+		view1 = View.new('view1')
+		assert_equal(true, view1.needs_rendering?)
+		
+		view1.is_visible = true
+		assert_equal(true, view1.needs_rendering?)
+		view1.render
+		assert_equal(false, view1.needs_rendering?)
+		
+		view1.is_visible = false
+		assert_equal(true, view1.needs_rendering?)
+		view1.render
+		assert_equal(false, view1.needs_rendering?)
+		
+		view1.is_visible = true
+		assert_equal(true, view1.needs_rendering?)
+		view1.render
+		assert_equal(false, view1.needs_rendering?)
+		
+		view1.draw_point(Point.new(0, 0), ?x)
+		assert_equal(false, view1.needs_rendering?)
+	end
+	
+	def test_sub_needs_rendering
+		view1 = View.new('view1')
+		view1.is_visible = true
+		assert_equal(false, view1.sub_needs_rendering?)
+		
+		view2 = View.new('view2')
+		view2.is_visible = true
+		view1.add_subview(view2)
+		assert_equal(false, view1.sub_needs_rendering?)
+		assert_equal(false, view2.sub_needs_rendering?)
+		
+		view2.is_visible = false
+		assert_equal(true, view1.sub_needs_rendering?)
+		assert_equal(false, view2.sub_needs_rendering?)
+		view1.render
+		assert_equal(false, view1.sub_needs_rendering?)
+		assert_equal(false, view2.sub_needs_rendering?)
+		
+		view3 = View.new('view3')
+		view3.is_visible = true
+		view2.add_subview(view3)
+		assert_equal(false, view1.sub_needs_rendering?)
+		assert_equal(false, view2.sub_needs_rendering?)
+		assert_equal(false, view3.sub_needs_rendering?)
+		
+		view2.is_visible = true
+		assert_equal(false, view1.sub_needs_rendering?)
+		assert_equal(false, view2.sub_needs_rendering?)
+		assert_equal(false, view3.sub_needs_rendering?)
+		
+		view3.is_visible = false
+		assert_equal(true, view1.sub_needs_rendering?)
+		assert_equal(true, view2.sub_needs_rendering?)
+		assert_equal(false, view3.sub_needs_rendering?)
+	end
+	
 	def test_render_exception
 		view1 = View.new
 		assert_raises ArgumentError do
@@ -330,7 +389,34 @@ class TestView < MiniTest::Test
 	end
 	
 	def test_render_subview_move
+		view1 = View.new('view1')
+		view1.is_visible = true
+		view1.draw_point(Point.new(0, 0), ?A)
+		view1.draw_point(Point.new(1, 0), ?B)
+		view1.draw_point(Point.new(2, 0), ?C)
 		
+		view2 = View.new('view2')
+		view2.is_visible = true
+		view2.position = TheFox::TermKit::Point.new(1, 0)
+		view2.draw_point(Point.new(0, 0), ?D)
+		view1.add_subview(view2)
+		
+		assert_equal('ADC', view1.to_s)
+		puts
+		puts
+		puts
+		
+		rendered = view1.render
+		pp rendered
+		
+		assert_equal(?B, rendered[0][1].char)
+		
+		puts
+		puts
+		puts
+		
+		#view2.position = TheFox::TermKit::Point.new(2, 0)
+		#assert_equal('ABD', view1.to_s)
 	end
 	
 	def test_render_size1
@@ -627,7 +713,6 @@ class TestView < MiniTest::Test
 		# view1.add_subview(view3)
 		
 		# assert_equal('', view1.to_s)
-		
 	end
 	
 	def test_negative_position
