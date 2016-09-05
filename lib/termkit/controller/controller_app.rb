@@ -12,8 +12,6 @@ module TheFox
 				super()
 				
 				@app = app
-				
-				#puts 'AppController->initialize'
 			end
 			
 		end

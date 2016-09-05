@@ -19,11 +19,7 @@ module TheFox
 			end
 			
 			def render
-				if is_active? && @view.needs_rendering?
-					@view.render
-				else
-					[]
-				end
+				
 			end
 			
 		end
