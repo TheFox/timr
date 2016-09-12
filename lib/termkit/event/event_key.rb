@@ -4,20 +4,14 @@ module TheFox
 		
 		class KeyEvent
 			
+			attr_accessor :key
+			
 			def initialize
 				super()
 				
 				@key = nil
 				
 				#puts "KeyEvent initialize"
-			end
-			
-			def key=(key)
-				@key = key
-			end
-			
-			def key
-				@key
 			end
 			
 			def to_s

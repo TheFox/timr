@@ -4,25 +4,12 @@ module TheFox
 		
 		class Rect
 			
+			attr_accessor :origin
+			attr_accessor :size
+			
 			def initialize(x = nil, y = nil, width = nil, height = nil)
 				@origin = Point.new(x, y)
 				@size = Size.new(width, height)
-			end
-			
-			def origin=(origin)
-				@origin = origin
-			end
-			
-			def origin
-				@origin
-			end
-			
-			def size=(size)
-				@size = size
-			end
-			
-			def size
-				@size
 			end
 			
 			def x
@@ -62,6 +49,7 @@ module TheFox
 				h_s = height.nil? ? 'NIL' : height
 				"#<#{self.class} #{x}:#{y} #{w_s}:#{h_s}>"
 			end
+			
 		end
 		
 	end

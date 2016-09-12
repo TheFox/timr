@@ -6,19 +6,13 @@ module TheFox
 		
 		class App
 			
+			attr_accessor :logger
+			
 			def initialize
 				@exit = false
 				
 				@logger = Logger.new('termkit_app.log')
 				@logger.level = Logger::DEBUG
-			end
-			
-			def logger=(logger)
-				@logger = logger
-			end
-			
-			def logger
-				@logger
 			end
 			
 			def run

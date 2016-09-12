@@ -4,6 +4,8 @@ module TheFox
 		
 		class ViewController < Controller
 			
+			attr_accessor :view
+			
 			def initialize(view = nil)
 				if !view.is_a?(View)
 					raise ArgumentError, "Argument is not a View -- #{view.class} given"
@@ -12,10 +14,6 @@ module TheFox
 				super()
 				
 				@view = view
-			end
-			
-			def view
-				@view
 			end
 			
 			def render

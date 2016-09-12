@@ -6,6 +6,8 @@ module TheFox
 		
 		class Stack < TheFox::TermKit::Model
 			
+			attr_reader :task
+			
 			def initialize
 				super()
 				
@@ -13,10 +15,6 @@ module TheFox
 				
 				@tasks = []
 				@task = nil
-			end
-			
-			def task
-				@task
 			end
 			
 			def has_task?

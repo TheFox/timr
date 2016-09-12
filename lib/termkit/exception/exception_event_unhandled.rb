@@ -5,12 +5,10 @@ module TheFox
 			
 			class UnhandledEventException < StdException
 				
+				attr_reader :event
+				
 				def initialize(event)
 					@event = event
-				end
-				
-				def event
-					@event
 				end
 				
 			end

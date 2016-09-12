@@ -4,25 +4,12 @@ module TheFox
 		
 		class Size
 			
+			attr_accessor :width
+			attr_accessor :height
+			
 			def initialize(width = nil, height = nil)
 				@width = width
 				@height = height
-			end
-			
-			def width=(width)
-				@width = width
-			end
-			
-			def width
-				@width
-			end
-			
-			def height=(height)
-				@height = height
-			end
-			
-			def height
-				@height
 			end
 			
 			def to_s

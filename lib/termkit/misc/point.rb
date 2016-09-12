@@ -4,25 +4,12 @@ module TheFox
 		
 		class Point
 			
+			attr_accessor :x
+			attr_accessor :y
+			
 			def initialize(x = nil, y = nil)
 				@x = x
 				@y = y
-			end
-			
-			def x=(x)
-				@x = x
-			end
-			
-			def x
-				@x
-			end
-			
-			def y=(y)
-				@y = y
-			end
-			
-			def y
-				@y
 			end
 			
 			def to_s

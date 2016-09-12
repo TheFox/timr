@@ -4,6 +4,9 @@ module TheFox
 		
 		class Window
 			
+			attr_reader :current_line
+			attr_reader :cursor
+			
 			def initialize(data = [])
 				@data = data
 				@content_length = 0
@@ -152,14 +155,6 @@ module TheFox
 			def previous_line
 				@page_changed = true
 				previous_page(1)
-			end
-			
-			def current_line
-				@current_line
-			end
-			
-			def cursor
-				@cursor
 			end
 			
 			def has_cursor?

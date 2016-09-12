@@ -8,6 +8,12 @@ module TheFox
 		
 		class Track < TheFox::TermKit::Model
 			
+			attr_accessor :id
+			attr_accessor :parent
+			attr_accessor :parent_id
+			attr_accessor :task
+			attr_reader :description
+			
 			def initialize
 				super()
 				
@@ -20,38 +26,6 @@ module TheFox
 				@begin_time = nil
 				@end_time = nil
 				@description = nil
-			end
-			
-			def id=(id)
-				@id = id
-			end
-			
-			def id
-				@id
-			end
-			
-			def parent=(parent)
-				@parent = parent
-			end
-			
-			def parent
-				@parent
-			end
-			
-			def parent_id=(parent_id)
-				@parent_id = parent_id
-			end
-			
-			def parent_id
-				@parent_id
-			end
-			
-			def task=(task)
-				@task = task
-			end
-			
-			def task
-				@task
 			end
 			
 			def begin_time=(begin_time)
@@ -82,10 +56,6 @@ module TheFox
 			
 			def description=(description)
 				@description = description == '' ? nil : description
-			end
-			
-			def description
-				@description
 			end
 			
 			def diff(end_time = nil)
