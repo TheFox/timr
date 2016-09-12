@@ -3,7 +3,7 @@
 		{
 			"path": ".",
 			"name": "Timr",
-			"folder_exclude_patterns": [ "doc" ],
+			"folder_exclude_patterns": [ "coverage", "doc", "releases" ],
 			"file_exclude_patterns": [ ]
 		}
 	]

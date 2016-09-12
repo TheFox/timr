@@ -9,7 +9,7 @@ dev:
 
 .PHONY: test
 test:
-	RUBYOPT=-w TZ=Europe/Vienna $(BUNDLER) exec ./tests/ts_all.rb -v
+	RUBYOPT=-w TZ=Europe/Vienna $(BUNDLER) exec ./test/suite_all.rb -v
 
 doc:
 	rdoc lib/termkit
