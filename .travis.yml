@@ -5,6 +5,9 @@ rvm:
     - 2.3
     - 2.4.0-preview1
     - ruby-head
+    - jruby-9.0
+    - jruby-head
+    - rbx-2
 sudo: required
 before_install:
     - gem update --system

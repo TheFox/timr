@@ -13,7 +13,7 @@ module TheFox
 			end
 			
 			def to_s
-				"#<#{self.class} #{x}:#{y}>"
+				"#<#{self.class} #{x.nil? ? 'nil' : x}:#{y.nil? ? 'nil' : y}>"
 			end
 			
 		end

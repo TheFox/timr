@@ -15,7 +15,11 @@ module TheFox
 			end
 			
 			def to_s
-				"#{self.class}->#{@key}[#{@key.ord}]"
+				ord_s = ''
+				if !@key.nil?
+					ord_s = "->#{@key.ord}[#{@key}]"
+				end
+				"#{self.class}#{ord_s}"
 			end
 			
 		end

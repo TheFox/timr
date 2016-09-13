@@ -8,11 +8,11 @@ module TheFox
 			
 			def initialize(view, char)
 				@view = view
-				@char = char[0].clone
+				@char = char[0]
 			end
 			
 			def to_s
-				char
+				@char
 			end
 			
 		end

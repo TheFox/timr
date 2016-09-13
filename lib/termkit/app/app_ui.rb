@@ -4,6 +4,9 @@ module TheFox
 		
 		class UIApp < App
 			
+			attr_accessor :app_controller
+			attr_accessor :active_controller
+			
 			def initialize
 				super()
 				
@@ -101,11 +104,11 @@ module TheFox
 			end
 			
 			def ui_init
-				#puts 'UIApp ui_init'
+				# raise NotImplementedError
 			end
 			
 			def ui_close
-				#puts 'UIApp ui_close'
+				# raise NotImplementedError
 			end
 			
 			def key_down(key)

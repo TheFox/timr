@@ -4,6 +4,8 @@ module TheFox
 		
 		class Controller
 			
+			attr_reader :subcontrollers
+			
 			def initialize
 				#puts 'Controller initialize'
 				
@@ -48,10 +50,6 @@ module TheFox
 			
 			def remove_subcontroller(subcontroller)
 				@subcontrollers.delete(subcontroller)
-			end
-			
-			def subcontrollers
-				@subcontrollers
 			end
 			
 		end

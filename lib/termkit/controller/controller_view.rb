@@ -7,7 +7,7 @@ module TheFox
 			attr_accessor :view
 			
 			def initialize(view = nil)
-				if !view.is_a?(View)
+				if !view.nil? && !view.is_a?(View)
 					raise ArgumentError, "Argument is not a View -- #{view.class} given"
 				end
 				

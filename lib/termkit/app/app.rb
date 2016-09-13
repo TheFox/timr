@@ -33,7 +33,7 @@ module TheFox
 			
 			def terminate
 				if !@exit
-					#puts 'App->terminate'
+					puts 'App->terminate'
 					
 					@exit = true
 					
@@ -44,7 +44,7 @@ module TheFox
 			protected
 			
 			def app_will_terminate
-				#puts 'App->app_will_terminate'
+				# puts 'App->app_will_terminate'
 			end
 			
 		end

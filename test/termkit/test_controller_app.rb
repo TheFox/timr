@@ -8,15 +8,7 @@ class TestAppController < MiniTest::Test
 	
 	include TheFox::TermKit
 	
-	def test_initialize
-		assert_raises ArgumentError do
-			AppController.new(nil)
-		end
-		
-		assert_raises ArgumentError do
-			AppController.new('STRING IS HERE INVALID')
-		end
-		
+	def test_app_controller
 		app1 = App.new
 		controller1 = AppController.new(app1)
 		assert_kind_of(App, app1)
@@ -27,6 +19,11 @@ class TestAppController < MiniTest::Test
 		assert_kind_of(App, app1)
 		assert_kind_of(UIApp, app1)
 		assert_kind_of(AppController, controller1)
+	end
+	
+	def test_app_controller_exception
+		assert_raises(ArgumentError){ AppController.new(nil) }
+		assert_raises(ArgumentError){ AppController.new('INVALID') }
 	end
 	
 end
