@@ -3,7 +3,6 @@
 # require 'minitest/reporters'
 # Minitest::Reporters.use!
 
-puts "#{ENV['COVERAGE'].to_i}"
 if ENV['COVERAGE'] && ENV['COVERAGE'].to_i != 0
 	require 'simplecov'
 	require 'simplecov-phpunit'

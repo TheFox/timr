@@ -9,11 +9,9 @@ class TestViewContent < MiniTest::Test
 	include TheFox::TermKit
 	
 	def test_to_s
-		view1 = View.new
-		
 		char = 'A'
 		
-		content1 = ViewContent.new(view1, char)
+		content1 = ViewContent.new(char)
 		assert_equal('A', content1.to_s)
 		assert_equal('A', char)
 		
