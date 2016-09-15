@@ -8,8 +8,8 @@ rvm:
     - rbx-2
 sudo: required
 before_install:
-    - gem update --system
     - gem --version
+    - gem update --system
     - gem install bundler -v '~>1.12'
     - bundler --version
 install:

@@ -24,12 +24,9 @@ Gem::Specification.new do |spec|
 	spec.required_ruby_version = '>=2.1.0'
 	
 	spec.add_development_dependency 'minitest', '~>5.8'
-	spec.add_development_dependency 'minitest-reporters', '~>1.1'
+	# spec.add_development_dependency 'minitest-reporters', '~>1.1'
 	spec.add_development_dependency 'simplecov', '~>0.12'
 	spec.add_development_dependency 'simplecov-phpunit', '~>0.2'
 	
-	spec.add_dependency 'curses', '~>1.0'
-	spec.add_dependency 'uuid', '~>2.3'
-	
-	spec.add_dependency 'thefox-ext', '~>1.4'
+	spec.add_dependency 'termkit', '~>0.0'
 end
