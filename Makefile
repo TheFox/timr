@@ -16,4 +16,4 @@ cov:
 	RUBYOPT=-w TZ=Europe/Vienna TERMKIT_LOAD_PATH=../termkit COVERAGE=1 $(BUNDLER) exec ./test/suite_all.rb -v
 
 doc:
-	rdoc lib/termkit
+	rdoc README.md lib/timr
