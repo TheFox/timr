@@ -189,4 +189,5 @@ class TestTask < MiniTest::Test
 		timeline[3].begin_time = Time.parse('2001-01-01 07:07:07')
 		assert_equal([4, 4, 5], task1.run_time_total(Time.parse('2001-01-01 08:08:09')))
 	end
+	
 end

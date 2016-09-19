@@ -14,7 +14,10 @@ if ENV['COVERAGE'] && ENV['COVERAGE'].to_i != 0
 	end
 end
 
+require_relative 'test_controller_app'
+require_relative 'test_controller_help'
 require_relative 'test_stack'
 require_relative 'test_task'
+require_relative 'test_task_manager'
 require_relative 'test_track'
 require_relative 'test_view_title'

@@ -1,8 +1,9 @@
 
 module TheFox
 	module Timr
+		
 		NAME = 'Timr'.freeze
-		VERSION = '0.4.0-dev.6'.freeze
+		VERSION = '0.4.0-dev.7'.freeze
 		DATE = '2016-09-19'.freeze
 		HOMEPAGE = 'https://github.com/TheFox/timr'.freeze
 		
@@ -18,5 +19,6 @@ module TheFox
 		TIME_FORMAT_FILE = '%FT%T%z'.freeze
 		
 		TASK_NO_TASK_LOADED_CHAR = ?-
+		
 	end
 end

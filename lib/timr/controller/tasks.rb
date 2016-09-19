@@ -6,11 +6,9 @@ module TheFox
 		
 		class TasksController < TheFox::TermKit::ViewController
 			
-			def initialize_x
-				super()
-				
-				puts 'TasksController initialize'
-			end
+			# def initialize_x
+			# 	super()
+			# end
 			
 		end
 		

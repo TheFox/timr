@@ -51,7 +51,7 @@ module TheFox
 						#Curses.setpos(2, 0)
 						#Curses.addstr("HELP HANDLED: #{event.key}   ")
 						
-						@main_view_controller.view.is_visible = false
+						# @main_view_controller.view.is_visible = false
 					else
 						raise Exception::UnhandledKeyEventException.new(event), "Unhandled event: #{event}"
 					end
