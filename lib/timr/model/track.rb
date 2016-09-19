@@ -2,6 +2,7 @@
 require 'time'
 require 'uuid'
 require 'thefox-ext'
+require 'termkit'
 
 module TheFox
 	module Timr

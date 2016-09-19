@@ -8,6 +8,8 @@ module TheFox
 		
 		class Timr < TheFox::TermKit::CursesApp
 			
+			include TheFox::TermKit
+			
 			def initialize(options = {})
 				super()
 				
@@ -43,13 +45,13 @@ module TheFox
 				
 				#puts "#{@task_manager.class}"
 				
-				#@containerController = TheFox::Timr::ContainerController.new(self)
+				#@containerController = ContainerController.new(self)
 				#active_controller(@containerController)
 				
-				@appController = TheFox::Timr::AppController.new(self)
-				#@timelineViewController = TheFox::Timr::TimelineViewController.new(self)
-				#@tasksViewController = TheFox::Timr::TasksViewController.new(self)
-				@helpViewController = TheFox::Timr::HelpViewController.new
+				@appController = AppController.new(self)
+				#@timelineViewController = TimelineViewController.new(self)
+				#@tasksViewController = TasksViewController.new(self)
+				@helpViewController = HelpViewController.new
 				
 				set_app_controller(@appController)
 				set_active_controller(@helpViewController)

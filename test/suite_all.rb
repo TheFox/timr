@@ -14,7 +14,7 @@ if ENV['COVERAGE'] && ENV['COVERAGE'].to_i != 0
 	end
 end
 
-require_relative 'timr/test_stack'
-require_relative 'timr/test_task'
-require_relative 'timr/test_track'
-require_relative 'timr/test_view_title'
+require_relative 'test_stack'
+require_relative 'test_task'
+require_relative 'test_track'
+require_relative 'test_view_title'

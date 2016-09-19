@@ -1,4 +1,6 @@
 
+require 'termkit'
+
 module TheFox
 	module Timr
 		

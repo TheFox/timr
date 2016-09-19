@@ -2,8 +2,8 @@
 module TheFox
 	module Timr
 		NAME = 'Timr'.freeze
-		VERSION = '0.4.0-dev.5'.freeze
-		DATE = '2016-09-15'.freeze
+		VERSION = '0.4.0-dev.6'.freeze
+		DATE = '2016-09-19'.freeze
 		HOMEPAGE = 'https://github.com/TheFox/timr'.freeze
 		
 		#COL = 1

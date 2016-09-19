@@ -2,6 +2,7 @@
 require 'time'
 require 'yaml/store'
 require 'uuid'
+require 'termkit'
 
 module TheFox
 	module Timr

@@ -1,8 +1,12 @@
 
+require 'termkit'
+
 module TheFox
 	module Timr
 		
 		class ContainerController < TheFox::TermKit::Controller
+			
+			include TheFox::TermKit
 			
 			def initialize(app)
 				super()
@@ -11,9 +15,9 @@ module TheFox
 				
 				@app = app
 				@active_controller = nil
-				@timelineController = TheFox::Timr::TimelineController.new
-				@tasksController = TheFox::Timr::TasksController.new
-				@helpController = TheFox::Timr::HelpController.new
+				@timelineController = TimelineController.new
+				@tasksController = TasksController.new
+				@helpController = HelpController.new
 				
 				add_child_controller(@timelineController)
 				add_child_controller(@tasksController)

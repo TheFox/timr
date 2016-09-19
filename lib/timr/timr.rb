@@ -1,6 +1,5 @@
 
 require 'time'
-
 require 'yaml/store'
 require 'thefox-ext'
 
