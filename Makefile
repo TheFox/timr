@@ -9,6 +9,10 @@ dev:
 
 .PHONY: test
 test:
+	RUBYOPT=-w TZ=Europe/Vienna $(BUNDLER) exec ./test/suite_all.rb -v
+
+.PHONY: test_local
+test_local:
 	RUBYOPT=-w TZ=Europe/Vienna TERMKIT_LOAD_PATH=../termkit $(BUNDLER) exec ./test/suite_all.rb -v
 
 .PHONY: cov
