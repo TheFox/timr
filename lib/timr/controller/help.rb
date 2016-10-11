@@ -9,15 +9,15 @@ module TheFox
 			include TheFox::TermKit
 			
 			def initialize
-				header = TextView.new("--HEADER A--")
+				header = TextView.new("##########--HEADER A--")
 				header.is_visible = true
 				
 				
 				table_view = TableView.new
-				# table_view.is_visible = true
-				# table_view.position = Point.new(0, 5)
-				# table_view.header_cell_view = header
-				# table_view.table_data = ['zeile 1', 'zeile 2', 'zeile 3', 'zeile 4', 'zeile 5']
+				table_view.is_visible = true
+				table_view.position = Point.new(0, 5)
+				table_view.header = header
+				table_view.data = ['zeile 1', 'zeile 2', 'zeile 3', 'zeile 4', 'zeile 5']
 				
 				view = View.new
 				view.is_visible = true
