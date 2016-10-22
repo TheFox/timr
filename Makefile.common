@@ -1,12 +1,11 @@
 
-# Ruby Common Big
-# 2016-05-20
+# Ruby Common Big 2016-10-22
 
 MV = mv -nv
 RM = rm -rfd
 MKDIR = mkdir -p
 CHMOD = chmod
-BUNDLER = bundle
+BUNDLER = bundler
 BUNDLER_OPTIONS = --jobs=5 --retry=3
 GEMSPEC_FILE = $(GEM_NAME).gemspec
 
@@ -17,6 +16,9 @@ all: setup $(ALL_TARGETS_EXT)
 setup: .setup
 
 .setup:
+	which ruby &> /dev/null
+	which $(BUNDLER) &> /dev/null
+	ruby -v
 	$(BUNDLER) install $(BUNDLER_OPTIONS)
 	touch $@
 
