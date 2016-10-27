@@ -27,5 +27,5 @@ Gem::Specification.new do |spec|
 	spec.add_development_dependency 'simplecov', '~>0.12'
 	spec.add_development_dependency 'simplecov-phpunit', '~>1.0'
 	
-	spec.add_dependency 'termkit', '~>0.0'
+	spec.add_dependency 'termkit', '~>0.1'
 end
