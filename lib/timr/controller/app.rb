@@ -26,11 +26,17 @@ module TheFox
 						@app.terminate
 					else
 						#raise Exception::UnhandledKeyEventException.new(event), "Unhandled event: #{event}"
-						@app.logger.warn("Timr AppController, Unhandled Key Event: #{event}")
+						
+						if !@app.nil? && !@app.logger.nil?
+							@app.logger.warn("Timr AppController, Unhandled Key Event: #{event}")
+						end
 					end
 				else
 					#raise Exception::UnhandledEventException.new(event), "Unhandled event: #{event}"
-					@app.logger.warn("Timr AppController, Unhandled Event: #{event}")
+					
+					if !@app.nil? && !@app.logger.nil?
+						@app.logger.warn("Timr AppController, Unhandled Event: #{event}")
+					end
 				end
 			end
 			

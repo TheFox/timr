@@ -54,7 +54,9 @@ module TheFox
 						raise Exception::UnhandledKeyEventException.new(event), "Unhandled event: #{event}"
 					end
 					
-					@app.logger.debug("HelpViewController -- table p=#{@table_view.cursor_position} r=#{@table_view.needs_rendering? ? 'Y' : 'N'} d=#{@table_view.cursor_direction} rb=#{@table_view.page_begin} re=#{@table_view.page_end} ph=#{@table_view.page_height} c=#{@table_view.highlighted_cell}")
+					if !@app.nil? && !@app.logger.nil?
+						@app.logger.debug("HelpViewController -- table p=#{@table_view.cursor_position} r=#{@table_view.needs_rendering? ? 'Y' : 'N'} d=#{@table_view.cursor_direction} rb=#{@table_view.page_begin} re=#{@table_view.page_end} ph=#{@table_view.page_height} c=#{@table_view.highlighted_cell}")
+					end
 				else
 					raise Exception::UnhandledEventException.new(event), "Unhandled event: #{event}"
 				end

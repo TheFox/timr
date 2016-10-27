@@ -28,15 +28,15 @@ class TestAppController < MiniTest::Test
 		controller1.handle_event(event1)
 	end
 	
-	def test_handle_event_exception
-		app1 = App.new
-		controller1 = AppController.new(app1)
+	# def test_handle_event_exception
+	# 	app1 = App.new
+	# 	controller1 = AppController.new(app1)
 		
-		event1 = KeyEvent.new
-		event1.key = 'INVALID'
+	# 	event1 = KeyEvent.new
+	# 	event1.key = 'INVALID'
 		
-		assert_raises(Exception::UnhandledKeyEventException){ controller1.handle_event(event1) }
-		assert_raises(Exception::UnhandledEventException){ controller1.handle_event(nil) }
-	end
+	# 	assert_raises(Exception::UnhandledKeyEventException){ controller1.handle_event(event1) }
+	# 	assert_raises(Exception::UnhandledEventException){ controller1.handle_event(nil) }
+	# end
 	
 end
