@@ -14,7 +14,7 @@ module TheFox
 				
 				@table_view = TableView.new
 				@table_view.is_visible = true
-				@table_view.size = Size.new(5, 3)
+				# @table_view.size = Size.new(5, 3)
 				@table_view.position = Point.new(0, 2)
 				@table_view.header = header
 				@table_view.data = ['zeile 1a', 'zeile 2b', 'zeile 3c', 'zeile 4d', 'zeile 5e']
@@ -44,9 +44,17 @@ module TheFox
 						#Curses.addstr("HELP HANDLED: #{event.key}   ")
 						
 						# @main_view_controller.view.is_visible = false
+					when 258
+						@table_view.cursor_down
+						@table_view.refresh
+					when 259
+						@table_view.cursor_up
+						@table_view.refresh
 					else
 						raise Exception::UnhandledKeyEventException.new(event), "Unhandled event: #{event}"
 					end
+					
+					@app.logger.debug("HelpViewController -- table p=#{@table_view.cursor_position} r=#{@table_view.needs_rendering? ? 'Y' : 'N'} d=#{@table_view.cursor_direction} rb=#{@table_view.page_begin} re=#{@table_view.page_end} ph=#{@table_view.page_height} c=#{@table_view.highlighted_cell}")
 				else
 					raise Exception::UnhandledEventException.new(event), "Unhandled event: #{event}"
 				end
