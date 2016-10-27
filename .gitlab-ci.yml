@@ -1,0 +1,70 @@
+before_script:
+    - apt-get update -yqq
+    - 'which ssh-agent || ( apt-get install openssh-client -y )'
+    - 'which rsync || ( apt-get install rsync -yqq --force-yes )'
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "$SSH_PRIVATE_KEY")
+    - mkdir -p ~/.ssh
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - ruby -v
+    - gem update --system
+    - gem install bundler -v '~>1.13'
+    - bundler --version
+    - make
+
+stages:
+    - test
+    - release
+    - deploy
+
+test_21:
+    image: ruby:2.1
+    stage: test
+    environment: test
+    only:
+        - tags
+    script:
+        - make test
+
+test_22:
+    image: ruby:2.2
+    stage: test
+    environment: test
+    only:
+        - tags
+    script:
+        - make test
+
+test_23:
+    image: ruby:2.3
+    stage: test
+    environment: test
+    only:
+        - tags
+    script:
+        - make test
+
+release_gem:
+    image: ruby:2.3
+    stage: release
+    environment: gem
+    only:
+        - tags
+    script:
+        - mkdir -p ~/.gem
+        - 'printf "%s\n:rubygems_api_key: %s" "---" "${RUBYGEMSORG_API_KEY}" > ~/.gem/credentials; chmod 0600 ~/.gem/credentials'
+        - make release
+
+deploy_homepage:
+    image: ruby:2.3
+    stage: deploy
+    environment: homepage
+    only:
+        - tags
+    script:
+        - make cov
+        - make doc
+        - bin/build_info.sh > build.txt
+        - 'rsync ${RSYNC_OPTIONS} coverage ${RSYNC_USER}@${RSYNC_HOST}:${RSYNC_REMOTE_PATH}'
+        - 'rsync ${RSYNC_OPTIONS} doc ${RSYNC_USER}@${RSYNC_HOST}:${RSYNC_REMOTE_PATH}'
+        - 'rsync ${RSYNC_OPTIONS} build.txt ${RSYNC_USER}@${RSYNC_HOST}:${RSYNC_REMOTE_PATH}'
