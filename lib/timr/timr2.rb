@@ -52,45 +52,30 @@ module TheFox
 				#@timelineViewController = TimelineViewController.new(self)
 				#@tasksViewController = TasksViewController.new(self)
 				@helpViewController = HelpViewController.new
+				@helpViewController.app = self
 				
 				set_app_controller(@appController)
 				set_active_controller(@helpViewController)
 			end
 			
-			def run_cycle
-				super()
-				
-				#puts 'Timr run_cycle'
-				#@containerController
-			end
-			
 			private
 			
 			def app_will_terminate
-				#puts 'Timr app_will_terminate'
-				
 				if !@task_manager.nil?
 					@task_manager.close
 				end
 			end
 			
 			def config_read
-				#puts "Timr config_read: #{@config_path}"
-				
 				begin
 					content = YAML::load_file(@config_path)
-					#pp content
 					@config.merge_recursive!(content)
 				rescue Exception # => e
 					#puts "Task Manager WARNING: #{e}"
 				end
-				
-				#pp @config
 			end
 			
 			def init_dirs
-				#puts 'Timr init_dirs'
-				
 				if !Dir.exist?(@base_dir_path)
 					FileUtils.mkdir_p(@base_dir_path)
 				end
