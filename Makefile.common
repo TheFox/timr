@@ -1,5 +1,5 @@
 
-# Ruby Common Big 2016-10-22
+# Ruby Common Big 2016-11-08
 
 MV = mv -nv
 RM = rm -rfd
@@ -24,13 +24,13 @@ setup: .setup
 
 .PHONY: install
 install:
-	gem_file=$$(gem build $(GEMSPEC_FILE) | grep 'File:' | tail -1 | awk '{ print $$2 }'); \
-	sudo gem install $$gem_file; \
+	gem_file=$$(gem build $(GEMSPEC_FILE) 2> /dev/null | grep 'File:' | tail -1 | awk '{ print $$2 }'); \
+	gem install $$gem_file; \
 	$(RM) $$gem_file
 
 .PHONY: uninstall
 uninstall:
-	sudo gem uninstall $(GEM_NAME)
+	gem uninstall $(GEM_NAME)
 
 .PHONY: update
 update:
