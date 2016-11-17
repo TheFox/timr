@@ -5,12 +5,11 @@ require 'time'
 #require 'fileutils'
 require 'timr'
 
-
 class TestTrack < MiniTest::Test
 	
 	include TheFox::Timr
 	
-	def test_basic
+	def test_track
 		track1 = Track.new
 		assert_equal(nil, track1.begin_time)
 		assert_equal(nil, track1.end_time)

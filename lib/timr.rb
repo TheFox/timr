@@ -5,8 +5,8 @@ require 'timr/model/stack'
 require 'timr/model/task'
 require 'timr/model/track'
 
-require 'timr/view/view_title'
-#require 'timr/view/view_table_help'
+require 'timr/view/title_view'
+#require 'timr/view/help_table_view'
 
 #require 'timr/controller/container'
 require 'timr/controller/app'

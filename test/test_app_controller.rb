@@ -5,7 +5,6 @@ require 'time'
 require 'fileutils'
 require 'timr'
 
-
 class TestAppController < MiniTest::Test
 	
 	include TheFox::TermKit

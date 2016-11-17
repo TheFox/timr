@@ -4,8 +4,6 @@ require 'minitest/autorun'
 require 'time'
 require 'fileutils'
 require 'timr'
-require 'pp'
-
 
 class TestHelpViewController < MiniTest::Test
 	

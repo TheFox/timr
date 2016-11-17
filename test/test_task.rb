@@ -5,7 +5,6 @@ require 'time'
 require 'fileutils'
 require 'timr'
 
-
 class TestTask < MiniTest::Test
 	
 	include TheFox::Timr

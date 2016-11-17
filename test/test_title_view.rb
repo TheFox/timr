@@ -3,7 +3,6 @@
 require 'minitest/autorun'
 require 'timr'
 
-
 class TestTitleView < MiniTest::Test
 	
 	include TheFox::Timr

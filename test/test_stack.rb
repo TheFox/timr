@@ -3,7 +3,6 @@
 require 'minitest/autorun'
 require 'timr'
 
-
 class TestStack < MiniTest::Test
 	
 	include TheFox::Timr
