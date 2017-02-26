@@ -44,7 +44,7 @@ test_23:
     script:
         - make test
 
-release_gem:
+release:
     image: ruby:2.3
     stage: release
     environment: gem
@@ -55,7 +55,7 @@ release_gem:
         - 'printf "%s\n:rubygems_api_key: %s" "---" "${RUBYGEMSORG_API_KEY}" > ~/.gem/credentials; chmod 0600 ~/.gem/credentials'
         - make release
 
-deploy_homepage:
+deploy:
     image: ruby:2.3
     stage: deploy
     environment: homepage
