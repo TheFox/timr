@@ -44,8 +44,17 @@ test_23:
     script:
         - make test
 
+test_24:
+    image: ruby:2.4.0
+    stage: test
+    environment: test
+    only:
+        - tags
+    script:
+        - make test
+
 release:
-    image: ruby:2.3
+    image: ruby:2.4.0
     stage: release
     environment: gem
     only:
@@ -56,7 +65,7 @@ release:
         - make release
 
 deploy:
-    image: ruby:2.3
+    image: ruby:2.4.0
     stage: deploy
     environment: homepage
     only:
