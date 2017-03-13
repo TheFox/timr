@@ -1,85 +1,118 @@
 
-require 'termkit'
-
 module TheFox
 	module Timr
 		
-		class Stack < TheFox::TermKit::Model
+		# The Stack holds one or more Tracks.
+		# Only one Track can run at a time.
+		# If you push a new Track on the Stack the underlying running
+		# will be paused.
+		class Stack < Model
 			
-			attr_reader :task
+			attr_accessor :timr
+			# attr_accessor :tasks_path
+			attr_reader :tracks
 			
 			def initialize
 				super()
 				
-				#puts 'Stack initialize'
+				@timr = nil
+				# @tasks_path = nil
 				
-				@tasks = []
-				@task = nil
+				# Data
+				@tracks = Array.new
 			end
 			
-			def has_task?
-				!@task.nil?
+			def current_track
+				@tracks.last
 			end
 			
-			def size
-				@tasks.length
+			def start(track)
+				stop
+				
+				@tracks = Array.new
+				@tracks << track
+				
+				# Mark Stack as changed.
+				changed
 			end
 			
-			def tasks_texts
-				@tasks.map do |task|
-					status = task.status
-					status = '*' if task == @task
-					
-					task_name = task.to_s
-					task_name = task.track.name if task.has_track?
-					
-					"#{status} #{task_name}"
-				end
+			def stop
+				@tracks.pop
+				
+				# Mark Stack as changed.
+				changed
+			end
+			
+			# def pause
+			# end
+			
+			# def continue
+			# end
+			
+			def push(track)
+				@tracks << track
 			end
 			
 			def pop
-				old = @tasks.pop
-				if !old.nil?
-					old.stop
-					@task = @tasks.last
-					@task.start if !@task.nil?
-					true
-				else
-					false
-				end
+				@tracks.pop
 			end
 			
-			def pop_all(new_task = nil, parent_track = nil)
-				if @task == new_task
-					@task.start(parent_track)
-				else
-					@tasks.each do |task|
-						task.stop
-					end
-					@tasks = []
-					@task = nil
+			def pre_save_to_file
+				# Tracks
+				@data = @tracks.map{ |track| [track.task.id, track.id] }
+				
+				super()
+			end
+			
+			def post_load_from_file
+				unless @timr
+					raise 'Stack: @timr variable is not set.'
+				end
+				
+				# puts "#{self.class} post_load_from_file"
+				# puts "#{self.class} data: '#{@data}'"
+				
+				@tracks = @data.map{ |ids|
+					puts "load from ids: #{ids}"
 					
-					if !new_task.nil?
-						push(new_task, parent_track)
-					end
-					true
-				end
-			end
-			
-			def push(task, parent_track = nil)
-				if !@tasks.include?(task)
-					@task.pause if has_task?
+					task_id, track_id = ids
+					# puts "load   task #{task_id}"
+					# puts "      track #{track_id}"
+					# puts
 					
-					@task = task
-					@task.start(parent_track)
-					@tasks << @task
-					true
-				else
-					false
-				end
+					task = @timr.get_task_by_id(task_id)
+					if task
+						track = task.find_track_by_id(track_id)
+					# else
+					# 	puts "no task found"
+					end
+				}.select{ |track|
+					!track.nil?
+				}
+				
+				puts "track loaded: #{@tracks.count}"
 			end
 			
-		end
+			def to_s
+				"Stack"
+			end
+			
+			def inspect
+				"#<Stack tracks=#{@tracks.count} current=#{@current_track.short_id}>"
+			end
+			
+			# All methods in this block are static.
+			# class << self
+				
+			# 	def load_stack_from_file(path)
+			# 		stack = Stack.new
+			# 		stack.load_from_file(path)
+			# 		stack
+			# 	end
+				
+			# end
+			
+		end # class Task
 		
-	end
-end
+	end # module Timr
+end #module TheFox

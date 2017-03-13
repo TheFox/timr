@@ -1,258 +1,254 @@
 
-require 'time'
-require 'yaml/store'
-require 'uuid'
-require 'termkit'
-
 module TheFox
 	module Timr
 		
-		class Task < TheFox::TermKit::Model
+		class Task < Model
 			
-			def initialize(path = nil)
+			attr_reader :description
+			attr_reader :tracks
+			
+			def initialize
 				super()
 				
-				#puts 'Task initialize'
+				# Meta
+				@name = nil
+				@description = nil
+				@current_track = nil
 				
-				@status = :stop
-				@changed = false
-				
-				@meta = {
-					'id' => UUID.new.generate,
-					'name' => nil,
-					'description' => nil,
-					'created' => Time.now.utc.strftime(TIME_FORMAT_FILE),
-					'modified' => Time.now.utc.strftime(TIME_FORMAT_FILE),
-				}
-				@track = nil
-				@timeline = []
-				@timeline_diff_total = nil
-				
-				@path = path
-				if !@path.nil?
-					load_from_file(@path)
-				end
-			end
-			
-			def load_from_file(path)
-				content = YAML::load_file(path)
-				@meta = content['meta']
-				@timeline = content['timeline']
-					.map{ |track_raw|
-						Track.from_h(self, track_raw)
-					}
-			end
-			
-			def save_to_file(path)
-				if @changed || !@track.nil?
-					timeline_c = @timeline
-						.map do |track|
-							h = track.to_h
-							h['e'] = Time.now.utc.strftime(TIME_FORMAT_FILE) if !h.has_key?('e') || h['e'].nil?
-							h
-						end
-					
-					store = YAML::Store.new(path)
-					store.transaction do
-						store['meta'] = @meta
-						store['timeline'] = timeline_c
-					end
-					@changed = false
-				end
-				
-				path
-			end
-			
-			def running?
-				@status == :running
-			end
-			
-			def paused?
-				@status == :paused
-			end
-			
-			def status
-				case @status
-				when :running
-					?>
-				when :paused
-					?|
-				when :stop
-					?.
-				end
-			end
-			
-			def changed
-				@changed = true
-				@meta['modified'] = Time.now.utc.strftime(TIME_FORMAT_FILE)
-			end
-			
-			def id
-				@meta['id']
-			end
-			
-			def name
-				@meta['name'].to_s
+				# Data
+				@tracks = Hash.new
 			end
 			
 			def name=(name)
+				@name = name
 				@changed = true
-				@meta['name'] = name
 			end
 			
-			def description
-				@meta['description']
-			end
-			
-			def description=(description)
-				@changed = true
-				@meta['description'] = description == '' ? nil : description
-			end
-			
-			def track
-				@track
-			end
-			
-			def has_track?
-				!@track.nil?
-			end
-			
-			def timeline
-				@timeline
-			end
-			
-			def start(parent_track = nil)
-				create_new_track = false
-				
-				if running?
-					if !parent_track.nil?
-						if @track.description != parent_track.description
-							stop
-							create_new_track = true
-						end
-					end
-				elsif paused?
-					parent_track = @track if parent_track.nil?
-					create_new_track = true
-				else
-					create_new_track = true
+			def name(max_length = nil)
+				name = @name
+				if name && max_length && name.length > max_length + 2
+					name = name[0, max_length] << '...'
 				end
-				
-				if create_new_track
-					@changed = true
-					
-					@track = Track.new
-					if !parent_track.nil?
-						@track.parent = parent_track
-						@track.description = parent_track.description
-					end
-					
-					@track.task = self
-					@track.begin_time = Time.now
-					@timeline << @track
-				end
-				
-				@status = :running
-				
-				create_new_track
-			end
-			
-			def pause
-				if running? && !@track.nil?
-					@status = :paused
-					@changed = true
-					@track.end_time = Time.now
-					@timeline_diff_total = nil
-				end
-			end
-			
-			def stop
-				if !@track.nil?
-					if running?
-						@changed = true
-						@track.end_time = Time.now
-					end
-					
-					@track = nil
-					@timeline_diff_total = nil
-				end
-				
-				@status = :stop
-			end
-			
-			def toggle
-				if running?
-					pause
-				else
-					start
-				end
-			end
-			
-			def remove_track(track)
-				@changed = true
-				@timeline.delete(track)
-			end
-			
-			def to_s
 				name
 			end
 			
-			def run_time_track(end_time = Time.now)
-				hours = 0
-				minutes = 0
-				seconds = 0
-				
-				if running? && has_track?
-					diff = (end_time - @track.begin_time).to_i.abs
-					hours = diff / 3600
-					
-					diff -= hours * 3600
-					minutes = diff / 60
-					
-					diff -= minutes * 60
-					seconds = diff
-				end
-				
-				[hours, minutes, seconds]
+			def description=(description)
+				@description = description
+				@changed = true
 			end
 			
-			def run_time_total(end_time = Time.now)
-				# Cache all other tracks.
-				if @timeline_diff_total.nil?
-					@timeline_diff_total = @timeline
-						.select do |track|
-							if running?
-								track != @track
-							else
-								true
-							end
+			def pre_save_to_file
+				# Meta
+				@meta['name'] = @name
+				@meta['description'] = @description
+				
+				@meta['current_track_id'] = nil
+				if @current_track
+					@meta['current_track_id'] = @current_track.id
+				end
+				
+				# Tracks
+				@data = @tracks.map{ |track_id, track|
+					#puts "map track: #{track_id} #{track}"
+					[track_id, track.to_h]
+				}.to_h
+				
+				super()
+			end
+			
+			def post_load_from_file
+				#puts "#{self.class} post_load_from_file"
+				
+				#puts "#{self.class} data: '#{@data}'"
+				
+				@tracks = @data.map{ |track_id, track_h|
+					#puts "load track #{track_id}"
+					
+					track = Track.create_track_from_hash(track_h)
+					track.task = self
+					[track_id, track]
+				}.to_h
+				
+				#puts "tracks loaded: #{@tracks.count}"
+				
+				current_track_id = @meta['current_track_id']
+				if current_track_id
+					@current_track = @tracks[current_track_id]
+					# if @current_track
+					# 	puts "current_track loaded: #{@current_track.short_id}"
+					# else
+					# 	puts "no current track found"
+					# end
+				end
+				
+				@name = @meta['name']
+				@description = @meta['description']
+			end
+			
+			def start(options = {})
+				puts "Task start"
+				
+				# Track Options
+				options ||= {}
+				# options[:date] ||= nil
+				# options[:time] ||= nil
+				options[:message] ||= nil
+				options[:track_id] ||= nil
+				
+				# End current Track before starting a new one.
+				# Leave options empty here for stop().
+				stop
+				
+				if options[:track_id]
+					found_track = find_track_by_id(options[:track_id])
+					if found_track
+						# puts "clone this track: #{found_track.short_id}"
+						
+						@current_track = found_track.dup
+						# puts "cloned track: #{@current_track.short_id}"
+						
+					else
+						raise "No Track found for Track ID '#{options[:track_id]}'"
+					end
+				else
+					@current_track = Track.new
+					@current_track.task = self
+					# puts "new track: #{@current_track.short_id}"
+				end
+				
+				@tracks[@current_track.id] = @current_track
+				
+				# Mark Task as changed.
+				changed
+				
+				@current_track.start(options)
+				@current_track
+			end
+			
+			# Stops a current running Track.
+			def stop(options = {})
+				puts "Task stop"
+				
+				options ||= {}
+				
+				if @current_track
+					@current_track.stop(options)
+					
+					# Reset current Track variable.
+					@current_track = nil
+					
+					# Mark Task as changed.
+					changed
+				end
+			end
+			
+			# Pauses a current running Track.
+			def pause(options = {})
+				puts "Task pause"
+				
+				options ||= {}
+				
+				if @current_track
+					@current_track.stop(options)
+					
+					# Mark Task as changed.
+					changed
+				end
+			end
+			
+			# Continues the current Track.
+			# Only if it isn't already running.
+			def continue(options = {})
+				puts "Task continue"
+				options ||= {}
+				
+				if @current_track
+					track = @current_track.dup
+					
+					track.start(options)
+					
+					# Mark Task as changed.
+					changed
+				end
+			end
+			
+			def duration(end_datetime = Time.now)
+				# t_hours = 0
+				# t_minutes = 0
+				t_seconds = 0
+				@tracks.each do |track_id, track|
+					# hours, minutes, seconds = track.duration(end_datetime)
+					#puts "#{t_seconds} #{hours}, #{minutes}, #{seconds}"
+					#t_seconds += hours * 3600 + minutes * 60 + seconds
+					t_seconds += track.duration_seconds
+				end
+				
+				DateTimeHelper.seconds_to_hours(t_seconds)
+			end
+			
+			def duration_s(end_datetime = Time.now)
+				'%d:%02d:%02d' % duration(end_datetime)
+			end
+			
+			# Find a Track by ID even if the ID is not 40 characters long.
+			# When the ID is 40 characters long @tracks[id] is faster. ;)
+			def find_track_by_id(hash_s)
+				hash_s_len = hash_s.length
+				track_id = nil
+				@tracks.keys.each do |key|
+					# puts "track id: #{hash_s} #{key}"
+					
+					if hash_s == key[0, hash_s_len]
+						if track_id
+							raise "Track ID '#{hash_s}' is not a unique identifier"
+						else
+							track_id = key
+							# puts "found track: #{track_id}"
 						end
-						.map{ |track| track.diff }
-						.inject(:+)
+					end
 				end
 				
-				hours = 0
-				minutes = 0
-				seconds = 0
-				
-				track_diff = 0
-				if running?
-					track_diff = @track.diff(end_time)
-				end
-				
-				diff = @timeline_diff_total.to_i + track_diff
-				hours = diff / 3600
-				
-				diff -= hours * 3600
-				minutes = diff / 60
-				
-				diff -= minutes * 60
-				seconds = diff
-				
-				[hours, minutes, seconds]
+				@tracks[track_id]
 			end
 			
-		end
+			def to_s
+				"Task #{@meta['id']}"
+			end
+			
+			def inspect
+				"#<Task #{@meta['id']}>"
+			end
+			
+			# All methods in this block are static.
+			class << self
+				
+				# Load a Task from a file into a Task instance.
+				def load_task_from_file(path)
+					task = Task.new
+					# puts "task: #{task.class} #{task} #{self.class} #{class}"
+					task.load_from_file(path)
+					task
+				end
+				
+				# Search a in a base path for a Track by ID.
+				# If found a file load it into a Task instance.
+				def load_task_from_file_with_id(base_path, task_id)
+					task_file_path = Model.find_file_by_id(base_path, task_id)
+					if task_file_path
+						load_task_from_file(task_file_path)
+					end
+				end
+				
+				def create_task_from_hash(hash)
+					task = Task.new
+					task.name = hash[:name] # || hash['name']
+					task.description = hash[:description] # || hash['description']
+					task
+				end
+				
+			end
+			
+		end # class Task
 		
-	end
-end
+	end # module Timr
+end #module TheFox

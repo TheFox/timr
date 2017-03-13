@@ -2,137 +2,233 @@
 
 require 'minitest/autorun'
 require 'time'
-#require 'fileutils'
 require 'timr'
 
 class TestTrack < MiniTest::Test
 	
-	include TheFox::Timr
-	
-	def test_track
-		track1 = Track.new
-		assert_equal(nil, track1.begin_time)
-		assert_equal(nil, track1.end_time)
+	# Everything empty
+	def test_begin_datetime_empty
+		options = {
+			:date => nil,
+			:time => nil,
+		}
+		track = TheFox::Timr::Track.new
+		track.start(options)
+		
+		#puts "time: #{track.begin_datetime.strftime('%F %T %z')}"
+		
+		assert_instance_of(Time, track.begin_datetime)
+		assert_equal(Time.now.utc.strftime('%F %T %z'), track.begin_datetime.strftime('%F %T %z'))
 	end
 	
-	def test_description
-		track1 = Track.new
-		assert_equal(nil, track1.description)
+	# Date set, Time empty
+	def test_begin_datetime_date_set_string_time_empty
+		options = {
+			:date => '2011-12-13',
+			:time => nil,
+		}
+		track = TheFox::Timr::Track.new
 		
-		track1.description = 'hello world1'
-		
-		track2 = Track.new
-		assert_equal(nil, track2.description)
-		
-		track2.parent = track1
-		assert_equal(nil, track2.description)
-		
-		track1.description = 'hello world2'
-		assert_equal(nil, track2.description)
+		assert_raises ArgumentError do
+			track.start(options)
+		end
 	end
 	
-	def test_diff
-		track1 = Track.new
-		assert_equal(0, track1.diff)
+	# Date set, Time set Hour
+	# def test_begin_datetime_date_set_time_set_hour
+	# 	options = {
+	# 		:date => '2011-12-13',
+	# 		:time => '15',
+	# 	}
+	# 	track = TheFox::Timr::Track.new
+	# 	track.start(options)
 		
-		track1.begin_time = Time.parse('1986-04-08 13:37:02')
-		track1.end_time   = Time.parse('1986-04-08 13:38:01')
-		assert_equal(59, track1.diff)
-		assert_equal(Fixnum, track1.diff.class)
+	# 	#puts "time: #{track.begin_datetime.strftime('%F %T %z')}"
 		
-		track1.begin_time = Time.parse('2015-01-16 23:00:00')
-		track1.end_time   = Time.parse('2015-06-04 15:30:01')
-		assert_equal(11979001, track1.diff)
-		assert_equal(Fixnum, track1.diff.class)
+	# 	assert_instance_of(Time, track.begin_datetime)
+	# 	assert_equal(Time.new(2011, 12, 13, 23, 0, 0, 0).strftime('%F %T %z'), track.begin_datetime.strftime('%F %T %z'))
+	# end
+	
+	# Date set, Time set Hour, Minute
+	def test_begin_datetime_date_set_time_set_hour_minute
+		options = {
+			:date => '2011-12-13',
+			:time => '15:1',
+		}
+		track = TheFox::Timr::Track.new
+		track.start(options)
+		
+		#puts "time: #{track.begin_datetime.strftime('%F %T %z')}"
+		
+		assert_instance_of(Time, track.begin_datetime)
+		assert_equal(Time.new(2011, 12, 13, 14, 1, 0, 0).strftime('%F %T %z'), track.begin_datetime.strftime('%F %T %z'))
 	end
 	
-	def test_name
-		task1 = Task.new
-		task1.name = 'task1'
+	# Date set, Time set Hour, Minute, Second
+	def test_begin_datetime_date_set_time_set_hour_minute_second
+		options = {
+			:date => '2011-12-13',
+			:time => '15:1:2',
+		}
+		track = TheFox::Timr::Track.new
+		track.start(options)
 		
-		track1 = Track.new
-		track1.description = 'hello world1'
+		#puts "time: #{track.begin_datetime.strftime('%F %T %z')}"
 		
-		task1.start(track1)
-		assert_equal('hello world1', track1.name)
-		
-		track1.task = task1
-		assert_equal('task1: hello world1', track1.name)
-		
-		task1.stop
-		assert_equal('task1: hello world1', track1.name)
+		assert_instance_of(Time, track.begin_datetime)
+		assert_equal(Time.new(2011, 12, 13, 14, 1, 2, 0).strftime('%F %T %z'), track.begin_datetime.strftime('%F %T %z'))
 	end
 	
-	def test_to_h
-		track1 = Track.new
+	# Date set, Time set Hour, Minute, Second, Timezone
+	def test_begin_datetime_date_set_time_set_hour_minute_second_timezone
+		options = {
+			:date => '2011-12-13',
+			:time => '15:01:02+03:00',
+		}
+		track = TheFox::Timr::Track.new
+		track.start(options)
 		
-		h = track1.to_h
-		assert_equal(false, h['id'].nil?)
-		assert_equal(nil, h['e'])
-		assert_equal(nil, h['d'])
-		assert_equal(nil, h['p'])
+		#puts "time: #{track.begin_datetime.strftime('%F %T %z')}"
 		
-		track1.begin_time = Time.parse('1990-02-21 09:45')
-		h = track1.to_h
-		assert_equal('1990-02-21T08:45:00+0000', h['b'])
-		assert_equal(nil, h['e'])
-		
-		track1.begin_time = Time.parse('1989-10-19 12:59')
-		track1.end_time   = Time.parse('2012-12-14 20:45')
-		track1.description = 'hello world1'
-		h = track1.to_h
-		assert_equal('1989-10-19T11:59:00+0000', h['b'])
-		assert_equal('2012-12-14T19:45:00+0000', h['e'])
-		assert_equal('hello world1', h['d'])
-		
-		track1.begin_time = Time.parse('2013-11-23 23:00')
-		track1.end_time   = Time.parse('2013-11-24 09:00')
-		track1.description = 'hello world2'
-		h = track1.to_h
-		assert_equal('2013-11-23T22:00:00+0000', h['b'])
-		assert_equal('2013-11-24T08:00:00+0000', h['e'])
-		assert_equal('hello world2', h['d'])
+		assert_instance_of(Time, track.begin_datetime)
+		assert_equal(Time.new(2011, 12, 13, 12, 1, 2, 0).strftime('%F %T %z'), track.begin_datetime.strftime('%F %T %z'))
 	end
 	
-	def test_to_s
-		track1 = Track.new
-		track1.begin_time = Time.parse('1990-08-29 12:34:56')
-		assert_equal('1990-08-29 12:34 - xx:xx               ', track1.to_s)
+	# Date set, Time set DateTime
+	# def test_begin_datetime_date_set_time_set_datetime
+	# 	options = {
+	# 		:date => '2010-11-12',
+	# 		:time => DateTime.parse('2012-12-13 14:15:16 +05:00'),
+	# 	}
+	# 	track = TheFox::Timr::Track.new
+	# 	track.start(options)
 		
-		task1 = Task.new
-		task1.name = 'task1'
+	# 	#puts "time: #{track.begin_datetime.strftime('%F %T %z')}"
 		
-		track1 = Track.new
-		track1.begin_time = Time.parse('1990-08-29 12:34:56')
-		track1.task = task1
-		assert_equal('1990-08-29 12:34 - xx:xx               task1', track1.to_s)
+	# 	assert_instance_of(Time, track.begin_datetime)
+	# 	assert_equal(Time.new(2010, 11, 12, 9, 15, 16, 0).strftime('%F %T %z'), track.begin_datetime.strftime('%F %T %z'))
+	# end
+	
+	# Date set, Time set Date
+	# def test_begin_datetime_date_set_time_set_date
+	# 	options = {
+	# 		:date => '2010-11-12',
+	# 		:time => Date.parse('2012-12-13'),
+	# 	}
+	# 	track = TheFox::Timr::Track.new
+	# 	track.start(options)
 		
-		track1.begin_time = Time.parse('1987-06-11 12:00:00')
-		track1.end_time   = Time.parse('1987-06-12 23:00:00')
-		assert_equal('1987-06-11 12:00 - 23:00 1987-06-12    task1', track1.to_s)
+	# 	#puts "time: #{track.begin_datetime.strftime('%F %T %z')}"
 		
-		track1.description = 'hello world'
-		assert_equal('1987-06-11 12:00 - 23:00 1987-06-12    task1: hello world', track1.to_s)
+	# 	now = Time.now.utc
+		
+	# 	assert_instance_of(Time, track.begin_datetime)
+	# 	assert_equal(Time.new(2010, 11, 12, now.hour, now.min, now.sec, 0).strftime('%F %T %z'), track.begin_datetime.strftime('%F %T %z'))
+	# end
+	
+	# Date set (DateTime), Time set
+	# def test_begin_datetime_date_set_datetime_time_set
+	# 	options = {
+	# 		:date => DateTime.parse('2011-12-13 18:19:20 +0300'),
+	# 		:time => '15:13:14',
+	# 	}
+	# 	track = TheFox::Timr::Track.new
+	# 	track.start(options)
+		
+	# 	#puts "time: #{track.begin_datetime.strftime('%F %T %z')}"
+		
+	# 	assert_instance_of(Time, track.begin_datetime)
+	# 	assert_equal(Time.new(2011, 12, 13, 14, 13, 14, 0).strftime('%F %T %z'), track.begin_datetime.strftime('%F %T %z'))
+	# end
+	
+	# Date set (Time), Time set
+	# def test_begin_datetime_date_set_time_time_set
+	# 	options = {
+	# 		:date => Time.parse('18:19:20 +0400'),
+	# 		:time => '15:13:14',
+	# 	}
+	# 	track = TheFox::Timr::Track.new
+	# 	track.start(options)
+		
+	# 	#puts "time: #{track.begin_datetime.strftime('%F %T %z')}"
+		
+	# 	today = Date.today
+		
+	# 	assert_instance_of(Time, track.begin_datetime)
+	# 	assert_equal(Time.new(today.year, today.month, today.day, 14, 13, 14, 0).strftime('%F %T %z'), track.begin_datetime.strftime('%F %T %z'))
+	# end
+	
+	def test_message
+		options = {
+			:message => 'msg1',
+		}
+		track = TheFox::Timr::Track.new
+		track.start(options)
+		assert_equal('msg1', track.message)
+		
+		options = {
+			:message => 'msg2',
+		}
+		track.stop(options)
+		assert_equal('msg2', track.message)
 	end
 	
-	def test_from_h
-		track1 = Track.from_h(nil, {})
-		assert_equal(nil, track1.begin_time)
-		assert_equal(nil, track1.end_time)
+	def test_duration_small
+		options = {
+			:date => '2011-12-13',
+			:time => '14:15:16',
+		}
+		track = TheFox::Timr::Track.new
+		track.start(options)
 		
-		track1 = Track.from_h(nil, {
-			'id' => 'abc',
-			'b' => '1986-06-18 12:34:56+0000',
-			'e' => '2014-11-11 19:05:12+0000',
-			'd' => 'hello world',
-			'p' => '123',
-		})
-		assert_equal('abc', track1.id)
-		assert_equal('1986-06-18 14:34:56', track1.begin_time.strftime('%Y-%m-%d %H:%M:%S'))
-		assert_equal('2014-11-11 20:05:12',   track1.end_time.strftime('%Y-%m-%d %H:%M:%S'))
-		assert_equal('hello world', track1.description)
-		assert_equal(nil, track1.parent)
-		assert_equal('123', track1.parent_id)
+		#assert_equal('1:02:03', track.duration_s(Time.new(2011, 12, 13, 15, 17, 19)))
+	end
+	
+	def test_duration_big
+		options = {
+			:date => '2011-12-13',
+			:time => '14:15:16',
+		}
+		track = TheFox::Timr::Track.new
+		track.start(options)
+		
+		#assert_equal('25:02:03', track.duration_s(Time.new(2011, 12, 14, 15, 17, 19)))
+	end
+	
+	def test_title_nil
+		track = TheFox::Timr::Track.new
+		assert_nil(track.title)
+	end
+	
+	def test_title_one_row
+		track = TheFox::Timr::Track.new
+		track.message = "Hello World"
+		assert_equal('Hello World', track.title)
+	end
+	
+	def test_title_two_rows
+		track = TheFox::Timr::Track.new
+		track.message = "Hello World\nMy second row."
+		assert_equal('Hello World', track.title)
+	end
+	
+	def test_title_three_rows
+		track = TheFox::Timr::Track.new
+		track.message = "Hello World\n\nLonger description."
+		assert_equal('Hello World', track.title)
+	end
+	
+	def test_title_max_length
+		track = TheFox::Timr::Track.new
+		track.message = "Hello World\n\nLonger description."
+		
+		#             123456789ab
+		assert_equal('Hello World', track.title(12))
+		assert_equal('Hello World', track.title(11))
+		assert_equal('Hello World', track.title(10))
+		assert_equal('Hello World', track.title(9))
+		assert_equal('Hello Wo...', track.title(8))
+		# assert_equal('Hello World', track.title(7))
 	end
 	
 end

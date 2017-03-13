@@ -1,18 +1,22 @@
 
 require 'timr/version'
+#require 'timr/simple_opt_parser'
 
-require 'timr/model/stack'
-require 'timr/model/task'
+require 'timr/helper/datetime_helper'
+
+require 'timr/model/model'
 require 'timr/model/track'
+require 'timr/model/task'
+require 'timr/model/stack'
 
-require 'timr/view/title_view'
-#require 'timr/view/help_table_view'
+require 'timr/command'
+require 'timr/command/help_command'
+require 'timr/command/version_command'
+require 'timr/command/status_command'
+require 'timr/command/start_command'
+require 'timr/command/stop_command'
+require 'timr/command/report_command'
 
-#require 'timr/controller/container'
-require 'timr/controller/app'
-require 'timr/controller/help'
-require 'timr/controller/tasks'
-require 'timr/controller/timeline'
+require 'timr/table'
 
-require 'timr/task_manager'
-require 'timr/timr2'
+require 'timr/timr'

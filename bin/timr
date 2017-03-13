@@ -1,50 +1,13 @@
 #!/usr/bin/env ruby
 # coding: UTF-8
 
-require 'optparse'
-require 'termkit'
+# require 'pp'
+# require 'optparse'
+# require 'pathname'
+# require 'terminal-table'
 require 'timr'
 
-@options = {
-	'base_dir_path' => nil,
-	'config_path' => "#{Dir.home}/.timr/timr.conf",
-}
-opts = OptionParser.new do |o|
-	o.banner = 'Usage: timr [options]'
-	o.separator('')
-	
-	o.on('-d', '--dir <path>', 'Path to a timr directory.') do |path|
-		@options['base_dir_path'] = File.expand_path(path)
-	end
-	
-	o.on('-p', '--project <name>', 'Project Name: use ~/.timr/projects/NAME as path.') do |name|
-		@options['base_dir_path'] = File.expand_path(name, "#{Dir.home}/.timr/projects")
-	end
-	
-	o.on('-c', '--config <path>', 'Path to config file. Default: ~/.timr/timr.conf') do |path|
-		@options['config_path'] = File.expand_path(path)
-	end
-	
-	o.on_tail('-V', '--version', 'Show version.') do
-		puts "#{TheFox::Timr::NAME} #{TheFox::Timr::VERSION} (#{TheFox::Timr::DATE})"
-		puts "#{TheFox::Timr::HOMEPAGE}"
-		exit
-	end
-	
-	o.on_tail('-h', '--help', 'Show this message.') do
-		puts o
-		puts
-		exit 3
-	end
-end
-ARGV << '-h' if ARGV.count == 0
-opts.parse(ARGV)
+#timr = TheFox::Timr::Timr.new(ARGV)
 
-timr = TheFox::Timr::Timr.new(@options)
-begin
-	timr.run
-rescue Exception => e
-	raise e
-ensure
-	timr.terminate
-end
+command = TheFox::Timr::Command.create_command_from_argv(ARGV.clone)
+command.run

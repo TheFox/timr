@@ -1,6 +1,8 @@
 /.bundle/
+.env
+.env.*
+!.env.example
 .setup
-/bin/dev
 CHANGELOG-*.txt
 /coverage/
 /doc/
