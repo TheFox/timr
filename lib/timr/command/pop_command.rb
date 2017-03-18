@@ -67,7 +67,7 @@ module TheFox
 				
 				track = @timr.stop(options)
 				unless track
-					puts "No running Track to pop/stop."
+					puts 'No running Track to pop/stop.'
 					exit
 				end
 				
@@ -94,7 +94,7 @@ module TheFox
 				
 				track = @timr.continue(options)
 				unless track
-					puts "No running Track left on Stack to continue."
+					puts 'No running Track left on Stack to continue.'
 					exit
 				end
 				

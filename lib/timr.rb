@@ -20,6 +20,7 @@ require 'timr/command/stop_command'
 require 'timr/command/report_command'
 require 'timr/command/push_command'
 require 'timr/command/pop_command'
+require 'timr/command/continue_command'
 
 require 'timr/table'
 

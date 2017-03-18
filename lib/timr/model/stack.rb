@@ -54,14 +54,14 @@ module TheFox
 			# end
 			
 			def push(track)
-				puts "Stack push #{track} (#{@tracks.count})"
+				# puts "Stack push #{track} (#{@tracks.count})"
 				
 				@tracks << track
 				
 				# Mark Stack as changed.
 				changed
 				
-				puts "Stack push OK (#{@tracks.count})"
+				# puts "Stack push OK (#{@tracks.count})"
 			end
 			
 			# Same as stop.

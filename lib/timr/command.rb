@@ -99,7 +99,7 @@ module TheFox
 						case command_name
 						when 'help'
 							command = HelpCommand.new
-						when 'status'
+						when 'status', 's'
 							command = StatusCommand.new(command_argv)
 						when 'start'
 							# puts "create start command"
@@ -111,6 +111,8 @@ module TheFox
 							command = PushCommand.new(command_argv)
 						when 'pop'
 							command = PopCommand.new(command_argv)
+						when 'continue', 'cont', 'c'
+							command = ContinueCommand.new(command_argv)
 						# when 'report'
 						# 	command = ReportCommand.new(command_argv)
 						when 'task'

@@ -68,7 +68,7 @@ module TheFox
 				@timr = Timr.new(@cwd)
 				track = @timr.stop(options)
 				unless track
-					puts "No running Track to stop."
+					puts 'No running Track to stop.'
 					exit
 				end
 				

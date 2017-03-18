@@ -15,7 +15,9 @@ The preferred method of installation is via RubyGems.org:
 
 A Task can has a name and a description. A Task can has multiple Tracks. One Track can has only one Task as parent.
 
-A Track is the smallest unit. It's a time span presented by a begin date time and end date time. All date times are stored as UTC and converted temporary to your local timezone.
+A Track is atomic. It's the smallest time unit. It's a time span presented by a begin date time and end date time. All date times are stored as UTC and converted temporary to your local timezone.
+
+When a Track gets *continued* or *restarted* it's actual a copy using the same message.
 
 ## Commands
 

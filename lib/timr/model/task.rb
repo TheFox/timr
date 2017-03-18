@@ -86,7 +86,7 @@ module TheFox
 			end
 			
 			def start(options = {})
-				puts "#{short_id} Task start"
+				# puts "#{short_id} Task start"
 				
 				# Track Options
 				options ||= {}
@@ -105,14 +105,13 @@ module TheFox
 				end
 				
 				if options[:track_id]
-					puts "find_track_by_id #{options[:track_id]}"
+					# puts "find_track_by_id #{options[:track_id]}"
 					found_track = find_track_by_id(options[:track_id])
 					if found_track
 						puts "clone this track: #{found_track.short_id}"
 						
 						@current_track = found_track.dup
-						puts "cloned track: #{@current_track.short_id}"
-						
+						# puts "cloned track: #{@current_track.short_id}"
 					else
 						raise "No Track found for Track ID '#{options[:track_id]}'."
 					end
@@ -136,7 +135,7 @@ module TheFox
 				options ||= {}
 				
 				if @current_track
-					puts "#{short_id} Task stop"
+					# puts "#{short_id} Task stop"
 					
 					@current_track.stop(options)
 					
@@ -155,7 +154,7 @@ module TheFox
 				options ||= {}
 				
 				if @current_track
-					puts "#{short_id} Task pause"
+					# puts "#{short_id} Task pause"
 					
 					@current_track.stop(options)
 					
@@ -174,7 +173,7 @@ module TheFox
 				
 				if @current_track
 					if @current_track.stopped?
-						puts "Task continue"
+						# puts "Task continue"
 						
 						@current_track = @current_track.dup
 						
@@ -182,6 +181,8 @@ module TheFox
 						
 						# Mark Task as changed.
 						changed
+					else
+						raise "Cannot continue Track #{@current_track.short_id}: already running."
 					end
 				else
 					#raise NotImplementedError
@@ -190,7 +191,7 @@ module TheFox
 						raise 'Track not set.'
 					end
 					
-					puts "continue clone track: #{options[:track].id}"
+					# puts "continue clone track: #{options[:track].id}"
 					
 					@current_track = options[:track].dup
 					
@@ -198,7 +199,7 @@ module TheFox
 					
 					@tracks[@current_track.id] = @current_track
 					
-					puts "clone started: #{@current_track.id}"
+					# puts "clone started: #{@current_track.id}"
 					
 					# Mark Task as changed.
 					changed

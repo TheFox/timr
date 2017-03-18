@@ -61,7 +61,7 @@ module TheFox
 				table_options = {
 					:headings => [
 						{:format => '%2d', :label => '##'},
-						{:format => '%-1s', :label => 'S'},
+						{:format => '%1s', :label => 'S'},
 						{:format => '%-5s', :label => 'START'},
 						# {:format => '%-14s', :label => 'START'},
 						{:format => '%-5s', :label => 'END'},
@@ -81,14 +81,14 @@ module TheFox
 					task = track.task
 					
 					status = track.short_status
-					case track.short_status
-					when 'R' # running
-						status = green(status)
-					when 'S' # stopped
-						status = red(status)
-					when 'P' # paused
-						status = yellow(status)
-					end
+					# case track.short_status
+					# when 'R' # running
+					# 	status = green(status)
+					# when 'S' # stopped
+					# 	status = red(status)
+					# when 'P' # paused
+					# 	status = yellow(status)
+					# end
 					
 					if track.begin_datetime
 						begin_datetime_s = track.begin_datetime_s('%H:%M')

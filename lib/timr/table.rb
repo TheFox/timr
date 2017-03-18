@@ -57,6 +57,7 @@ module TheFox
 				
 				#header_row = []
 				s << @options[:headings].map{ |header|
+					#puts "build header: '#{header[:label]}'"
 					unless header[:empty]
 						('%%-%ds' % [header[:max_length]]) % [header[:label]]
 						#header[:format] % [header[:label]]
