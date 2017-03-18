@@ -77,7 +77,7 @@ module TheFox
 					raise "Tack #{track.id} has no Task."
 				end
 				
-				status = green(track.long_status)
+				status = red(track.long_status)
 				
 				# puts '----------'
 				puts ' Task: %s %s' % [task.short_id, task.name]

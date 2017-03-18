@@ -4,13 +4,12 @@ require 'term/ansicolor'
 module TheFox
 	module Timr
 		
-		class ContinueCommand < Command
+		class PauseCommand < Command
 			
 			include Term::ANSIColor
 			
 			def initialize(argv = [])
 				super()
-				# puts "argv '#{argv}'"
 				
 				@help_opt = false
 				
@@ -30,7 +29,7 @@ module TheFox
 					when '-t', '--time'
 						@time_opt = argv.shift
 					else
-						raise ArgumentError, "Unknown argument '#{arg}'. See 'timr continue --help'."
+						raise ArgumentError, "Unknown argument '#{arg}'. See 'timr pause --help'."
 					end
 				end
 			end
@@ -48,9 +47,9 @@ module TheFox
 					:time => @time_opt,
 				}
 				
-				track = @timr.continue(options)
+				track = @timr.pause(options)
 				unless track
-					puts 'No running Track to continue.'
+					puts 'No running Track to pause.'
 					exit
 				end
 				
@@ -59,26 +58,26 @@ module TheFox
 					raise "Tack #{track.id} has no Task."
 				end
 				
-				status = green(track.long_status)
+				status = red(track.long_status)
 				
 				puts ' Task: %s %s' % [task.short_id, task.name]
 				puts 'Track: %s %s' % [track.short_id, track.title]
 				puts '  Start: %s' % [track.begin_datetime_s]
 				puts '  End:   %s' % [track.end_datetime_s]
 				puts '  Duration: %16s' % [track.duration_s]
-				puts '  Status: %s (continued)' % [status]
+				puts '  Status: %s (paused)' % [status]
 				puts 'Stack: %s' % [TranslationHelper.pluralize(@timr.stack.tracks.count, 'track', 'tracks')]
 			end
 			
 			private
 			
 			def help
-				puts 'usage: timr continue [-d|--date <YYYY-MM-DD>] [-t|--time <HH:MM[:SS]>]'
-				puts '   or: timr continue [-h|--help]'
+				puts 'usage: timr pause [-d|--date <YYYY-MM-DD>] [-t|--time <HH:MM[:SS]>]'
+				puts '   or: timr pause [-h|--help]'
 				puts
 				puts 'Track Options'
-				puts '    -d, --date <YYYY-MM-DD>    New Start Date'
-				puts '    -t, --time <HH:MM[:SS]>    New Start Time'
+				puts '    -d, --date <YYYY-MM-DD>    End Date'
+				puts '    -t, --time <HH:MM[:SS]>    End Time'
 				puts
 			end
 			

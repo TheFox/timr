@@ -173,11 +173,19 @@ module TheFox
 					return
 				end
 				
+				# Track Status
+				if track.stopped?
+					raise "Current Track #{track.short_id} is not running."
+				end
+				
 				# Get Task from Track.
 				task = track.task
 				
 				# Pause Task
 				track = task.pause(options)
+				
+				# Save Task
+				task.save_to_file
 				
 				# Do nothing on the Stack.
 				

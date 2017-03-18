@@ -176,7 +176,7 @@ module TheFox
 				puts '    -r, --reverse    Reverse the list.'
 				puts
 				puts 'Columns'
-				puts '    S        Status: R = Running, S = Stopped, P = Paused,'
+				puts '    S        Status: R = Running, S = Stopped/Paused,' # P = Paused,
 				puts '                     U = Unknown, - = Not started yet.'
 				puts '    START    Track Start Date'
 				puts '    END      Track End Date'
