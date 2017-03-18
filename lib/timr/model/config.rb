@@ -22,13 +22,13 @@ module TheFox
 			end
 			
 			def post_load_from_file
-				puts "Config post_load_from_file"
+				# puts "Config post_load_from_file"
 				
 				@inital_version = @data['inital_version'] || VERSION
 				@last_used_version = @data['last_used_version']
 				
-				puts "Config inital_version: '#{@inital_version}'"
-				puts "Config last_used_version: '#{@last_used_version}'"
+				# puts "Config inital_version: '#{@inital_version}'"
+				# puts "Config last_used_version: '#{@last_used_version}'"
 				
 				if @last_used_version != VERSION
 					@last_used_version = VERSION

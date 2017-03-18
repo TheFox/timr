@@ -143,9 +143,9 @@ module TheFox
 				if @begin_datetime.nil?
 					'-'
 				elsif @end_datetime.nil?
-					'R'
+					'R' # running
 				elsif @end_datetime
-					'S'
+					'S' # stopped
 				else
 					'U'
 				end
@@ -163,6 +163,10 @@ module TheFox
 				when 'U'
 					'unknown'
 				end
+			end
+			
+			def stopped?
+				short_status == 'S' # stopped
 			end
 			
 			# This is the title.

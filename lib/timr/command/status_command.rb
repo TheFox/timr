@@ -42,8 +42,8 @@ module TheFox
 				
 				@timr = Timr.new(@cwd)
 				
-				puts '----------'
-				puts 'STACK'
+				# puts '----------'
+				#puts 'STACK'
 				if @full_opt
 					print_full_table
 				else
@@ -147,7 +147,7 @@ module TheFox
 			end
 			
 			def help
-				puts 'usage: timr status [-h|--help]'
+				puts 'usage: timr status [-h|--help] [-f|--full] [-r|--reverse]'
 				puts
 				puts 'Options'
 				puts '    -f, --full       Show full status.'
@@ -155,12 +155,12 @@ module TheFox
 				puts
 				puts 'Columns'
 				puts '    S        Status: R = Running, S = Stopped,'
-				puts '                     U = Unknown, - = Not Started'
+				puts '                     U = Unknown, - = Not started yet.'
 				puts '    START    Track Start Date'
 				puts '    END      Track End Date'
 				puts '    DUR      Track Duration'
 				puts '    TASK     Task ID'
-				puts '    TRACK    Track ID'
+				puts '    TRACK    Track ID and title'
 				puts
 			end
 			

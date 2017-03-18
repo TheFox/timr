@@ -107,6 +107,8 @@ module TheFox
 							# puts "start command: #{command.class}"
 						when 'stop'
 							command = StopCommand.new(command_argv)
+						when 'push'
+							command = PushCommand.new(command_argv)
 						# when 'report'
 						# 	command = ReportCommand.new(command_argv)
 						when 'task'

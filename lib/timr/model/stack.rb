@@ -36,11 +36,14 @@ module TheFox
 				changed
 			end
 			
+			# Same as pop.
 			def stop
-				@tracks.pop
-				
-				# Mark Stack as changed.
-				changed
+				if @tracks.count > 0
+					@tracks.pop
+					
+					# Mark Stack as changed.
+					changed
+				end
 			end
 			
 			# def pause
@@ -50,11 +53,24 @@ module TheFox
 			# end
 			
 			def push(track)
+				puts "Stack push #{track} (#{@tracks.count})"
+				
 				@tracks << track
+				
+				# Mark Stack as changed.
+				changed
+				
+				puts "Stack push OK (#{@tracks.count})"
 			end
 			
+			# Same as stop.
 			def pop
-				@tracks.pop
+				if @tracks.count > 0
+					@tracks.pop
+					
+					# Mark Stack as changed.
+					changed
+				end
 			end
 			
 			def pre_save_to_file
@@ -73,7 +89,7 @@ module TheFox
 				# puts "#{self.class} data: '#{@data}'"
 				
 				@tracks = @data.map{ |ids|
-					puts "load from ids: #{ids}"
+					# puts "load from ids: #{ids}"
 					
 					task_id, track_id = ids
 					# puts "load   task #{task_id}"
@@ -90,7 +106,7 @@ module TheFox
 					!track.nil?
 				}
 				
-				puts "track loaded: #{@tracks.count}"
+				# puts "track loaded: #{@tracks.count}"
 			end
 			
 			def to_s

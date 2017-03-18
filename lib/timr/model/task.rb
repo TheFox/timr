@@ -86,29 +86,35 @@ module TheFox
 			end
 			
 			def start(options = {})
-				puts "Task start"
+				puts "#{short_id} Task start"
 				
 				# Track Options
 				options ||= {}
 				# options[:date] ||= nil
 				# options[:time] ||= nil
-				options[:message] ||= nil
+				#options[:message] ||= nil
 				options[:track_id] ||= nil
 				
-				# End current Track before starting a new one.
-				# Leave options empty here for stop().
-				stop
+				# Used by Push to
+				options[:no_stop] ||= false
+				
+				unless options[:no_stop]
+					# End current Track before starting a new one.
+					# Leave options empty here for stop().
+					stop
+				end
 				
 				if options[:track_id]
+					puts "find_track_by_id #{options[:track_id]}"
 					found_track = find_track_by_id(options[:track_id])
 					if found_track
-						# puts "clone this track: #{found_track.short_id}"
+						puts "clone this track: #{found_track.short_id}"
 						
 						@current_track = found_track.dup
-						# puts "cloned track: #{@current_track.short_id}"
+						puts "cloned track: #{@current_track.short_id}"
 						
 					else
-						raise "No Track found for Track ID '#{options[:track_id]}'"
+						raise "No Track found for Track ID '#{options[:track_id]}'."
 					end
 				else
 					@current_track = Track.new
@@ -127,11 +133,11 @@ module TheFox
 			
 			# Stops a current running Track.
 			def stop(options = {})
-				puts "Task stop"
-				
 				options ||= {}
 				
 				if @current_track
+					puts "#{short_id} Task stop"
+					
 					@current_track.stop(options)
 					
 					# Reset current Track variable.
@@ -144,11 +150,11 @@ module TheFox
 			
 			# Pauses a current running Track.
 			def pause(options = {})
-				puts "Task pause"
-				
 				options ||= {}
 				
 				if @current_track
+					puts "#{short_id} Task pause"
+					
 					@current_track.stop(options)
 					
 					# Mark Task as changed.
@@ -159,16 +165,22 @@ module TheFox
 			# Continues the current Track.
 			# Only if it isn't already running.
 			def continue(options = {})
-				puts "Task continue"
 				options ||= {}
 				
 				if @current_track
-					track = @current_track.dup
-					
-					track.start(options)
-					
-					# Mark Task as changed.
-					changed
+					if @current_track.stopped?
+						puts "Task continue"
+						
+						track = @current_track.dup
+						
+						track.start(options)
+						
+						# Mark Task as changed.
+						changed
+					end
+				else
+					# @TODO continue nil current_track
+					raise NotImplementedError
 				end
 			end
 			
@@ -192,18 +204,25 @@ module TheFox
 			
 			# Find a Track by ID even if the ID is not 40 characters long.
 			# When the ID is 40 characters long @tracks[id] is faster. ;)
-			def find_track_by_id(hash_s)
-				hash_s_len = hash_s.length
-				track_id = nil
-				@tracks.keys.each do |key|
-					# puts "track id: #{hash_s} #{key}"
-					
-					if hash_s == key[0, hash_s_len]
-						if track_id
-							raise "Track ID '#{hash_s}' is not a unique identifier"
-						else
-							track_id = key
-							# puts "found track: #{track_id}"
+			def find_track_by_id(id)
+				id_len = id.length
+				
+				if id_len == 40
+					track_id = id
+				else
+					@tracks.keys.each do |key|
+						puts "track id: #{id} #{key}"
+						
+						if id == key[0, id_len]
+							if track_id
+								raise "Track ID '#{id}' is not a unique identifier."
+							else
+								track_id = key
+								puts "found track: #{track_id}"
+								
+								# Do not break the loop here.
+								# Iterate all keys to make sure the ID is unique.
+							end
 						end
 					end
 				end

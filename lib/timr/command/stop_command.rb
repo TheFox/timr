@@ -27,9 +27,9 @@ module TheFox
 					case arg
 					when '-h', '--help'
 						@help_opt = true
-					when '--start-date'
+					when '--sd', '--start-date'
 						@start_date_opt = argv.shift
-					when '--start-time'
+					when '--st', '--start-time'
 						@start_time_opt = argv.shift
 					when '-d', '--date'
 						@date_opt = argv.shift
@@ -74,13 +74,14 @@ module TheFox
 					raise "Tack #{track.id} has no Task"
 				end
 				
-				puts '----------'
+				# puts '----------'
 				puts ' Task: %s %s' % [task.short_id, task.name]
 				puts 'Track: %s %s' % [track.short_id, track.title]
 				puts '  Start: %s' % [track.begin_datetime_s]
 				puts '  End:   %s' % [track.end_datetime_s]
 				puts '  Duration: %16s' % [track.duration_s]
 				puts '  Status: %s' % [track.long_status]
+				puts 'Stack: %s' % [TranslationHelper.pluralize(@timr.stack.tracks.count, 'track', 'tracks')]
 			end
 			
 			private
@@ -95,8 +96,8 @@ module TheFox
 				puts '    -m, --message              Track Message. What have you done? This will overwrite'
 				puts '                               the start message. See --append option.'
 				puts '    -a, --append               Append the message from --message option to the start message.'
-				puts '    --start-date <YYYY-MM-DD>  Overwrite the start date.'
-				puts '    --start-time <HH:MM[:SS]>  Overwrite the start time.'
+				puts '    --sd, --start-date <YYYY-MM-DD>  Overwrite the start date.'
+				puts '    --st, --start-time <HH:MM[:SS]>  Overwrite the start time.'
 				puts '    -d, --date <YYYY-MM-DD>        End Date. Default: today'
 				puts '    -t, --time <HH:MM[:SS]>    End Time.'
 				puts

@@ -1,7 +1,7 @@
 
 # require 'fileutils'
 # require 'yaml/store'
-require 'pp'
+require 'pp' # @TODO remove pp
 require 'pathname'
 
 module TheFox
@@ -34,7 +34,7 @@ module TheFox
 				
 				# Stack Path
 				stack_path = Pathname.new('stack.yml').expand_path(@cwd)
-				puts "stack path: #{stack_path}"
+				# puts "stack path: #{stack_path}"
 				
 				# Stack
 				@stack = Stack.new
@@ -42,11 +42,11 @@ module TheFox
 				# @stack.tasks_path = @tasks_path
 				@stack.file_path = stack_path
 				if stack_path.exist?
-					puts "load stack from file"
+					# puts "load stack from file"
 					@stack.load_from_file
 				end
 				
-				puts "timr for stack: #{@stack.timr}"
+				# puts "timr for stack: #{@stack.timr}"
 			end
 			
 			# Removes all previous Tracks and starts a new one.
@@ -55,29 +55,33 @@ module TheFox
 				options[:task_id] ||= nil
 				options[:track_id] ||= nil
 				
+				#pp options
+				
 				# Get current Track from Stack.
-				track = @stack.current_track
+				old_track = @stack.current_track
 				
 				# Stop current running Track.
-				if track
+				if old_track
 					# Get Task from Track.
-					task = track.task
-					unless task
-						raise "Track #{track.short_id} has no Task."
+					old_task = old_track.task
+					unless old_task
+						raise "Track #{old_track.short_id} has no Task."
 					end
 					
 					# Stop Task
-					task.stop
+					old_task.stop
 					
 					# Save Task
-					task.save_to_file
+					old_task.save_to_file
+					
+					old_task = nil
 				end
 				
 				if options[:task_id]
 					task = get_task_by_id(options[:task_id])
 					
 					track = task.start(options)
-					puts "new task: #{task.id}"
+					# puts "new task: #{task.id}"
 					
 					#puts "save"
 					task.save_to_file
@@ -90,33 +94,42 @@ module TheFox
 						# The long way. Should be avoided.
 						# Search all files.
 						
-						# track = Track.find_track_by_id(options[:track_id])
-						# if track
-						# 	track = task.start(options)
-						# 	puts "new task: #{task.id}"
+						# puts 'the long way'
+						
+						track = Track.find_track_by_id(@tasks_path, options[:track_id])
+						if track
+							# puts "track: #{track.id}"
+							options[:track_id] = track.id
 							
-						# 	puts "save"
-						# 	task.save_to_file
+							# Get Task from Track.
+							task = track.task
+							unless task
+								raise "Track #{track.short_id} has no Task."
+							end
 							
-						# 	puts "start to stack: #{track}"
-						# 	@stack.start(track)
-						# 	@stack.save_to_file
-						# end
+							# Start Task
+							track = task.start(options)
+							
+							# Save Task
+							task.save_to_file
+							
+							#puts "start to stack: #{track}"
+							@stack.start(track)
+							@stack.save_to_file
+						end
 					else
 						# Create completely new Task.
 						task = Task.create_task_from_hash(options)
-						#puts "new task: #{task.id}"
 						
+						# Start Task
 						track = task.start(options)
 						
-						# Save Track to file.
+						# Task Path
 						task_file_path = Model.create_path_by_id(@tasks_path, task.id)
-						#puts "path: #{task_file_path}"
 						
-						#puts "save"
+						# Save Track to file.
 						task.save_to_file(task_file_path)
 						
-						#puts "start to stack: #{track}"
 						@stack.start(track)
 						@stack.save_to_file
 					end
@@ -165,6 +178,8 @@ module TheFox
 				
 				# Pause Task
 				task.pause(options)
+				
+				# Do nothing on the Stack.
 			end
 			
 			# Continues the Top Track.
@@ -182,10 +197,97 @@ module TheFox
 				
 				# Continue Task
 				task.continue(options)
+				
+				# Do nothing on the Stack.
 			end
 			
 			# Starts a new Track and pauses the underlying one.
-			def push
+			def push(options = {})
+				options ||= {}
+				options[:task_id] ||= nil
+				options[:track_id] ||= nil
+				
+				#pp options
+				
+				# Get current Track from Stack.
+				old_track = @stack.current_track
+				
+				# Stop current running Track.
+				if old_track
+					# Get Task from Track.
+					old_task = old_track.task
+					unless old_task
+						raise "Track #{old_track.short_id} has no Task."
+					end
+					
+					# Stop Task here because on pop we need to take the
+					# current Track from Stack instead from Task.
+					# You can push another Track from an already existing
+					# Task on the Stack. A Task can hold only one current Track.
+					old_task.stop
+					
+					# Save Task
+					old_task.save_to_file
+					
+					old_task = nil
+				end
+				
+				if options[:task_id]
+					puts "get_task_by_id(#{options[:task_id]})"
+					task = get_task_by_id(options[:task_id])
+					
+					# Start Task
+					puts "start task"
+					track = task.start(options)
+					
+					# Save Task
+					task.save_to_file
+					
+					@stack.push(track)
+					@stack.save_to_file
+				else
+					if options[:track_id]
+						# The long way. Should be avoided.
+						# Search all files.
+						
+						track = Track.find_track_by_id(@tasks_path, options[:track_id])
+						if track
+							options[:track_id] = track.id
+							
+							# Get Task from Track.
+							task = track.task
+							unless task
+								raise "Track #{track.short_id} has no Task."
+							end
+							
+							# Start Task
+							track = task.start(options)
+							
+							# Save Task
+							task.save_to_file
+							
+							@stack.push(track)
+							@stack.save_to_file
+						end
+					else
+						# Create completely new Task.
+						task = Task.create_task_from_hash(options)
+						
+						# Start Task
+						track = task.start(options)
+						
+						# Task Path
+						task_file_path = Model.create_path_by_id(@tasks_path, task.id)
+						
+						# Save Track to file.
+						task.save_to_file(task_file_path)
+						
+						@stack.push(track)
+						@stack.save_to_file
+					end
+				end
+				
+				track
 			end
 			
 			# Stops the Top Track, removes it from the Stack and
@@ -197,8 +299,9 @@ module TheFox
 				task = @tasks[id]
 				
 				if task
-					puts "take task from cache: #{id}"
-					puts "tracks: #{task.tracks.count}"
+					# Take Task from cache.
+					# puts "take task from cache: #{id}"
+					# puts "tracks: #{task.tracks.count}"
 				else
 					task = Task.load_task_from_file_with_id(@tasks_path, id)
 					@tasks[task.id] = task

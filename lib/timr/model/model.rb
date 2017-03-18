@@ -59,13 +59,13 @@ module TheFox
 				if path.nil?
 					path = @file_path
 					if path.nil?
-						raise "Path cannot be nil"
+						raise 'Path cannot be nil'
 					end
 				else
 					@file_path = path
 				end
 				
-				puts "#{self.class} load_from_file: #{path} #{load}"
+				# puts "#{self.class} load_from_file: #{path} #{load}"
 				if load
 					content = YAML::load_file(path)
 					@meta = content['meta']
@@ -95,7 +95,7 @@ module TheFox
 					@file_path = path
 				end
 				
-				puts "#{self.class} save_to_file: #{store} #{@changed}"
+				#puts "#{self.class} save_to_file: #{store} #{@changed}"
 				if force || (store && @changed)
 					@meta['modified'] = Time.now.utc.strftime(MODEL_DATETIME_FORMAT)
 					
@@ -157,10 +157,10 @@ module TheFox
 						base_path = Pathname.new(base_path)
 					end
 					unless id.is_a?(String)
-						raise ArgumentError, "ID is not a String. #{id.class} given."
+						raise ArgumentError, "ID '#{id}' is not a String. #{id.class} given."
 					end
 					if id.length < 4
-						raise ArgumentError, "ID is too short for find. Minimum length: 4"
+						raise ArgumentError, "ID '#{id}' is too short for find. Minimum length: 4"
 					end
 					
 					if id.length == 40
@@ -184,8 +184,8 @@ module TheFox
 						end
 						search_path << '*'
 						
-						puts "search_path #{search_path}"
-						puts "base_path #{base_path}"
+						# puts "search_path #{search_path}"
+						# puts "base_path #{base_path}"
 						
 						path = nil
 						base_path.find.each do |file|
@@ -208,6 +208,9 @@ module TheFox
 								raise "ID '#{id}' is not a unique identifier"
 							else
 								path = file
+								
+								# Do not break the loop here.
+								# Iterate all keys to make sure the ID is unique.
 							end
 						end
 					end
