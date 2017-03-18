@@ -144,8 +144,25 @@ module TheFox
 				seconds
 			end
 			
-			def duration_s(end_datetime = Time.now)
-				'%d:%02d:%02d' % duration(end_datetime)
+			def duration_s(end_datetime = nil)
+				end_datetime ||= Time.now
+				#format ||= '%d:%02d:%02d'
+				
+				hours, minutes, seconds = duration(end_datetime)
+				
+				if hours > 160
+					'%dh' % [hours]
+				elsif hours > 0
+					'%d:%02dh' % [hours, minutes]
+				elsif minutes > 0
+					'%d:%02dm' % [minutes, seconds]
+				elsif seconds > 0
+					'%ds' % [seconds]
+				else
+					'-'
+				end
+				
+				#format % duration(end_datetime)
 			end
 			
 			def short_status

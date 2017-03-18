@@ -60,14 +60,12 @@ module TheFox
 				
 				table_options = {
 					:headings => [
-						{:format => '%2d', :label => '##'},
+						{:format => '%2s', :label => '##'},
 						{:format => '%1s', :label => 'S'},
-						{:format => '%-5s', :label => 'START'},
-						# {:format => '%-14s', :label => 'START'},
+						{:format => '%-5s', :label => 'START', :padding_left => ' '},
 						{:format => '%-5s', :label => 'END'},
-						# {:format => '%-14s', :label => 'END'},
-						{:format => '%8s', :label => 'DUR'},
-						{:format => '%s', :label => 'TASK'},
+						{:format => '%8s', :label => 'DUR', :padding_right => ' '},
+						{:format => '%-6s', :label => 'TASK', :padding_right => ' '},
 						{:format => '%s', :label => 'TRACK'},
 					],
 				}
@@ -81,23 +79,13 @@ module TheFox
 					task = track.task
 					
 					status = track.short_status
-					# case track.short_status
-					# when 'R' # running
-					# 	status = green(status)
-					# when 'S' # stopped
-					# 	status = red(status)
-					# when 'P' # paused
-					# 	status = yellow(status)
-					# end
 					
 					if track.begin_datetime
 						begin_datetime_s = track.begin_datetime_s('%H:%M')
-						# begin_datetime_s = track.begin_datetime_s('%y-%m-%d %H:%M')
 					end
 					
 					if track.end_datetime
 						end_datetime_s = track.end_datetime_s('%H:%M')
-						# end_datetime_s = track.end_datetime_s('%y-%m-%d %H:%M')
 					end
 					
 					table << [
@@ -105,12 +93,9 @@ module TheFox
 						status,
 						begin_datetime_s,
 						end_datetime_s,
-						#task.duration_s,
 						track.duration_s,
-						# '%s %s' % [task.short_id, task.name(15)],
 						task.short_id,
 						'%s %s' % [track.short_id, track.title(15)],
-						#track.short_id,
 					]
 				end
 				

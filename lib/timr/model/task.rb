@@ -5,7 +5,7 @@ module TheFox
 		class Task < Model
 			
 			attr_reader :description
-			attr_reader :tracks
+			# attr_reader :tracks
 			
 			def initialize
 				super()
@@ -35,6 +35,47 @@ module TheFox
 			def description=(description)
 				@description = description
 				@changed = true
+			end
+			
+			def tracks(options = {})
+				options ||= {}
+				options[:from] ||= nil
+				options[:to] ||= nil
+				
+				if options[:from].nil? && options[:to].nil?
+					puts "from and to are nil"
+					@tracks.values
+				elsif !options[:from].nil? && options[:to].nil?
+					# @TODO: it is not so easy
+					# @tracks.values.select{ |track|
+					# 	track.begin_datetime &&
+					# 		track.begin_datetime >= options[:from]
+					# }
+				elsif options[:from].nil? && !options[:to].nil?
+					# @TODO: it is not so easy
+					# @tracks.values.select{ |track|
+					# 	track.end_datetime &&
+					# 		track.end_datetime <= options[:to]
+					# }
+				elsif !options[:from].nil? && !options[:to].nil?
+					# @TODO: it is not so easy
+					puts "from and to are NOT nil"
+					puts "from #{options[:from]}"
+					puts "  to #{options[:to]}"
+					# @tracks.values.select{ |track|
+					# 	puts "filter: #{track.short_id}"
+						
+					# 	begin_datetime = track.begin_datetime
+					# 	end_datetime = track.end_datetime || Time.now
+						
+					# 	begin_datetime &&
+					# 		end_datetime &&
+					# 		begin_datetime >= options[:from] &&
+					# 		end_datetime <= options[:to]
+					# }
+				else
+					raise 'Should never happen bug shit happens.'
+				end
 			end
 			
 			def pre_save_to_file
@@ -255,11 +296,11 @@ module TheFox
 			end
 			
 			def to_s
-				"Task #{@meta['id']}"
+				"Task_#{short_id}"
 			end
 			
 			def inspect
-				"#<Task #{@meta['id']}>"
+				"#<Task #{short_id}>"
 			end
 			
 			# All methods in this block are static.

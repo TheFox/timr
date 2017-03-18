@@ -152,6 +152,14 @@ module TheFox
 					Pathname.new(path_s).expand_path(base_path)
 				end
 				
+				# Convert
+				#   3d/d5/0a/2b50eabc84022a23ad2c06d9bb6396f978.yml
+				# to
+				# 3dd50a2b50eabc84022a23ad2c06d9bb6396f978
+				def get_id_from_path(base_path, path)
+					path.relative_path_from(base_path).to_s.gsub('/', '')[0..-5]
+				end
+				
 				def find_file_by_id(base_path, id)
 					if base_path.is_a?(String)
 						base_path = Pathname.new(base_path)

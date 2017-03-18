@@ -322,8 +322,6 @@ module TheFox
 				
 				if task
 					# Take Task from cache.
-					# puts "take task from cache: #{id}"
-					# puts "tracks: #{task.tracks.count}"
 				else
 					task = Task.load_task_from_file_with_id(@tasks_path, id)
 					@tasks[task.id] = task
@@ -332,11 +330,54 @@ module TheFox
 				task
 			end
 			
+			def tracks(options = {})
+				options ||= {}
+				# options[:from] ||= nil
+				# options[:to] ||= nil
+				
+				options[:from] = nil # @TODO remove
+				options[:to] = nil # @TODO remove
+				
+				load_all_tracks
+				
+				filtered_tracks = []
+				
+				@tasks.each do |task_id, task|
+					puts "task: #{filtered_tracks.count} #{task} #{task_id} #{task.short_id}"
+					tracks = task.tracks(options)
+					filtered_tracks.push(*tracks)
+					puts "  -> #{filtered_tracks.count}"
+					puts
+				end
+				
+				filtered_tracks
+			end
+			
 			def shutdown
 				# puts 'Timr shutdown'
 				
 				# Save config
 				@config.save_to_file
+			end
+			
+			def load_all_tracks
+				# Iterate all files.
+				@tasks_path.find.each do |file|
+					# Filter all directories.
+					unless file.file?
+						next
+					end
+					
+					# Filter all non-yaml files.
+					unless file.basename.fnmatch('*.yml')
+						next
+					end
+					
+					id = Model.get_id_from_path(@tasks_path, file)
+					
+					# Loads the Task from file into @tasks.
+					get_task_by_id(id)
+				end
 			end
 			
 			def to_s

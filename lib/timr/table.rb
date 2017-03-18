@@ -27,12 +27,16 @@ module TheFox
 							header[:empty] = true
 						end
 						header[:max_length] ||= 0
+						header[:padding_left] ||= ''
+						header[:padding_right] ||= ''
 					else
 						header = {
 							:format => '%s',
 							:label => '',
 							:empty => true,
 							:max_length => 0,
+							:padding_left => '',
+							:padding_right => '',
 						}
 					end
 					
@@ -42,7 +46,7 @@ module TheFox
 						end
 						col_s = col.to_s
 						if col_s.length > header[:max_length]
-							header[:max_length] = (header[:format] % [col_s]).length
+							header[:max_length] = (header[:format] % [col_s]).length + header[:padding_left].length + header[:padding_right].length
 						end
 					end
 					
@@ -59,8 +63,8 @@ module TheFox
 				s << @options[:headings].map{ |header|
 					#puts "build header: '#{header[:label]}'"
 					unless header[:empty]
-						('%%-%ds' % [header[:max_length]]) % [header[:label]]
-						#header[:format] % [header[:label]]
+						#('%%-%ds' % [header[:max_length]]) % [header[:label]]
+						"%s#{header[:format]}%s" % [header[:padding_left], header[:label], header[:padding_right]]
 					end
 				}.select{ |s| !s.nil? }.join(' ')
 				s << "\n"
@@ -72,7 +76,8 @@ module TheFox
 						header = @options[:headings][col_n]
 						unless header[:empty]
 							#s << header[:format] % [col] << ' '
-							columns << header[:format] % [col]
+							col_s = "%s#{header[:format]}%s" % [header[:padding_left], col, header[:padding_right]]
+							columns << col_s
 						end
 						col_n += 1
 					end
