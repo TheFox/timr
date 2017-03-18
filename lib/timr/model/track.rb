@@ -10,6 +10,7 @@ module TheFox
 			attr_reader :begin_datetime
 			attr_reader :end_datetime
 			attr_accessor :message
+			attr_accessor :paused
 			
 			def initialize
 				super()
@@ -19,6 +20,7 @@ module TheFox
 				@begin_datetime = nil
 				@end_datetime = nil
 				@message = nil
+				@paused = false
 			end
 			
 			def begin_datetime=(begin_datetime)
@@ -53,6 +55,10 @@ module TheFox
 				options ||= {}
 				options[:message] ||= nil
 				
+				if @begin_datetime
+					raise 'Cannot re-start Track. Use dup() on this instance or create a new instance by using Track.new().'
+				end
+				
 				@begin_datetime = self.class.get_datetime_from_options(options)
 				
 				if options[:message]
@@ -67,6 +73,7 @@ module TheFox
 				options[:start_date] ||= nil
 				options[:start_time] ||= nil
 				options[:message] ||= nil
+				options[:paused] ||= false
 				
 				# Set Start DateTime
 				if options[:start_date] || options[:start_time]
@@ -92,6 +99,8 @@ module TheFox
 						@message = options[:message]
 					end
 				end
+				
+				@paused = options[:paused]
 				
 				changed
 			end
@@ -141,13 +150,18 @@ module TheFox
 			
 			def short_status
 				if @begin_datetime.nil?
-					'-'
+					'-' # not started
 				elsif @end_datetime.nil?
 					'R' # running
 				elsif @end_datetime
-					'S' # stopped
+					if @paused
+						# It's actually stopped but with an additional flag.
+						'P' # paused
+					else
+						'S' # stopped
+					end
 				else
-					'U'
+					'U' # unknown
 				end
 			end
 			
@@ -160,6 +174,8 @@ module TheFox
 					'running'
 				when 'S'
 					'stopped'
+				when 'P'
+					'paused'
 				when 'U'
 					'unknown'
 				end

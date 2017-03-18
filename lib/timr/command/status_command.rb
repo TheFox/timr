@@ -1,5 +1,5 @@
 
-#require 'term/ansicolor'
+require 'term/ansicolor'
 # require 'terminal-table'
 require 'thefox-ext'
 
@@ -7,6 +7,8 @@ module TheFox
 	module Timr
 		
 		class StatusCommand < Command
+			
+			include Term::ANSIColor
 			
 			def initialize(argv = [])
 				#puts "argv '#{argv}'"
@@ -78,6 +80,16 @@ module TheFox
 					
 					task = track.task
 					
+					status = track.short_status
+					case track.short_status
+					when 'R' # running
+						status = green(status)
+					when 'S' # stopped
+						status = red(status)
+					when 'P' # paused
+						status = yellow(status)
+					end
+					
 					if track.begin_datetime
 						begin_datetime_s = track.begin_datetime_s('%H:%M')
 						# begin_datetime_s = track.begin_datetime_s('%y-%m-%d %H:%M')
@@ -90,7 +102,7 @@ module TheFox
 					
 					table << [
 						track_c,
-						track.short_status,
+						status,
 						begin_datetime_s,
 						end_datetime_s,
 						#task.duration_s,
@@ -119,13 +131,23 @@ module TheFox
 					
 					task = track.task
 					
+					status = track.long_status
+					case track.short_status
+					when 'R' # running
+						status = green(status)
+					when 'S' # stopped
+						status = red(status)
+					when 'P' # paused
+						status = yellow(status)
+					end
+					
 					puts '--- #%d ---' % [track_c]
 					puts ' Task: %s %s' % [task.short_id, task.name]
 					puts 'Track: %s %s' % [track.short_id, track.title]
 					puts '  Start: %s' % [track.begin_datetime_s]
 					puts '  End:   %s' % [track.end_datetime_s || '--']
 					puts '  Duration: %16s' % [track.duration_s]
-					puts '  Status: %s' % [track.long_status]
+					puts '  Status: %s' % [status]
 					puts
 				end
 				
@@ -154,7 +176,7 @@ module TheFox
 				puts '    -r, --reverse    Reverse the list.'
 				puts
 				puts 'Columns'
-				puts '    S        Status: R = Running, S = Stopped,'
+				puts '    S        Status: R = Running, S = Stopped, P = Paused,'
 				puts '                     U = Unknown, - = Not started yet.'
 				puts '    START    Track Start Date'
 				puts '    END      Track End Date'

@@ -1,8 +1,12 @@
 
+require 'term/ansicolor'
+
 module TheFox
 	module Timr
 		
 		class PushCommand < Command
+			
+			include Term::ANSIColor
 			
 			def initialize(argv = [])
 				super()
@@ -68,19 +72,21 @@ module TheFox
 				@timr = Timr.new(@cwd)
 				track = @timr.push(options)
 				unless track
-					raise 'Could not start a new Track'
+					raise 'Could not start a new Track.'
 				end
 				
 				task = track.task
 				unless task
-					raise "Tack #{track.id} has no Task"
+					raise "Tack #{track.id} has no Task."
 				end
+				
+				status = green(track.long_status)
 				
 				puts '----------'
 				puts ' Task: %s %s' % [task.short_id, task.name]
 				puts 'Track: %s %s' % [track.short_id, track.title]
 				puts '  Start: %s' % [track.begin_datetime_s]
-				puts '  Status: %s' % [track.long_status]
+				puts '  Status: %s' % [status]
 				puts 'Stack: %s' % [TranslationHelper.pluralize(@timr.stack.tracks.count, 'track', 'tracks')]
 			end
 			

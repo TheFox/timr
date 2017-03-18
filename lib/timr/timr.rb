@@ -177,9 +177,11 @@ module TheFox
 				task = track.task
 				
 				# Pause Task
-				task.pause(options)
+				track = task.pause(options)
 				
 				# Do nothing on the Stack.
+				
+				track
 			end
 			
 			# Continues the Top Track.
@@ -191,14 +193,22 @@ module TheFox
 				unless track
 					return
 				end
+				options[:track] = track
 				
 				# Get Task from Track.
 				task = track.task
 				
 				# Continue Task
-				task.continue(options)
+				track = task.continue(options)
 				
-				# Do nothing on the Stack.
+				# Save Task
+				task.save_to_file
+				
+				@stack.stop
+				@stack.push(track)
+				@stack.save_to_file
+				
+				track
 			end
 			
 			# Starts a new Track and pauses the underlying one.
@@ -292,7 +302,11 @@ module TheFox
 			
 			# Stops the Top Track, removes it from the Stack and
 			# continues the next underlying (new Top) Track.
-			def pop
+			def pop(options = {})
+				options ||= {}
+				
+				stop(options)
+				continue(options)
 			end
 			
 			def get_task_by_id(id)

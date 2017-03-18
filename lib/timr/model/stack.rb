@@ -36,7 +36,6 @@ module TheFox
 				changed
 			end
 			
-			# Same as pop.
 			def stop
 				if @tracks.count > 0
 					@tracks.pop
@@ -49,7 +48,9 @@ module TheFox
 			# def pause
 			# end
 			
-			# def continue
+			# def continue(track)
+			# 	stop
+			# 	push(track)
 			# end
 			
 			def push(track)
@@ -64,14 +65,14 @@ module TheFox
 			end
 			
 			# Same as stop.
-			def pop
-				if @tracks.count > 0
-					@tracks.pop
+			# def pop
+			# 	if @tracks.count > 0
+			# 		@tracks.pop
 					
-					# Mark Stack as changed.
-					changed
-				end
-			end
+			# 		# Mark Stack as changed.
+			# 		changed
+			# 	end
+			# end
 			
 			def pre_save_to_file
 				# Tracks

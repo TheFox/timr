@@ -109,6 +109,8 @@ module TheFox
 							command = StopCommand.new(command_argv)
 						when 'push'
 							command = PushCommand.new(command_argv)
+						when 'pop'
+							command = PopCommand.new(command_argv)
 						# when 'report'
 						# 	command = ReportCommand.new(command_argv)
 						when 'task'

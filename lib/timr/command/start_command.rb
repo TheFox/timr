@@ -1,10 +1,13 @@
 
+require 'term/ansicolor'
 require 'tempfile'
 
 module TheFox
 	module Timr
 		
 		class StartCommand < Command
+			
+			include Term::ANSIColor
 			
 			def initialize(argv = [])
 				super()
@@ -108,11 +111,13 @@ module TheFox
 					raise "Tack #{track.id} has no Task"
 				end
 				
+				status = green(track.long_status)
+				
 				puts '----------'
 				puts ' Task: %s %s' % [task.short_id, task.name]
 				puts 'Track: %s %s' % [track.short_id, track.title]
 				puts '  Start: %s' % [track.begin_datetime_s]
-				puts '  Status: %s' % [track.long_status]
+				puts '  Status: %s' % [status]
 				puts 'Stack: %s' % [TranslationHelper.pluralize(@timr.stack.tracks.count, 'track', 'tracks')]
 			end
 			

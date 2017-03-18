@@ -146,6 +146,8 @@ module TheFox
 					# Mark Task as changed.
 					changed
 				end
+				
+				nil
 			end
 			
 			# Pauses a current running Track.
@@ -159,6 +161,8 @@ module TheFox
 					
 					# Mark Task as changed.
 					changed
+					
+					@current_track
 				end
 			end
 			
@@ -166,22 +170,41 @@ module TheFox
 			# Only if it isn't already running.
 			def continue(options = {})
 				options ||= {}
+				options[:track] ||= nil
 				
 				if @current_track
 					if @current_track.stopped?
 						puts "Task continue"
 						
-						track = @current_track.dup
+						@current_track = @current_track.dup
 						
-						track.start(options)
+						@current_track.start(options)
 						
 						# Mark Task as changed.
 						changed
 					end
 				else
-					# @TODO continue nil current_track
-					raise NotImplementedError
+					#raise NotImplementedError
+					
+					unless options[:track]
+						raise 'Track not set.'
+					end
+					
+					puts "continue clone track: #{options[:track].id}"
+					
+					@current_track = options[:track].dup
+					
+					@current_track.start(options)
+					
+					@tracks[@current_track.id] = @current_track
+					
+					puts "clone started: #{@current_track.id}"
+					
+					# Mark Task as changed.
+					changed
 				end
+				
+				@current_track
 			end
 			
 			def duration(end_datetime = Time.now)

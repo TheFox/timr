@@ -231,4 +231,43 @@ class TestTrack < MiniTest::Test
 		# assert_equal('Hello World', track.title(7))
 	end
 	
+	def test_status
+		track = TheFox::Timr::Track.new
+		assert_equal('-', track.short_status)
+		assert_equal(true, track.long_status.length > 5)
+		
+		track.begin_datetime = '2017-03-18 01:02:03'
+		assert_equal('R', track.short_status)
+		assert_equal(true, track.long_status.length > 5)
+		
+		track.end_datetime = '2017-03-18 01:02:04'
+		assert_equal('S', track.short_status)
+		assert_equal(true, track.long_status.length > 5)
+	end
+	
+	def test_status_paused
+		track = TheFox::Timr::Track.new
+		
+		track.paused = false
+		assert_equal('-', track.short_status)
+		
+		track.paused = true
+		assert_equal('-', track.short_status)
+		
+		track.paused = false
+		track.begin_datetime = '2017-03-18 01:02:03'
+		assert_equal('R', track.short_status)
+		
+		track.paused = true
+		assert_equal('R', track.short_status)
+		
+		track.paused = false
+		track.end_datetime = '2017-03-18 01:02:04'
+		assert_equal('S', track.short_status)
+		
+		track.paused = true
+		assert_equal('P', track.short_status)
+		assert_equal(true, track.long_status.length > 5)
+	end
+	
 end
