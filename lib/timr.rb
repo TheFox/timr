@@ -8,6 +8,7 @@ require 'timr/model/model'
 require 'timr/model/track'
 require 'timr/model/task'
 require 'timr/model/stack'
+require 'timr/model/config'
 
 require 'timr/command'
 require 'timr/command/help_command'

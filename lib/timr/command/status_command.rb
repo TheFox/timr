@@ -1,5 +1,5 @@
 
-require 'term/ansicolor'
+#require 'term/ansicolor'
 # require 'terminal-table'
 require 'thefox-ext'
 

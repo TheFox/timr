@@ -11,3 +11,4 @@ require 'timr'
 
 command = TheFox::Timr::Command.create_command_from_argv(ARGV.clone)
 command.run
+command.shutdown

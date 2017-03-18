@@ -15,6 +15,15 @@ module TheFox
 				# Current Working Directory
 				@cwd = cwd
 				
+				@config = Config.new
+				@config.file_path = Pathname.new('config.yml').expand_path(@cwd)
+				if @config.file_path.exist?
+					@config.load_from_file
+				else
+					#@config.save_to_file
+					@config.save_to_file(nil, true)
+				end
+				
 				@tasks_path = Pathname.new('tasks').expand_path(@cwd)
 				unless @tasks_path.exist?
 					@tasks_path.mkpath
@@ -196,6 +205,13 @@ module TheFox
 				end
 				
 				task
+			end
+			
+			def shutdown
+				# puts 'Timr shutdown'
+				
+				# Save config
+				@config.save_to_file
 			end
 			
 			def to_s

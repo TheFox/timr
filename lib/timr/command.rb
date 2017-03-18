@@ -10,11 +10,22 @@ module TheFox
 			
 			def initialize
 				@cwd = nil
+				@timr = nil
 			end
 			
 			def run
-				puts "run"
-				puts "class: #{self.class}"
+				# puts "run"
+				# puts "class: #{self.class}"
+			end
+			
+			def shutdown
+				# puts "shutdown"
+				
+				if @timr
+					# puts "shutdown timr"
+					
+					@timr.shutdown
+				end
 			end
 			
 			# All methods in this block are static.
