@@ -337,13 +337,25 @@ module TheFox
 				
 				filtered_tracks = Hash.new
 				@tasks.each do |task_id, task|
-					puts "task: #{task} #{task.tracks.count}"
+					#puts "task: #{task} #{task.tracks.count}"
 					tracks = task.tracks(options)
 					filtered_tracks.merge!(tracks)
-					puts "  -> #{filtered_tracks.count}"
-					puts
+					#puts "  -> #{filtered_tracks.count}"
+					#puts
 				end
-				filtered_tracks
+				
+				filtered_tracks.sort{ |t1, t2|
+					t1 = t1.last
+					t2 = t2.last
+					
+					cmp1 = t1.begin_datetime <=> t2.begin_datetime
+					puts "cmp1: #{cmp1}"
+					if cmp1 == 0
+						t1.end_datetime <=> t2.end_datetime
+					else
+						cmp1
+					end
+				}
 			end
 			
 			def shutdown

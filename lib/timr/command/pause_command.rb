@@ -82,7 +82,7 @@ module TheFox
 				puts
 			end
 			
-		end # class StopCommand
+		end # class PauseCommand
 	
 	end # module Timr
 end # module TheFox

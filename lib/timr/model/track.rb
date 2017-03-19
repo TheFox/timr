@@ -36,9 +36,13 @@ module TheFox
 				@begin_datetime = begin_datetime
 			end
 			
-			def begin_datetime_s(format = HUMAN_DATETIME_FOMRAT)
+			def begin_datetime_s(format = HUMAN_DATETIME_FOMRAT, from = nil)
 				if @begin_datetime
-					@begin_datetime.localtime.strftime(format)
+					if from && from > @begin_datetime
+						from.localtime.strftime(format)
+					else
+						@begin_datetime.localtime.strftime(format)
+					end
 				end
 			end
 			
@@ -55,9 +59,13 @@ module TheFox
 				@end_datetime = end_datetime
 			end
 			
-			def end_datetime_s(format = HUMAN_DATETIME_FOMRAT)
+			def end_datetime_s(format = HUMAN_DATETIME_FOMRAT, to = nil)
 				if @end_datetime
-					@end_datetime.localtime.strftime(format)
+					if to && to < @end_datetime
+						to.localtime.strftime(format)
+					else
+						@end_datetime.localtime.strftime(format)
+					end
 				end
 			end
 			
@@ -148,6 +156,21 @@ module TheFox
 					end
 				
 				Duration.new(seconds)
+			end
+			
+			# When begin_datetime is 2017-01-01 01:15
+			#  and end_datetime   is 2017-01-03 02:17
+			# this function returns
+			#   [
+			#   	Date.new(2017, 1, 1),
+			#   	Date.new(2017, 1, 2),
+			#   	Date.new(2017, 1, 3),
+			#   ]
+			def days
+				begin_date = @begin_datetime.to_date
+				end_date = @end_datetime.to_date
+				
+				begin_date.upto(end_date)
 			end
 			
 			def short_status

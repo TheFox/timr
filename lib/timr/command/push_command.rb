@@ -118,7 +118,7 @@ module TheFox
 				puts
 			end
 			
-		end # class StatusCommand
+		end # class PushCommand
 	
 	end # module Timr
 end # module TheFox

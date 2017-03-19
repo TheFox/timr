@@ -169,7 +169,7 @@ module TheFox
 				puts '    END      Track End Date'
 				puts '    DUR      Track Duration'
 				puts '    TASK     Task ID'
-				puts '    TRACK    Track ID and title'
+				puts '    TRACK    Track ID and Title.'
 				puts
 			end
 			

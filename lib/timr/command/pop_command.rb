@@ -132,7 +132,7 @@ module TheFox
 				puts
 			end
 			
-		end # class StopCommand
+		end # class PopCommand
 	
 	end # module Timr
 end # module TheFox

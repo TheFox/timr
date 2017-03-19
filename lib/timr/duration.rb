@@ -34,13 +34,13 @@ module TheFox
 				end
 				
 				if @smh_hours > 160
-					'%dh' % [@smh_hours]
+					'%d h' % [@smh_hours]
 				elsif @smh_hours > 0
-					'%d:%02dh' % [@smh_hours, @smh_minutes]
+					'%d:%02d h' % [@smh_hours, @smh_minutes]
 				elsif @smh_minutes > 0
-					'%d:%02dm' % [@smh_minutes, @smh_seconds]
+					'%d:%02d m' % [@smh_minutes, @smh_seconds]
 				elsif @smh_seconds > 0
-					'%ds' % [@smh_seconds]
+					'%d s' % [@smh_seconds]
 				else
 					'--'
 				end

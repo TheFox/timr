@@ -1,13 +1,7 @@
 #!/usr/bin/env ruby
 # coding: UTF-8
 
-# require 'pp'
-# require 'optparse'
-# require 'pathname'
-# require 'terminal-table'
 require 'timr'
-
-#timr = TheFox::Timr::Timr.new(ARGV)
 
 command = TheFox::Timr::Command.create_command_from_argv(ARGV.clone)
 command.run

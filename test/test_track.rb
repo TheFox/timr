@@ -158,6 +158,25 @@ class TestTrack < MiniTest::Test
 	# 	assert_equal(Time.new(today.year, today.month, today.day, 14, 13, 14, 0).strftime('%F %T %z'), track.begin_datetime.strftime('%F %T %z'))
 	# end
 	
+	def test_begin_end_datetime_s
+		track = TheFox::Timr::Track.new
+		track.begin_datetime = '2017-01-01 01:00:00'
+		track.end_datetime   = '2017-01-01 02:00:00'
+		
+		from = Time.parse('2017-01-01 00:30:00')
+		assert_equal('17-01-01 01:00:00', track.begin_datetime_s('%y-%m-%d %T', from))
+		
+		from = Time.parse('2017-01-01 01:00:05')
+		assert_equal('17-01-01 01:00:05', track.begin_datetime_s('%y-%m-%d %T', from))
+		
+		
+		to = Time.parse('2017-01-01 01:59:00')
+		assert_equal('17-01-01 01:59:00', track.end_datetime_s('%y-%m-%d %T', to))
+		
+		to = Time.parse('2017-01-01 02:05:00')
+		assert_equal('17-01-01 02:00:00', track.end_datetime_s('%y-%m-%d %T', to))
+	end
+	
 	def test_message
 		options = {
 			:message => 'msg1',
