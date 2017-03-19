@@ -11,4 +11,6 @@ if ENV['COVERAGE'] && ENV['COVERAGE'].to_i != 0
 end
 
 # require_relative 'test_simple_opt_parser'
+
 require_relative 'test_track'
+require_relative 'test_task'

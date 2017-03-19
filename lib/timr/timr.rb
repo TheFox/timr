@@ -335,17 +335,17 @@ module TheFox
 				# options[:from] ||= nil
 				# options[:to] ||= nil
 				
-				options[:from] = nil # @TODO remove
-				options[:to] = nil # @TODO remove
+				# options[:from] = nil # @TODO remove
+				# options[:to] = nil # @TODO remove
 				
 				load_all_tracks
 				
-				filtered_tracks = []
+				filtered_tracks = Hash.new
 				
 				@tasks.each do |task_id, task|
 					puts "task: #{filtered_tracks.count} #{task} #{task_id} #{task.short_id}"
 					tracks = task.tracks(options)
-					filtered_tracks.push(*tracks)
+					filtered_tracks.merge!(tracks)
 					puts "  -> #{filtered_tracks.count}"
 					puts
 				end

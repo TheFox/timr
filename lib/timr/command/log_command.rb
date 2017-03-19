@@ -70,7 +70,7 @@ module TheFox
 				}
 				
 				track_c = 0
-				get_tracks.each do |track|
+				get_tracks.each do |track_id, track|
 					track_c += 1
 					table_has_rows = true
 					

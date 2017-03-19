@@ -37,44 +37,96 @@ module TheFox
 				@changed = true
 			end
 			
+			def add_track(track)
+				@tracks[track.id] = track
+			end
+			
+			# Select Track by Time Range.
 			def tracks(options = {})
 				options ||= {}
 				options[:from] ||= nil
 				options[:to] ||= nil
 				
-				if options[:from].nil? && options[:to].nil?
-					puts "from and to are nil"
-					@tracks.values
-				elsif !options[:from].nil? && options[:to].nil?
-					# @TODO: it is not so easy
-					# @tracks.values.select{ |track|
-					# 	track.begin_datetime &&
-					# 		track.begin_datetime >= options[:from]
-					# }
-				elsif options[:from].nil? && !options[:to].nil?
-					# @TODO: it is not so easy
-					# @tracks.values.select{ |track|
-					# 	track.end_datetime &&
-					# 		track.end_datetime <= options[:to]
-					# }
-				elsif !options[:from].nil? && !options[:to].nil?
-					# @TODO: it is not so easy
-					puts "from and to are NOT nil"
-					puts "from #{options[:from]}"
-					puts "  to #{options[:to]}"
-					# @tracks.values.select{ |track|
-					# 	puts "filter: #{track.short_id}"
+				# Local variables.
+				from = options[:from]
+				to = options[:to]
+				
+				# Fixed Start and End (from != nil && to != nil)
+				# Selected Range           |----------|
+				# Track A              +-----------------+
+				# Track B                 +------+
+				# Track C                      +------------+
+				# Track D                       +----+
+				# Track E            +---+
+				# Track F                                 +---+
+				# 
+				# Track A is bigger then the Options range. Take it.
+				# Track B ends in the Options range. Take it.
+				# Track C starts in the Options range. Take it.
+				# Track D starts and ends within the Options range. Definitely take this.
+				# Track E is out-of-score. Ignore it.
+				# Track F is out-of-score. Ignore it.
+				
+				# Open End (to == nil)
+				# Selected Range           |---------->
+				# Track A              +-----------------+
+				# Track B                 +------+
+				# Track C                      +------------+
+				# Track D                       +----+
+				# Track E            +---+
+				# Track F                                 +---+
+				# 
+				# Take all except Track E.
+				
+				# Open Start (from == nil)
+				# Selected Range           <----------|
+				# Track A              +-----------------+
+				# Track B                 +------+
+				# Track C                      +------------+
+				# Track D                       +----+
+				# Track E            +---+
+				# Track F                                 +---+
+				# 
+				# Take all except Track F.
+				
+				if from && to && from > to
+					raise RangeError, 'From cannot be bigger than To.'
+				end
+				
+				if from.nil? && to.nil?
+					# Take all Tracks.
+					@tracks
+				elsif !from.nil? && to.nil?
+					# Open End (to == nil)
+					@tracks.select{ |track_id, track|
+						bdt = track.begin_datetime
+						edt = track.end_datetime || Time.now
 						
-					# 	begin_datetime = track.begin_datetime
-					# 	end_datetime = track.end_datetime || Time.now
+						bdt <  from && edt >  from || # Track A, B
+						bdt >= from && edt >= from    # Track C, D, F
+					}
+				elsif from.nil? && !to.nil?
+					# Open Start (from == nil)
+					@tracks.select{ |track_id, track|
+						bdt = track.begin_datetime
+						edt = track.end_datetime || Time.now
 						
-					# 	begin_datetime &&
-					# 		end_datetime &&
-					# 		begin_datetime >= options[:from] &&
-					# 		end_datetime <= options[:to]
-					# }
+						bdt <  to && edt <= to || # Track B, D, E
+						bdt <  to && edt >  to    # Track A, C
+					}
+				elsif !from.nil? && !to.nil?
+					# Fixed Start and End (from != nil && to != nil)
+					@tracks.select{ |track_id, track|
+						bdt = track.begin_datetime
+						edt = track.end_datetime || Time.now
+						
+						bdt >= from && edt <= to ||               # Track D
+						bdt <  from && edt >  to ||               # Track A
+						bdt <  from && edt <= to && edt > from || # Track B
+						bdt >= from && edt >  to && bdt < to      # Track C
+					}
 				else
-					raise 'Should never happen bug shit happens.'
+					raise 'Should never happen, bug shit happens.'
 				end
 			end
 			
