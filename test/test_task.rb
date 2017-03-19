@@ -233,4 +233,33 @@ class TestTask < MiniTest::Test
 		end
 	end
 	
+	def test_duration
+		track1 = TheFox::Timr::Track.new
+		track1.begin_datetime = '2015-06-01 10:00:00'
+		track1.end_datetime   = '2015-06-01 11:00:00'
+		
+		track2 = TheFox::Timr::Track.new
+		track2.begin_datetime = '2015-06-01 10:30:00'
+		track2.end_datetime   = '2015-06-01 11:30:00'
+		
+		task = TheFox::Timr::Task.new
+		task.add_track(track1)
+		task.add_track(track2)
+		
+		assert_equal(7200, task.duration.to_i)
+		
+		# Cut Start
+		from = Time.parse('2015-06-01 10:30:00')
+		assert_equal(5400, task.duration({:from => from, :to => nil}).to_i)
+		
+		# Cut End
+		to = Time.parse('2015-06-01 11:00:15')
+		assert_equal(5415, task.duration({:from => nil, :to => to}).to_i)
+		
+		# Cut Start End
+		from = Time.parse('2015-06-01 10:30:00')
+		to   = Time.parse('2015-06-01 11:00:15')
+		assert_equal(3615, task.duration({:from => from, :to => to}).to_i)
+	end
+	
 end

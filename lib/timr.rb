@@ -10,6 +10,7 @@ require 'timr/model/track'
 require 'timr/model/task'
 require 'timr/model/stack'
 require 'timr/model/config'
+require 'timr/duration'
 
 require 'timr/command'
 require 'timr/command/help_command'

@@ -16,7 +16,7 @@ module TheFox
 			end
 			
 			def <<(row)
-				# "new row: #{row}"
+				"new row: #{row}"
 				col_n = 0
 				row.each do |col|
 					# "col: #{col_n} #{col}"

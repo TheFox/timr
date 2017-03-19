@@ -66,7 +66,7 @@ module TheFox
 				table = Table.new(table_options)
 				
 				totals = {
-					
+					:duration => Duration.new,
 				}
 				
 				track_c = 0
@@ -86,22 +86,31 @@ module TheFox
 						end_datetime_s = track.end_datetime_s('%H:%M %y-%m-%d')
 					end
 					
+					duration = track.duration({:from => @from_opt, :to => @to_opt})
+					
 					table << [
 						track_c,
 						begin_datetime_s,
 						end_datetime_s,
-						track.duration_s,
+						duration.to_human,
 						task.short_id,
 						'%s %s' % [track.short_id, track.title(15)],
 					]
+					
+					totals[:duration] += duration
 				end
 				
+				#total_duration = Duration.new(totals[:seconds]).to_human
+				
 				# Add totals to the bottom.
-				# table << [
-				# 	nil, # track_c
-				# 	nil, # status
-					
-				# ]
+				table << [
+					nil, # track_c
+					nil, # begin_datetime
+					'TOTAL', # end_datetime
+					totals[:duration].to_human, # duration
+					nil, # task
+					nil, # track
+				]
 				
 				if table_has_rows
 					puts table
@@ -109,17 +118,12 @@ module TheFox
 			end
 			
 			def get_tracks
-				today = Date.today
-				
-				if @from_opt
-					from = Time.parse(@from_opt)
+				if @from_opt || @to_opt
+					from = @from_opt
+					to = @to_opt
 				else
+					today = Date.today
 					from = Time.new(today.year, today.month, today.day, 0, 0, 0)
-				end
-				
-				if @to_opt
-					to = Time.parse(@to_opt)
-				else
 					to = Time.new(today.year, today.month, today.day, 23, 59, 59)
 				end
 				
@@ -127,6 +131,7 @@ module TheFox
 					:from => from,
 					:to => to,
 				}
+				#pp options
 				@timr.tracks(options)
 			end
 			
@@ -137,6 +142,8 @@ module TheFox
 				puts 'Track Options'
 				puts '    -s, --from \'<YYYY-MM-DD> <HH:MM[:SS]>\'    From Date/Time. Must be one string.'
 				puts '    -e, --to   \'<YYYY-MM-DD> <HH:MM[:SS]>\'    To Date/Time. Must be one string.'
+				puts
+				puts ''
 				puts
 			end
 			

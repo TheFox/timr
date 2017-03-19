@@ -173,26 +173,28 @@ class TestTrack < MiniTest::Test
 		assert_equal('msg2', track.message)
 	end
 	
-	def test_duration_small
-		options = {
-			:date => '2011-12-13',
-			:time => '14:15:16',
-		}
+	def test_duration
 		track = TheFox::Timr::Track.new
-		track.start(options)
+		assert_equal(0, track.duration.to_i)
 		
-		#assert_equal('1:02:03', track.duration_s(Time.new(2011, 12, 13, 15, 17, 19)))
-	end
-	
-	def test_duration_big
-		options = {
-			:date => '2011-12-13',
-			:time => '14:15:16',
-		}
-		track = TheFox::Timr::Track.new
-		track.start(options)
+		track.begin_datetime = '2017-01-01 01:00:00'
+		track.end_datetime   = '2017-01-01 02:00:00'
+		assert_equal(3600, track.duration.to_i)
 		
-		#assert_equal('25:02:03', track.duration_s(Time.new(2011, 12, 14, 15, 17, 19)))
+		# Cut Start
+		from = Time.parse('2017-01-01 01:00:05')
+		to   = nil
+		assert_equal(3595, track.duration({:from => from, :to => to}).to_i)
+		
+		# Cut End
+		from = nil
+		to   = Time.parse('2017-01-01 01:55:00')
+		assert_equal(3300, track.duration({:from => from, :to => to}).to_i)
+		
+		# Cut Start End
+		from = Time.parse('2017-01-01 01:00:05')
+		to   = Time.parse('2017-01-01 01:55:00')
+		assert_equal(3295, track.duration({:from => from, :to => to}).to_i)
 	end
 	
 	def test_title_nil

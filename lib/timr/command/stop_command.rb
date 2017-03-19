@@ -77,6 +77,7 @@ module TheFox
 					raise "Tack #{track.id} has no Task."
 				end
 				
+				duration = track.duration.to_human
 				status = red(track.long_status)
 				
 				# puts '----------'
@@ -84,7 +85,7 @@ module TheFox
 				puts 'Track: %s %s' % [track.short_id, track.title]
 				puts '  Start: %s' % [track.begin_datetime_s]
 				puts '  End:   %s' % [track.end_datetime_s]
-				puts '  Duration: %16s' % [track.duration_s]
+				puts '  Duration: %16s' % [duration]
 				puts '  Status: %s' % [status]
 				puts 'Stack: %s' % [TranslationHelper.pluralize(@timr.stack.tracks.count, 'track', 'tracks')]
 			end
@@ -98,13 +99,14 @@ module TheFox
 				puts '   or: timr stop [-h|--help]'
 				puts
 				puts 'Track Options'
-				puts '    -m, --message              Track Message. What have you done? This will overwrite'
-				puts '                               the start message. See --append option.'
-				puts '    -a, --append               Append the message from --message option to the start message.'
+				puts '    -m, --message              Track Message. What have you done? This will'
+				puts '                               overwrite the start message. See --append option.'
+				puts '    -a, --append               Append the message from --message option'
+				puts '                               to the start message.'
 				puts '    --sd, --start-date <YYYY-MM-DD>  Overwrite the start date.'
 				puts '    --st, --start-time <HH:MM[:SS]>  Overwrite the start time.'
-				puts '    -d, --date <YYYY-MM-DD>        End Date. Default: today'
-				puts '    -t, --time <HH:MM[:SS]>    End Time.'
+				puts '    -d, --date <YYYY-MM-DD>          End Date. Default: today'
+				puts '    -t, --time <HH:MM[:SS]>          End Time. Default: now'
 				puts
 			end
 			

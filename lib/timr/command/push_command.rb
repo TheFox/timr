@@ -106,7 +106,7 @@ module TheFox
 				puts '    -m, --message              Track Message. What have you done?'
 				puts '                               You can overwrite this on stop command.'
 				puts '    -d, --date <YYYY-MM-DD>    Start Date. Default: today'
-				puts '    -t, --time <HH:MM[:SS]>    Start Time.'
+				puts '    -t, --time <HH:MM[:SS]>    Start Time. Default: now'
 				puts
 				puts 'Arguments'
 				puts '    <task_id>     Task ID (SHA1 Hash)'

@@ -113,7 +113,6 @@ module TheFox
 				
 				status = green(track.long_status)
 				
-				puts '----------'
 				puts ' Task: %s %s' % [task.short_id, task.name]
 				puts 'Track: %s %s' % [track.short_id, track.title]
 				puts '  Start: %s' % [track.begin_datetime_s]
@@ -140,7 +139,7 @@ module TheFox
 				puts '                               You can overwrite this on stop command.'
 				# puts '    -e, --edit         Edit Track Message.'
 				puts '    -d, --date <YYYY-MM-DD>    Start Date. Default: today'
-				puts '    -t, --time <HH:MM[:SS]>    Start Time.'
+				puts '    -t, --time <HH:MM[:SS]>    Start Time. Default: now'
 				puts
 				puts 'Arguments'
 				

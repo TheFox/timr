@@ -24,8 +24,13 @@ module TheFox
 			end
 			
 			def begin_datetime=(begin_datetime)
-				if begin_datetime.is_a?(String)
+				case begin_datetime
+				when String
 					begin_datetime = Time.parse(begin_datetime)
+				when Time
+					# OK
+				else
+					raise ArgumentError, "begin_datetime needs to be a String or Time, #{begin_datetime.class} given."
 				end
 				
 				@begin_datetime = begin_datetime
@@ -38,8 +43,13 @@ module TheFox
 			end
 			
 			def end_datetime=(end_datetime)
-				if end_datetime.is_a?(String)
+				case end_datetime
+				when String
 					end_datetime = Time.parse(end_datetime)
+				when Time
+					# OK
+				else
+					raise ArgumentError, "end_datetime needs to be a String or Time, #{end_datetime.class} given."
 				end
 				
 				@end_datetime = end_datetime
@@ -106,63 +116,38 @@ module TheFox
 			end
 			
 			# Cacluates the hours, minutes and secondes between begin and end datetime.
-			def duration(end_datetime = Time.now)
-				hours = 0
-				minutes = 0
-				seconds = 0
-				
-				# Check global End DateTime.
-				if @end_datetime
-					end_datetime = @end_datetime
-				#else
-					# Take local End DateTime.
-				end
+			def duration(options = {})
+				options ||= {}
+				options[:from] ||= nil
+				options[:to] ||= nil
 				
 				if @begin_datetime
-					seconds = (end_datetime.utc - @begin_datetime.utc).to_i.abs
-					
-					hours, minutes, seconds = DateTimeHelper.seconds_to_hours(seconds)
+					bdt = @begin_datetime.utc
+					#puts "Track duration: bdt #{bdt}"
 				end
-				
-				[hours, minutes, seconds]
-			end
-			
-			def duration_seconds(end_datetime = Time.now)
-				seconds = 0
-				
-				# Check global End DateTime.
 				if @end_datetime
-					end_datetime = @end_datetime
-				#else
-					# Take local End DateTime.
-				end
-				
-				if @begin_datetime
-					seconds = (end_datetime.utc - @begin_datetime.utc).to_i.abs
-				end
-				
-				seconds
-			end
-			
-			def duration_s(end_datetime = nil)
-				end_datetime ||= Time.now
-				#format ||= '%d:%02d:%02d'
-				
-				hours, minutes, seconds = duration(end_datetime)
-				
-				if hours > 160
-					'%dh' % [hours]
-				elsif hours > 0
-					'%d:%02dh' % [hours, minutes]
-				elsif minutes > 0
-					'%d:%02dm' % [minutes, seconds]
-				elsif seconds > 0
-					'%ds' % [seconds]
+					edt = @end_datetime.utc
 				else
-					'-'
+					edt = Time.now.utc
 				end
 				
-				#format % duration(end_datetime)
+				# Cut Start
+				if options[:from] && bdt && options[:from] > bdt
+					bdt = options[:from].utc
+				end
+				
+				# Cut End
+				if options[:to] && options[:to] < edt
+					edt = options[:to].utc
+				end
+				
+				seconds = if bdt
+						(edt - bdt).to_i
+					else
+						0
+					end
+				
+				Duration.new(seconds)
 			end
 			
 			def short_status

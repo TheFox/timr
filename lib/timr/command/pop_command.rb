@@ -76,13 +76,14 @@ module TheFox
 					raise "Tack #{track.id} has no Task."
 				end
 				
+				duration = track.duration.to_human
 				status = red(track.long_status)
 				
 				puts ' Task: %s %s' % [task.short_id, task.name]
 				puts 'Track: %s %s' % [track.short_id, track.title]
 				puts '  Start: %s' % [track.begin_datetime_s]
 				puts '  End:   %s' % [track.end_datetime_s]
-				puts '  Duration: %16s' % [track.duration_s]
+				puts '  Duration: %16s' % [duration]
 				puts '  Status: %s (popped)' % [status]
 				puts
 				
@@ -103,13 +104,14 @@ module TheFox
 					raise "Tack #{track.id} has no Task."
 				end
 				
+				duration = track.duration.to_human
 				status = green(track.long_status)
 				
 				puts ' Task: %s %s' % [task.short_id, task.name]
 				puts 'Track: %s %s' % [track.short_id, track.title]
 				puts '  Start: %s' % [track.begin_datetime_s]
 				puts '  End:   %s' % [track.end_datetime_s]
-				puts '  Duration: %16s' % [track.duration_s]
+				puts '  Duration: %16s' % [duration]
 				puts '  Status: %s (continued)' % [status]
 				puts
 				

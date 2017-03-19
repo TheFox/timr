@@ -97,10 +97,23 @@ module TheFox
 					# Take all Tracks.
 					@tracks
 				elsif !from.nil? && to.nil?
+					# puts "open end"
 					# Open End (to == nil)
 					@tracks.select{ |track_id, track|
 						bdt = track.begin_datetime
 						edt = track.end_datetime || Time.now
+						
+						# puts "check track: #{track.short_id}"
+						# puts "  -> f #{from}"
+						# puts "  -> b #{bdt}"
+						# puts "  -> e #{edt}"
+						# puts
+						# puts "  -> bdt <  from     #{bdt <  from}"
+						# puts "  -> edt >  from     #{edt >  from}"
+						# puts
+						# puts "  -> bdt >= from     #{bdt >= from}"
+						# puts "  -> edt >= from     #{edt >= from}"
+						# puts
 						
 						bdt <  from && edt >  from || # Track A, B
 						bdt >= from && edt >= from    # Track C, D, F
@@ -301,22 +314,16 @@ module TheFox
 				@current_track
 			end
 			
-			def duration(end_datetime = Time.now)
-				# t_hours = 0
-				# t_minutes = 0
-				t_seconds = 0
-				@tracks.each do |track_id, track|
-					# hours, minutes, seconds = track.duration(end_datetime)
-					#puts "#{t_seconds} #{hours}, #{minutes}, #{seconds}"
-					#t_seconds += hours * 3600 + minutes * 60 + seconds
-					t_seconds += track.duration_seconds
-				end
+			def duration(options = {})
+				options ||= {}
 				
-				DateTimeHelper.seconds_to_hours(t_seconds)
-			end
-			
-			def duration_s(end_datetime = Time.now)
-				'%d:%02d:%02d' % duration(end_datetime)
+				duration = Duration.new
+				@tracks.each do |track_id, track|
+					duration += track.duration(options)
+					
+					puts "track #{track.short_id} #{duration}"
+				end
+				duration
 			end
 			
 			# Find a Track by ID even if the ID is not 40 characters long.

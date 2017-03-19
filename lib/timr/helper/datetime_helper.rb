@@ -37,17 +37,6 @@ module TheFox
 					end
 				end
 				
-				def seconds_to_hours(seconds)
-					hours = seconds / 3600
-					
-					seconds -= hours * 3600
-					minutes = seconds / 60
-					
-					seconds -= minutes * 60
-					
-					[hours, minutes, seconds]
-				end
-				
 			end
 			
 		end # class DateTimeHelper

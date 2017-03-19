@@ -79,6 +79,7 @@ module TheFox
 					task = track.task
 					
 					status = track.short_status
+					duration = track.duration.to_human
 					
 					if track.begin_datetime
 						begin_datetime_s = track.begin_datetime_s('%H:%M')
@@ -93,7 +94,7 @@ module TheFox
 						status,
 						begin_datetime_s,
 						end_datetime_s,
-						track.duration_s,
+						duration,
 						task.short_id,
 						'%s %s' % [track.short_id, track.title(15)],
 					]
@@ -115,6 +116,7 @@ module TheFox
 					table_has_rows = true
 					
 					task = track.task
+					duration = track.duration.to_human
 					
 					status = track.long_status
 					case track.short_status
@@ -131,7 +133,7 @@ module TheFox
 					puts 'Track: %s %s' % [track.short_id, track.title]
 					puts '  Start: %s' % [track.begin_datetime_s]
 					puts '  End:   %s' % [track.end_datetime_s || '--']
-					puts '  Duration: %16s' % [track.duration_s]
+					puts '  Duration: %16s' % [duration]
 					puts '  Status: %s' % [status]
 					puts
 				end
