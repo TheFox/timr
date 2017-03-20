@@ -6,10 +6,19 @@ module TheFox
 		
 		class Track < Model
 			
+			# Parent Task instance
 			attr_accessor :task
+			
+			# Time instance
 			attr_reader :begin_datetime
+			
+			# Time instance
 			attr_reader :end_datetime
+			
+			# Track Message. What have you done?
 			attr_accessor :message
+			
+			# Is this even in use? ;D
 			attr_accessor :paused
 			
 			def initialize
@@ -158,14 +167,17 @@ module TheFox
 				Duration.new(seconds)
 			end
 			
-			# When begin_datetime is 2017-01-01 01:15
-			#  and end_datetime   is 2017-01-03 02:17
+			# When begin_datetime is `2017-01-01 01:15`  
+			#  and end_datetime   is `2017-01-03 02:17`  
 			# this function returns
+			# 
+			# ```
 			#   [
 			#   	Date.new(2017, 1, 1),
 			#   	Date.new(2017, 1, 2),
 			#   	Date.new(2017, 1, 3),
 			#   ]
+			# ```
 			def days
 				begin_date = @begin_datetime.to_date
 				end_date = @end_datetime.to_date
@@ -173,6 +185,7 @@ module TheFox
 				begin_date.upto(end_date)
 			end
 			
+			# Evaluates the Short Status and returns a new Status instance.
 			def status
 				if @begin_datetime.nil?
 					short_status = '-' # not started
@@ -196,9 +209,11 @@ module TheFox
 				short_status == 'S' # stopped
 			end
 			
-			# This is the title.
+			# Title generated from message. If the message has multiple lines only the first
+			# line will be taken to create the title.
 			# 
-			# This could be a longer description.
+			# `max_length` can be used to define a maximum length. Three dots `...` will be appended
+			# at the end if the title is longer than `max_length`.
 			def title(max_length = nil)
 				unless @message
 					return
@@ -249,6 +264,7 @@ module TheFox
 			def to_h
 				h = {
 					'id' => @meta['id'],
+					'short_id' => short_id, # Not used.
 					'created' => @meta['created'],
 					'modified' => @meta['modified'],
 					'message' => @message,
@@ -269,6 +285,7 @@ module TheFox
 			# All methods in this block are static.
 			class << self
 				
+				# Helper method
 				def get_datetime_from_options(options = {})
 					options ||= {}
 					options[:date] ||= nil
@@ -309,6 +326,7 @@ module TheFox
 					# Time.new(dy, dm, dd, th, tm, ts, tz)
 				end
 				
+				# Create a new Track instance from a Hash.
 				def create_track_from_hash(hash)
 					track = Track.new
 					if hash['id']

@@ -4,6 +4,7 @@ require 'pp' # @TODO remove pp
 module TheFox
 	module Timr
 		
+		# Stop a Track.
 		class StopCommand < Command
 			
 			def initialize(argv = Array.new)
@@ -91,8 +92,8 @@ module TheFox
 			
 			def help
 				puts 'usage: timr stop [[--start-date <YYYY-MM-DD>] --start-time <HH:MM[:SS]>]'
-				puts '       [-d|--date <YYYY-MM-DD>] [-t|--time <HH:MM[:SS]>]'
-				puts '       [-m|--message <message>] [-a|--append]'
+				puts '                 [-d|--date <YYYY-MM-DD>] [-t|--time <HH:MM[:SS]>]'
+				puts '                 [-m|--message <message>] [-a|--append]'
 				puts '   or: timr stop [-h|--help]'
 				puts
 				puts 'Track Options'
@@ -100,10 +101,12 @@ module TheFox
 				puts '                               overwrite the start message. See --append option.'
 				puts '    -a, --append               Append the message from --message option'
 				puts '                               to the start message.'
-				puts '    --sd, --start-date <YYYY-MM-DD>  Overwrite the start date.'
-				puts '    --st, --start-time <HH:MM[:SS]>  Overwrite the start time.'
-				puts '    -d, --date <YYYY-MM-DD>          End Date. Default: today'
-				puts '    -t, --time <HH:MM[:SS]>          End Time. Default: now'
+				puts
+				puts '    --sd, --start-date <YYYY-MM-DD>    Overwrite the start date.'
+				puts '    --st, --start-time <HH:MM[:SS]>    Overwrite the start time.'
+				puts
+				puts '    -d, --date <YYYY-MM-DD>            End Date. Default: today'
+				puts '    -t, --time <HH:MM[:SS]>            End Time. Default: now'
 				puts
 			end
 			

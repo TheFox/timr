@@ -4,6 +4,7 @@ require 'tempfile'
 module TheFox
 	module Timr
 		
+		# Start a new Track.
 		class StartCommand < Command
 			
 			def initialize(argv = Array.new)
@@ -139,8 +140,6 @@ module TheFox
 				puts '    -t, --time <HH:MM[:SS]>    Start Time. Default: now'
 				puts
 				puts 'Arguments'
-				
-				# If not specified a new Task will be created.
 				puts '    <task_id>     Task ID (SHA1 Hash)'
 				puts '                  If not specified a new Task will be created.'
 				puts

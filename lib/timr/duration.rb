@@ -2,8 +2,10 @@
 module TheFox
 	module Timr
 		
+		# Uses seconds as basis.
 		class Duration
 			
+			# Basis Data (int)
 			attr_reader :seconds
 			
 			def initialize(seconds = 0)
@@ -28,13 +30,14 @@ module TheFox
 				[@smh_seconds, @smh_minutes, @smh_hours]
 			end
 			
+			# Converts seconds to `nh nm ns` format. Where `n` is a number.
 			def to_human
 				if @smh_seconds.nil? || @smh_minutes.nil? || @smh_hours.nil?
 					to_smh
 				end
 				
 				if @smh_hours > 160
-					'%d h' % [@smh_hours]
+					'%dh' % [@smh_hours]
 				elsif @smh_hours > 0
 					'%dh %dm' % [@smh_hours, @smh_minutes]
 				elsif @smh_minutes > 0
@@ -46,6 +49,8 @@ module TheFox
 				end
 			end
 			
+			# Man-days, Man-hours
+			# Man Unit: 8 hours are 1 man-day. 5 man-days are 1 man-week, and so on.
 			def to_man_days
 				if @seconds < 28800 # 8 * 3600 = 1 man-day
 					to_human
@@ -73,6 +78,7 @@ module TheFox
 				end
 			end
 			
+			# Adds two Durations.
 			def +(duration)
 				unless duration.is_a?(Duration)
 					raise ArgumentError, "Wrong type #{duration.class} for '+' function."
@@ -81,6 +87,7 @@ module TheFox
 				Duration.new(@seconds + duration.seconds)
 			end
 			
+			# String
 			def to_s
 				@seconds.to_s
 			end

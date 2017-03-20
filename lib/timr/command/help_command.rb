@@ -23,6 +23,10 @@ module TheFox
 				puts '    push                 Push a new Track on the Stack and pause the old one.'
 				puts '    pop                  Pop the Top Track and continue the old one.'
 				puts
+				puts "    task                 Task related commands. See 'timr task --help'."
+				puts "    track                Track related commands. See 'timr track --help'."
+				puts
+				puts "See 'timr <command> -h' to read details about a specific command."
 			end
 			
 		end # class HelpCommand

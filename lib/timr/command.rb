@@ -4,8 +4,10 @@ require 'pathname'
 module TheFox
 	module Timr
 		
+		# Basic Command Class
 		class Command
 			
+			# Current Working Directory
 			attr_accessor :cwd
 			
 			def initialize
@@ -14,16 +16,11 @@ module TheFox
 			end
 			
 			def run
-				# puts "run"
-				# puts "class: #{self.class}"
+				raise NotImplementedError
 			end
 			
 			def shutdown
-				# puts "shutdown"
-				
 				if @timr
-					# puts "shutdown timr"
-					
 					@timr.shutdown
 				end
 			end
@@ -31,6 +28,11 @@ module TheFox
 			# All methods in this block are static.
 			class << self
 				
+				# Creates a new Command instance for each command string.
+				# 
+				# For example, it returns a new StopCommand instance when `stop` String is provided by `argv` Array.
+				# 
+				# Used by `bin/timr`.
 				def create_command_from_argv(argv)
 					# optparser = SimpleOptParser.new
 					
@@ -119,8 +121,8 @@ module TheFox
 							command = LogCommand.new(command_argv)
 						when 'task'
 							command = TaskCommand.new(command_argv)
-						# when 'track'
-						# 	command = TrackCommand.new(command_argv)
+						when 'track'
+							command = TrackCommand.new(command_argv)
 						# when 'report'
 						# 	command = ReportCommand.new(command_argv)
 						else

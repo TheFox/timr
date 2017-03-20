@@ -5,7 +5,6 @@ module TheFox
 		class Task < Model
 			
 			attr_reader :description
-			# attr_reader :tracks
 			
 			def initialize
 				super()
@@ -39,9 +38,61 @@ module TheFox
 			
 			def add_track(track)
 				@tracks[track.id] = track
+				
+				# Mark Task as changed.
+				changed
 			end
 			
 			# Select Track by Time Range.
+			# 
+			# Fixed Start and End (`from != nil && to != nil`)
+			# 
+			# ```
+			# Selected Range           |----------|
+			# Track A              +-----------------+
+			# Track B                 +------+
+			# Track C                      +------------+
+			# Track D                       +----+
+			# Track E            +---+
+			# Track F                                 +---+
+			# ```
+			# 
+			# * Track A is bigger then the Options range. Take it.
+			# * Track B ends in the Options range. Take it.
+			# * Track C starts in the Options range. Take it.
+			# * Track D starts and ends within the Options range. Definitely take this.
+			# * Track E is out-of-score. Ignore it.
+			# * Track F is out-of-score. Ignore it.
+			#
+			# ---
+			#
+			# Open End (`to == nil`)  
+			# Take all except Track E.
+			# 
+			# ```
+			# Selected Range           |---------->
+			# Track A              +-----------------+
+			# Track B                 +------+
+			# Track C                      +------------+
+			# Track D                       +----+
+			# Track E            +---+
+			# Track F                                 +---+
+			# ```
+			#
+			# ---
+			#
+			# Open Start (`from == nil`)  
+			# Take all except Track F.
+			# 
+			# ```
+			# Selected Range           <----------|
+			# Track A              +-----------------+
+			# Track B                 +------+
+			# Track C                      +------------+
+			# Track D                       +----+
+			# Track E            +---+
+			# Track F                                 +---+
+			# ```
 			def tracks(options = {})
 				options ||= {}
 				options[:from] ||= nil
@@ -64,44 +115,6 @@ module TheFox
 				else
 					status = nil
 				end
-				
-				# Fixed Start and End (from != nil && to != nil)
-				# Selected Range           |----------|
-				# Track A              +-----------------+
-				# Track B                 +------+
-				# Track C                      +------------+
-				# Track D                       +----+
-				# Track E            +---+
-				# Track F                                 +---+
-				# 
-				# Track A is bigger then the Options range. Take it.
-				# Track B ends in the Options range. Take it.
-				# Track C starts in the Options range. Take it.
-				# Track D starts and ends within the Options range. Definitely take this.
-				# Track E is out-of-score. Ignore it.
-				# Track F is out-of-score. Ignore it.
-				
-				# Open End (to == nil)
-				# Selected Range           |---------->
-				# Track A              +-----------------+
-				# Track B                 +------+
-				# Track C                      +------------+
-				# Track D                       +----+
-				# Track E            +---+
-				# Track F                                 +---+
-				# 
-				# Take all except Track E.
-				
-				# Open Start (from == nil)
-				# Selected Range           <----------|
-				# Track A              +-----------------+
-				# Track B                 +------+
-				# Track C                      +------------+
-				# Track D                       +----+
-				# Track E            +---+
-				# Track F                                 +---+
-				# 
-				# Take all except Track F.
 				
 				if from && to && from > to
 					raise RangeError, 'From cannot be bigger than To.'
@@ -178,6 +191,7 @@ module TheFox
 			
 			def pre_save_to_file
 				# Meta
+				@meta['short_id'] = short_id # Not used.
 				@meta['name'] = @name
 				@meta['description'] = @description
 				
@@ -420,7 +434,7 @@ module TheFox
 					task
 				end
 				
-				# Search a in a base path for a Track by ID.
+				# Search a Task in a base path for a Track by ID.
 				# If found a file load it into a Task instance.
 				def load_task_from_file_with_id(base_path, task_id)
 					task_file_path = Model.find_file_by_id(base_path, task_id)

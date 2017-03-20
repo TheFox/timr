@@ -2,6 +2,7 @@
 module TheFox
 	module Timr
 		
+		# Push a new Track to the Stack.
 		class PushCommand < Command
 			
 			def initialize(argv = Array.new)
@@ -90,8 +91,8 @@ module TheFox
 			
 			def help
 				puts 'usage: timr push [-n|--name <name>] [--desc|--description <description>]'
-				puts '                  [[-d|--date <YYYY-MM-DD>] -t|--time <HH:MM[:SS]>]'
-				puts '                  [-m|--message <message>] [<task_id> [<track_id>]]'
+				puts '                 [[-d|--date <YYYY-MM-DD>] -t|--time <HH:MM[:SS]>]'
+				puts '                 [-m|--message <message>] [<task_id> [<track_id>]]'
 				puts '   or: timr push [-h|--help]'
 				puts
 				puts 'Task Options'

@@ -10,6 +10,7 @@ module TheFox
 				
 				@help_opt = false
 				@tasks_opt = Set.new
+				@tracks_opt = false
 				
 				loop_c = 0 # Limit the loop.
 				while loop_c < 1024 && argv.length > 0
@@ -19,6 +20,8 @@ module TheFox
 					case arg
 					when '-h', '--help'
 						@help_opt = true
+					when '-t', '--tracks'
+						@tracks_opt = true
 					when Task
 						@tasks_opt << arg
 					else
@@ -61,17 +64,21 @@ module TheFox
 						
 						task_s = Array.new
 						task_s << 'Task: %s %s' % [task.short_id, task.name]
-						task_s << '  Tracks: %d' % [tracks_count]
-						if duration_human == duration_man_days
-							task_s << '  Duration: %s' % [task.duration.to_human]
-						else
-							task_s << '  Duration: %s' % [duration_human]
+						
+						task_s << '  Duration: %s' % [duration_human]
+						if duration_human != duration_man_days
 							task_s << '  Man Unit: %s' % [duration_man_days]
 						end
+						
 						task_s << '  Begin Track: %s  %s' % [first_track.short_id, first_track.begin_datetime_s]
 						task_s << '  End   Track: %s  %s' % [last_track.short_id, last_track.end_datetime_s]
 						
 						task_s << '  Status: %s' % [status]
+						
+						task_s << '  Tracks: %d' % [tracks_count]
+						if @tracks_opt # --tracks
+							task_s << '  Track IDs: %s' % [tracks.map{ |track_id, track| track.short_id }.join(' ')]
+						end
 						
 						if task.description
 							task_s << '  Description: %s' % [task.description]
@@ -91,6 +98,13 @@ module TheFox
 			def help
 				puts 'usage: timr task <task_ids...>'
 				puts '   or: timr task [-h|--help]'
+				puts
+				puts 'Options'
+				puts '    -t, --tracks    Show a list of Track IDs for each Task.'
+				puts
+				puts 'Man Unit: 8 hours are 1 man-day.'
+				puts '          5 man-days are 1 man-week, and so on.'
+				puts
 			end
 			
 		end # class TaskCommand

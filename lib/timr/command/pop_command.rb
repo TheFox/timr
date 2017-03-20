@@ -3,9 +3,34 @@ module TheFox
 	module Timr
 		
 		# This command pops the Top Track,
-		# makes a duplication next Track on the Stack, also pops this
+		# makes a duplication of the next Track on the Stack, pops the next,
 		# and pushes the duplication Track back on the Stack. There are
 		# at least 3 Tracks involved.
+		# 
+		# ### Example
+		# 
+		# Example Stack before pop:
+		# 
+		# ```
+		# Track 1234 stopped
+		# Track 2345 stopped
+		# Track 3456 running
+		# ```
+		# 
+		# Pop Execution
+		# 
+		# 1. Make duplication of Track `3456` -> new Track `4567`.  
+		#   Because Track `3456` is the latest Track on the Stack. Sometimes call *Top Track*.
+		# 2. Pop Track `3456` from Stack.
+		# 3. Push new Track `4567` to Stack.
+		# 
+		# Example Stack after pop:
+		# 
+		# ```
+		# Track 1234 stopped
+		# Track 2345 stopped
+		# Track 4567 running
+		# ```
 		class PopCommand < Command
 			
 			def initialize(argv = Array.new)

@@ -48,6 +48,7 @@ module TheFox
 				@meta['modified'] = modified
 			end
 			
+			# Mark an object as changed. Only changed objects are stored to files on save_to_file().
 			def changed
 				@meta['modified'] = Time.now.utc.strftime(MODEL_DATETIME_FORMAT)
 				@changed = true
@@ -128,11 +129,16 @@ module TheFox
 				
 				# Split an SHA1 Hash into directories.
 				# 
+				# Function IO:
+				# 
+				# ```
+				# 3dd50a2b50eabc84022a23ad2c06d9bb6396f978          <- input
 				# 3d/d50a2b50eabc84022a23ad2c06d9bb6396f978
 				# 3d/d50a2b50eabc84022a23ad2c06d9bb6396f978
 				# 3d/d5/0a2b50eabc84022a23ad2c06d9bb6396f978
 				# 3d/d5/0a/2b50eabc84022a23ad2c06d9bb6396f978
-				# 3d/d5/0a/2b50eabc84022a23ad2c06d9bb6396f978.yml
+				# 3d/d5/0a/2b50eabc84022a23ad2c06d9bb6396f978.yml   <- output
+				# ```
 				def create_path_by_id(base_path, id)
 					if base_path.is_a?(String)
 						base_path = Pathname.new(base_path)
@@ -152,10 +158,12 @@ module TheFox
 					Pathname.new(path_s).expand_path(base_path)
 				end
 				
-				# Convert
-				#   3d/d5/0a/2b50eabc84022a23ad2c06d9bb6396f978.yml
-				# to
-				# 3dd50a2b50eabc84022a23ad2c06d9bb6396f978
+				# Function IO:
+				# 
+				# ```
+				# 3d/d5/0a/2b50eabc84022a23ad2c06d9bb6396f978.yml  <- input
+				# 3dd50a2b50eabc84022a23ad2c06d9bb6396f978         <- output
+				# ```
 				def get_id_from_path(base_path, path)
 					path.relative_path_from(base_path).to_s.gsub('/', '')[0..-5]
 				end
