@@ -233,6 +233,40 @@ class TestTask < MiniTest::Test
 		end
 	end
 	
+	def test_begin_datetime
+		track1 = TheFox::Timr::Track.new
+		track1.id = 't1'
+		track1.begin_datetime = '2015-06-08 10:00:00'
+		track1.end_datetime   = '2015-06-27 20:00:00'
+		
+		track2 = TheFox::Timr::Track.new
+		track2.id = 't2'
+		track2.begin_datetime = '2015-06-10 10:00:00'
+		track2.end_datetime   = '2015-06-15 20:00:00'
+		
+		track3 = TheFox::Timr::Track.new
+		track3.id = 't3'
+		track3.begin_datetime = '2015-06-20 10:00:00'
+		track3.end_datetime   = '2015-06-25 20:00:00'
+		
+		task = TheFox::Timr::Task.new
+		task.add_track(track1)
+		task.add_track(track2)
+		task.add_track(track3)
+		
+		from = Time.parse('2015-06-05 09:00:00')
+		to   = Time.parse('2015-06-28 15:00:00')
+		options = {:format => '%F %T', :from => from, :to => to}
+		assert_equal('2015-06-08 10:00:00', task.begin_datetime_s(options))
+		assert_equal('2015-06-27 20:00:00', task.end_datetime_s(options))
+		
+		from = Time.parse('2015-06-09 09:00:00')
+		to   = Time.parse('2015-06-26 15:00:00')
+		options = {:format => '%F %T', :from => from, :to => to}
+		assert_equal('2015-06-09 09:00:00', task.begin_datetime_s(options))
+		assert_equal('2015-06-26 15:00:00', task.end_datetime_s(options))
+	end
+	
 	def test_duration
 		track1 = TheFox::Timr::Track.new
 		track1.begin_datetime = '2015-06-01 10:00:00'

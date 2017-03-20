@@ -2,6 +2,7 @@
 module TheFox
 	module Timr
 		
+		# Print informations about a Task.
 		class TaskCommand < Command
 			
 			def initialize(argv = Array.new)
@@ -59,8 +60,8 @@ module TheFox
 					status = task.status.colorized
 					
 					if tracks_count > 0
-						first_track = tracks.sort_by{ |tid, t| t.begin_datetime }.to_h.values.first
-						last_track  = tracks.sort_by{ |tid, t| t.end_datetime   }.to_h.values.last
+						first_track = tracks.sort_by{ |track_id, track| track.begin_datetime }.to_h.values.first
+						last_track  = tracks.sort_by{ |track_id, track| track.end_datetime   }.to_h.values.last
 						
 						task_s = Array.new
 						task_s << 'Task: %s %s' % [task.short_id, task.name]

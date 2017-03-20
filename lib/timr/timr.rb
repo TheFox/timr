@@ -342,7 +342,12 @@ module TheFox
 			end
 			
 			def tracks(options = {})
+				puts "#{Time.now.to_ms} #{self.class} #{__method__}"
+				
 				options ||= {}
+				unless options.has_key?(:sort)
+					options[:sort] = true
+				end
 				
 				load_all_tracks
 				
@@ -355,17 +360,24 @@ module TheFox
 					#puts
 				end
 				
-				filtered_tracks.sort{ |t1, t2|
-					t1 = t1.last
-					t2 = t2.last
-					
-					cmp1 = t1.begin_datetime <=> t2.begin_datetime
-					if cmp1 == 0
-						t1.end_datetime <=> t2.end_datetime
-					else
-						cmp1
-					end
-				}.to_h
+				puts "#{Time.now.to_ms} #{self.class} #{__method__} END"
+				
+				if options[:sort]
+					# Sort ASC by Begin DateTime, End DateTime.
+					filtered_tracks.sort{ |t1, t2|
+						t1 = t1.last
+						t2 = t2.last
+						
+						cmp1 = t1.begin_datetime <=> t2.begin_datetime
+						if cmp1 == 0
+							t1.end_datetime <=> t2.end_datetime
+						else
+							cmp1
+						end
+					}.to_h
+				else
+					filtered_tracks
+				end
 			end
 			
 			def shutdown

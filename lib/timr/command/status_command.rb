@@ -78,11 +78,11 @@ module TheFox
 					duration = track.duration.to_human
 					
 					if track.begin_datetime
-						begin_datetime_s = track.begin_datetime_s('%H:%M')
+						begin_datetime_s = track.begin_datetime_s({:format => '%H:%M'})
 					end
 					
 					if track.end_datetime
-						end_datetime_s = track.end_datetime_s('%H:%M')
+						end_datetime_s = track.end_datetime_s({:format => '%H:%M'})
 					end
 					
 					table << [

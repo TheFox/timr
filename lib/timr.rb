@@ -2,6 +2,8 @@
 require 'timr/version'
 #require 'timr/simple_opt_parser'
 
+require 'timr/ext/time'
+
 require 'timr/helper/datetime_helper'
 require 'timr/helper/translation_helper'
 
@@ -26,7 +28,7 @@ require 'timr/command/pause_command'
 require 'timr/command/log_command'
 require 'timr/command/task_command'
 require 'timr/command/track_command'
-# require 'timr/command/report_command'
+require 'timr/command/report_command'
 
 require 'timr/table'
 

@@ -11,6 +11,8 @@ module TheFox
 			attr_accessor :cwd
 			
 			def initialize
+				puts "#{Time.now.to_ms} #{self.class} #{__method__}"
+				
 				@cwd = nil
 				@timr = nil
 			end
@@ -123,8 +125,8 @@ module TheFox
 							command = TaskCommand.new(command_argv)
 						when 'track'
 							command = TrackCommand.new(command_argv)
-						# when 'report'
-						# 	command = ReportCommand.new(command_argv)
+						when 'report'
+							command = ReportCommand.new(command_argv)
 						else
 							raise "timr: '%s' is not a timr command. See 'timr --help'." % [command_name]
 						end

@@ -9,12 +9,6 @@ module TheFox
 			# Parent Task instance
 			attr_accessor :task
 			
-			# Time instance
-			attr_reader :begin_datetime
-			
-			# Time instance
-			attr_reader :end_datetime
-			
 			# Track Message. What have you done?
 			attr_accessor :message
 			
@@ -32,6 +26,7 @@ module TheFox
 				@paused = false
 			end
 			
+			# Set begin_datetime.
 			def begin_datetime=(begin_datetime)
 				case begin_datetime
 				when String
@@ -45,16 +40,39 @@ module TheFox
 				@begin_datetime = begin_datetime
 			end
 			
-			def begin_datetime_s(format = HUMAN_DATETIME_FOMRAT, from = nil)
+			# Get begin_datetime.
+			# 
+			# Options:
+			# 
+			# - `:from`
+			def begin_datetime(options = {})
+				options ||= {}
+				options[:from] ||= nil
+				
 				if @begin_datetime
-					if from && from > @begin_datetime
-						from.localtime.strftime(format)
+					if options[:from] && options[:from] > @begin_datetime
+						bdt = options[:from]
 					else
-						@begin_datetime.localtime.strftime(format)
+						bdt = @begin_datetime
 					end
+					bdt.localtime
 				end
 			end
 			
+			# Get begin_datetime String.
+			# 
+			# Options:
+			# 
+			# - `:format` | `:begin_format`
+			def begin_datetime_s(options = {})
+				options ||= {}
+				options[:begin_format] ||= HUMAN_DATETIME_FOMRAT
+				options[:format] ||= options[:begin_format]
+				
+				begin_datetime(options).strftime(options[:format])
+			end
+			
+			# Set end_datetime.
 			def end_datetime=(end_datetime)
 				case end_datetime
 				when String
@@ -68,14 +86,36 @@ module TheFox
 				@end_datetime = end_datetime
 			end
 			
-			def end_datetime_s(format = HUMAN_DATETIME_FOMRAT, to = nil)
+			# Get end_datetime.
+			# 
+			# Options:
+			# 
+			# - `:to`
+			def end_datetime(options = {})
+				options ||= {}
+				options[:to] ||= nil
+				
 				if @end_datetime
-					if to && to < @end_datetime
-						to.localtime.strftime(format)
+					if options[:to] && options[:to] < @end_datetime
+						edt = options[:to]
 					else
-						@end_datetime.localtime.strftime(format)
+						edt = @end_datetime
 					end
+					edt.localtime
 				end
+			end
+			
+			# Get end_datetime String.
+			# 
+			# Options:
+			# 
+			# - `:format` | `:end_format`
+			def end_datetime_s(options = {})
+				options ||= {}
+				options[:end_format] ||= HUMAN_DATETIME_FOMRAT
+				options[:format] ||= options[:end_format]
+				
+				end_datetime(options).strftime(options[:format])
 			end
 			
 			def start(options = {})
@@ -133,6 +173,10 @@ module TheFox
 			end
 			
 			# Cacluates the hours, minutes and secondes between begin and end datetime.
+			# 
+			# Options:
+			# 
+			# - `:from`, `:to` limit the begin and end datetimes to a specific range.
 			def duration(options = {})
 				options ||= {}
 				options[:from] ||= nil
@@ -172,11 +216,11 @@ module TheFox
 			# this function returns
 			# 
 			# ```
-			#   [
-			#   	Date.new(2017, 1, 1),
-			#   	Date.new(2017, 1, 2),
-			#   	Date.new(2017, 1, 3),
-			#   ]
+			# [
+			# 	Date.new(2017, 1, 1),
+			# 	Date.new(2017, 1, 2),
+			# 	Date.new(2017, 1, 3),
+			# ]
 			# ```
 			def days
 				begin_date = @begin_datetime.to_date

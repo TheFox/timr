@@ -16,13 +16,19 @@ module TheFox
 				
 				# Data
 				@tracks = Hash.new
+				
+				# Cache
+				@begin_datetime = nil
+				@end_datetime = nil
 			end
 			
+			# Set name.
 			def name=(name)
 				@name = name
 				@changed = true
 			end
 			
+			# Get name.
 			def name(max_length = nil)
 				name = @name
 				if name && max_length && name.length > max_length + 2
@@ -39,11 +45,20 @@ module TheFox
 			def add_track(track)
 				@tracks[track.id] = track
 				
+				# Refresh Cache
+				@begin_datetime = nil
+				@end_datetime = nil
+				
 				# Mark Task as changed.
 				changed
 			end
 			
-			# Select Track by Time Range.
+			# Select Track by Time Range and/or Status.
+			# 
+			# Options:
+			# 
+			# - `:from`, `:to` limit the begin and end datetimes to a specific range.
+			# - `:status` filter Tracks by Short Status.
 			# 
 			# Fixed Start and End (`from != nil && to != nil`)
 			# 
@@ -98,6 +113,9 @@ module TheFox
 				options[:from] ||= nil
 				options[:to] ||= nil
 				options[:status] ||= nil
+				unless options.has_key?(:sort)
+					options[:sort] = true
+				end
 				
 				# Local variables.
 				from = options[:from]
@@ -120,35 +138,23 @@ module TheFox
 					raise RangeError, 'From cannot be bigger than To.'
 				end
 				
-				tracks = Hash.new
+				filtered_tracks = Hash.new
 				if from.nil? && to.nil?
 					# Take all Tracks.
-					tracks = @tracks
+					filtered_tracks = @tracks
 				elsif !from.nil? && to.nil?
 					# puts "open end"
 					# Open End (to == nil)
-					tracks = @tracks.select{ |track_id, track|
+					filtered_tracks = @tracks.select{ |track_id, track|
 						bdt = track.begin_datetime
 						edt = track.end_datetime || Time.now
-						
-						# puts "check track: #{track.short_id}"
-						# puts "  -> f #{from}"
-						# puts "  -> b #{bdt}"
-						# puts "  -> e #{edt}"
-						# puts
-						# puts "  -> bdt <  from     #{bdt <  from}"
-						# puts "  -> edt >  from     #{edt >  from}"
-						# puts
-						# puts "  -> bdt >= from     #{bdt >= from}"
-						# puts "  -> edt >= from     #{edt >= from}"
-						# puts
 						
 						bdt <  from && edt >  from || # Track A, B
 						bdt >= from && edt >= from    # Track C, D, F
 					}
 				elsif from.nil? && !to.nil?
 					# Open Start (from == nil)
-					tracks = @tracks.select{ |track_id, track|
+					filtered_tracks = @tracks.select{ |track_id, track|
 						bdt = track.begin_datetime
 						edt = track.end_datetime || Time.now
 						
@@ -157,7 +163,7 @@ module TheFox
 					}
 				elsif !from.nil? && !to.nil?
 					# Fixed Start and End (from != nil && to != nil)
-					tracks = @tracks.select{ |track_id, track|
+					filtered_tracks = @tracks.select{ |track_id, track|
 						bdt = track.begin_datetime
 						edt = track.end_datetime || Time.now
 						
@@ -171,22 +177,89 @@ module TheFox
 				end
 				
 				if status
-					tracks.select!{ |track_id, track|
+					filtered_tracks.select!{ |track_id, track|
 						status.include?(track.status.short_status)
 					}
 				end
 				
-				tracks.sort{ |t1, t2|
-					t1 = t1.last
-					t2 = t2.last
-					
-					cmp1 = t1.begin_datetime <=> t2.begin_datetime
-					if cmp1 == 0
-						t1.end_datetime <=> t2.end_datetime
-					else
-						cmp1
-					end
-				}.to_h
+				if options[:sort]
+					#pp filtered_tracks
+					filtered_tracks.sort{ |t1, t2|
+						t1 = t1.last
+						t2 = t2.last
+						
+						cmp1 = t1.begin_datetime <=> t2.begin_datetime
+						if cmp1 == 0
+							t1.end_datetime <=> t2.end_datetime
+						else
+							cmp1
+						end
+					}.to_h
+				else
+					filtered_tracks
+				end
+			end
+			
+			# Uses `tracks()` with `options` to filter.
+			def begin_datetime(options = {})
+				options ||= {}
+				
+				if @begin_datetime
+					return @begin_datetime
+				end
+				
+				# Do not sort. We only need to sort the tracks
+				# by begin_datetime and take the first.
+				options[:sort] = false
+				
+				@begin_datetime = tracks(options)
+					.sort_by{ |track_id, track| track.begin_datetime }
+					.to_h
+					.values
+					.first
+					.begin_datetime(options)
+			end
+			
+			# Options:
+			# 
+			# - `:format` | `:begin_format`
+			def begin_datetime_s(options = {})
+				options ||= {}
+				options[:begin_format] ||= HUMAN_DATETIME_FOMRAT
+				options[:format] ||= options[:begin_format]
+				
+				begin_datetime(options).strftime(options[:format])
+			end
+			
+			# Uses `tracks()` with `options` to filter.
+			def end_datetime(options = {})
+				options ||= {}
+				
+				if @end_datetime
+					return @end_datetime
+				end
+				
+				# Do not sort. We only need to sort the tracks
+				# by end_datetime and take the last.
+				options[:sort] = false
+				
+				@end_datetime = tracks(options)
+					.sort_by{ |track_id, track| track.end_datetime }
+					.to_h
+					.values
+					.last
+					.end_datetime(options)
+			end
+			
+			# Options:
+			# 
+			# - `:format` | `:end_format`
+			def end_datetime_s(options = {})
+				options ||= {}
+				options[:end_format] ||= HUMAN_DATETIME_FOMRAT
+				options[:format] ||= options[:end_format]
+				
+				end_datetime(options).strftime(options[:format])
 			end
 			
 			def pre_save_to_file
@@ -243,12 +316,9 @@ module TheFox
 				
 				# Track Options
 				options ||= {}
-				# options[:date] ||= nil
-				# options[:time] ||= nil
-				#options[:message] ||= nil
 				options[:track_id] ||= nil
 				
-				# Used by Push to
+				# Used by Push.
 				options[:no_stop] ||= false
 				
 				unless options[:no_stop]
@@ -420,7 +490,7 @@ module TheFox
 			end
 			
 			def inspect
-				"#<Task #{short_id}>"
+				"#<Task_#{short_id} tracks=#{@tracks.count}>"
 			end
 			
 			# All methods in this block are static.

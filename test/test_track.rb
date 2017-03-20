@@ -164,17 +164,17 @@ class TestTrack < MiniTest::Test
 		track.end_datetime   = '2017-01-01 02:00:00'
 		
 		from = Time.parse('2017-01-01 00:30:00')
-		assert_equal('17-01-01 01:00:00', track.begin_datetime_s('%y-%m-%d %T', from))
+		assert_equal('17-01-01 01:00:00', track.begin_datetime_s({:format => '%y-%m-%d %T', :from => from}))
 		
 		from = Time.parse('2017-01-01 01:00:05')
-		assert_equal('17-01-01 01:00:05', track.begin_datetime_s('%y-%m-%d %T', from))
+		assert_equal('17-01-01 01:00:05', track.begin_datetime_s({:format => '%y-%m-%d %T', :from => from}))
 		
 		
 		to = Time.parse('2017-01-01 01:59:00')
-		assert_equal('17-01-01 01:59:00', track.end_datetime_s('%y-%m-%d %T', to))
+		assert_equal('17-01-01 01:59:00', track.end_datetime_s({:format => '%y-%m-%d %T', :to => to}))
 		
 		to = Time.parse('2017-01-01 02:05:00')
-		assert_equal('17-01-01 02:00:00', track.end_datetime_s('%y-%m-%d %T', to))
+		assert_equal('17-01-01 02:00:00', track.end_datetime_s({:format => '%y-%m-%d %T', :to => to}))
 	end
 	
 	def test_message

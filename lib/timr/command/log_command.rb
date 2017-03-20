@@ -9,8 +9,7 @@ module TheFox
 			
 			def initialize(argv = Array.new)
 				super()
-				
-				today = Date.today
+				puts "#{Time.now.to_ms} #{self.class} #{__method__}"
 				
 				@help_opt = false
 				
@@ -38,45 +37,15 @@ module TheFox
 						@to_opt = Time.parse(argv.shift)
 					
 					when '-d', '--day'
-						day = argv.shift
-						@from_opt = Time.parse("#{day} 00:00:00")
-						@to_opt   = Time.parse("#{day} 23:59:59")
+						@from_opt, @to_opt = DateTimeHelper.parse_day_argv(argv)
 					when '-m', '--month'
-						parts = argv.shift.split('-').map{ |s| s.to_i }
-						if parts.count == 1
-							y = today.year
-							m = parts.first
-						else
-							y, m = parts
-						end
-						if y < 2000 # shit
-							y += 2000
-						end
-						
-						start_date = Date.new(y, m, 1)
-						end_date   = Date.new(y, m, -1)
-						
-						@from_opt = Time.parse("#{start_date.strftime('%F')} 00:00:00")
-						@to_opt   = Time.parse("#{end_date.strftime('%F')} 23:59:59")
+						@from_opt, @to_opt = DateTimeHelper.parse_month_argv(argv)
 					when '-y', '--year'
-						y = argv.shift
-						if y
-							y = y.to_i
-						else
-							y = today.year
-						end
-						if y < 2000 # shit
-							y += 2000
-						end
-						
-						start_date = Date.new(y, 1, 1)
-						end_date   = Date.new(y, 12, -1)
-						
-						@from_opt = Time.parse("#{start_date.strftime('%F')} 00:00:00")
-						@to_opt   = Time.parse("#{end_date.strftime('%F')} 23:59:59")
+						@from_opt, @to_opt = DateTimeHelper.parse_year_argv(argv)
+					
 					when '-a', '--all'
-						@from_opt = Time.parse("1970-01-01 00:00:00")
-						@to_opt   = Time.parse("2099-12-31 23:59:59")
+						@from_opt = Time.parse('1970-01-01 00:00:00')
+						@to_opt   = Time.parse('2099-12-31 23:59:59')
 					
 					when '--sd', '--start-date'
 						@start_date = Time.parse(argv.shift)
@@ -102,16 +71,22 @@ module TheFox
 					@daytime_filter = true
 				end
 				
-				
+				today = Date.today
 				unless @from_opt
 					@from_opt = Time.new(today.year, today.month, today.day, 0, 0, 0)
 				end
 				unless @to_opt
 					@to_opt = Time.new(today.year, today.month, today.day, 23, 59, 59)
 				end
+				
+				@filter_options = {:from => @from_opt, :to => @to_opt}
+				
+				
+				puts "#{Time.now.to_ms} #{self.class} #{__method__} END"
 			end
 			
 			def run
+				puts "#{Time.now.to_ms} #{self.class} #{__method__}"
 				if @help_opt
 					help
 					return
@@ -125,6 +100,8 @@ module TheFox
 			private
 			
 			def print_small_table
+				puts "#{Time.now.to_ms} #{self.class} #{__method__}"
+				
 				puts 'Selected datetime range:'
 				if @daytime_filter
 					puts "On every day from #{@start_date.strftime('%F')}"
@@ -151,11 +128,24 @@ module TheFox
 				
 				totals = {
 					:duration => Duration.new,
+					:task_c => 0,
+					
+					:begin_datetime => nil,
+					:end_datetime   => nil,
 				}
 				
+				tmp_options = {
+					:begin_format => '%y-%m-%d %H:%M',
+					:end_format   => '%H:%M %y-%m-%d',
+					:from => nil,
+					:to   => nil,
+				}
+				glob_options = tmp_options.clone
+				glob_options[:from] = @from_opt
+				glob_options[:to] = @to_opt
+				
 				table_has_rows = false
-				track_c = 0
-				get_tracks.each do |track_id, track|
+				@timr.tracks(@filter_options).each do |track_id, track|
 					table_has_rows = true
 					
 					task = track.task
@@ -170,11 +160,24 @@ module TheFox
 								next
 							end
 							
-							track_c += 1
+							totals[:task_c] += 1
 							
-							begin_datetime_s = track.begin_datetime_s('%y-%m-%d %H:%M', from)
-							end_datetime_s = track.end_datetime_s('%H:%M %y-%m-%d', to)
+							bdt = track.begin_datetime(@filter_options)
+							edt = track.end_datetime(@filter_options)
+							if !totals[:begin_datetime] || bdt < totals[:begin_datetime]
+								totals[:begin_datetime] = bdt
+							end
+							if !totals[:end_datetime] || edt > totals[:end_datetime]
+								totals[:end_datetime] = edt
+							end
+							
+							tmp_options[:from] = from
+							tmp_options[:to] = to
+							begin_datetime_s = track.begin_datetime_s(tmp_options)
+							end_datetime_s   = track.end_datetime_s(tmp_options)
+							
 							duration = track.duration({:from => from, :to => to})
+							totals[:duration] += duration
 							
 							table << [
 								track_c,
@@ -184,26 +187,34 @@ module TheFox
 								task.short_id,
 								'%s %s' % [track.short_id, track.title(15)],
 							]
-							
-							totals[:duration] += duration
 						end
 					else
-						track_c += 1
+						totals[:task_c] += 1
 						
-						begin_datetime_s = track.begin_datetime_s('%y-%m-%d %H:%M', @from_opt)
-						end_datetime_s = track.end_datetime_s('%H:%M %y-%m-%d', @to_opt)
-						duration = track.duration({:from => @from_opt, :to => @to_opt})
+						bdt = track.begin_datetime(@filter_options)
+						edt = track.end_datetime(@filter_options)
+						
+						if !totals[:begin_datetime] || bdt < totals[:begin_datetime]
+							totals[:begin_datetime] = bdt
+						end
+						if !totals[:end_datetime] || edt > totals[:end_datetime]
+							totals[:end_datetime] = edt
+						end
+						
+						begin_datetime_s = track.begin_datetime_s(glob_options)
+						end_datetime_s   = track.end_datetime_s(glob_options)
+						
+						duration = track.duration(@filter_options)
+						totals[:duration] += duration
 						
 						table << [
-							track_c,
+							totals[:task_c],
 							begin_datetime_s,
 							end_datetime_s,
 							duration.to_human,
 							task.short_id,
 							'%s %s' % [track.short_id, track.title(15)],
 						]
-						
-						totals[:duration] += duration
 					end
 				end
 				
@@ -213,9 +224,9 @@ module TheFox
 				table << [
 					nil,        # track_c
 					nil,        # begin_datetime
-					'TOTAL',    # end_datetime
+					nil,        # end_datetime
 					totals[:duration].to_human, # duration
-					nil,        # task
+					'TOTAL',    # task
 					nil,        # track
 				]
 				
@@ -224,19 +235,8 @@ module TheFox
 				else
 					puts 'No tracks found.'
 				end
-			end
-			
-			def get_tracks
-				# if @from_opt || @to_opt
-				# 	from = @from_opt
-				# 	to = @to_opt
-				# else
-				# 	today = Date.today
-				# 	from = Time.new(today.year, today.month, today.day, 0, 0, 0)
-				# 	to = Time.new(today.year, today.month, today.day, 23, 59, 59)
-				# end
 				
-				@timr.tracks({:from => @from_opt, :to => @to_opt})
+				puts "#{Time.now.to_ms} #{self.class} #{__method__} END"
 			end
 			
 			def help
