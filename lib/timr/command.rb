@@ -117,12 +117,12 @@ module TheFox
 							command = PauseCommand.new(command_argv)
 						when 'log'
 							command = LogCommand.new(command_argv)
-						# when 'report'
-						# 	command = ReportCommand.new(command_argv)
-						# when 'task'
-						# 	command = TaskCommand.new(command_argv)
+						when 'task'
+							command = TaskCommand.new(command_argv)
 						# when 'track'
 						# 	command = TrackCommand.new(command_argv)
+						# when 'report'
+						# 	command = ReportCommand.new(command_argv)
 						else
 							raise "timr: '%s' is not a timr command. See 'timr --help'." % [command_name]
 						end

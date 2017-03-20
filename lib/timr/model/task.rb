@@ -93,13 +93,14 @@ module TheFox
 					raise RangeError, 'From cannot be bigger than To.'
 				end
 				
+				tracks = Hash.new
 				if from.nil? && to.nil?
 					# Take all Tracks.
-					@tracks
+					tracks = @tracks
 				elsif !from.nil? && to.nil?
 					# puts "open end"
 					# Open End (to == nil)
-					@tracks.select{ |track_id, track|
+					tracks = @tracks.select{ |track_id, track|
 						bdt = track.begin_datetime
 						edt = track.end_datetime || Time.now
 						
@@ -120,7 +121,7 @@ module TheFox
 					}
 				elsif from.nil? && !to.nil?
 					# Open Start (from == nil)
-					@tracks.select{ |track_id, track|
+					tracks = @tracks.select{ |track_id, track|
 						bdt = track.begin_datetime
 						edt = track.end_datetime || Time.now
 						
@@ -129,7 +130,7 @@ module TheFox
 					}
 				elsif !from.nil? && !to.nil?
 					# Fixed Start and End (from != nil && to != nil)
-					@tracks.select{ |track_id, track|
+					tracks = @tracks.select{ |track_id, track|
 						bdt = track.begin_datetime
 						edt = track.end_datetime || Time.now
 						
@@ -141,6 +142,18 @@ module TheFox
 				else
 					raise 'Should never happen, bug shit happens.'
 				end
+				
+				tracks.sort{ |t1, t2|
+					t1 = t1.last
+					t2 = t2.last
+					
+					cmp1 = t1.begin_datetime <=> t2.begin_datetime
+					if cmp1 == 0
+						t1.end_datetime <=> t2.end_datetime
+					else
+						cmp1
+					end
+				}.to_h
 			end
 			
 			def pre_save_to_file
@@ -321,7 +334,7 @@ module TheFox
 				@tracks.each do |track_id, track|
 					duration += track.duration(options)
 					
-					puts "track #{track.short_id} #{duration}"
+					#puts "track #{track.short_id} #{duration}"
 				end
 				duration
 			end

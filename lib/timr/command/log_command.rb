@@ -76,6 +76,9 @@ module TheFox
 						
 						@from_opt = Time.parse("#{start_date.strftime('%F')} 00:00:00")
 						@to_opt   = Time.parse("#{end_date.strftime('%F')} 23:59:59")
+					when '-a', '--all'
+						@from_opt = Time.parse("1970-01-01 00:00:00")
+						@to_opt   = Time.parse("2099-12-31 23:59:59")
 					
 					when '--sd', '--start-date'
 						@start_date = Time.parse(argv.shift)
@@ -134,6 +137,7 @@ module TheFox
 					puts " From #{@from_opt.strftime('%F %T %z')}"
 					puts "   To #{@to_opt.strftime('%F %T %z')}"
 				end
+				puts
 				
 				table_options = {
 					:headings => [
@@ -253,6 +257,7 @@ module TheFox
 				puts '    -d, --day   <YYYY-MM-DD>                  A single day from 00:00 to 23:59.'
 				puts '    -m, --month <[YYYY-]MM>                   A single month from 01 to 31.'
 				puts '    -y, --year  [<YYYY>]                      A single year from 01-01 to 12-31.'
+				puts '    -a, --all                                 All.'
 				puts
 				puts 'Day Time Filter'
 				puts '    --sd, --start-date <YYYY-MM-DD>    Start Date'

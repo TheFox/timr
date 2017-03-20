@@ -349,13 +349,12 @@ module TheFox
 					t2 = t2.last
 					
 					cmp1 = t1.begin_datetime <=> t2.begin_datetime
-					puts "cmp1: #{cmp1}"
 					if cmp1 == 0
 						t1.end_datetime <=> t2.end_datetime
 					else
 						cmp1
 					end
-				}
+				}.to_h
 			end
 			
 			def shutdown

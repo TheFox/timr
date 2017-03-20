@@ -14,3 +14,4 @@ end
 
 require_relative 'test_track'
 require_relative 'test_task'
+require_relative 'test_duration'

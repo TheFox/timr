@@ -23,6 +23,9 @@ require 'timr/command/pop_command'
 require 'timr/command/continue_command'
 require 'timr/command/pause_command'
 require 'timr/command/log_command'
+require 'timr/command/task_command'
+# require 'timr/command/track_command'
+# require 'timr/command/report_command'
 
 require 'timr/table'
 
