@@ -262,4 +262,35 @@ class TestTask < MiniTest::Test
 		assert_equal(3615, task.duration({:from => from, :to => to}).to_i)
 	end
 	
+	def test_status_stopped
+		track1 = TheFox::Timr::Track.new
+		track1.begin_datetime = '2015-06-01 10:00:00'
+		track1.end_datetime   = '2015-06-01 11:00:00'
+		
+		track2 = TheFox::Timr::Track.new
+		track2.begin_datetime = '2015-06-01 10:30:00'
+		track2.end_datetime   = '2015-06-01 11:30:00'
+		
+		task = TheFox::Timr::Task.new
+		task.add_track(track1)
+		task.add_track(track2)
+		
+		assert_equal('S', task.status.short_status)
+	end
+	
+	def test_status_running
+		track1 = TheFox::Timr::Track.new
+		track1.begin_datetime = '2015-06-01 10:00:00'
+		track1.end_datetime   = '2015-06-01 11:00:00'
+		
+		track2 = TheFox::Timr::Track.new
+		track2.begin_datetime = '2015-06-01 10:30:00'
+		
+		task = TheFox::Timr::Task.new
+		task.add_track(track1)
+		task.add_track(track2)
+		
+		assert_equal('R', task.status.short_status)
+	end
+	
 end

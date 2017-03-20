@@ -46,10 +46,24 @@ module TheFox
 				options ||= {}
 				options[:from] ||= nil
 				options[:to] ||= nil
+				options[:status] ||= nil
 				
 				# Local variables.
 				from = options[:from]
 				to = options[:to]
+				
+				if options[:status]
+					case options[:status]
+					when String
+						status = [options[:status]]
+					when Array
+						status = options[:status]
+					else
+						raise ArgumentError, "Status wrong type #{options[:status].class}."
+					end
+				else
+					status = nil
+				end
 				
 				# Fixed Start and End (from != nil && to != nil)
 				# Selected Range           |----------|
@@ -141,6 +155,12 @@ module TheFox
 					}
 				else
 					raise 'Should never happen, bug shit happens.'
+				end
+				
+				if status
+					tracks.select!{ |track_id, track|
+						status.include?(track.status.short_status)
+					}
 				end
 				
 				tracks.sort{ |t1, t2|
@@ -339,29 +359,43 @@ module TheFox
 				duration
 			end
 			
+			def status
+				stati = @tracks.map{ |track_id, track| track.status.short_status }.to_set
+				
+				if stati.include?('R')
+					status = 'R'
+				elsif stati.include?('S')
+					status = 'S'
+				else
+					status = 'U'
+				end
+				
+				Status.new(status)
+			end
+			
 			# Find a Track by ID even if the ID is not 40 characters long.
 			# When the ID is 40 characters long @tracks[id] is faster. ;)
-			def find_track_by_id(id)
-				id_len = id.length
+			def find_track_by_id(track_id)
+				track_id_len = track_id.length
 				
-				if id_len == 40
-					track_id = id
-				else
+				if track_id_len < 40
+					found_track_id = nil
 					@tracks.keys.each do |key|
-						puts "track id: #{id} #{key}"
+						#puts "find_track_by_id: #{track_id} #{key}"
 						
-						if id == key[0, id_len]
-							if track_id
-								raise "Track ID '#{id}' is not a unique identifier."
+						if track_id == key[0, track_id_len]
+							if found_track_id
+								raise "Track ID '#{track_id}' is not a unique identifier."
 							else
-								track_id = key
-								puts "found track: #{track_id}"
+								found_track_id = key
+								#puts "find_track_by_id found track: #{found_track_id}"
 								
 								# Do not break the loop here.
 								# Iterate all keys to make sure the ID is unique.
 							end
 						end
 					end
+					track_id = found_track_id
 				end
 				
 				@tracks[track_id]

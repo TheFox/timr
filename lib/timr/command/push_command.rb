@@ -1,14 +1,10 @@
 
-require 'term/ansicolor'
-
 module TheFox
 	module Timr
 		
 		class PushCommand < Command
 			
-			include Term::ANSIColor
-			
-			def initialize(argv = [])
+			def initialize(argv = Array.new)
 				super()
 				
 				@help_opt = false
@@ -19,7 +15,7 @@ module TheFox
 				@time_opt = nil
 				@message_opt = nil
 				# @edit_opt = false
-				@id_opts = []
+				@id_opts = Array.new
 				
 				loop_c = 0 # Limit the loop.
 				while loop_c < 1024 && argv.length > 0
@@ -80,7 +76,7 @@ module TheFox
 					raise "Tack #{track.id} has no Task."
 				end
 				
-				status = green(track.long_status)
+				status = track.status.colorized
 				
 				puts '----------'
 				puts ' Task: %s %s' % [task.short_id, task.name]

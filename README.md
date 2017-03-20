@@ -27,8 +27,9 @@ When a Track gets *continued* or *restarted* it's actual a copy using the same m
 
 Options:
 
-- `-n`, `--name`  
-  Track Name
+- `-n`, `--name`
+
+	Track Name
 
 ### Status Command
 

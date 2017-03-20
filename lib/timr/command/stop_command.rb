@@ -1,5 +1,4 @@
 
-require 'term/ansicolor'
 require 'pp' # @TODO remove pp
 
 module TheFox
@@ -7,9 +6,7 @@ module TheFox
 		
 		class StopCommand < Command
 			
-			include Term::ANSIColor
-			
-			def initialize(argv = [])
+			def initialize(argv = Array.new)
 				super()
 				# puts "argv '#{argv}'"
 				
@@ -78,7 +75,7 @@ module TheFox
 				end
 				
 				duration = track.duration.to_human
-				status = red(track.long_status)
+				status = track.status.colorized
 				
 				# puts '----------'
 				puts ' Task: %s %s' % [task.short_id, task.name]

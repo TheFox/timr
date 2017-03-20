@@ -75,7 +75,7 @@ module TheFox
 			
 			def +(duration)
 				unless duration.is_a?(Duration)
-					raise ArgumentError, "Wrong type #{duration.class}."
+					raise ArgumentError, "Wrong type #{duration.class} for '+' function."
 				end
 				
 				Duration.new(@seconds + duration.seconds)

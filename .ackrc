@@ -6,3 +6,4 @@
 --ignore-dir=releases
 --ignore-dir=tmp
 --ignore-dir=lib1
+--ignore-dir=test1

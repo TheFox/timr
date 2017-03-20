@@ -113,7 +113,7 @@ module TheFox
 							command = PopCommand.new(command_argv)
 						when 'continue', 'cont', 'c'
 							command = ContinueCommand.new(command_argv)
-						when 'pause'
+						when 'pause', 'p'
 							command = PauseCommand.new(command_argv)
 						when 'log'
 							command = LogCommand.new(command_argv)

@@ -11,6 +11,7 @@ require 'timr/model/task'
 require 'timr/model/stack'
 require 'timr/model/config'
 require 'timr/duration'
+require 'timr/status'
 
 require 'timr/command'
 require 'timr/command/help_command'

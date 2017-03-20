@@ -1,14 +1,10 @@
 
-require 'term/ansicolor'
-
 module TheFox
 	module Timr
 		
 		class ContinueCommand < Command
 			
-			include Term::ANSIColor
-			
-			def initialize(argv = [])
+			def initialize(argv = Array.new)
 				super()
 				# puts "argv '#{argv}'"
 				
@@ -60,7 +56,7 @@ module TheFox
 				end
 				
 				duration = track.duration.to_human
-				status = green(track.long_status)
+				status = track.status.colorized
 				
 				puts ' Task: %s %s' % [task.short_id, task.name]
 				puts 'Track: %s %s' % [track.short_id, track.title]

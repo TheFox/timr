@@ -1,6 +1,4 @@
 
-require 'term/ansicolor'
-# require 'terminal-table'
 require 'thefox-ext'
 
 module TheFox
@@ -8,9 +6,7 @@ module TheFox
 		
 		class StatusCommand < Command
 			
-			include Term::ANSIColor
-			
-			def initialize(argv = [])
+			def initialize(argv = Array.new)
 				#puts "argv '#{argv}'"
 				super()
 				
@@ -78,7 +74,7 @@ module TheFox
 					
 					task = track.task
 					
-					status = track.short_status
+					status = track.status.short_status
 					duration = track.duration.to_human
 					
 					if track.begin_datetime
@@ -118,15 +114,7 @@ module TheFox
 					task = track.task
 					duration = track.duration.to_human
 					
-					status = track.long_status
-					case track.short_status
-					when 'R' # running
-						status = green(status)
-					when 'S' # stopped
-						status = red(status)
-					when 'P' # paused
-						status = yellow(status)
-					end
+					status = track.status.colorized
 					
 					puts '--- #%d ---' % [track_c]
 					puts ' Task: %s %s' % [task.short_id, task.name]

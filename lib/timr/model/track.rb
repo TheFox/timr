@@ -173,37 +173,23 @@ module TheFox
 				begin_date.upto(end_date)
 			end
 			
-			def short_status
+			def status
 				if @begin_datetime.nil?
-					'-' # not started
+					short_status = '-' # not started
 				elsif @end_datetime.nil?
-					'R' # running
+					short_status = 'R' # running
 				elsif @end_datetime
 					if @paused
 						# It's actually stopped but with an additional flag.
-						'P' # paused
+						short_status = 'P' # paused
 					else
-						'S' # stopped
+						short_status = 'S' # stopped
 					end
 				else
-					'U' # unknown
+					short_status = 'U' # unknown
 				end
-			end
-			
-			def long_status
-				s = short_status
-				case s
-				when '-'
-					'not started'
-				when 'R'
-					'running'
-				when 'S'
-					'stopped'
-				when 'P'
-					'paused'
-				when 'U'
-					'unknown'
-				end
+				
+				Status.new(short_status)
 			end
 			
 			def stopped?
@@ -226,6 +212,11 @@ module TheFox
 					msg = msg[0, max_length] << '...'
 				end
 				msg
+			end
+			
+			# Title Alias
+			def name(max_length = nil)
+				title(max_length)
 			end
 			
 			def changed
@@ -344,6 +335,8 @@ module TheFox
 				
 				# This is really bad. Do not use this.
 				def find_track_by_id(base_path, track_id)
+					found_track = nil
+					
 					# Iterate all files.
 					base_path.find.each do |file|
 						# Filter all directories.
@@ -357,13 +350,17 @@ module TheFox
 						end
 						
 						task = Task.load_task_from_file(file)
-						track = task.find_track_by_id(track_id)
-						if track
-							return track
+						tmp_track = task.find_track_by_id(track_id)
+						if tmp_track
+							if found_track
+								raise "Track ID '#{track_id}' is not a unique identifier."
+							else
+								found_track = tmp_track
+							end
 						end
 					end
 					
-					nil
+					found_track
 				end
 				
 			end

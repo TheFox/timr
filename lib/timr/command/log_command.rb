@@ -7,9 +7,7 @@ module TheFox
 		
 		class LogCommand < Command
 			
-			include Term::ANSIColor
-			
-			def initialize(argv = [])
+			def initialize(argv = Array.new)
 				super()
 				
 				today = Date.today

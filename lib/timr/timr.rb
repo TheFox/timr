@@ -317,17 +317,28 @@ module TheFox
 				continue(options)
 			end
 			
-			def get_task_by_id(id)
-				task = @tasks[id]
+			def get_task_by_id(task_id)
+				task = @tasks[task_id]
 				
 				if task
 					# Take Task from cache.
 				else
-					task = Task.load_task_from_file_with_id(@tasks_path, id)
+					task = Task.load_task_from_file_with_id(@tasks_path, task_id)
 					@tasks[task.id] = task
 				end
 				
 				task
+			end
+			
+			def get_track_by_id(track_id)
+				@tasks.each do |task_id, task|
+					# puts "Timr search track: #{task}"
+					
+					track = task.find_track_by_id(track_id)
+					if track
+						return track
+					end
+				end
 			end
 			
 			def tracks(options = {})
@@ -377,10 +388,10 @@ module TheFox
 						next
 					end
 					
-					id = Model.get_id_from_path(@tasks_path, file)
+					track_id = Model.get_id_from_path(@tasks_path, file)
 					
 					# Loads the Task from file into @tasks.
-					get_task_by_id(id)
+					get_task_by_id(track_id)
 				end
 			end
 			
