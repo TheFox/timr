@@ -134,15 +134,17 @@ module TheFox
 					:end_datetime   => nil,
 				}
 				
-				tmp_options = {
-					:begin_format => '%y-%m-%d %H:%M',
-					:end_format   => '%H:%M %y-%m-%d',
-					:from => nil,
-					:to   => nil,
+				tmp_begin_options = {:format => '%y-%m-%d %H:%M'}
+				tmp_end_options = {:format => '%H:%M %y-%m-%d'}
+				
+				glob_begin_options = {
+					:format => tmp_begin_options[:format],
+					:from => @from_opt,
 				}
-				glob_options = tmp_options.clone
-				glob_options[:from] = @from_opt
-				glob_options[:to] = @to_opt
+				glob_end_options = {
+					:format => tmp_end_options[:format],
+					:to => @to_opt,
+				}
 				
 				table_has_rows = false
 				@timr.tracks(@filter_options).each do |track_id, track|
@@ -171,10 +173,10 @@ module TheFox
 								totals[:end_datetime] = edt
 							end
 							
-							tmp_options[:from] = from
-							tmp_options[:to] = to
-							begin_datetime_s = track.begin_datetime_s(tmp_options)
-							end_datetime_s   = track.end_datetime_s(tmp_options)
+							tmp_begin_options[:from] = from
+							tmp_end_options[:to] = to
+							begin_datetime_s = track.begin_datetime_s(tmp_begin_options)
+							end_datetime_s   = track.end_datetime_s(tmp_end_options)
 							
 							duration = track.duration({:from => from, :to => to})
 							totals[:duration] += duration
@@ -201,8 +203,12 @@ module TheFox
 							totals[:end_datetime] = edt
 						end
 						
-						begin_datetime_s = track.begin_datetime_s(glob_options)
-						end_datetime_s   = track.end_datetime_s(glob_options)
+						pp glob_begin_options
+						pp glob_end_options
+						puts
+						
+						begin_datetime_s = track.begin_datetime_s(glob_begin_options)
+						end_datetime_s   = track.end_datetime_s(glob_end_options)
 						
 						duration = track.duration(@filter_options)
 						totals[:duration] += duration
@@ -223,8 +229,8 @@ module TheFox
 				# Add totals to the bottom.
 				table << [
 					nil,        # track_c
-					nil,        # begin_datetime
-					nil,        # end_datetime
+					totals[:begin_datetime].strftime(glob_begin_options[:format]),
+					totals[:end_datetime].strftime(glob_end_options[:format]),
 					totals[:duration].to_human, # duration
 					'TOTAL',    # task
 					nil,        # track

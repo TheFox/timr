@@ -147,12 +147,12 @@ module TheFox
 				
 				# Add totals to the bottom.
 				table << [
-					nil,        # task_c
+					nil, # task_c
 					totals[:begin_datetime].strftime(@filter_options[:format]),
 					totals[:end_datetime].strftime(@filter_options[:format]),
 					totals[:duration].to_human, # duration
 					totals[:tracks_c],
-					'TOTAL',        # task
+					'TOTAL', # task
 				]
 				
 				if table_has_rows

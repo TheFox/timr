@@ -222,11 +222,10 @@ module TheFox
 			
 			# Options:
 			# 
-			# - `:format` | `:begin_format`
+			# - `:format`
 			def begin_datetime_s(options = {})
 				options ||= {}
-				options[:begin_format] ||= HUMAN_DATETIME_FOMRAT
-				options[:format] ||= options[:begin_format]
+				options[:format] ||= HUMAN_DATETIME_FOMRAT
 				
 				begin_datetime(options).strftime(options[:format])
 			end
@@ -253,11 +252,10 @@ module TheFox
 			
 			# Options:
 			# 
-			# - `:format` | `:end_format`
+			# - `:format`
 			def end_datetime_s(options = {})
 				options ||= {}
-				options[:end_format] ||= HUMAN_DATETIME_FOMRAT
-				options[:format] ||= options[:end_format]
+				options[:format] ||= HUMAN_DATETIME_FOMRAT
 				
 				end_datetime(options).strftime(options[:format])
 			end
