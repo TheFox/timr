@@ -48,7 +48,8 @@ module TheFox
 			# 
 			# Options:
 			# 
-			# - `:from`
+			# - `:from` (Time)  
+			#   See documentation about `:to` on `end_datetime()`.
 			def begin_datetime(options = {})
 				options ||= {}
 				options[:from] ||= nil
@@ -67,7 +68,7 @@ module TheFox
 			# 
 			# Options:
 			# 
-			# - `:format`
+			# - `:format` (String)
 			def begin_datetime_s(options = {})
 				options ||= {}
 				options[:format] ||= HUMAN_DATETIME_FOMRAT
@@ -101,7 +102,10 @@ module TheFox
 			# 
 			# Options:
 			# 
-			# - `:to`
+			# - `:to` (Time)  
+			#   This limits `@end_datetime`. If `:to` > `@end_datetime` it returns the
+			# original `@end_datetime`. Otherwise it will return `:to`. The same applies for
+			# `:from` on `begin_datetime()` but just the other way round.
 			def end_datetime(options = {})
 				options ||= {}
 				options[:to] ||= nil
@@ -120,7 +124,7 @@ module TheFox
 			# 
 			# Options:
 			# 
-			# - `:format`
+			# - `:format` (String)
 			def end_datetime_s(options = {})
 				options ||= {}
 				options[:format] ||= HUMAN_DATETIME_FOMRAT
@@ -128,6 +132,7 @@ module TheFox
 				end_datetime(options).strftime(options[:format])
 			end
 			
+			# Start this Track. A Track cannot be restarted because it's the smallest time unit.
 			def start(options = {})
 				options ||= {}
 				options[:message] ||= nil
@@ -143,6 +148,7 @@ module TheFox
 				end
 			end
 			
+			# Stop this Track.
 			def stop(options = {})
 				# puts "Track stop"
 				
@@ -178,11 +184,12 @@ module TheFox
 				changed
 			end
 			
-			# Cacluates the hours, minutes and secondes between begin and end datetime.
+			# Cacluates the secondes between begin and end datetime and returns a new Duration instance.
 			# 
 			# Options:
 			# 
-			# - `:from`, `:to` limit the begin and end datetimes to a specific range.
+			# - `:from` (Time), `:to` (Time)  
+			#   Limit the begin and end datetimes to a specific range.
 			def duration(options = {})
 				options ||= {}
 				options[:from] ||= nil
@@ -255,6 +262,7 @@ module TheFox
 				Status.new(short_status)
 			end
 			
+			# Is the Track stopped?
 			def stopped?
 				short_status == 'S' # stopped
 			end
@@ -284,6 +292,9 @@ module TheFox
 				title(max_length)
 			end
 			
+			# When the Track is marked as changed it needs to mark the Task as changed.
+			# A single Track cannot be stored to a file. Tracks are assiged to a Task and are stored
+			# to the Task file.
 			def changed
 				super()
 				
@@ -292,14 +303,15 @@ module TheFox
 				end
 			end
 			
-			# Alias for Task.
-			# A Track cannot saved to a file. Only the whole Task.
+			# Alias for Task. A Track cannot saved to a file. Only the whole Task.
 			def save_to_file(path = nil, force = false)
 				if @task
 					@task.save_to_file(path, force)
 				end
 			end
 			
+			# Duplicate this Track using the same Message. This is used almost by every Command.  
+			# Start, Continue, Push, etc.
 			def dup
 				track = Track.new
 				track.task = @task
@@ -307,10 +319,12 @@ module TheFox
 				track
 			end
 			
+			# To String
 			def to_s
 				"Track_#{@meta['id']}"
 			end
 			
+			# To Hash
 			def to_h
 				h = {
 					'id' => @meta['id'],
