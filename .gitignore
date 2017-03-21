@@ -1,13 +1,15 @@
 /.bundle/
 .env
-.env.*
-!.env.example
 .setup
 CHANGELOG-*.txt
 /coverage/
 /doc/
 Gemfile.lock
+/lib1/
 /releases/
 README.html
+/test1/
 /tmp/
 *.log
+*.yml
+*.txt

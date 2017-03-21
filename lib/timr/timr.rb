@@ -342,7 +342,7 @@ module TheFox
 			end
 			
 			def tracks(options = {})
-				puts "#{Time.now.to_ms} #{self.class} #{__method__}"
+				# puts "#{Time.now.to_ms} #{self.class} #{__method__}"
 				
 				options ||= {}
 				unless options.has_key?(:sort)
@@ -360,7 +360,7 @@ module TheFox
 					#puts
 				end
 				
-				puts "#{Time.now.to_ms} #{self.class} #{__method__} END"
+				# puts "#{Time.now.to_ms} #{self.class} #{__method__} END"
 				
 				if options[:sort]
 					# Sort ASC by Begin DateTime, End DateTime.

@@ -83,6 +83,35 @@ module TheFox
 					[from, to]
 				end
 				
+				# Options:
+				# 
+				# - `:date` String
+				# - `:time` String
+				def get_datetime_from_options(options = {})
+					options ||= {}
+					options[:date] ||= nil
+					options[:time] ||= nil
+					
+					if options[:date] && !options[:time]
+						raise ArgumentError, 'You also need to set a time when giving a date.'
+					end
+					
+					datetime_a = []
+					if options[:date]
+						datetime_a << options[:date]
+					end
+					if options[:time]
+						datetime_a << options[:time]
+					end
+					
+					if datetime_a.count > 0
+						datetime_s = datetime_a.join(' ')
+						Time.parse(datetime_s).utc
+					else
+						Time.now.utc
+					end
+				end
+				
 			end
 			
 		end # class DateTimeHelper

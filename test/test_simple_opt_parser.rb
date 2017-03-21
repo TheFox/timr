@@ -83,7 +83,7 @@ class TestSimpleOptParser < MiniTest::Test
 		optparser = TheFox::Timr::SimpleOptParser.new
 		optparser.register_option(['-a'], 1)
 		
-		assert_raises ArgumentError do
+		assert_raises(ArgumentError) do
 			optparser.parse('-a')
 		end
 	end
@@ -99,7 +99,7 @@ class TestSimpleOptParser < MiniTest::Test
 		optparser.register_option(['-a'], 1)
 		optparser.register_option(['-b'], 0)
 		
-		assert_raises ArgumentError do
+		assert_raises(ArgumentError) do
 			optparser.parse('-a -b')
 		end
 	end
@@ -229,7 +229,7 @@ class TestSimpleOptParser < MiniTest::Test
 		optparser.register_option(['-b'], 0)
 		optparser.register_option(['-c'], 1)
 		
-		assert_raises ArgumentError do
+		assert_raises(ArgumentError) do
 			optparser.parse('-abc')
 		end
 	end
@@ -264,7 +264,7 @@ class TestSimpleOptParser < MiniTest::Test
 		optparser.register_option(['-b'], 1)
 		optparser.register_option(['-c'], 0)
 		
-		assert_raises ArgumentError do
+		assert_raises(ArgumentError) do
 			optparser.parse('-abc val1')
 		end
 	end
@@ -323,7 +323,7 @@ class TestSimpleOptParser < MiniTest::Test
 		optparser.register_option(['-b'], 1)
 		
 		opts = [['-a', 'val1'], ['-b']]
-		assert_raises ArgumentError do
+		assert_raises(ArgumentError) do
 			optparser.verify(opts)
 		end
 	end
@@ -341,7 +341,7 @@ class TestSimpleOptParser < MiniTest::Test
 		optparser.register_option(['-b'], 1)
 		
 		opts = [['-a'], ['-b']]
-		assert_raises ArgumentError do
+		assert_raises(ArgumentError) do
 			optparser.verify(opts)
 		end
 	end

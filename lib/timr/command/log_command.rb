@@ -5,11 +5,12 @@ require 'time'
 module TheFox
 	module Timr
 		
+		# By default this Command prints all todays Tracks.
 		class LogCommand < Command
 			
 			def initialize(argv = Array.new)
 				super()
-				puts "#{Time.now.to_ms} #{self.class} #{__method__}"
+				# puts "#{Time.now.to_ms} #{self.class} #{__method__}"
 				
 				@help_opt = false
 				
@@ -81,12 +82,11 @@ module TheFox
 				
 				@filter_options = {:from => @from_opt, :to => @to_opt}
 				
-				
-				puts "#{Time.now.to_ms} #{self.class} #{__method__} END"
+				# puts "#{Time.now.to_ms} #{self.class} #{__method__} END"
 			end
 			
 			def run
-				puts "#{Time.now.to_ms} #{self.class} #{__method__}"
+				# puts "#{Time.now.to_ms} #{self.class} #{__method__}"
 				if @help_opt
 					help
 					return
@@ -100,7 +100,7 @@ module TheFox
 			private
 			
 			def print_small_table
-				puts "#{Time.now.to_ms} #{self.class} #{__method__}"
+				# puts "#{Time.now.to_ms} #{self.class} #{__method__}"
 				
 				puts 'Selected datetime range:'
 				if @daytime_filter
@@ -203,10 +203,6 @@ module TheFox
 							totals[:end_datetime] = edt
 						end
 						
-						pp glob_begin_options
-						pp glob_end_options
-						puts
-						
 						begin_datetime_s = track.begin_datetime_s(glob_begin_options)
 						end_datetime_s   = track.end_datetime_s(glob_end_options)
 						
@@ -242,7 +238,7 @@ module TheFox
 					puts 'No tracks found.'
 				end
 				
-				puts "#{Time.now.to_ms} #{self.class} #{__method__} END"
+				# puts "#{Time.now.to_ms} #{self.class} #{__method__} END"
 			end
 			
 			def help

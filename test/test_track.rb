@@ -6,6 +6,58 @@ require 'timr'
 
 class TestTrack < MiniTest::Test
 	
+	def test_set_begin_end_datetime
+		track = TheFox::Timr::Track.new
+		
+		assert_raises(ArgumentError) do
+			track.end_datetime = nil
+		end
+		
+		track.begin_datetime = '2017-01-01 01:00:00'
+		
+		assert_raises(ArgumentError) do
+			track.end_datetime = nil # Wrong type.
+		end
+		
+		assert_silent do
+			track.end_datetime = '2017-01-01 02:00:00'
+		end
+	end
+	
+	def test_set_begin_end_datetime_same
+		track = TheFox::Timr::Track.new
+		
+		track.begin_datetime = '2017-01-02 01:00:00'
+		
+		assert_raises(ArgumentError) do
+			track.end_datetime = '2017-01-01 01:00:00'
+		end
+		assert_raises(ArgumentError) do
+			track.end_datetime = '2017-01-02 01:00:00'
+		end
+		
+		track.end_datetime = '2017-01-03 01:00:00'
+		track.begin_datetime = '2017-01-03 00:00:00'
+		
+		assert_raises(ArgumentError) do
+			track.begin_datetime = '2017-01-03 01:00:00'
+		end
+		assert_raises(ArgumentError) do
+			track.begin_datetime = '2017-01-03 02:00:00'
+		end
+	end
+	
+	def test_set_begin_end_datetime_wrong_type
+		track = TheFox::Timr::Track.new
+		
+		assert_raises(ArgumentError) do
+			track.begin_datetime = Date.new
+		end
+		assert_raises(ArgumentError) do
+			track.end_datetime = Date.new
+		end
+	end
+	
 	# Everything empty
 	def test_begin_datetime_empty
 		options = {
@@ -18,7 +70,7 @@ class TestTrack < MiniTest::Test
 		#puts "time: #{track.begin_datetime.strftime('%F %T %z')}"
 		
 		assert_instance_of(Time, track.begin_datetime)
-		assert_equal(Time.now.utc.strftime('%F %T %z'), track.begin_datetime.strftime('%F %T %z'))
+		assert_equal(Time.now.localtime.strftime('%F %T %z'), track.begin_datetime.strftime('%F %T %z'))
 	end
 	
 	# Date set, Time empty
@@ -29,7 +81,7 @@ class TestTrack < MiniTest::Test
 		}
 		track = TheFox::Timr::Track.new
 		
-		assert_raises ArgumentError do
+		assert_raises(ArgumentError) do
 			track.start(options)
 		end
 	end
@@ -58,10 +110,10 @@ class TestTrack < MiniTest::Test
 		track = TheFox::Timr::Track.new
 		track.start(options)
 		
-		#puts "time: #{track.begin_datetime.strftime('%F %T %z')}"
+		# puts "time: #{track.begin_datetime.strftime('%F %T %z')}"
 		
 		assert_instance_of(Time, track.begin_datetime)
-		assert_equal(Time.new(2011, 12, 13, 14, 1, 0, 0).strftime('%F %T %z'), track.begin_datetime.strftime('%F %T %z'))
+		assert_equal(Time.new(2011, 12, 13, 15, 1, 0).localtime.strftime('%F %T %z'), track.begin_datetime.strftime('%F %T %z'))
 	end
 	
 	# Date set, Time set Hour, Minute, Second
@@ -73,10 +125,13 @@ class TestTrack < MiniTest::Test
 		track = TheFox::Timr::Track.new
 		track.start(options)
 		
-		#puts "time: #{track.begin_datetime.strftime('%F %T %z')}"
+		# puts
+		# puts "time A: #{track.begin_datetime.strftime('%F %T %z')}"
+		# puts "time B: #{Time.new(2011, 12, 13, 15, 1, 2, '+00:00').localtime.strftime('%F %T %z')}"
+		# puts "time C: #{Time.new(2011, 12, 13, 15, 1, 2).localtime.strftime('%F %T %z')}"
 		
 		assert_instance_of(Time, track.begin_datetime)
-		assert_equal(Time.new(2011, 12, 13, 14, 1, 2, 0).strftime('%F %T %z'), track.begin_datetime.strftime('%F %T %z'))
+		assert_equal(Time.new(2011, 12, 13, 15, 1, 2).strftime('%F %T %z'), track.begin_datetime.strftime('%F %T %z'))
 	end
 	
 	# Date set, Time set Hour, Minute, Second, Timezone
@@ -88,10 +143,12 @@ class TestTrack < MiniTest::Test
 		track = TheFox::Timr::Track.new
 		track.start(options)
 		
-		#puts "time: #{track.begin_datetime.strftime('%F %T %z')}"
+		# puts
+		# puts "time A: #{track.begin_datetime.strftime('%F %T %z')}"
+		# puts "time B: #{Time.new(2011, 12, 13, 15, 1, 2, '+03:00').localtime.strftime('%F %T %z')}"
 		
 		assert_instance_of(Time, track.begin_datetime)
-		assert_equal(Time.new(2011, 12, 13, 12, 1, 2, 0).strftime('%F %T %z'), track.begin_datetime.strftime('%F %T %z'))
+		assert_equal(Time.new(2011, 12, 13, 15, 1, 2, '+03:00').localtime.strftime('%F %T %z'), track.begin_datetime.strftime('%F %T %z'))
 	end
 	
 	# Date set, Time set DateTime

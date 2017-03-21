@@ -18,8 +18,8 @@ module TheFox
 				@tracks = Hash.new
 				
 				# Cache
-				@begin_datetime = nil
-				@end_datetime = nil
+				# @begin_datetime = nil
+				# @end_datetime = nil
 			end
 			
 			# Set name.
@@ -46,8 +46,8 @@ module TheFox
 				@tracks[track.id] = track
 				
 				# Refresh Cache
-				@begin_datetime = nil
-				@end_datetime = nil
+				# @begin_datetime = nil
+				# @end_datetime = nil
 				
 				# Mark Task as changed.
 				changed
@@ -201,23 +201,43 @@ module TheFox
 			end
 			
 			# Uses `tracks()` with `options` to filter.
+			# 
+			# Options:
+			# 
+			# - `:from`
 			def begin_datetime(options = {})
 				options ||= {}
+				options[:from] ||= nil
 				
-				if @begin_datetime
-					return @begin_datetime
-				end
+				# Cache
+				# if @begin_datetime
+				# 	return @begin_datetime
+				# end
+				# Cannot use this cache because of :from :to range limitation.
+				# It needs always to be direct from child Tracks, because the
+				# cache does not know when the begin and end datetimes of the
+				# child Tracks change.
 				
 				# Do not sort. We only need to sort the tracks
 				# by begin_datetime and take the first.
 				options[:sort] = false
 				
-				@begin_datetime = tracks(options)
+				first_track = tracks(options)
+					.select{ |track_id, track| track.begin_datetime } # filter nil
 					.sort_by{ |track_id, track| track.begin_datetime }
-					.to_h
-					.values
+					.to_h # sort_by makes [[]]
+					.values # no keys to take the first
 					.first
-					.begin_datetime(options)
+				
+				if first_track
+					bdt = first_track.begin_datetime(options)
+				end
+				
+				if options[:from] && bdt && options[:from] > bdt
+					bdt = options[:from]
+				end
+				
+				bdt
 			end
 			
 			# Options:
@@ -227,27 +247,50 @@ module TheFox
 				options ||= {}
 				options[:format] ||= HUMAN_DATETIME_FOMRAT
 				
-				begin_datetime(options).strftime(options[:format])
+				bdt = begin_datetime(options)
+				if bdt
+					bdt.strftime(options[:format])
+				end
 			end
 			
 			# Uses `tracks()` with `options` to filter.
+			# 
+			# Options:
+			# 
+			# - `:to`
 			def end_datetime(options = {})
 				options ||= {}
+				options[:to] ||= nil
 				
-				if @end_datetime
-					return @end_datetime
-				end
+				# Cache
+				# if @end_datetime
+				# 	return @end_datetime
+				# end
+				# Cannot use this cache because of :from :to range limitation.
+				# It needs always to be direct from child Tracks, because the
+				# cache does not know when the begin and end datetimes of the
+				# child Tracks change.
 				
 				# Do not sort. We only need to sort the tracks
 				# by end_datetime and take the last.
 				options[:sort] = false
 				
-				@end_datetime = tracks(options)
+				last_track = tracks(options)
+					.select{ |track_id, track| track.end_datetime } # filter nil
 					.sort_by{ |track_id, track| track.end_datetime }
-					.to_h
-					.values
+					.to_h # sort_by makes [[]]
+					.values # no keys to take the last
 					.last
-					.end_datetime(options)
+				
+				if last_track
+					edt = last_track.end_datetime(options)
+				end
+				
+				if options[:to] && edt && options[:to] < edt
+					edt = options[:to]
+				end
+				
+				edt
 			end
 			
 			# Options:
@@ -257,7 +300,10 @@ module TheFox
 				options ||= {}
 				options[:format] ||= HUMAN_DATETIME_FOMRAT
 				
-				end_datetime(options).strftime(options[:format])
+				edt = end_datetime(options)
+				if edt
+					edt.strftime(options[:format])
+				end
 			end
 			
 			def pre_save_to_file

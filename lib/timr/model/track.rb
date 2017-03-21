@@ -37,6 +37,10 @@ module TheFox
 					raise ArgumentError, "begin_datetime needs to be a String or Time, #{begin_datetime.class} given."
 				end
 				
+				if @end_datetime && begin_datetime >= @end_datetime
+					raise ArgumentError, 'begin_datetime must be lesser than end_datetime.'
+				end
+				
 				@begin_datetime = begin_datetime
 			end
 			
@@ -73,6 +77,10 @@ module TheFox
 			
 			# Set end_datetime.
 			def end_datetime=(end_datetime)
+				if !@begin_datetime
+					raise ArgumentError, 'end_datetime cannot be set until begin_datetime is set.'
+				end
+				
 				case end_datetime
 				when String
 					end_datetime = Time.parse(end_datetime)
@@ -80,6 +88,10 @@ module TheFox
 					# OK
 				else
 					raise ArgumentError, "end_datetime needs to be a String or Time, #{end_datetime.class} given."
+				end
+				
+				if end_datetime <= @begin_datetime
+					raise ArgumentError, 'end_datetime must be greater than begin_datetime.'
 				end
 				
 				@end_datetime = end_datetime
@@ -124,7 +136,7 @@ module TheFox
 					raise 'Cannot re-start Track. Use dup() on this instance or create a new instance by using Track.new().'
 				end
 				
-				@begin_datetime = self.class.get_datetime_from_options(options)
+				@begin_datetime = DateTimeHelper.get_datetime_from_options(options)
 				
 				if options[:message]
 					@message = options[:message]
@@ -147,19 +159,15 @@ module TheFox
 						:date => options[:start_date],
 						:time => options[:start_time],
 					}
-					@begin_datetime = self.class.get_datetime_from_options(begin_options)
+					@begin_datetime = DateTimeHelper.get_datetime_from_options(begin_options)
 				end
 				
 				# Set End DateTime
-				@end_datetime = self.class.get_datetime_from_options(options)
-				# puts "track end time: #{@end_datetime}"
+				@end_datetime = DateTimeHelper.get_datetime_from_options(options)
 				
 				if options[:message]
 					if options[:append]
-						# puts "   old message: '#{@message}'"
-						# puts "append message: '#{options[:message]}'"
 						@message << ' ' << options[:message]
-						# puts "   new message: '#{@message}'"
 					else
 						@message = options[:message]
 					end
@@ -326,47 +334,6 @@ module TheFox
 			
 			# All methods in this block are static.
 			class << self
-				
-				# Helper method
-				def get_datetime_from_options(options = {})
-					options ||= {}
-					options[:date] ||= nil
-					options[:time] ||= nil
-					
-					if options[:date] && !options[:time]
-						raise ArgumentError, 'You also need to set a time when giving a date'
-					end
-					
-					datetime_a = []
-					if options[:date]
-						datetime_a << options[:date]
-					end
-					if options[:time]
-						datetime_a << options[:time]
-					end
-					
-					if datetime_a.count > 0
-						datetime_s = datetime_a.join(' ')
-						Time.parse(datetime_s).utc
-					else
-						Time.now.utc
-					end
-					
-					
-					
-					# date = DateTimeHelper.convert_date(options[:date])
-					# time = DateTimeHelper.convert_time(options[:time])
-					
-					# dy = date.year
-					# dm = date.month
-					# dd = date.day
-					# th = time.hour
-					# tm = time.min
-					# ts = time.sec
-					# tz = 0 # UTC (Timezone)
-					
-					# Time.new(dy, dm, dd, th, tm, ts, tz)
-				end
 				
 				# Create a new Track instance from a Hash.
 				def create_track_from_hash(hash)

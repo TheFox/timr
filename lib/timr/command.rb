@@ -11,7 +11,7 @@ module TheFox
 			attr_accessor :cwd
 			
 			def initialize
-				puts "#{Time.now.to_ms} #{self.class} #{__method__}"
+				# puts "#{Time.now.to_ms} #{self.class} #{__method__}"
 				
 				@cwd = nil
 				@timr = nil

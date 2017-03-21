@@ -2,6 +2,7 @@
 module TheFox
 	module Timr
 		
+		# This Command is very similar to LogCommand. By default it prints all Tasks of the current month.
 		class ReportCommand < Command
 			
 			def initialize(argv = [])
@@ -87,7 +88,7 @@ module TheFox
 						{:format => '%-14s', :label => 'START', :padding_left => ' ', :padding_right => ' '},
 						{:format => '%-14s', :label => 'END', :padding_left => ' ', :padding_right => ' '},
 						{:format => '%7s', :label => 'DUR', :padding_left => ' ', :padding_right => ' '},
-						{:format => '%3s', :label => 'TrC'},
+						{:format => '%3s', :label => 'TRC'},
 						{:format => '%-6s', :label => 'TASK', :padding_right => ' '},
 					],
 				}
@@ -100,12 +101,6 @@ module TheFox
 					
 					:begin_datetime => nil,
 					:end_datetime   => nil,
-					
-					# :begin_datetime => Time.parse('2099-12-31 23:59:59'),
-					# :end_datetime   => Time.parse('1970-01-01 00:00:00'),
-					
-					# :begin_datetime => Time.parse('1970-01-01 00:00:00'),
-					# :end_datetime   => Time.parse('2099-12-31 23:59:59'),
 				}
 				
 				table_has_rows = false
@@ -130,8 +125,6 @@ module TheFox
 					if !totals[:end_datetime] || edt > totals[:end_datetime]
 						totals[:end_datetime] = edt
 					end
-					
-					puts "table task: #{totals[:task_c]} #{task} #{duration}"
 					
 					table << [
 						totals[:task_c],
@@ -174,8 +167,6 @@ module TheFox
 				# Get Tracks.
 				tracks = @timr.tracks(@filter_options)
 				
-				puts "filtered_tasks tracks: #{tracks.count}"
-				
 				# Convert Tracks to Tasks. Convert the Array to a Set removes all duplicates.
 				tracks.map{ |track_id, track| track.task }.to_set
 			end
@@ -194,7 +185,7 @@ module TheFox
 				puts '    START    Task Start Date'
 				puts '    END      Task End Date'
 				puts '    DUR      Task Duration'
-				puts '    TrC      Tracks Count'
+				puts '    TRC      Tracks Count'
 				puts '    TASK     Task ID and Name.'
 				puts
 			end

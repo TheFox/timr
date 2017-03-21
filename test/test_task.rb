@@ -228,12 +228,12 @@ class TestTask < MiniTest::Test
 		from = Time.parse('2015-06-02 15:00:00')
 		to   = Time.parse('2015-06-01 15:00:00')
 		
-		assert_raises RangeError do
+		assert_raises(RangeError) do
 			task.tracks({:from => from, :to => to})
 		end
 	end
 	
-	def test_begin_datetime
+	def test_begin_datetime_all_set
 		track1 = TheFox::Timr::Track.new
 		track1.id = 't1'
 		track1.begin_datetime = '2015-06-08 10:00:00'
@@ -265,6 +265,21 @@ class TestTask < MiniTest::Test
 		options = {:format => '%F %T', :from => from, :to => to}
 		assert_equal('2015-06-09 09:00:00', task.begin_datetime_s(options))
 		assert_equal('2015-06-26 15:00:00', task.end_datetime_s(options))
+	end
+	
+	def test_begin_datetime_end_nil
+		track1 = TheFox::Timr::Track.new
+		track1.id = 't1'
+		track1.begin_datetime = '2015-06-08 10:00:00'
+		
+		task = TheFox::Timr::Task.new
+		task.add_track(track1)
+		
+		from = Time.parse('2015-06-05 09:00:00')
+		to   = Time.parse('2015-06-28 15:00:00')
+		options = {:format => '%F %T', :from => from, :to => to}
+		assert_equal('2015-06-08 10:00:00', task.begin_datetime_s(options))
+		assert_nil(task.end_datetime_s(options))
 	end
 	
 	def test_duration
