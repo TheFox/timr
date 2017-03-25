@@ -63,7 +63,7 @@ module TheFox
 				if path.nil?
 					path = @file_path
 					if path.nil?
-						raise 'Path cannot be nil'
+						raise ModelError, 'Path cannot be nil.'
 					end
 				else
 					@file_path = path
@@ -93,7 +93,7 @@ module TheFox
 				if path.nil?
 					path = @file_path
 					if path.nil?
-						raise "Path cannot be nil"
+						raise ModelError, 'Path cannot be nil.'
 					end
 				else
 					@file_path = path
@@ -125,6 +125,15 @@ module TheFox
 			end
 			
 			def post_save_to_file
+			end
+			
+			def delete_file(path = nil)
+				path ||= @file_path
+				if path.nil?
+					raise ModelError, 'Path cannot be nil.'
+				end
+				
+				path.delete
 			end
 			
 			# All methods in this block are static.
@@ -224,7 +233,7 @@ module TheFox
 							end
 							
 							if path
-								raise "ID '#{id}' is not a unique identifier"
+								raise ModelError, "ID '#{id}' is not a unique identifier."
 							else
 								path = file
 								
@@ -237,7 +246,7 @@ module TheFox
 					if path && path.exist?
 						return path
 					end
-					raise "Could not find file for ID '#{id}' at #{base_path}"
+					raise ModelError, "Could not find a file for ID '#{id}' at #{base_path}."
 				end
 				
 			end

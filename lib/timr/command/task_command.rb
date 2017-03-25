@@ -12,6 +12,7 @@ module TheFox
 				@help_opt = false
 				@show_opt = false
 				@add_opt = false
+				@remove_opt = false
 				
 				@tracks_opt = false
 				@name_opt = nil
@@ -38,6 +39,8 @@ module TheFox
 						@show_opt = true
 					when 'add'
 						@add_opt = true
+					when 'remove'
+						@remove_opt = true
 					when Task
 						@tasks_opt << arg
 					else
@@ -64,19 +67,12 @@ module TheFox
 				
 				if @add_opt
 					run_add
-				# elsif @show_opt
-				# 	puts 'show_opt' # @TODO remove
-				# 	run_show
+				elsif @remove_opt
+					run_remove
 				else
-					# puts 'else' # @TODO remove
-					
 					if @tasks_opt.count == 0
-						# puts 'else all' # @TODO remove
-						
 						run_show_all
 					else
-						# puts 'else specific' # @TODO remove
-						
 						run_show
 					end
 				end
@@ -99,6 +95,15 @@ module TheFox
 				
 				if task_s.count > 0
 					puts task_s.join("\n")
+				end
+			end
+			
+			def run_remove
+				@tasks_opt.each do |task_id|
+					task = @timr.remove_task({:task_id => task_id})
+					
+					tracks_s = TranslationHelper.pluralize(@timr.stack.tracks.count, 'track', 'tracks')
+					puts 'Deleted task %s (%s).' % [task.short_id, tracks_s]
 				end
 			end
 			
@@ -172,6 +177,8 @@ module TheFox
 				if task.description
 					task_s << '  Description: %s' % [task.description]
 				end
+				
+				task_s << '  File path: %s' % [task.file_path]
 				
 				task_s
 			end

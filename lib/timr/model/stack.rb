@@ -27,6 +27,10 @@ module TheFox
 			end
 			
 			def start(track)
+				unless track.is_a?(Track)
+					raise ArgumentError, "track variable must be a Track instance. #{track.class} given."
+				end
+				
 				stop
 				
 				@tracks = Array.new
@@ -45,34 +49,37 @@ module TheFox
 				end
 			end
 			
-			# def pause
-			# end
-			
-			# def continue(track)
-			# 	stop
-			# 	push(track)
-			# end
-			
 			def push(track)
-				# puts "Stack push #{track} (#{@tracks.count})"
+				unless track.is_a?(Track)
+					raise ArgumentError, "track variable must be a Track instance. #{track.class} given."
+				end
 				
 				@tracks << track
 				
 				# Mark Stack as changed.
 				changed
-				
-				# puts "Stack push OK (#{@tracks.count})"
 			end
 			
-			# Same as stop.
-			# def pop
-			# 	if @tracks.count > 0
-			# 		@tracks.pop
-					
-			# 		# Mark Stack as changed.
-			# 		changed
-			# 	end
-			# end
+			def remove(track)
+				unless track.is_a?(Track)
+					raise ArgumentError, "track variable must be a Track instance. #{track.class} given."
+				end
+				
+				puts "stack tracks: #{@tracks.count}" # @TODO remove
+				
+				puts "stack track to remove: #{track.short_id} #{track.object_id}"
+				@tracks.each do |track|
+					puts "stack track: #{track.short_id} #{track.object_id}"
+				end
+				
+				r = @tracks.delete(track)
+				
+				puts "stack tracks delete: #{r}" # @TODO remove
+				puts "stack left tracks: #{@tracks.count}" # @TODO remove
+				
+				# Mark Stack as changed.
+				changed
+			end
 			
 			def pre_save_to_file
 				# Tracks
@@ -86,28 +93,23 @@ module TheFox
 					raise 'Stack: @timr variable is not set.'
 				end
 				
-				# puts "#{self.class} post_load_from_file"
-				# puts "#{self.class} data: '#{@data}'"
-				
 				@tracks = @data.map{ |ids|
-					# puts "load from ids: #{ids}"
-					
 					task_id, track_id = ids
-					# puts "load   task #{task_id}"
-					# puts "      track #{track_id}"
-					# puts
 					
-					task = @timr.get_task_by_id(task_id)
-					if task
-						track = task.find_track_by_id(track_id)
-					# else
-					# 	puts "no task found"
+					begin
+						task = @timr.get_task_by_id(task_id)
+						if task
+							track = task.find_track_by_id(track_id)
+						end
+					rescue Exception => e
+						# Mark Stack as changed.
+						changed
+						
+						nil
 					end
 				}.select{ |track|
 					!track.nil?
 				}
-				
-				# puts "track loaded: #{@tracks.count}"
 			end
 			
 			def to_s
@@ -117,17 +119,6 @@ module TheFox
 			def inspect
 				"#<Stack tracks=#{@tracks.count} current=#{@current_track.short_id}>"
 			end
-			
-			# All methods in this block are static.
-			# class << self
-				
-			# 	def load_stack_from_file(path)
-			# 		stack = Stack.new
-			# 		stack.load_from_file(path)
-			# 		stack
-			# 	end
-				
-			# end
 			
 		end # class Task
 		

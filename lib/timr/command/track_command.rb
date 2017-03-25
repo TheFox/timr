@@ -95,6 +95,9 @@ module TheFox
 					if track.message
 						track_s << '  Message: %s' % [track.message]
 					end
+					
+					track_s << '  File path: %s' % [task.file_path]
+					
 					tracks << track_s
 				end
 				

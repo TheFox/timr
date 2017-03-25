@@ -334,15 +334,55 @@ module TheFox
 				task
 			end
 			
+			# Remove a Task.
+			# 
+			# Options:
+			# 
+			# - `:task_id` (String) 
+			def remove_task(options = {})
+				options ||= {}
+				options[:task_id] ||= nil
+				unless options[:task_id]
+					raise ArgumentError, 'task_id cannot be nil.'
+				end
+				
+				task = get_task_by_id(options[:task_id])
+				
+				@tasks.delete(task.id)
+				
+				# Get running Tracks and remove these from Stack.
+				task.tracks({:status => ?R}).each do |track_id, track|
+					puts "TRACK: #{track}" # @TODO remove
+					@stack.remove(track)
+				end
+				@stack.save_to_file
+				
+				task.delete_file
+				
+				task
+			end
+			
 			def get_task_by_id(task_id)
 				task = @tasks[task_id]
+				
+				puts "Timr get_task_by_id: #{task_id}" # @TODO remove
 				
 				if task
 					# Take Task from cache.
 				else
 					task = Task.load_task_from_file_with_id(@tasks_path, task_id)
-					@tasks[task.id] = task
+					
+					# task_id can be a short ID. If a Task is already loaded with full ID
+					# another search by short ID leads to generate a new object_id. Then there are
+					# two Tasks instances loaded for the same Task ID. The if-condition prohibits this.
+					if @tasks[task.id]
+						task = @tasks[task.id]
+					else
+						@tasks[task.id] = task
+					end
 				end
+				
+				puts "Timr Tasks: #{@tasks.count} #{@tasks.map{|id, t| t.short_id}}" # @TODO remove
 				
 				task
 			end
@@ -413,6 +453,9 @@ module TheFox
 			
 			def shutdown
 				# puts 'Timr shutdown'
+				
+				# Save Stack
+				@stack.save_to_file
 				
 				# Save config
 				@config.save_to_file

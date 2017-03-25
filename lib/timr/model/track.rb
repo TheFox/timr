@@ -138,7 +138,7 @@ module TheFox
 				options[:message] ||= nil
 				
 				if @begin_datetime
-					raise 'Cannot re-start Track. Use dup() on this instance or create a new instance by using Track.new().'
+					raise Track, 'Cannot restart Track. Use dup() on this instance or create a new instance by using Track.new().'
 				end
 				
 				@begin_datetime = DateTimeHelper.get_datetime_from_options(options)
@@ -321,7 +321,7 @@ module TheFox
 			
 			# To String
 			def to_s
-				"Track_#{@meta['id']}"
+				"Track_#{short_id}"
 			end
 			
 			# To Hash
@@ -394,7 +394,7 @@ module TheFox
 						tmp_track = task.find_track_by_id(track_id)
 						if tmp_track
 							if found_track
-								raise "Track ID '#{track_id}' is not a unique identifier."
+								raise TrackError, "Track ID '#{track_id}' is not a unique identifier."
 							else
 								found_track = tmp_track
 							end

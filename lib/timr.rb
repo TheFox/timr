@@ -4,6 +4,8 @@ require 'timr/version'
 
 require 'timr/ext/time'
 
+require 'timr/exception/timr_error'
+
 require 'timr/helper/datetime_helper'
 require 'timr/helper/translation_helper'
 

@@ -374,12 +374,12 @@ module TheFox
 					# puts "find_track_by_id #{options[:track_id]}"
 					found_track = find_track_by_id(options[:track_id])
 					if found_track
-						puts "clone this track: #{found_track.short_id}"
+						# puts "clone this track: #{found_track.short_id}" # @TODO remove
 						
 						@current_track = found_track.dup
 						# puts "cloned track: #{@current_track.short_id}"
 					else
-						raise "No Track found for Track ID '#{options[:track_id]}'."
+						raise TrackError, "No Track found for Track ID '#{options[:track_id]}'."
 					end
 				else
 					@current_track = Track.new
@@ -448,13 +448,13 @@ module TheFox
 						# Mark Task as changed.
 						changed
 					else
-						raise "Cannot continue Track #{@current_track.short_id}: already running."
+						raise TrackError, "Cannot continue Track #{@current_track.short_id}: already running."
 					end
 				else
 					#raise NotImplementedError
 					
 					unless options[:track]
-						raise 'Track not set.'
+						raise ArgumentError, 'Track not set.'
 					end
 					
 					# puts "continue clone track: #{options[:track].id}"
@@ -514,7 +514,7 @@ module TheFox
 						
 						if track_id == key[0, track_id_len]
 							if found_track_id
-								raise "Track ID '#{track_id}' is not a unique identifier."
+								raise TrackError, "Track ID '#{track_id}' is not a unique identifier."
 							else
 								found_track_id = key
 								#puts "find_track_by_id found track: #{found_track_id}"

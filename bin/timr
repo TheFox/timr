@@ -7,7 +7,11 @@ START_TIME = Time.now.to_ms
 puts "#{START_TIME} #{self.class} #{__method__}"
 
 command = TheFox::Timr::Command.create_command_from_argv(ARGV.clone)
-command.run
+begin
+	command.run
+rescue TheFox::Timr::TimrError => e
+	puts "error: #{e}"
+end
 command.shutdown
 
 END_TIME = Time.now.to_ms

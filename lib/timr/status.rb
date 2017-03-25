@@ -29,9 +29,9 @@ module TheFox
 			
 			def colorized
 				case @short_status
-				when 'R'
+				when ?R
 					green(@long_status)
-				when 'S'
+				when ?S
 					red(@long_status)
 				else
 					@long_status
@@ -46,15 +46,15 @@ module TheFox
 			
 			def set_long_status
 				@long_status = case @short_status
-					when '-'
+					when ?-
 						'not started'
-					when 'R'
+					when ?R
 						'running'
-					when 'S'
+					when ?S
 						'stopped'
-					when 'P'
+					when ?P
 						'paused'
-					when 'U'
+					when ?U
 						'unknown'
 					else
 						'unknown'

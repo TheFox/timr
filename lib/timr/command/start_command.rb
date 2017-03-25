@@ -101,12 +101,12 @@ module TheFox
 				@timr = Timr.new(@cwd)
 				track = @timr.start(options)
 				unless track
-					raise 'Could not start a new Track.'
+					raise TrackError, 'Could not start a new Track.'
 				end
 				
 				task = track.task
 				unless task
-					raise "Tack #{track.id} has no Task."
+					raise TrackError, "Tack #{track.id} has no Task."
 				end
 				
 				status = track.status.colorized
