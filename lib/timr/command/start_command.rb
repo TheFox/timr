@@ -128,16 +128,16 @@ module TheFox
 				puts
 				puts 'Task Options'
 				#puts '    -i, --id           Task ID' # @TODO --id
-				puts '    -n, --name                 Name of the Task.'
-				puts '    --desc, --description      Description of the Task.'
+				puts '    -n, --name <name>              Name of the Task.'
+				puts '    --desc, --description <str>    Description of the Task.'
 				#puts '    -e, --estimation <HH:MM>' # @TODO --estimation
 				puts
 				puts 'Track Options'
-				puts '    -m, --message              Track Message. What have you done?'
-				puts '                               You can overwrite this on stop command.'
+				puts '    -m, --message                  Track Message. What have you done?'
+				puts '                                   You can overwrite this on stop command.'
 				# puts '    -e, --edit         Edit Track Message.'
-				puts '    -d, --date <YYYY-MM-DD>    Start Date. Default: today'
-				puts '    -t, --time <HH:MM[:SS]>    Start Time. Default: now'
+				puts '    -d, --date <YYYY-MM-DD>        Start Date. Default: today'
+				puts '    -t, --time <HH:MM[:SS]>        Start Time. Default: now'
 				puts
 				puts 'Arguments'
 				puts '    <task_id>     Task ID (SHA1 Hash)'

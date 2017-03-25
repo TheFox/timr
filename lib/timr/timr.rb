@@ -317,6 +317,23 @@ module TheFox
 				continue(options)
 			end
 			
+			# Just add a new Task. Will not be started or something else.
+			def add_task(options = {})
+				options ||= {}
+				
+				task = Task.create_task_from_hash(options)
+				
+				# Task Path
+				task_file_path = Model.create_path_by_id(@tasks_path, task.id)
+				
+				# Save Track to file.
+				task.save_to_file(task_file_path)
+				
+				# Leave Stack untouched.
+				
+				task
+			end
+			
 			def get_task_by_id(task_id)
 				task = @tasks[task_id]
 				
@@ -341,9 +358,19 @@ module TheFox
 				end
 			end
 			
-			def tracks(options = {})
-				# puts "#{Time.now.to_ms} #{self.class} #{__method__}"
+			# Get all Tasks.
+			def tasks
+				load_all_tracks
 				
+				@tasks
+			end
+			
+			# Get all Tracks.
+			# 
+			# Options:
+			# 
+			# - `:sort` (Boolean)
+			def tracks(options = {})
 				options ||= {}
 				unless options.has_key?(:sort)
 					options[:sort] = true
@@ -353,14 +380,16 @@ module TheFox
 				
 				filtered_tracks = Hash.new
 				@tasks.each do |task_id, task|
-					#puts "task: #{task} #{task.tracks.count}"
+					puts "task: #{task} #{task.tracks.count}" # @TODO remove
+					
 					tracks = task.tracks(options)
 					filtered_tracks.merge!(tracks)
-					#puts "  -> #{filtered_tracks.count}"
-					#puts
+					
+					puts "  -> #{filtered_tracks.count}" # @TODO remove
+					puts # @TODO remove
 				end
 				
-				# puts "#{Time.now.to_ms} #{self.class} #{__method__} END"
+				puts "#{Time.now.to_ms} #{self.class} #{__method__} END #{filtered_tracks.count}" # @TODO remove
 				
 				if options[:sort]
 					# Sort ASC by Begin DateTime, End DateTime.
@@ -369,6 +398,8 @@ module TheFox
 						t2 = t2.last
 						
 						cmp1 = t1.begin_datetime <=> t2.begin_datetime
+						puts "cmp1: #{cmp1}" # @TODO remove
+						
 						if cmp1 == 0
 							t1.end_datetime <=> t2.end_datetime
 						else

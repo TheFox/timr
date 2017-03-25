@@ -308,7 +308,6 @@ module TheFox
 			
 			def pre_save_to_file
 				# Meta
-				@meta['short_id'] = short_id # Not used.
 				@meta['name'] = @name
 				@meta['description'] = @description
 				
@@ -490,7 +489,9 @@ module TheFox
 			def status
 				stati = @tracks.map{ |track_id, track| track.status.short_status }.to_set
 				
-				if stati.include?('R')
+				if @tracks.count == 0
+					status = '-'
+				elsif stati.include?('R')
 					status = 'R'
 				elsif stati.include?('S')
 					status = 'S'
@@ -557,6 +558,12 @@ module TheFox
 					end
 				end
 				
+				# Create a new Task using a Hash.
+				# 
+				# Options:
+				# 
+				# - `:name` (String)
+				# - `:description` (String)
 				def create_task_from_hash(hash)
 					task = Task.new
 					task.name = hash[:name] # || hash['name']

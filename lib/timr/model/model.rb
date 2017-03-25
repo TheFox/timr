@@ -15,9 +15,12 @@ module TheFox
 			attr_accessor :file_path
 			
 			def initialize
+				# id 40 chars long.
+				id = Digest::SHA1.hexdigest(UUID.new.generate)
+				
 				@meta = {
-					# id 40 chars long.
-					'id' => Digest::SHA1.hexdigest(UUID.new.generate),
+					'id' => id,
+					'short_id' => id[0, 6],
 					'created' => Time.now.utc.strftime(MODEL_DATETIME_FORMAT),
 					'modified' => Time.now.utc.strftime(MODEL_DATETIME_FORMAT),
 				}
