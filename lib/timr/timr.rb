@@ -55,7 +55,7 @@ module TheFox
 				options[:task_id] ||= nil
 				options[:track_id] ||= nil
 				
-				#pp options
+				#pp options # @TODO remove pp
 				
 				# Get current Track from Stack.
 				old_track = @stack.current_track
@@ -225,7 +225,7 @@ module TheFox
 				options[:task_id] ||= nil
 				options[:track_id] ||= nil
 				
-				#pp options
+				#pp options # @TODO remove pp
 				
 				# Get current Track from Stack.
 				old_track = @stack.current_track

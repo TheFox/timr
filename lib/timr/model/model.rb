@@ -1,5 +1,5 @@
 
-require 'pp'
+require 'pp' # @TODO remove pp
 require 'time'
 require 'yaml/store'
 require 'uuid'
@@ -24,7 +24,7 @@ module TheFox
 				@data = nil
 				@changed = false
 				@file_path = nil
-				# pp @meta
+				# pp @meta # @TODO remove pp
 			end
 			
 			def id=(id)

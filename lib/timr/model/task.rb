@@ -183,7 +183,7 @@ module TheFox
 				end
 				
 				if options[:sort]
-					#pp filtered_tracks
+					#pp filtered_tracks # @TODO remove pp
 					filtered_tracks.sort{ |t1, t2|
 						t1 = t1.last
 						t2 = t2.last

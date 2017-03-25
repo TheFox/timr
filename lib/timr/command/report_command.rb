@@ -519,8 +519,7 @@ module TheFox
 				puts '    -m, --month <[YYYY-]MM>     A single month from 01 to 31.'
 				puts '    -y, --year  [<YYYY>]        A single year from 01-01 to 12-31.'
 				puts '    -a, --all                   All.'
-				puts "    --csv <path>                Export as CSV file. Use '--csv -' to print it"
-				puts "                                to STDOUT."
+				puts "    --csv <path>                Export as CSV file. Use '--csv -' to use STDOUT."
 				puts
 				puts 'Task Table Columns'
 				puts '    START    Task Start Date'
@@ -537,26 +536,30 @@ module TheFox
 				puts '    TRACK    Track ID and Name.'
 				puts
 				puts 'Task CSV Columns'
-				puts '    ROW_NO                    x' # @TODO description
-				puts '    TASK_ID                   x'
-				puts '    TASK_NAME                 x'
-				puts '    TASK_BEGIN_DATETIME       x'
-				puts '    TASK_END_DATETIME         x'
-				puts '    TASK_DURATION_HUMAN       x'
-				puts '    TASK_DURATION_SECONDS     x'
-				puts '    TASK_TRACK_COUNT          x'
+				puts '    ROW_NO                    Sequential CSV file row number.'
+				puts
+				puts '    TASK_ID                   Task ID'
+				puts '    TASK_NAME                 Task Name'
+				puts '    TASK_BEGIN_DATETIME       Begin DateTime of the first Track.'
+				puts '    TASK_END_DATETIME         End DateTime of the last Track.'
+				puts '    TASK_DURATION_HUMAN       Task Duration in human format: 5m 6s'
+				puts '    TASK_DURATION_SECONDS     Task Duration in seconds: 306'
+				puts '    TASK_TRACK_COUNT          Task Track count.'
 				puts
 				puts 'Track CSV Columns'
-				puts '    ROW_NO                    x'
-				puts '    TASK_ID                   x'
-				puts '    TASK_NAME                 x'
-				puts '    TRACK_ID                  x'
-				puts '    TRACK_TITLE               x'
-				puts '    TRACK_BEGIN_DATETIME      x'
-				puts '    TRACK_END_DATETIME        x'
-				puts '    TRACK_DURATION_HUMAN      x'
-				puts '    TRACK_DURATION_SECONDS    x'
+				puts '    ROW_NO                    Sequential CSV file row number.'
 				puts
+				puts '    TASK_ID                   Task ID'
+				puts '    TASK_NAME                 Task Name'
+				puts
+				puts '    TRACK_ID                  Track ID'
+				puts '    TRACK_TITLE               Track Title'
+				puts '    TRACK_BEGIN_DATETIME      Begin DateTime'
+				puts '    TRACK_END_DATETIME        End DateTime'
+				puts '    TRACK_DURATION_HUMAN      Track Duration in human format: 5m 6s'
+				puts '    TRACK_DURATION_SECONDS    Task Duration in seconds: 306'
+				puts
+				puts 'The last row in CSV files is always the total sum.'
 			end
 			
 		end # class TrackCommand

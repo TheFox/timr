@@ -85,19 +85,9 @@ module TheFox
 						end
 					end
 					
-					# puts
-					# puts "help_opt #{help_opt}"
-					# puts "version_opt #{version_opt}"
-					# puts "command_name #{command_name}"
-					# puts "command_argv #{command_argv}"
-					# puts "argv #{argv}"
-					# puts
-					
 					if help_opt
-						# puts "its help"
 						command = HelpCommand.new
 					elsif version_opt
-						# puts "its version"
 						command = VersionCommand.new
 					else
 						case command_name
@@ -106,9 +96,7 @@ module TheFox
 						when 'status', 's'
 							command = StatusCommand.new(command_argv)
 						when 'start'
-							# puts "create start command"
 							command = StartCommand.new(command_argv)
-							# puts "start command: #{command.class}"
 						when 'stop'
 							command = StopCommand.new(command_argv)
 						when 'push'
@@ -132,7 +120,6 @@ module TheFox
 						end
 					end
 					
-					# puts "set command cwd: #{cwd_opt}"
 					command.cwd = cwd_opt
 					command
 				end

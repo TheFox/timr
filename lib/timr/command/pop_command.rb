@@ -41,7 +41,7 @@ module TheFox
 				
 				@date_opt = nil
 				@time_opt = nil
-				@start_date_opt = nil # @TODO
+				@start_date_opt = nil # @TODO --start-date
 				@start_time_opt = nil
 				@end_date_opt = nil
 				@end_time_opt = nil
