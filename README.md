@@ -42,7 +42,7 @@ Sometimes you need to work on a task only temporary. You want to track the time 
 ## API
 
 - [API Reference Mainpage](https://timr.fox21.at/doc/)
-- [Inheritance Tree of Error classes](https://timr.fox21.at/doc/TheFox/Timr/Error.html)
+- [Errors Inheritance Tree](https://timr.fox21.at/doc/TheFox/Timr/Error.html)
 
 ## Project Links
 

@@ -1,44 +1,46 @@
 
 module TheFox
 	module Timr
-		
-		class Config < Model
+		module Model
 			
-			attr_accessor :inital_version
-			attr_accessor :last_used_version
-			
-			def initialize
-				super()
+			class Config < Model
 				
-				@inital_version = nil
-				@last_used_version = nil
-			end
-			
-			def pre_save_to_file
-				@data = {
-					'inital_version' => @inital_version || VERSION,
-					'last_used_version' => VERSION,
-				}
-			end
-			
-			def post_load_from_file
-				# puts "Config post_load_from_file"
+				attr_accessor :inital_version
+				attr_accessor :last_used_version
 				
-				@inital_version = @data['inital_version'] || VERSION
-				@last_used_version = @data['last_used_version']
-				
-				# puts "Config inital_version: '#{@inital_version}'"
-				# puts "Config last_used_version: '#{@last_used_version}'"
-				
-				if @last_used_version != VERSION
-					@last_used_version = VERSION
+				def initialize
+					super()
 					
-					# Mark Config as changed.
-					changed
+					@inital_version = nil
+					@last_used_version = nil
 				end
-			end
+				
+				def pre_save_to_file
+					@data = {
+						'inital_version' => @inital_version || VERSION,
+						'last_used_version' => VERSION,
+					}
+				end
+				
+				def post_load_from_file
+					# puts "Config post_load_from_file"
+					
+					@inital_version = @data['inital_version'] || VERSION
+					@last_used_version = @data['last_used_version']
+					
+					# puts "Config inital_version: '#{@inital_version}'"
+					# puts "Config last_used_version: '#{@last_used_version}'"
+					
+					if @last_used_version != VERSION
+						@last_used_version = VERSION
+						
+						# Mark Config as changed.
+						changed
+					end
+				end
+				
+			end # class Config
 			
-		end # class Config
-		
+		end # module Model
 	end # module Timr
 end #module TheFox

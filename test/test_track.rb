@@ -6,7 +6,7 @@ require 'timr'
 
 class TestTrack < MiniTest::Test
 	
-	include TheFox::Timr
+	include TheFox::Timr::Model
 	include TheFox::Timr::Error
 	
 	def test_set_begin_end_datetime

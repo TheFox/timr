@@ -2,7 +2,7 @@
 module TheFox
 	module Timr
 		
-		# # Inheritance Tree of Error classes
+		# # Errors Inheritance Tree
 		# 
 		# TimrError is the basic class for all Timr Error classes. It subclasses from Rubys StandardError.
 		# 

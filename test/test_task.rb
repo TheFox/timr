@@ -7,20 +7,22 @@ require 'pp' # @TODO remove pp
 
 class TestTask < MiniTest::Test
 	
+	include TheFox::Timr::Model
+	
 	def test_filter_tracks_from_nil_to_nil
-		track1 = TheFox::Timr::Track.new
+		track1 = Track.new
 		track1.begin_datetime = '2015-06-05 10:00:00'
 		track1.end_datetime   = '2015-06-05 20:00:00'
 		
-		track2 = TheFox::Timr::Track.new
+		track2 = Track.new
 		track2.begin_datetime = '2015-06-15 10:00:00'
 		track2.end_datetime   = '2015-06-15 20:00:00'
 		
-		track3 = TheFox::Timr::Track.new
+		track3 = Track.new
 		track3.begin_datetime = '2015-06-28 10:00:00'
 		track3.end_datetime   = '2015-06-28 20:00:00'
 		
-		task = TheFox::Timr::Task.new
+		task = Task.new
 		task.add_track(track1)
 		task.add_track(track2)
 		task.add_track(track3)
@@ -31,22 +33,22 @@ class TestTask < MiniTest::Test
 	
 	# From set, To nil
 	def test_filter_tracks_from_set_to_nil
-		track1 = TheFox::Timr::Track.new
+		track1 = Track.new
 		track1.id = 't1'
 		track1.begin_datetime = '2015-06-05 10:00:00'
 		track1.end_datetime   = '2015-06-05 20:00:00'
 		
-		track2 = TheFox::Timr::Track.new
+		track2 = Track.new
 		track2.id = 't2'
 		track2.begin_datetime = '2015-06-15 10:00:00'
 		track2.end_datetime   = '2015-06-15 20:00:00'
 		
-		track3 = TheFox::Timr::Track.new
+		track3 = Track.new
 		track3.id = 't3'
 		track3.begin_datetime = '2015-06-28 10:00:00'
 		track3.end_datetime   = '2015-06-28 20:00:00'
 		
-		task = TheFox::Timr::Task.new
+		task = Task.new
 		task.add_track(track1)
 		task.add_track(track2)
 		task.add_track(track3)
@@ -102,22 +104,22 @@ class TestTask < MiniTest::Test
 	
 	# From nil, To set
 	def test_filter_tracks_from_nil_to_set
-		track1 = TheFox::Timr::Track.new
+		track1 = Track.new
 		track1.id = 't1'
 		track1.begin_datetime = '2015-06-05 10:00:00'
 		track1.end_datetime   = '2015-06-05 20:00:00'
 		
-		track2 = TheFox::Timr::Track.new
+		track2 = Track.new
 		track2.id = 't2'
 		track2.begin_datetime = '2015-06-15 10:00:00'
 		track2.end_datetime   = '2015-06-15 20:00:00'
 		
-		track3 = TheFox::Timr::Track.new
+		track3 = Track.new
 		track3.id = 't3'
 		track3.begin_datetime = '2015-06-28 10:00:00'
 		track3.end_datetime   = '2015-06-28 20:00:00'
 		
-		task = TheFox::Timr::Task.new
+		task = Task.new
 		task.add_track(track1)
 		task.add_track(track2)
 		task.add_track(track3)
@@ -172,37 +174,37 @@ class TestTask < MiniTest::Test
 	
 	# From set, To set
 	def test_filter_tracks_from_set_to_set
-		track1 = TheFox::Timr::Track.new
+		track1 = Track.new
 		track1.id = 't1'
 		track1.begin_datetime = '2015-06-01 10:00:00'
 		track1.end_datetime   = '2015-06-30 20:00:00'
 		
-		track2 = TheFox::Timr::Track.new
+		track2 = Track.new
 		track2.id = 't2'
 		track2.begin_datetime = '2015-06-02 10:00:00'
 		track2.end_datetime   = '2015-06-15 20:00:00'
 		
-		track3 = TheFox::Timr::Track.new
+		track3 = Track.new
 		track3.id = 't3'
 		track3.begin_datetime = '2015-06-10 10:00:00'
 		track3.end_datetime   = '2015-07-01 20:00:00'
 		
-		track4 = TheFox::Timr::Track.new
+		track4 = Track.new
 		track4.id = 't4'
 		track4.begin_datetime = '2015-06-12 10:00:00'
 		track4.end_datetime   = '2015-06-20 20:00:00'
 		
-		track5 = TheFox::Timr::Track.new
+		track5 = Track.new
 		track5.id = 't5'
 		track5.begin_datetime = '2015-01-01 10:00:00'
 		track5.end_datetime   = '2015-01-01 20:00:00'
 		
-		track6 = TheFox::Timr::Track.new
+		track6 = Track.new
 		track6.id = 't6'
 		track6.begin_datetime = '2015-12-20 10:00:00'
 		track6.end_datetime   = '2015-12-20 20:00:00'
 		
-		task = TheFox::Timr::Task.new
+		task = Task.new
 		task.add_track(track1)
 		task.add_track(track2)
 		task.add_track(track3)
@@ -223,7 +225,7 @@ class TestTask < MiniTest::Test
 	
 	# From bigger than To
 	def test_filter_tracks_to_before_from
-		task = TheFox::Timr::Task.new
+		task = Task.new
 		
 		from = Time.parse('2015-06-02 15:00:00')
 		to   = Time.parse('2015-06-01 15:00:00')
@@ -234,22 +236,22 @@ class TestTask < MiniTest::Test
 	end
 	
 	def test_begin_datetime_all_set
-		track1 = TheFox::Timr::Track.new
+		track1 = Track.new
 		track1.id = 't1'
 		track1.begin_datetime = '2015-06-08 10:00:00'
 		track1.end_datetime   = '2015-06-27 20:00:00'
 		
-		track2 = TheFox::Timr::Track.new
+		track2 = Track.new
 		track2.id = 't2'
 		track2.begin_datetime = '2015-06-10 10:00:00'
 		track2.end_datetime   = '2015-06-15 20:00:00'
 		
-		track3 = TheFox::Timr::Track.new
+		track3 = Track.new
 		track3.id = 't3'
 		track3.begin_datetime = '2015-06-20 10:00:00'
 		track3.end_datetime   = '2015-06-25 20:00:00'
 		
-		task = TheFox::Timr::Task.new
+		task = Task.new
 		task.add_track(track1)
 		task.add_track(track2)
 		task.add_track(track3)
@@ -268,11 +270,11 @@ class TestTask < MiniTest::Test
 	end
 	
 	def test_begin_datetime_end_nil
-		track1 = TheFox::Timr::Track.new
+		track1 = Track.new
 		track1.id = 't1'
 		track1.begin_datetime = '2015-06-08 10:00:00'
 		
-		task = TheFox::Timr::Task.new
+		task = Task.new
 		task.add_track(track1)
 		
 		from = Time.parse('2015-06-05 09:00:00')
@@ -283,15 +285,15 @@ class TestTask < MiniTest::Test
 	end
 	
 	def test_duration
-		track1 = TheFox::Timr::Track.new
+		track1 = Track.new
 		track1.begin_datetime = '2015-06-01 10:00:00'
 		track1.end_datetime   = '2015-06-01 11:00:00'
 		
-		track2 = TheFox::Timr::Track.new
+		track2 = Track.new
 		track2.begin_datetime = '2015-06-01 10:30:00'
 		track2.end_datetime   = '2015-06-01 11:30:00'
 		
-		task = TheFox::Timr::Task.new
+		task = Task.new
 		task.add_track(track1)
 		task.add_track(track2)
 		
@@ -312,15 +314,15 @@ class TestTask < MiniTest::Test
 	end
 	
 	def test_status_stopped
-		track1 = TheFox::Timr::Track.new
+		track1 = Track.new
 		track1.begin_datetime = '2015-06-01 10:00:00'
 		track1.end_datetime   = '2015-06-01 11:00:00'
 		
-		track2 = TheFox::Timr::Track.new
+		track2 = Track.new
 		track2.begin_datetime = '2015-06-01 10:30:00'
 		track2.end_datetime   = '2015-06-01 11:30:00'
 		
-		task = TheFox::Timr::Task.new
+		task = Task.new
 		task.add_track(track1)
 		task.add_track(track2)
 		
@@ -328,14 +330,14 @@ class TestTask < MiniTest::Test
 	end
 	
 	def test_status_running
-		track1 = TheFox::Timr::Track.new
+		track1 = Track.new
 		track1.begin_datetime = '2015-06-01 10:00:00'
 		track1.end_datetime   = '2015-06-01 11:00:00'
 		
-		track2 = TheFox::Timr::Track.new
+		track2 = Track.new
 		track2.begin_datetime = '2015-06-01 10:30:00'
 		
-		task = TheFox::Timr::Task.new
+		task = Task.new
 		task.add_track(track1)
 		task.add_track(track2)
 		
