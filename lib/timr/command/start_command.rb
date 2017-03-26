@@ -6,7 +6,7 @@ module TheFox
 		module Command
 			
 			# Start a new Track.
-			class StartCommand < Command
+			class StartCommand < BasicCommand
 				
 				include TheFox::Timr::Error
 				

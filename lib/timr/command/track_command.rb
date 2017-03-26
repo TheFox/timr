@@ -4,7 +4,7 @@ module TheFox
 		module Command
 			
 			# Print informations about a Track.
-			class TrackCommand < Command
+			class TrackCommand < BasicCommand
 				
 				include TheFox::Timr::Error
 				

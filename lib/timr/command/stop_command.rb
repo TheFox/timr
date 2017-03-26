@@ -6,7 +6,7 @@ module TheFox
 		module Command
 			
 			# Stop a Track.
-			class StopCommand < Command
+			class StopCommand < BasicCommand
 				
 				include TheFox::Timr::Error
 				

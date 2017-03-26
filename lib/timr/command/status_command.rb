@@ -5,7 +5,7 @@ module TheFox
 	module Timr
 		module Command
 			
-			class StatusCommand < Command
+			class StatusCommand < BasicCommand
 				
 				include TheFox::Timr::Error
 				

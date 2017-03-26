@@ -3,9 +3,12 @@ module TheFox
 	module Timr
 		module Model
 			
-			class Config < Model
+			class Config < BasicModel
 				
+				# The version String which the file was created with.
 				attr_accessor :inital_version
+				
+				# The version of the previous Timr run.
 				attr_accessor :last_used_version
 				
 				def initialize
@@ -15,6 +18,7 @@ module TheFox
 					@last_used_version = nil
 				end
 				
+				# BasicModel Hook
 				def pre_save_to_file
 					@data = {
 						'inital_version' => @inital_version || VERSION,
@@ -22,6 +26,7 @@ module TheFox
 					}
 				end
 				
+				# BasicModel Hook
 				def post_load_from_file
 					# puts "Config post_load_from_file"
 					

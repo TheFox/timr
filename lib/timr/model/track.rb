@@ -5,7 +5,7 @@ module TheFox
 	module Timr
 		module Model
 			
-			class Track < Model
+			class Track < BasicModel
 				
 				include TheFox::Timr::Error
 				

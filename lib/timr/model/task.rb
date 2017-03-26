@@ -3,7 +3,7 @@ module TheFox
 	module Timr
 		module Model
 			
-			class Task < Model
+			class Task < BasicModel
 				
 				attr_reader :description
 				
@@ -317,6 +317,7 @@ module TheFox
 					end
 				end
 				
+				# BasicModel Hook
 				def pre_save_to_file
 					# Meta
 					@meta['name'] = @name
@@ -336,6 +337,7 @@ module TheFox
 					super()
 				end
 				
+				# BasicModel Hook
 				def post_load_from_file
 					#puts "#{self.class} post_load_from_file"
 					

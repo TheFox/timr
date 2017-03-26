@@ -3,7 +3,7 @@ module TheFox
 	module Timr
 		module Command
 			
-			class VersionCommand < Command
+			class VersionCommand < BasicCommand
 				
 				def run
 					puts "#{TheFox::Timr::NAME} #{TheFox::Timr::VERSION} (#{TheFox::Timr::DATE})"

@@ -32,7 +32,7 @@ module TheFox
 			# Track 2345 stopped
 			# Track 4567 running
 			# ```
-			class PopCommand < Command
+			class PopCommand < BasicCommand
 				
 				include TheFox::Timr::Error
 				

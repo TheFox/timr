@@ -6,7 +6,7 @@ module TheFox
 		module Command
 			
 			# This Command is very similar to LogCommand. By default it prints all Tasks of the current month.
-			class ReportCommand < Command
+			class ReportCommand < BasicCommand
 				
 				include TheFox::Timr::Error
 				

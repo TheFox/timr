@@ -7,7 +7,7 @@ module TheFox
 			# Only one Track can run at a time.
 			# If you push a new Track on the Stack the underlying running
 			# will be paused.
-			class Stack < Model
+			class Stack < BasicModel
 				
 				attr_accessor :timr
 				# attr_accessor :tasks_path
@@ -82,6 +82,7 @@ module TheFox
 					changed
 				end
 				
+				# BasicModel Hook
 				def pre_save_to_file
 					# Tracks
 					@data = @tracks.map{ |track| [track.task.id, track.id] }
@@ -89,6 +90,7 @@ module TheFox
 					super()
 				end
 				
+				# BasicModel Hook
 				def post_load_from_file
 					unless @timr
 						raise 'Stack: @timr variable is not set.'

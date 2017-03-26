@@ -5,8 +5,8 @@ module TheFox
 	module Timr
 		module Command
 			
-			# Basic Command Class
-			class Command
+			# Basic Class
+			class BasicCommand
 				
 				include TheFox::Timr::Error
 				

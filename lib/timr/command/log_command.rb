@@ -7,7 +7,7 @@ module TheFox
 		module Command
 			
 			# By default this Command prints all todays Tracks.
-			class LogCommand < Command
+			class LogCommand < BasicCommand
 				
 				include TheFox::Timr::Error
 				

@@ -4,7 +4,7 @@ module TheFox
 		module Command
 			
 			# Print informations about a Task.
-			class TaskCommand < Command
+			class TaskCommand < BasicCommand
 				
 				include TheFox::Timr::Error
 				

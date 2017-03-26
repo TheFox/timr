@@ -3,7 +3,7 @@ module TheFox
 	module Timr
 		module Command
 			
-			class PauseCommand < Command
+			class PauseCommand < BasicCommand
 				
 				include TheFox::Timr::Error
 				

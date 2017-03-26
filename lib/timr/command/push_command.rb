@@ -4,7 +4,7 @@ module TheFox
 		module Command
 			
 			# Push a new Track to the Stack.
-			class PushCommand < Command
+			class PushCommand < BasicCommand
 				
 				include TheFox::Timr::Error
 				

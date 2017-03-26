@@ -10,7 +10,8 @@ module TheFox
 	module Timr
 		module Model
 			
-			class Model
+			# Basic Class
+			class BasicModel
 				
 				attr_accessor :changed
 				attr_accessor :file_path
@@ -140,7 +141,7 @@ module TheFox
 				# All methods in this block are static.
 				class << self
 					
-					# Split an SHA1 Hash into directories.
+					# Converts an SHA1 Hash into a path.
 					# 
 					# Function IO:
 					# 

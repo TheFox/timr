@@ -3,7 +3,7 @@ module TheFox
 	module Timr
 		module Command
 			
-			class HelpCommand < Command
+			class HelpCommand < BasicCommand
 				
 				def run
 					puts 'usage: timr [-V|--version] [-h|--help] [-C <path>] <command> [<args>]'
