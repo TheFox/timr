@@ -17,6 +17,7 @@ module TheFox
 					@help_opt = false
 					@show_opt = false
 					@add_opt = false
+					@remove_opt = false
 					
 					@tracks_opt = Set.new
 					@task_opt = false
@@ -52,6 +53,8 @@ module TheFox
 							@show_opt = true
 						when 'add'
 							@add_opt = true
+						when 'remove'
+							@remove_opt = true
 						
 						else
 							if /[a-f0-9]+/i.match(arg)
@@ -76,6 +79,8 @@ module TheFox
 						run_task_command
 					elsif @add_opt
 						run_add
+					elsif @remove_opt
+						run_remove
 					else
 						run_show
 					end
@@ -164,6 +169,17 @@ module TheFox
 					puts track_to_array(track).join("\n")
 				end
 				
+				def run_remove
+					@tracks_opt.each do |track_id|
+						task_track_h = @timr.remove_track({:track_id => track_id})
+						
+						task = task_track_h[:task]
+						track = task_track_h[:track]
+						
+						puts 'Deleted Track %s from Task %s.' % [track.short_id, task.short_id]
+					end
+				end
+				
 				# Is used to print the Task to STDOUT.
 				def track_to_array(track)
 					task = track.task
@@ -205,6 +221,7 @@ module TheFox
 					puts '                      [--start-date <YYYY-MM-DD> --start-time <HH:MM[:SS]>'
 					puts '                        [--end-date <YYYY-MM-DD> --end-time <HH:MM[:SS]>]]'
 					puts '                      <task_id>'
+					puts '   or: timr track remove <track_ids...>'
 					puts '   or: timr track [-h|--help]'
 					puts
 					puts 'Show Options'

@@ -66,17 +66,17 @@ module TheFox
 						raise StackError, "track variable must be a Track instance. #{track.class} given."
 					end
 					
-					puts "stack tracks: #{@tracks.count}" # @TODO remove
+					# puts "stack tracks: #{@tracks.count}" # @TODO remove
 					
-					puts "stack track to remove: #{track.short_id} #{track.object_id}"
-					@tracks.each do |track|
-						puts "stack track: #{track.short_id} #{track.object_id}"
-					end
+					# puts "stack track to remove: #{track.short_id} #{track.object_id}" # @TODO remove
+					# @tracks.each do |track|
+					# 	puts "stack track: #{track.short_id} #{track.object_id}" # @TODO remove
+					# end
 					
 					r = @tracks.delete(track)
 					
-					puts "stack tracks delete: #{r}" # @TODO remove
-					puts "stack left tracks: #{@tracks.count}" # @TODO remove
+					# puts "stack tracks delete: #{r.class}" # @TODO remove
+					# puts "stack left tracks: #{@tracks.count}" # @TODO remove
 					
 					# Mark Stack as changed.
 					changed

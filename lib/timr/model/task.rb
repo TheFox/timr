@@ -64,6 +64,15 @@ module TheFox
 					changed
 				end
 				
+				def remove_track(track)
+					track.task = nil
+					
+					@tracks.delete(track.id)
+					
+					# Mark Task as changed.
+					changed
+				end
+				
 				# Select Track by Time Range and/or Status.
 				# 
 				# Options:

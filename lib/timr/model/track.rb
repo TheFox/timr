@@ -329,6 +329,13 @@ module TheFox
 					track
 				end
 				
+				# Removes itself from parent Task.
+				def remove
+					if @task
+						@task.remove_track(self)
+					end
+				end
+				
 				# To String
 				def to_s
 					"Track_#{short_id}"

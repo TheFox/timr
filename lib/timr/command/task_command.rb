@@ -117,7 +117,7 @@ module TheFox
 						task = @timr.remove_task({:task_id => task_id})
 						
 						tracks_s = TranslationHelper.pluralize(@timr.stack.tracks.count, 'track', 'tracks')
-						puts 'Deleted task %s (%s).' % [task.short_id, tracks_s]
+						puts 'Deleted Task %s (%s).' % [task.short_id, tracks_s]
 					end
 				end
 				

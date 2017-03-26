@@ -10,6 +10,7 @@ module TheFox
 		class Timr
 			
 			include Model
+			include Error
 			
 			attr_reader :stack
 			
@@ -345,7 +346,7 @@ module TheFox
 				options ||= {}
 				options[:task_id] ||= nil
 				unless options[:task_id]
-					raise ArgumentError, 'task_id cannot be nil.'
+					raise TaskError, 'task_id cannot be nil.'
 				end
 				
 				task = get_task_by_id(options[:task_id])
@@ -362,6 +363,40 @@ module TheFox
 				task.delete_file
 				
 				task
+			end
+			
+			# Remove a Track.
+			# 
+			# Options:
+			# 
+			# - `:track_id` (String) 
+			def remove_track(options = {})
+				options ||= {}
+				options[:track_id] ||= nil
+				
+				unless options[:track_id]
+					raise TrackError, 'track_id cannot be nil.'
+				end
+				
+				track = get_track_by_id(options[:track_id])
+				unless track
+					raise TrackError, "Track for ID '#{options[:track_id]}' not found."
+				end
+				
+				task = track.task
+				
+				track.remove
+				
+				task.save_to_file
+				
+				# Remove Track from Stack.
+				@stack.remove(track)
+				@stack.save_to_file
+				
+				{
+					:task => task,
+					:track => track,
+				}
 			end
 			
 			# Find a Task by ID.
