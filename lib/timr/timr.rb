@@ -9,6 +9,8 @@ module TheFox
 		
 		class Timr
 			
+			include Model
+			
 			attr_reader :stack
 			
 			def initialize(cwd)
@@ -125,7 +127,7 @@ module TheFox
 						track = task.start(options)
 						
 						# Task Path
-						task_file_path = Model.create_path_by_id(@tasks_path, task.id)
+						task_file_path = BasicModel.create_path_by_id(@tasks_path, task.id)
 						
 						# Save Track to file.
 						task.save_to_file(task_file_path)
@@ -295,7 +297,7 @@ module TheFox
 						track = task.start(options)
 						
 						# Task Path
-						task_file_path = Model.create_path_by_id(@tasks_path, task.id)
+						task_file_path = BasicModel.create_path_by_id(@tasks_path, task.id)
 						
 						# Save Track to file.
 						task.save_to_file(task_file_path)
@@ -324,7 +326,7 @@ module TheFox
 				task = Task.create_task_from_hash(options)
 				
 				# Task Path
-				task_file_path = Model.create_path_by_id(@tasks_path, task.id)
+				task_file_path = BasicModel.create_path_by_id(@tasks_path, task.id)
 				
 				# Save Track to file.
 				task.save_to_file(task_file_path)
@@ -420,16 +422,16 @@ module TheFox
 				
 				filtered_tracks = Hash.new
 				@tasks.each do |task_id, task|
-					puts "task: #{task} #{task.tracks.count}" # @TODO remove
+					# puts "task: #{task} #{task.tracks.count}" # @TODO remove
 					
 					tracks = task.tracks(options)
 					filtered_tracks.merge!(tracks)
 					
-					puts "  -> #{filtered_tracks.count}" # @TODO remove
-					puts # @TODO remove
+					# puts "  -> #{filtered_tracks.count}" # @TODO remove
+					# puts # @TODO remove
 				end
 				
-				puts "#{Time.now.to_ms} #{self.class} #{__method__} END #{filtered_tracks.count}" # @TODO remove
+				# puts "#{Time.now.to_ms} #{self.class} #{__method__} END #{filtered_tracks.count}" # @TODO remove
 				
 				if options[:sort]
 					# Sort ASC by Begin DateTime, End DateTime.
@@ -438,7 +440,7 @@ module TheFox
 						t2 = t2.last
 						
 						cmp1 = t1.begin_datetime <=> t2.begin_datetime
-						puts "cmp1: #{cmp1}" # @TODO remove
+						#puts "cmp1: #{cmp1}" # @TODO remove
 						
 						if cmp1 == 0
 							t1.end_datetime <=> t2.end_datetime
@@ -474,7 +476,7 @@ module TheFox
 						next
 					end
 					
-					track_id = Model.get_id_from_path(@tasks_path, file)
+					track_id = BasicModel.get_id_from_path(@tasks_path, file)
 					
 					# Loads the Task from file into @tasks.
 					get_task_by_id(track_id)

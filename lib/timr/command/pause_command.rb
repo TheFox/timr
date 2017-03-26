@@ -5,6 +5,7 @@ module TheFox
 			
 			class PauseCommand < BasicCommand
 				
+				include TheFox::Timr::Helper
 				include TheFox::Timr::Error
 				
 				def initialize(argv = Array.new)
@@ -49,7 +50,7 @@ module TheFox
 					track = @timr.pause(options)
 					unless track
 						puts 'No running Track to pause.'
-						exit
+						return
 					end
 					
 					task = track.task

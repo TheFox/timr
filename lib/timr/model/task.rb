@@ -5,6 +5,8 @@ module TheFox
 			
 			class Task < BasicModel
 				
+				include TheFox::Timr::Error
+				
 				attr_reader :description
 				
 				def initialize
@@ -17,10 +19,6 @@ module TheFox
 					
 					# Data
 					@tracks = Hash.new
-					
-					# Cache
-					# @begin_datetime = nil
-					# @end_datetime = nil
 				end
 				
 				# Set name.
@@ -55,10 +53,6 @@ module TheFox
 				
 				def add_track(track)
 					@tracks[track.id] = track
-					
-					# Refresh Cache
-					# @begin_datetime = nil
-					# @end_datetime = nil
 					
 					# Mark Task as changed.
 					changed
@@ -139,14 +133,14 @@ module TheFox
 						when Array
 							status = options[:status]
 						else
-							raise ArgumentError, "Status wrong type #{options[:status].class}."
+							raise TaskError, "Status wrong type #{options[:status].class}."
 						end
 					else
 						status = nil
 					end
 					
 					if from && to && from > to
-						raise RangeError, 'From cannot be bigger than To.'
+						raise TaskError, 'From cannot be bigger than To.'
 					end
 					
 					filtered_tracks = Hash.new
@@ -450,16 +444,19 @@ module TheFox
 					options ||= {}
 					options[:track] ||= nil
 					
+					# puts "continue" # @TODO remove
+					
 					if @current_track
 						if @current_track.stopped?
-							# puts "Task continue"
+							# puts "Task continue: #{@current_track.short_id}" # @TODO remove
 							
+							# Duplicate and start.
 							@current_track = @current_track.dup
-							
 							@current_track.start(options)
 							
-							# Mark Task as changed.
-							changed
+							# puts "Task continue clone: #{@current_track.short_id}" # @TODO remove
+							
+							add_track(@current_track)
 						else
 							raise TrackError, "Cannot continue Track #{@current_track.short_id}: already running."
 						end
@@ -467,21 +464,17 @@ module TheFox
 						#raise NotImplementedError
 						
 						unless options[:track]
-							raise ArgumentError, 'Track not set.'
+							raise TrackError, 'Track not set.'
 						end
 						
-						# puts "continue clone track: #{options[:track].id}"
+						# puts "continue clone track: #{options[:track].id}" # @TODO remove
 						
+						# Duplicate and start.
 						@current_track = options[:track].dup
-						
 						@current_track.start(options)
+						# puts "clone started: #{@current_track.id}" # @TODO remove
 						
-						@tracks[@current_track.id] = @current_track
-						
-						# puts "clone started: #{@current_track.id}"
-						
-						# Mark Task as changed.
-						changed
+						add_track(@current_track)
 					end
 					
 					@current_track
@@ -494,7 +487,7 @@ module TheFox
 					@tracks.each do |track_id, track|
 						duration += track.duration(options)
 						
-						#puts "track #{track.short_id} #{duration}"
+						#puts "track #{track.short_id} #{duration}" # @TODO remove
 					end
 					duration
 				end
@@ -565,7 +558,7 @@ module TheFox
 					# Search a Task in a base path for a Track by ID.
 					# If found a file load it into a Task instance.
 					def load_task_from_file_with_id(base_path, task_id)
-						task_file_path = Model.find_file_by_id(base_path, task_id)
+						task_file_path = BasicModel.find_file_by_id(base_path, task_id)
 						if task_file_path
 							load_task_from_file(task_file_path)
 						end

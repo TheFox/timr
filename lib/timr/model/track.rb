@@ -7,6 +7,7 @@ module TheFox
 			
 			class Track < BasicModel
 				
+				include TheFox::Timr::Helper
 				include TheFox::Timr::Error
 				
 				# Parent Task instance
@@ -273,7 +274,7 @@ module TheFox
 				
 				# Is the Track stopped?
 				def stopped?
-					short_status == 'S' # stopped
+					status.short_status == 'S' # stopped
 				end
 				
 				# Title generated from message. If the message has multiple lines only the first
@@ -352,7 +353,7 @@ module TheFox
 				end
 				
 				def inspect
-					"#<Track #{@meta['id']}>"
+					"#<Track #{short_id}>"
 				end
 				
 				# All methods in this block are static.

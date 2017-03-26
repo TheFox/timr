@@ -34,6 +34,7 @@ module TheFox
 			# ```
 			class PopCommand < BasicCommand
 				
+				include TheFox::Timr::Helper
 				include TheFox::Timr::Error
 				
 				def initialize(argv = Array.new)
@@ -57,10 +58,12 @@ module TheFox
 						case arg
 						when '-h', '--help'
 							@help_opt = true
+						
 						when '-d', '--date'
 							@date_opt = argv.shift
 						when '-t', '--time'
 							@time_opt = argv.shift
+						
 						# when '--sd', '--start-date'
 						# 	@start_date_opt = argv.shift
 						# when '--st', '--start-time'
@@ -69,6 +72,7 @@ module TheFox
 						# 	@end_date_opt = argv.shift
 						# when '--et', '--end-time'
 						# 	@end_time_opt = argv.shift
+						
 						else
 							raise PopCommandError, "Unknown argument '#{arg}'. See 'timr pop --help'."
 						end
@@ -92,7 +96,7 @@ module TheFox
 					track = @timr.stop(options)
 					unless track
 						puts 'No running Track to pop/stop.'
-						exit
+						return
 					end
 					
 					task = track.task
@@ -121,7 +125,7 @@ module TheFox
 					track = @timr.continue(options)
 					unless track
 						puts 'No running Track left on Stack to continue.'
-						exit
+						return
 					end
 					
 					task = track.task

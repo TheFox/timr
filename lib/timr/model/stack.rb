@@ -29,7 +29,7 @@ module TheFox
 				
 				def start(track)
 					unless track.is_a?(Track)
-						raise ArgumentError, "track variable must be a Track instance. #{track.class} given."
+						raise StackError, "track variable must be a Track instance. #{track.class} given."
 					end
 					
 					stop
@@ -52,7 +52,7 @@ module TheFox
 				
 				def push(track)
 					unless track.is_a?(Track)
-						raise ArgumentError, "track variable must be a Track instance. #{track.class} given."
+						raise StackError, "track variable must be a Track instance. #{track.class} given."
 					end
 					
 					@tracks << track
@@ -63,7 +63,7 @@ module TheFox
 				
 				def remove(track)
 					unless track.is_a?(Track)
-						raise ArgumentError, "track variable must be a Track instance. #{track.class} given."
+						raise StackError, "track variable must be a Track instance. #{track.class} given."
 					end
 					
 					puts "stack tracks: #{@tracks.count}" # @TODO remove
@@ -92,8 +92,10 @@ module TheFox
 				
 				# BasicModel Hook
 				def post_load_from_file
+					#puts "Stack post_load_from_file" # @TODO remove
+					
 					unless @timr
-						raise 'Stack: @timr variable is not set.'
+						raise StackError, 'Stack: @timr variable is not set.'
 					end
 					
 					@tracks = @data.map{ |ids|
@@ -103,14 +105,28 @@ module TheFox
 							task = @timr.get_task_by_id(task_id)
 							if task
 								track = task.find_track_by_id(track_id)
+								
+								if track.nil?
+									# Task file was found but no Track with ID from Stack.
+									
+									# Mark Stack as changed.
+									changed
+									
+									nil
+								else
+									track
+								end
 							end
 						rescue Exception => e
+							# Task file for ID from Stack was not found.
+							
 							# Mark Stack as changed.
 							changed
 							
 							nil
 						end
 					}.select{ |track|
+						# puts "track found B: #{track.class}" # @TODO remove
 						!track.nil?
 					}
 				end

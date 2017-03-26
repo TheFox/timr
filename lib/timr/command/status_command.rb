@@ -43,8 +43,6 @@ module TheFox
 					
 					@timr = Timr.new(@cwd)
 					
-					# puts '----------'
-					#puts 'STACK'
 					if @full_opt
 						print_full_table
 					else

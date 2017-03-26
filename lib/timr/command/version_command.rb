@@ -6,8 +6,8 @@ module TheFox
 			class VersionCommand < BasicCommand
 				
 				def run
-					puts "#{TheFox::Timr::NAME} #{TheFox::Timr::VERSION} (#{TheFox::Timr::DATE})"
-					puts "#{TheFox::Timr::HOMEPAGE}"
+					puts "#{NAME} #{VERSION} (#{DATE})"
+					puts "#{HOMEPAGE}"
 				end
 				
 			end # class VersionCommand

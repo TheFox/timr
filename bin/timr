@@ -7,7 +7,7 @@ include TheFox::Timr::Command
 include TheFox::Timr::Error
 
 START_TIME = Time.now.to_ms
-puts "#{START_TIME} #{self.class} #{__method__}"
+puts "#{START_TIME} #{self.class} #{__method__} START"
 
 begin
 	command = BasicCommand.create_command_from_argv(ARGV.clone)
@@ -18,5 +18,5 @@ rescue TimrError => e
 end
 
 END_TIME = Time.now.to_ms
-puts "#{END_TIME} #{self.class} #{__method__}"
-puts "runtime: #{END_TIME - START_TIME} ms"
+puts "#{END_TIME} #{self.class} #{__method__} END"
+puts "TIMR RUNTIME: #{END_TIME - START_TIME} ms"

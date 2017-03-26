@@ -6,6 +6,7 @@ module TheFox
 			# Push a new Track to the Stack.
 			class PushCommand < BasicCommand
 				
+				include TheFox::Timr::Helper
 				include TheFox::Timr::Error
 				
 				def initialize(argv = Array.new)

@@ -5,6 +5,8 @@ module TheFox
 		# Uses seconds as basis.
 		class Duration
 			
+			include Error
+			
 			# Basis Data (int)
 			attr_reader :seconds
 			
@@ -81,7 +83,7 @@ module TheFox
 			# Adds two Durations.
 			def +(duration)
 				unless duration.is_a?(Duration)
-					raise ArgumentError, "Wrong type #{duration.class} for '+' function."
+					raise DurationError, "Wrong type #{duration.class} for '+' function."
 				end
 				
 				Duration.new(@seconds + duration.seconds)

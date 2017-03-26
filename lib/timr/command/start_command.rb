@@ -8,6 +8,8 @@ module TheFox
 			# Start a new Track.
 			class StartCommand < BasicCommand
 				
+				include TheFox::Timr::Model
+				include TheFox::Timr::Helper
 				include TheFox::Timr::Error
 				
 				def initialize(argv = Array.new)

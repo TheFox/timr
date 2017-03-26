@@ -11,6 +11,7 @@ module TheFox
 		# 		- IdError
 		# 		- TaskError
 		# 		- TrackError
+		# 		- StackError
 		# 	- DateTimeError
 		# 	- CommandError
 		# 		- ContinueCommandError
@@ -24,6 +25,7 @@ module TheFox
 		# 		- StopCommandError
 		# 		- TaskCommandError
 		# 		- TrackCommandError
+		# 	- DurationError
 		module Error
 		
 			class TimrError < StandardError
@@ -39,6 +41,9 @@ module TheFox
 			end
 			
 			class TrackError < ModelError
+			end
+			
+			class StackError < ModelError
 			end
 			
 			class DateTimeError < TimrError
@@ -78,6 +83,9 @@ module TheFox
 			end
 			
 			class TrackCommandError < CommandError
+			end
+			
+			class DurationError < TimrError
 			end
 			
 		end # module Error

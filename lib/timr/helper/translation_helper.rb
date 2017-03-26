@@ -1,25 +1,27 @@
 
 module TheFox
 	module Timr
-		
-		class TranslationHelper
+		module Helper
 			
-			# All methods in this block are static.
-			class << self
+			class TranslationHelper
 				
-				def pluralize(n, singular, plural=nil)
-					if n == 1
-						"1 #{singular}"
-					elsif plural
-						"#{n} #{plural}"
-					else
-						"#{n} #{singular}s"
+				# All methods in this block are static.
+				class << self
+					
+					def pluralize(n, singular, plural=nil)
+						if n == 1
+							"1 #{singular}"
+						elsif plural
+							"#{n} #{plural}"
+						else
+							"#{n} #{singular}s"
+						end
 					end
+					
 				end
 				
-			end
+			end # class TranslationHelper
 			
-		end # class DateTimeHelper
-		
+		end # module Helper
 	end # module Timr
 end # module TheFox

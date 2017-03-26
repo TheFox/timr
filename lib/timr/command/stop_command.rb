@@ -8,6 +8,7 @@ module TheFox
 			# Stop a Track.
 			class StopCommand < BasicCommand
 				
+				include TheFox::Timr::Helper
 				include TheFox::Timr::Error
 				
 				def initialize(argv = Array.new)
@@ -70,7 +71,7 @@ module TheFox
 					track = @timr.stop(options)
 					unless track
 						puts 'No running Track to stop.'
-						exit
+						return
 					end
 					
 					task = track.task

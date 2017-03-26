@@ -8,6 +8,7 @@ module TheFox
 			# This Command is very similar to LogCommand. By default it prints all Tasks of the current month.
 			class ReportCommand < BasicCommand
 				
+				include TheFox::Timr::Helper
 				include TheFox::Timr::Error
 				
 				def initialize(argv = [])
@@ -92,7 +93,7 @@ module TheFox
 					@timr = Timr.new(@cwd)
 					
 					if @csv_opt
-						puts "CSV: task=#{@tasks_opt} track=#{@tracks_opt}"
+						# puts "CSV: task=#{@tasks_opt} track=#{@tracks_opt}" # @TODO remove
 						
 						if @tasks_opt
 							export_tasks_csv

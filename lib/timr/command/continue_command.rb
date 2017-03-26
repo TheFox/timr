@@ -5,6 +5,7 @@ module TheFox
 			
 			class ContinueCommand < BasicCommand
 				
+				include TheFox::Timr::Helper
 				include TheFox::Timr::Error
 				
 				def initialize(argv = Array.new)
@@ -50,7 +51,7 @@ module TheFox
 					track = @timr.continue(options)
 					unless track
 						puts 'No running Track to continue.'
-						exit
+						return
 					end
 					
 					task = track.task

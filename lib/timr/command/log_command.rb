@@ -9,6 +9,7 @@ module TheFox
 			# By default this Command prints all todays Tracks.
 			class LogCommand < BasicCommand
 				
+				include TheFox::Timr::Helper
 				include TheFox::Timr::Error
 				
 				def initialize(argv = Array.new)
