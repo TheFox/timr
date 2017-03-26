@@ -8,6 +8,8 @@ module TheFox
 			# Start a new Track.
 			class StartCommand < Command
 				
+				include TheFox::Timr::Error
+				
 				def initialize(argv = Array.new)
 					super()
 					
@@ -43,7 +45,7 @@ module TheFox
 							@edit_opt = true
 						else
 							if arg[0] == '-'
-								raise ArgumentError, "Unknown argument '#{arg}'. See 'timr start --help'."
+								raise StartCommandError, "Unknown argument '#{arg}'. See 'timr start --help'."
 							else
 								if @id_opts.length < 2
 									@id_opts << arg
@@ -62,7 +64,7 @@ module TheFox
 					if @edit_opt
 						# Edit feature is still in alpha stage.
 						unless ENV['EDITOR']
-							raise 'EDITOR environment variable not set'
+							raise StartCommandError, 'EDITOR environment variable not set'
 						end
 						
 						tmpfile = Tempfile.new('timr_start_message')
@@ -107,7 +109,7 @@ module TheFox
 					
 					task = track.task
 					unless task
-						raise TrackError, "Tack #{track.id} has no Task."
+						raise TrackError, "Track #{track.id} has no Task."
 					end
 					
 					status = track.status.colorized

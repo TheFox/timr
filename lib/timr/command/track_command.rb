@@ -6,6 +6,8 @@ module TheFox
 			# Print informations about a Track.
 			class TrackCommand < Command
 				
+				include TheFox::Timr::Error
+				
 				def initialize(argv = [])
 					super()
 					# puts "argv '#{argv}'"
@@ -28,7 +30,7 @@ module TheFox
 							if /[a-f0-9]+/i.match(arg)
 								@tracks_opt << arg
 							else
-								raise ArgumentError, "Unknown argument '#{arg}'. See 'timr track --help'."
+								raise TrackCommandError, "Unknown argument '#{arg}'. See 'timr track --help'."
 							end
 						end
 					end

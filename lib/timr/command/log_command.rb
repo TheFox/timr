@@ -9,6 +9,8 @@ module TheFox
 			# By default this Command prints all todays Tracks.
 			class LogCommand < Command
 				
+				include TheFox::Timr::Error
+				
 				def initialize(argv = Array.new)
 					super()
 					# puts "#{Time.now.to_ms} #{self.class} #{__method__}"
@@ -59,7 +61,7 @@ module TheFox
 							@end_time = Time.parse(argv.shift)
 						
 						else
-							raise ArgumentError, "Unknown argument '#{arg}'. See 'timr log --help'."
+							raise LogCommandError, "Unknown argument '#{arg}'. See 'timr log --help'."
 						end
 					end
 					

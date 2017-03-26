@@ -6,6 +6,8 @@ module TheFox
 			# Push a new Track to the Stack.
 			class PushCommand < Command
 				
+				include TheFox::Timr::Error
+				
 				def initialize(argv = Array.new)
 					super()
 					
@@ -41,7 +43,7 @@ module TheFox
 						# 	@edit_opt = true
 						else
 							if arg[0] == '-'
-								raise ArgumentError, "Unknown argument '#{arg}'. See 'timr push --help'."
+								raise PushCommandError, "Unknown argument '#{arg}'. See 'timr push --help'."
 							else
 								if @id_opts.length < 2
 									@id_opts << arg
@@ -70,12 +72,12 @@ module TheFox
 					@timr = Timr.new(@cwd)
 					track = @timr.push(options)
 					unless track
-						raise 'Could not start a new Track.'
+						raise TrackError, 'Could not start a new Track.'
 					end
 					
 					task = track.task
 					unless task
-						raise "Tack #{track.id} has no Task."
+						raise TrackError, "Track #{track.id} has no Task."
 					end
 					
 					status = track.status.colorized

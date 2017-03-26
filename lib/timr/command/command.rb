@@ -8,6 +8,8 @@ module TheFox
 			# Basic Command Class
 			class Command
 				
+				include TheFox::Timr::Error
+				
 				# Current Working Directory
 				attr_accessor :cwd
 				
@@ -77,7 +79,7 @@ module TheFox
 								else
 									# puts "ELSE '#{arg[0]}'"
 									if arg[0] == '-'
-										raise ArgumentError, "Unknown argument '#{arg}'. See 'timr --help'."
+										raise CommandError, "Unknown argument '#{arg}'. See 'timr --help'."
 									else
 										# puts "set command_name"
 										command_name = arg
@@ -117,7 +119,7 @@ module TheFox
 							when 'report'
 								command = ReportCommand.new(command_argv)
 							else
-								raise "timr: '%s' is not a timr command. See 'timr --help'." % [command_name]
+								raise CommandError, "timr: '%s' is not a timr command. See 'timr --help'." % [command_name]
 							end
 						end
 						

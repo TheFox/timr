@@ -8,6 +8,8 @@ module TheFox
 			# Stop a Track.
 			class StopCommand < Command
 				
+				include TheFox::Timr::Error
+				
 				def initialize(argv = Array.new)
 					super()
 					# puts "argv '#{argv}'"
@@ -42,7 +44,7 @@ module TheFox
 						when '-a', '--append'
 							@append_opt = true
 						else
-							raise ArgumentError, "Unknown argument '#{arg}'. See 'timr stop --help'."
+							raise StopCommandError, "Unknown argument '#{arg}'. See 'timr stop --help'."
 						end
 					end
 				end
@@ -73,7 +75,7 @@ module TheFox
 					
 					task = track.task
 					unless task
-						raise "Tack #{track.id} has no Task."
+						raise TrackError, "Track #{track.id} has no Task."
 					end
 					
 					duration = track.duration.to_human

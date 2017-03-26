@@ -7,6 +7,8 @@ module TheFox
 			
 			class StatusCommand < Command
 				
+				include TheFox::Timr::Error
+				
 				def initialize(argv = Array.new)
 					#puts "argv '#{argv}'"
 					super()
@@ -28,7 +30,7 @@ module TheFox
 						when '-r', '--reverse'
 							@reverse_opt = true
 						else
-							raise ArgumentError, "Unknown argument '#{arg}'. See 'timr stop --help'."
+							raise StatusCommandError, "Unknown argument '#{arg}'. See 'timr stop --help'."
 						end
 					end
 				end

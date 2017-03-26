@@ -34,6 +34,8 @@ module TheFox
 			# ```
 			class PopCommand < Command
 				
+				include TheFox::Timr::Error
+				
 				def initialize(argv = Array.new)
 					super()
 					# puts "argv '#{argv}'"
@@ -68,7 +70,7 @@ module TheFox
 						# when '--et', '--end-time'
 						# 	@end_time_opt = argv.shift
 						else
-							raise ArgumentError, "Unknown argument '#{arg}'. See 'timr pop --help'."
+							raise PopCommandError, "Unknown argument '#{arg}'. See 'timr pop --help'."
 						end
 					end
 				end
@@ -95,7 +97,7 @@ module TheFox
 					
 					task = track.task
 					unless task
-						raise "Tack #{track.id} has no Task."
+						raise TrackError, "Track #{track.id} has no Task."
 					end
 					
 					duration = track.duration.to_human
@@ -124,7 +126,7 @@ module TheFox
 					
 					task = track.task
 					unless task
-						raise "Tack #{track.id} has no Task."
+						raise TrackError, "Track #{track.id} has no Task."
 					end
 					
 					duration = track.duration.to_human

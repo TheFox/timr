@@ -6,6 +6,8 @@ module TheFox
 			# Print informations about a Task.
 			class TaskCommand < Command
 				
+				include TheFox::Timr::Error
+				
 				def initialize(argv = Array.new)
 					super()
 					# puts "argv '#{argv}'"
@@ -50,7 +52,7 @@ module TheFox
 								puts 'collect tasks' # @TODO remove
 								@tasks_opt << arg
 							else
-								raise ArgumentError, "Unknown argument '#{arg}'. See 'timr task --help'."
+								raise TaskCommandError, "Unknown argument '#{arg}'. See 'timr task --help'."
 							end
 						end
 					end

@@ -8,6 +8,8 @@ module TheFox
 			# This Command is very similar to LogCommand. By default it prints all Tasks of the current month.
 			class ReportCommand < Command
 				
+				include TheFox::Timr::Error
+				
 				def initialize(argv = [])
 					super()
 					# puts "argv '#{argv}'"
@@ -48,13 +50,13 @@ module TheFox
 						when '--csv'
 							@csv_opt = argv.shift
 							if !@csv_opt
-								raise ArgumentError, 'Invalid value for --csv option.'
+								raise ReportCommandError, 'Invalid value for --csv option.'
 							end
 						when '--force'
 							@force_opt = true
 						
 						else
-							raise ArgumentError, "Unknown argument '#{arg}'. See 'timr report --help'."
+							raise ReportCommandError, "Unknown argument '#{arg}'. See 'timr report --help'."
 						end
 					end
 					
@@ -294,7 +296,7 @@ module TheFox
 						csv_file_handle = STDOUT
 					else
 						if @csv_opt.exist? && !@force_opt
-							raise "File '#{@csv_opt}' already exist. Use --force to overwrite it."
+							raise ReportCommandError, "File '#{@csv_opt}' already exist. Use --force to overwrite it."
 						end
 						#csv_file_handle = @csv_opt.to_s
 						csv_file_handle = File.open(@csv_opt, 'wb')
@@ -409,7 +411,7 @@ module TheFox
 						csv_file_handle = STDOUT
 					else
 						if @csv_opt.exist? && !@force_opt
-							raise "File '#{@csv_opt}' already exist. Use --force to overwrite it."
+							raise ReportCommandError, "File '#{@csv_opt}' already exist. Use --force to overwrite it."
 						end
 						#csv_file_handle = @csv_opt.to_s
 						csv_file_handle = File.open(@csv_opt, 'wb')

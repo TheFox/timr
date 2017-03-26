@@ -5,6 +5,8 @@ module TheFox
 			
 			class PauseCommand < Command
 				
+				include TheFox::Timr::Error
+				
 				def initialize(argv = Array.new)
 					super()
 					
@@ -26,7 +28,7 @@ module TheFox
 						when '-t', '--time'
 							@time_opt = argv.shift
 						else
-							raise ArgumentError, "Unknown argument '#{arg}'. See 'timr pause --help'."
+							raise PauseCommandError, "Unknown argument '#{arg}'. See 'timr pause --help'."
 						end
 					end
 				end
@@ -52,7 +54,7 @@ module TheFox
 					
 					task = track.task
 					unless task
-						raise "Tack #{track.id} has no Task."
+						raise TrackError, "Track #{track.id} has no Task."
 					end
 					
 					duration = track.duration.to_human
