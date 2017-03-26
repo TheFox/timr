@@ -56,6 +56,8 @@ module TheFox
 				end
 				
 				def add_track(track)
+					track.task = self
+					
 					@tracks[track.id] = track
 					
 					# Mark Task as changed.

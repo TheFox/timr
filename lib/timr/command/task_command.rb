@@ -133,6 +133,12 @@ module TheFox
 					
 					task = @timr.get_task_by_id(task_id)
 					
+					puts '--- OLD ---'
+					puts 'Task: %s' % [task.short_id]
+					puts '  Name: %s' % [task.name]
+					puts '  Description: %s' % [task.description]
+					puts
+					
 					if @name_opt
 						task.name = @name_opt
 					end
@@ -141,6 +147,11 @@ module TheFox
 					end
 					
 					task.save_to_file
+					
+					puts '--- NEW ---'
+					puts 'Task: %s' % [task.short_id]
+					puts '  Name: %s' % [task.name]
+					puts '  Description: %s' % [task.description]
 				end
 				
 				def run_show
