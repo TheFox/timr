@@ -8,6 +8,7 @@ require 'pp' # @TODO remove pp
 class TestTask < MiniTest::Test
 	
 	include TheFox::Timr::Model
+	include TheFox::Timr::Error
 	
 	def test_filter_tracks_from_nil_to_nil
 		track1 = Track.new
@@ -230,7 +231,7 @@ class TestTask < MiniTest::Test
 		from = Time.parse('2015-06-02 15:00:00')
 		to   = Time.parse('2015-06-01 15:00:00')
 		
-		assert_raises(RangeError) do
+		assert_raises(TaskError) do
 			task.tracks({:from => from, :to => to})
 		end
 	end
