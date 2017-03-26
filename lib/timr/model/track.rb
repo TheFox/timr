@@ -6,6 +6,8 @@ module TheFox
 		
 		class Track < Model
 			
+			include TheFox::Timr::Error
+			
 			# Parent Task instance
 			attr_accessor :task
 			
@@ -34,11 +36,11 @@ module TheFox
 				when Time
 					# OK
 				else
-					raise ArgumentError, "begin_datetime needs to be a String or Time, #{begin_datetime.class} given."
+					raise TrackError, "begin_datetime needs to be a String or Time, #{begin_datetime.class} given."
 				end
 				
 				if @end_datetime && begin_datetime >= @end_datetime
-					raise ArgumentError, 'begin_datetime must be lesser than end_datetime.'
+					raise TrackError, 'begin_datetime must be lesser than end_datetime.'
 				end
 				
 				@begin_datetime = begin_datetime
@@ -73,13 +75,16 @@ module TheFox
 				options ||= {}
 				options[:format] ||= HUMAN_DATETIME_FOMRAT
 				
-				begin_datetime(options).strftime(options[:format])
+				bdt = begin_datetime(options)
+				if bdt
+					bdt.strftime(options[:format])
+				end
 			end
 			
 			# Set end_datetime.
 			def end_datetime=(end_datetime)
 				if !@begin_datetime
-					raise ArgumentError, 'end_datetime cannot be set until begin_datetime is set.'
+					raise TrackError, 'end_datetime cannot be set until begin_datetime is set.'
 				end
 				
 				case end_datetime
@@ -88,11 +93,11 @@ module TheFox
 				when Time
 					# OK
 				else
-					raise ArgumentError, "end_datetime needs to be a String or Time, #{end_datetime.class} given."
+					raise TrackError, "end_datetime needs to be a String or Time, #{end_datetime.class} given."
 				end
 				
 				if end_datetime <= @begin_datetime
-					raise ArgumentError, 'end_datetime must be greater than begin_datetime.'
+					raise TrackError, 'end_datetime must be greater than begin_datetime.'
 				end
 				
 				@end_datetime = end_datetime
@@ -129,7 +134,10 @@ module TheFox
 				options ||= {}
 				options[:format] ||= HUMAN_DATETIME_FOMRAT
 				
-				end_datetime(options).strftime(options[:format])
+				edt = end_datetime(options)
+				if edt
+					edt.strftime(options[:format])
+				end
 			end
 			
 			# Start this Track. A Track cannot be restarted because it's the smallest time unit.
@@ -138,7 +146,7 @@ module TheFox
 				options[:message] ||= nil
 				
 				if @begin_datetime
-					raise Track, 'Cannot restart Track. Use dup() on this instance or create a new instance by using Track.new().'
+					raise TrackError, 'Cannot restart Track. Use dup() on this instance or create a new instance by using Track.new().'
 				end
 				
 				@begin_datetime = DateTimeHelper.get_datetime_from_options(options)

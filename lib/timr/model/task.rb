@@ -37,6 +37,16 @@ module TheFox
 				name
 			end
 			
+			# Get name or '-' if name is not set.
+			def name_s(max_length = nil)
+				s = name(max_length)
+				if s.nil?
+					'-'
+				else
+					s
+				end
+			end
+			
 			def description=(description)
 				@description = description
 				@changed = true

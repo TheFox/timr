@@ -8,6 +8,7 @@ require 'pathname'
 
 module TheFox
 	module Timr
+		#module Model
 		
 		class Model
 			
@@ -156,10 +157,10 @@ module TheFox
 						base_path = Pathname.new(base_path)
 					end
 					unless id.is_a?(String)
-						raise ArgumentError, "ID is not a String. #{id.class} given."
+						raise IdError, "ID is not a String. #{id.class} given."
 					end
 					if id.length <= 6
-						raise ArgumentError, "ID is too short for creating a path. Minimum length: 7"
+						raise IdError, "ID is too short for creating a path. Minimum length: 7"
 					end
 					
 					# puts "base_path: #{base_path}"
@@ -185,10 +186,10 @@ module TheFox
 						base_path = Pathname.new(base_path)
 					end
 					unless id.is_a?(String)
-						raise ArgumentError, "ID '#{id}' is not a String. #{id.class} given."
+						raise IdError, "ID '#{id}' is not a String. #{id.class} given."
 					end
 					if id.length < 4
-						raise ArgumentError, "ID '#{id}' is too short for find. Minimum length: 4"
+						raise IdError, "ID '#{id}' is too short for find. Minimum length: 4"
 					end
 					
 					if id.length == 40
@@ -233,7 +234,7 @@ module TheFox
 							end
 							
 							if path
-								raise ModelError, "ID '#{id}' is not a unique identifier."
+								raise ModelError.new(id), "ID '#{id}' is not a unique identifier."
 							else
 								path = file
 								
@@ -253,5 +254,6 @@ module TheFox
 			
 		end # class Task
 		
+		#end # module Model
 	end # module Timr
 end #module TheFox

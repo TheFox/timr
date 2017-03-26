@@ -39,8 +39,15 @@ Options:
 
 Sometimes you need to work on a task only temporary. You want to track the time for this as well. For example fixing a bug. When you fixed the bug you want to continue your actual work. Here comes `push` and `pop` into the game. It works like a stack. If you know [Git Stashing](https://git-scm.com/book/en/v1/Git-Tools-Stashing) it's very similar. But only for tasks. If you `push` a new task the below task will be paused. On `pop` the top task will be stopped and the next below will continued.
 
+## API
+
+- [API Reference Mainpage](https://timr.fox21.at/doc/)
+- [Inheritance Tree of Error classes](https://timr.fox21.at/doc/TheFox/Timr/Error.html)
+
 ## Project Links
 
+- [Timr Homepage](https://timr.fox21.at/)
+- [Timr Code Coverage](https://timr.fox21.at/coverage/)
 - [Timr Gem](https://rubygems.org/gems/timr)
 - [Travis CI Repository](https://travis-ci.org/TheFox/timr)
 

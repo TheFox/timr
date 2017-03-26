@@ -126,7 +126,7 @@ module TheFox
 			
 			def run_show_all
 				@timr.tasks.each do |task_id, task|
-					puts '%s %s' % [task.short_id, task.name]
+					puts '%s %s' % [task.short_id, task.name_s]
 				end
 			end
 			
@@ -189,8 +189,9 @@ module TheFox
 				puts '   or: timr task [-h|--help]'
 				puts
 				puts 'Subcommands'
-				puts '    show    Default command. When no Task ID is given print all Tasks.'
-				puts '    add     Add a new Task without starting it.'
+				puts '    show      Default command. When no Task ID is given print all Tasks.'
+				puts '    add       Add a new Task without starting it.'
+				puts '    remove    Remove an existing Task.'
 				puts
 				puts 'Show Options'
 				puts '    -t, --tracks             Show a list of Track IDs for each Task.'

@@ -100,12 +100,13 @@ module TheFox
 				duration = track.duration.to_human
 				status = track.status.colorized
 				
-				puts ' Task: %s %s' % [task.short_id, task.name]
+				puts '--- POPED ---'
+				puts ' Task: %s %s' % [task.short_id, task.name_s]
 				puts 'Track: %s %s' % [track.short_id, track.title]
 				puts '  Start: %s' % [track.begin_datetime_s]
 				puts '  End:   %s' % [track.end_datetime_s]
 				puts '  Duration: %16s' % [duration]
-				puts '  Status: %s (popped)' % [status]
+				puts '  Status: %s' % [status]
 				puts
 				
 				# Continue
@@ -128,15 +129,17 @@ module TheFox
 				duration = track.duration.to_human
 				status = track.status.colorized
 				
-				puts ' Task: %s %s' % [task.short_id, task.name]
+				puts '--- CONTINUED ---'
+				puts ' Task: %s %s' % [task.short_id, task.name_s]
 				puts 'Track: %s %s' % [track.short_id, track.title]
 				puts '  Start: %s' % [track.begin_datetime_s]
 				puts '  End:   %s' % [track.end_datetime_s]
 				puts '  Duration: %16s' % [duration]
-				puts '  Status: %s (continued)' % [status]
+				puts '  Status: %s' % [status]
 				puts
 				
-				puts 'Stack: %s' % [TranslationHelper.pluralize(@timr.stack.tracks.count, 'track', 'tracks')]
+				stack = TranslationHelper.pluralize(@timr.stack.tracks.count, 'track', 'tracks')
+				puts 'Stack: %s' % [stack]
 			end
 			
 			private

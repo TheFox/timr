@@ -6,16 +6,19 @@ require 'timr'
 
 class TestTrack < MiniTest::Test
 	
+	include TheFox::Timr
+	include TheFox::Timr::Error
+	
 	def test_set_begin_end_datetime
-		track = TheFox::Timr::Track.new
+		track = Track.new
 		
-		assert_raises(ArgumentError) do
+		assert_raises(TrackError) do
 			track.end_datetime = nil
 		end
 		
 		track.begin_datetime = '2017-01-01 01:00:00'
 		
-		assert_raises(ArgumentError) do
+		assert_raises(TrackError) do
 			track.end_datetime = nil # Wrong type.
 		end
 		
@@ -25,35 +28,35 @@ class TestTrack < MiniTest::Test
 	end
 	
 	def test_set_begin_end_datetime_same
-		track = TheFox::Timr::Track.new
+		track = Track.new
 		
 		track.begin_datetime = '2017-01-02 01:00:00'
 		
-		assert_raises(ArgumentError) do
+		assert_raises(TrackError) do
 			track.end_datetime = '2017-01-01 01:00:00'
 		end
-		assert_raises(ArgumentError) do
+		assert_raises(TrackError) do
 			track.end_datetime = '2017-01-02 01:00:00'
 		end
 		
 		track.end_datetime = '2017-01-03 01:00:00'
 		track.begin_datetime = '2017-01-03 00:00:00'
 		
-		assert_raises(ArgumentError) do
+		assert_raises(TrackError) do
 			track.begin_datetime = '2017-01-03 01:00:00'
 		end
-		assert_raises(ArgumentError) do
+		assert_raises(TrackError) do
 			track.begin_datetime = '2017-01-03 02:00:00'
 		end
 	end
 	
 	def test_set_begin_end_datetime_wrong_type
-		track = TheFox::Timr::Track.new
+		track = Track.new
 		
-		assert_raises(ArgumentError) do
+		assert_raises(TrackError) do
 			track.begin_datetime = Date.new
 		end
-		assert_raises(ArgumentError) do
+		assert_raises(TrackError) do
 			track.end_datetime = Date.new
 		end
 	end
@@ -64,7 +67,7 @@ class TestTrack < MiniTest::Test
 			:date => nil,
 			:time => nil,
 		}
-		track = TheFox::Timr::Track.new
+		track = Track.new
 		track.start(options)
 		
 		#puts "time: #{track.begin_datetime.strftime('%F %T %z')}"
@@ -79,9 +82,9 @@ class TestTrack < MiniTest::Test
 			:date => '2011-12-13',
 			:time => nil,
 		}
-		track = TheFox::Timr::Track.new
+		track = Track.new
 		
-		assert_raises(ArgumentError) do
+		assert_raises(DateTimeError) do
 			track.start(options)
 		end
 	end
@@ -92,7 +95,7 @@ class TestTrack < MiniTest::Test
 	# 		:date => '2011-12-13',
 	# 		:time => '15',
 	# 	}
-	# 	track = TheFox::Timr::Track.new
+	# 	track = Track.new
 	# 	track.start(options)
 		
 	# 	#puts "time: #{track.begin_datetime.strftime('%F %T %z')}"
@@ -107,7 +110,7 @@ class TestTrack < MiniTest::Test
 			:date => '2011-12-13',
 			:time => '15:1',
 		}
-		track = TheFox::Timr::Track.new
+		track = Track.new
 		track.start(options)
 		
 		# puts "time: #{track.begin_datetime.strftime('%F %T %z')}"
@@ -122,7 +125,7 @@ class TestTrack < MiniTest::Test
 			:date => '2011-12-13',
 			:time => '15:1:2',
 		}
-		track = TheFox::Timr::Track.new
+		track = Track.new
 		track.start(options)
 		
 		# puts
@@ -140,7 +143,7 @@ class TestTrack < MiniTest::Test
 			:date => '2011-12-13',
 			:time => '15:01:02+03:00',
 		}
-		track = TheFox::Timr::Track.new
+		track = Track.new
 		track.start(options)
 		
 		# puts
@@ -157,7 +160,7 @@ class TestTrack < MiniTest::Test
 	# 		:date => '2010-11-12',
 	# 		:time => DateTime.parse('2012-12-13 14:15:16 +05:00'),
 	# 	}
-	# 	track = TheFox::Timr::Track.new
+	# 	track = Track.new
 	# 	track.start(options)
 		
 	# 	#puts "time: #{track.begin_datetime.strftime('%F %T %z')}"
@@ -172,7 +175,7 @@ class TestTrack < MiniTest::Test
 	# 		:date => '2010-11-12',
 	# 		:time => Date.parse('2012-12-13'),
 	# 	}
-	# 	track = TheFox::Timr::Track.new
+	# 	track = Track.new
 	# 	track.start(options)
 		
 	# 	#puts "time: #{track.begin_datetime.strftime('%F %T %z')}"
@@ -189,7 +192,7 @@ class TestTrack < MiniTest::Test
 	# 		:date => DateTime.parse('2011-12-13 18:19:20 +0300'),
 	# 		:time => '15:13:14',
 	# 	}
-	# 	track = TheFox::Timr::Track.new
+	# 	track = Track.new
 	# 	track.start(options)
 		
 	# 	#puts "time: #{track.begin_datetime.strftime('%F %T %z')}"
@@ -204,7 +207,7 @@ class TestTrack < MiniTest::Test
 	# 		:date => Time.parse('18:19:20 +0400'),
 	# 		:time => '15:13:14',
 	# 	}
-	# 	track = TheFox::Timr::Track.new
+	# 	track = Track.new
 	# 	track.start(options)
 		
 	# 	#puts "time: #{track.begin_datetime.strftime('%F %T %z')}"
@@ -216,7 +219,7 @@ class TestTrack < MiniTest::Test
 	# end
 	
 	def test_begin_end_datetime_s
-		track = TheFox::Timr::Track.new
+		track = Track.new
 		track.begin_datetime = '2017-01-01 01:00:00'
 		track.end_datetime   = '2017-01-01 02:00:00'
 		
@@ -238,7 +241,7 @@ class TestTrack < MiniTest::Test
 		options = {
 			:message => 'msg1',
 		}
-		track = TheFox::Timr::Track.new
+		track = Track.new
 		track.start(options)
 		assert_equal('msg1', track.message)
 		
@@ -250,7 +253,7 @@ class TestTrack < MiniTest::Test
 	end
 	
 	def test_duration
-		track = TheFox::Timr::Track.new
+		track = Track.new
 		assert_equal(0, track.duration.to_i)
 		
 		track.begin_datetime = '2017-01-01 01:00:00'
@@ -274,30 +277,30 @@ class TestTrack < MiniTest::Test
 	end
 	
 	def test_title_nil
-		track = TheFox::Timr::Track.new
+		track = Track.new
 		assert_nil(track.title)
 	end
 	
 	def test_title_one_row
-		track = TheFox::Timr::Track.new
+		track = Track.new
 		track.message = "Hello World"
 		assert_equal('Hello World', track.title)
 	end
 	
 	def test_title_two_rows
-		track = TheFox::Timr::Track.new
+		track = Track.new
 		track.message = "Hello World\nMy second row."
 		assert_equal('Hello World', track.title)
 	end
 	
 	def test_title_three_rows
-		track = TheFox::Timr::Track.new
+		track = Track.new
 		track.message = "Hello World\n\nLonger description."
 		assert_equal('Hello World', track.title)
 	end
 	
 	def test_title_max_length
-		track = TheFox::Timr::Track.new
+		track = Track.new
 		track.message = "Hello World\n\nLonger description."
 		
 		#             123456789ab
@@ -310,7 +313,7 @@ class TestTrack < MiniTest::Test
 	end
 	
 	def test_status
-		track = TheFox::Timr::Track.new
+		track = Track.new
 		assert_equal('-', track.status.short_status)
 		assert_equal(true, track.status.long_status.length > 5)
 		
@@ -324,7 +327,7 @@ class TestTrack < MiniTest::Test
 	end
 	
 	def test_status_paused
-		track = TheFox::Timr::Track.new
+		track = Track.new
 		
 		track.paused = false
 		assert_equal('-', track.status.short_status)

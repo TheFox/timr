@@ -287,7 +287,7 @@ module TheFox
 			end
 			
 			def export_tasks_csv
-				puts "xxxxxx" # @TODO remove
+				# puts "xxxxxx" # @TODO remove
 				
 				if @csv_opt == '-'
 					csv_file_handle = STDOUT

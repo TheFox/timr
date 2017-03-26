@@ -110,12 +110,13 @@ module TheFox
 				end
 				
 				status = track.status.colorized
+				stack = TranslationHelper.pluralize(@timr.stack.tracks.count, 'track', 'tracks')
 				
-				puts ' Task: %s %s' % [task.short_id, task.name]
+				puts ' Task: %s %s' % [task.short_id, task.name_s]
 				puts 'Track: %s %s' % [track.short_id, track.title]
 				puts '  Start: %s' % [track.begin_datetime_s]
 				puts '  Status: %s' % [status]
-				puts 'Stack: %s' % [TranslationHelper.pluralize(@timr.stack.tracks.count, 'track', 'tracks')]
+				puts 'Stack: %s' % [stack]
 			end
 			
 			private

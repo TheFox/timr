@@ -77,15 +77,15 @@ module TheFox
 				
 				duration = track.duration.to_human
 				status = track.status.colorized
+				stack = TranslationHelper.pluralize(@timr.stack.tracks.count, 'track', 'tracks')
 				
-				# puts '----------'
-				puts ' Task: %s %s' % [task.short_id, task.name]
+				puts ' Task: %s %s' % [task.short_id, task.name_s]
 				puts 'Track: %s %s' % [track.short_id, track.title]
 				puts '  Start: %s' % [track.begin_datetime_s]
 				puts '  End:   %s' % [track.end_datetime_s]
 				puts '  Duration: %16s' % [duration]
 				puts '  Status: %s' % [status]
-				puts 'Stack: %s' % [TranslationHelper.pluralize(@timr.stack.tracks.count, 'track', 'tracks')]
+				puts 'Stack: %s' % [stack]
 			end
 			
 			private

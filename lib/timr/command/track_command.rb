@@ -78,7 +78,7 @@ module TheFox
 					task = track.task
 					
 					track_s = Array.new
-					track_s << ' Task: %s %s' % [task.short_id, task.name]
+					track_s << ' Task: %s %s' % [task.short_id, task.name_s]
 					track_s << 'Track: %s %s' % [track.short_id, track.name]
 					
 					track_s << '  Duration: %s' % [duration_human]

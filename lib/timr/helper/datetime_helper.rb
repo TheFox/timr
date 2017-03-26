@@ -11,6 +11,8 @@ module TheFox
 			# All methods in this block are static.
 			class << self
 				
+				include TheFox::Timr::Error
+				
 				def convert_date(date)
 					case date
 					when String
@@ -93,7 +95,7 @@ module TheFox
 					options[:time] ||= nil
 					
 					if options[:date] && !options[:time]
-						raise ArgumentError, 'You also need to set a time when giving a date.'
+						raise DateTimeError, 'You also need to set a time when giving a date.'
 					end
 					
 					datetime_a = []

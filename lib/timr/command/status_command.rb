@@ -104,29 +104,30 @@ module TheFox
 			end
 			
 			def print_full_table
-				table_has_rows = false
-				
+				tracks = Array.new
 				track_c = 0
 				get_tracks.each do |track|
 					track_c += 1
-					table_has_rows = true
 					
 					task = track.task
 					duration = track.duration.to_human
 					
 					status = track.status.colorized
 					
-					puts '--- #%d ---' % [track_c]
-					puts ' Task: %s %s' % [task.short_id, task.name]
-					puts 'Track: %s %s' % [track.short_id, track.title]
-					puts '  Start: %s' % [track.begin_datetime_s]
-					puts '  End:   %s' % [track.end_datetime_s || '--']
-					puts '  Duration: %16s' % [duration]
-					puts '  Status: %s' % [status]
-					puts
+					track_s = Array.new
+					track_s << '--- #%d ---' % [track_c]
+					track_s << ' Task: %s %s' % [task.short_id, task.name_s]
+					track_s << 'Track: %s %s' % [track.short_id, track.title]
+					track_s << '  Start: %s' % [track.begin_datetime_s]
+					track_s << '  End:   %s' % [track.end_datetime_s || '--']
+					track_s << '  Duration: %16s' % [duration]
+					track_s << '  Status: %s' % [status]
+					tracks << track_s
 				end
 				
-				unless table_has_rows
+				if tracks.count > 0
+					puts tracks.map{ |track_s| track_s.join("\n") }.join("\n\n")
+				else
 					print_no_tracks
 				end
 			end
@@ -151,13 +152,18 @@ module TheFox
 				puts '    -r, --reverse    Reverse the list.'
 				puts
 				puts 'Columns'
-				puts '    S        Status: R = Running, S = Stopped/Paused,' # P = Paused,
-				puts '                     U = Unknown, - = Not started yet.'
+				puts '    S        Status'
 				puts '    START    Track Start Date'
 				puts '    END      Track End Date'
 				puts '    DUR      Track Duration'
 				puts '    TASK     Task ID'
 				puts '    TRACK    Track ID and Title.'
+				puts
+				puts 'Status'
+				puts '    R    Running'
+				puts '    S    Stopped'
+				puts '    U    Unknown'
+				puts '    -    Not started yet.'
 				puts
 			end
 			

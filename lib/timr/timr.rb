@@ -352,7 +352,7 @@ module TheFox
 				
 				# Get running Tracks and remove these from Stack.
 				task.tracks({:status => ?R}).each do |track_id, track|
-					puts "TRACK: #{track}" # @TODO remove
+					# puts "TRACK: #{track}" # @TODO remove
 					@stack.remove(track)
 				end
 				@stack.save_to_file
@@ -365,7 +365,7 @@ module TheFox
 			def get_task_by_id(task_id)
 				task = @tasks[task_id]
 				
-				puts "Timr get_task_by_id: #{task_id}" # @TODO remove
+				# puts "Timr get_task_by_id: #{task_id}" # @TODO remove
 				
 				if task
 					# Take Task from cache.
@@ -382,7 +382,7 @@ module TheFox
 					end
 				end
 				
-				puts "Timr Tasks: #{@tasks.count} #{@tasks.map{|id, t| t.short_id}}" # @TODO remove
+				# puts "Timr Tasks: #{@tasks.count} #{@tasks.map{|id, t| t.short_id}}" # @TODO remove
 				
 				task
 			end
