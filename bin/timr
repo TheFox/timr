@@ -3,10 +3,12 @@
 
 require 'timr'
 
+include TheFox::Timr::Command
+
 START_TIME = Time.now.to_ms
 puts "#{START_TIME} #{self.class} #{__method__}"
 
-command = TheFox::Timr::Command.create_command_from_argv(ARGV.clone)
+command = Command.create_command_from_argv(ARGV.clone)
 begin
 	command.run
 rescue TheFox::Timr::TimrError => e

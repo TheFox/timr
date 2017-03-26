@@ -16,8 +16,9 @@ require 'timr/model/stack'
 require 'timr/model/config'
 require 'timr/duration'
 require 'timr/status'
+require 'timr/table'
 
-require 'timr/command'
+require 'timr/command/command'
 require 'timr/command/help_command'
 require 'timr/command/version_command'
 require 'timr/command/status_command'
@@ -31,7 +32,5 @@ require 'timr/command/log_command'
 require 'timr/command/task_command'
 require 'timr/command/track_command'
 require 'timr/command/report_command'
-
-require 'timr/table'
 
 require 'timr/timr'
