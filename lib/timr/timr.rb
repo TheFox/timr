@@ -364,6 +364,7 @@ module TheFox
 				task
 			end
 			
+			# Find a Task by ID.
 			def get_task_by_id(task_id)
 				task = @tasks[task_id]
 				
@@ -389,6 +390,7 @@ module TheFox
 				task
 			end
 			
+			# Find a Track by ID.
 			def get_track_by_id(track_id)
 				@tasks.each do |task_id, task|
 					# puts "Timr search track: #{task}"

@@ -3,7 +3,9 @@ module TheFox
 	module Timr
 		module Command
 			
-			# Print informations about a Task.
+			# - Print informations about a Task.
+			# - Add/remove a Task.
+			# - Edit (set) a Task.
 			class TaskCommand < BasicCommand
 				
 				include TheFox::Timr::Model
@@ -18,6 +20,7 @@ module TheFox
 					@show_opt = false
 					@add_opt = false
 					@remove_opt = false
+					@set_opt = false
 					
 					@tracks_opt = false
 					@name_opt = nil
@@ -40,12 +43,16 @@ module TheFox
 							@name_opt = argv.shift
 						when '--desc', '--description', '-d' # -d not official
 							@description_opt = argv.shift
+						
 						when 'show'
 							@show_opt = true
 						when 'add'
 							@add_opt = true
 						when 'remove'
 							@remove_opt = true
+						when 'set'
+							@set_opt = true
+						
 						when Task
 							@tasks_opt << arg
 						else
@@ -74,6 +81,8 @@ module TheFox
 						run_add
 					elsif @remove_opt
 						run_remove
+					elsif @set_opt
+						run_set
 					else
 						if @tasks_opt.count == 0
 							run_show_all
@@ -110,6 +119,28 @@ module TheFox
 						tracks_s = TranslationHelper.pluralize(@timr.stack.tracks.count, 'track', 'tracks')
 						puts 'Deleted task %s (%s).' % [task.short_id, tracks_s]
 					end
+				end
+				
+				def run_set
+					if @tasks_opt.count == 0
+						raise TaskCommandError, 'No Task ID given.'
+					end
+					task_id = @tasks_opt.first
+					
+					if @name_opt.nil? && @description_opt.nil?
+						raise TaskCommandError, 'No option given. Use --name or --description.'
+					end
+					
+					task = @timr.get_task_by_id(task_id)
+					
+					if @name_opt
+						task.name = @name_opt
+					end
+					if @description_opt
+						task.description = @description_opt
+					end
+					
+					task.save_to_file
 				end
 				
 				def run_show
@@ -191,17 +222,20 @@ module TheFox
 				def help
 					puts 'usage: timr task [show] [[-t|--tracks] <task_ids...>]'
 					puts 'usage: timr task add [-n|--name <name>] [--description <str>]'
+					puts 'usage: timr task remove <task_ids...>'
+					puts 'usage: timr task set [-n|--name <name>] [--description <str>] <task_id>'
 					puts '   or: timr task [-h|--help]'
 					puts
 					puts 'Subcommands'
 					puts '    show      Default command. When no Task ID is given print all Tasks.'
 					puts '    add       Add a new Task without starting it.'
 					puts '    remove    Remove an existing Task.'
+					puts '    set       Edit an existing Task.'
 					puts
 					puts 'Show Options'
 					puts '    -t, --tracks             Show a list of Track IDs for each Task.'
 					puts
-					puts 'Add Options'
+					puts 'Add/Set Options'
 					puts '    -n, --name <name>              Name of the Task.'
 					puts '    --desc, --description <str>    Description of the Task.'
 					puts

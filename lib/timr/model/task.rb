@@ -24,7 +24,9 @@ module TheFox
 				# Set name.
 				def name=(name)
 					@name = name
-					@changed = true
+					
+					# Mark Task as changed.
+					changed
 				end
 				
 				# Get name.
@@ -48,7 +50,9 @@ module TheFox
 				
 				def description=(description)
 					@description = description
-					@changed = true
+					
+					# Mark Task as changed.
+					changed
 				end
 				
 				def add_track(track)

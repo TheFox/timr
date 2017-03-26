@@ -3,7 +3,8 @@ module TheFox
 	module Timr
 		module Command
 			
-			# Print informations about a Track.
+			# - Print Track informations.
+			# - Add/remove a Track.
 			class TrackCommand < BasicCommand
 				
 				include TheFox::Timr::Error
