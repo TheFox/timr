@@ -14,6 +14,8 @@ module TheFox
 					# puts "argv '#{argv}'"
 					
 					@help_opt = false
+					@show_opt = false
+					
 					@tracks_opt = Set.new
 					@task_opt = false
 					
@@ -27,6 +29,10 @@ module TheFox
 							@help_opt = true
 						when '-t', '--task'
 							@task_opt = true
+						
+						when 'show'
+							@show_opt = true
+						
 						else
 							if /[a-f0-9]+/i.match(arg)
 								@tracks_opt << arg
@@ -49,7 +55,7 @@ module TheFox
 					if @task_opt
 						run_task_command
 					else
-						run_normal
+						run_show
 					end
 				end
 				
@@ -71,10 +77,13 @@ module TheFox
 					task_command.run
 				end
 				
-				def run_normal
+				def run_show
 					tracks = Array.new
 					@tracks_opt.each do |track_id|
 						track = @timr.get_track_by_id(track_id)
+						unless track
+							raise TrackCommandError, "Track for ID '#{track_id}' not found."
+						end
 						
 						duration_human = track.duration.to_human
 						duration_man_days = track.duration.to_man_days
@@ -106,12 +115,12 @@ module TheFox
 					end
 					
 					if tracks.count > 0
-						puts tracks.map{ |t| t.join("\n") }.join("\n\n")
+						puts tracks.map{ |track_s| track_s.join("\n") }.join("\n\n")
 					end
 				end
 				
 				def help
-					puts 'usage: timr track [-t|--task] <track_ids...>'
+					puts 'usage: timr track [show] [-t|--task] <track_ids...>'
 					puts '   or: timr track [-h|--help]'
 					puts
 					puts 'Options'

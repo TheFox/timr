@@ -393,13 +393,15 @@ module TheFox
 			# Find a Track by ID.
 			def get_track_by_id(track_id)
 				@tasks.each do |task_id, task|
-					# puts "Timr search track: #{task}"
+					# puts "Timr search track: #{task}" # @TODO remove
 					
 					track = task.find_track_by_id(track_id)
 					if track
 						return track
 					end
 				end
+				
+				nil
 			end
 			
 			# Get all Tasks.
