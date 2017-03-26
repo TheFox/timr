@@ -47,37 +47,37 @@ module TheFox
 			class CommandError < TimrError
 			end
 			
-			class ContinueCommandError < TimrError
+			class ContinueCommandError < CommandError
 			end
 			
-			class LogCommandError < TimrError
+			class LogCommandError < CommandError
 			end
 			
-			class PauseCommandError < TimrError
+			class PauseCommandError < CommandError
 			end
 			
-			class PopCommandError < TimrError
+			class PopCommandError < CommandError
 			end
 			
-			class PushCommandError < TimrError
+			class PushCommandError < CommandError
 			end
 			
-			class ReportCommandError < TimrError
+			class ReportCommandError < CommandError
 			end
 			
-			class StartCommandError < TimrError
+			class StartCommandError < CommandError
 			end
 			
-			class StatusCommandError < TimrError
+			class StatusCommandError < CommandError
 			end
 			
-			class StopCommandError < TimrError
+			class StopCommandError < CommandError
 			end
 			
-			class TaskCommandError < TimrError
+			class TaskCommandError < CommandError
 			end
 			
-			class TrackCommandError < TimrError
+			class TrackCommandError < CommandError
 			end
 			
 		end # module Error

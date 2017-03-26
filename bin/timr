@@ -4,17 +4,18 @@
 require 'timr'
 
 include TheFox::Timr::Command
+include TheFox::Timr::Error
 
 START_TIME = Time.now.to_ms
 puts "#{START_TIME} #{self.class} #{__method__}"
 
-command = BasicCommand.create_command_from_argv(ARGV.clone)
 begin
+	command = BasicCommand.create_command_from_argv(ARGV.clone)
 	command.run
-rescue TheFox::Timr::TimrError => e
-	puts "error: #{e}"
+	command.shutdown
+rescue TimrError => e
+	puts "timr error: #{e}"
 end
-command.shutdown
 
 END_TIME = Time.now.to_ms
 puts "#{END_TIME} #{self.class} #{__method__}"

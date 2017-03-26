@@ -8,8 +8,6 @@ module TheFox
 			# Basic Class
 			class BasicCommand
 				
-				include TheFox::Timr::Error
-				
 				# Current Working Directory
 				attr_accessor :cwd
 				
@@ -33,11 +31,13 @@ module TheFox
 				# All methods in this block are static.
 				class << self
 					
+					include TheFox::Timr::Error
+					
 					# Creates a new Command instance for each command string.
 					# 
 					# For example, it returns a new StopCommand instance when `stop` String is provided by `argv` Array.
 					# 
-					# Used by `bin/timr`.
+					# Primary used by `bin/timr`.
 					def create_command_from_argv(argv)
 						# optparser = SimpleOptParser.new
 						
@@ -119,7 +119,7 @@ module TheFox
 							when 'report'
 								command = ReportCommand.new(command_argv)
 							else
-								raise CommandError, "timr: '%s' is not a timr command. See 'timr --help'." % [command_name]
+								raise CommandError, "'%s' is not a timr command. See 'timr --help'." % [command_name]
 							end
 						end
 						
