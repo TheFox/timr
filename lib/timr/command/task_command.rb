@@ -233,8 +233,8 @@ module TheFox
 				def help
 					puts 'usage: timr task [show] [[-t|--tracks] <task_ids...>]'
 					puts 'usage: timr task add [-n|--name <name>] [--description <str>]'
-					puts 'usage: timr task remove <task_ids...>'
 					puts 'usage: timr task set [-n|--name <name>] [--description <str>] <task_id>'
+					puts 'usage: timr task remove <task_ids...>'
 					puts '   or: timr task [-h|--help]'
 					puts
 					puts 'Subcommands'

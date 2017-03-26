@@ -7,7 +7,7 @@ Timr is a time tracking tool for the [Command-line](https://en.wikipedia.org/wik
 ## Install
 
 The preferred method of installation is via RubyGems.org:  
-<https://rubygems.org/gems/thefox-wallet>
+<https://rubygems.org/gems/timr>
 
 	gem install timr
 

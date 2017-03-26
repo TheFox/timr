@@ -46,6 +46,9 @@ module TheFox
 					end
 					
 					@begin_datetime = begin_datetime
+					
+					# Mark Track as changed.
+					changed
 				end
 				
 				# Get begin_datetime.
@@ -103,6 +106,9 @@ module TheFox
 					end
 					
 					@end_datetime = end_datetime
+					
+					# Mark Track as changed.
+					changed
 				end
 				
 				# Get end_datetime.
@@ -191,6 +197,7 @@ module TheFox
 					
 					@paused = options[:paused]
 					
+					# Mark Track as changed.
 					changed
 				end
 				

@@ -18,9 +18,11 @@ module TheFox
 					@show_opt = false
 					@add_opt = false
 					@remove_opt = false
+					@set_opt = false
 					
 					@tracks_opt = Set.new
 					@task_opt = false
+					@task_id_opt = nil
 					@message_opt = nil
 					@start_date_opt = nil
 					@start_time_opt = nil
@@ -36,7 +38,11 @@ module TheFox
 						when '-h', '--help'
 							@help_opt = true
 						when '-t', '--task'
-							@task_opt = true
+							if @set_opt
+								@task_id_opt = argv.shift
+							else
+								@task_opt = true
+							end
 						
 						when '-m', '--message'
 							@message_opt = argv.shift
@@ -55,6 +61,8 @@ module TheFox
 							@add_opt = true
 						when 'remove'
 							@remove_opt = true
+						when 'set'
+							@set_opt = true
 						
 						else
 							if /[a-f0-9]+/i.match(arg)
@@ -81,6 +89,8 @@ module TheFox
 						run_add
 					elsif @remove_opt
 						run_remove
+					elsif @set_opt
+						run_set
 					else
 						run_show
 					end
@@ -121,34 +131,9 @@ module TheFox
 				end
 				
 				def run_add
-					if @tracks_opt.count == 0
-						raise TrackCommandError, 'No Task ID given.'
-					end
-					task_id = @tracks_opt.first
+					task_id = check_task_id
 					
-					if @start_date_opt.nil? && @start_time_opt.nil? &&
-						@end_date_opt.nil? && @end_time_opt.nil? &&
-						@message_opt.nil?
-						
-						raise TaskCommandError, "No option given. See 'timr track --help'."
-					end
-					if @start_date_opt || @start_time_opt ||
-						@end_date_opt || @end_time_opt
-						
-						if @start_date_opt.nil?
-							raise TaskCommandError, 'Start Date must be given.'
-						end
-						if @start_time_opt.nil?
-							raise TaskCommandError, 'Start Time must be given.'
-						end
-						
-						if @end_date_opt.nil?
-							raise TaskCommandError, 'End Date must be given.'
-						end
-						if @end_time_opt.nil?
-							raise TaskCommandError, 'End Time must be given.'
-						end
-					end
+					check_opts_add
 					
 					task = @timr.get_task_by_id(task_id)
 					
@@ -178,6 +163,79 @@ module TheFox
 						
 						puts 'Deleted Track %s from Task %s.' % [track.short_id, task.short_id]
 					end
+				end
+				
+				def run_set
+					track_id = check_track_id
+					
+					check_opts_set
+					
+					track = @timr.get_track_by_id(track_id)
+					unless track
+						raise TrackError, "Track for ID '#{track_id}' not found."
+					end
+					
+					puts '--- OLD ---'
+					puts track_to_array(track).join("\n")
+					puts
+					
+					bdt = track.begin_datetime
+					edt = track.end_datetime
+					
+					if @start_date_opt && @start_time_opt
+						track.begin_datetime = "#{@start_date_opt}T#{@start_time_opt}"
+					elsif @start_date_opt.nil? && @start_time_opt
+						if bdt
+							track.begin_datetime = "#{bdt.strftime('%F')}T#{@start_time_opt}"
+						else
+							raise TrackCommandError, 'Start Date must be given. Track has no Start DateTime.'
+						end
+					elsif @start_date_opt && @start_time_opt.nil?
+						if bdt
+							track.begin_datetime = "#{@start_date_opt}T#{bdt.strftime('%T%z')}"
+						else
+							raise TrackCommandError, 'Start Time must be given. Track has no Start DateTime.'
+						end
+					# elsif @start_date_opt.nil? && @start_time_opt.nil?
+					# 	raise TrackCommandError, 'Start Date or Start Time must be given.'
+					end
+					
+					if @end_date_opt && @end_time_opt
+						track.end_datetime = "#{@end_date_opt}T#{@end_time_opt}"
+					elsif @end_date_opt.nil? && @end_time_opt
+						if edt
+							track.end_datetime = "#{edt.strftime('%F')}T#{@end_time_opt}"
+						else
+							raise TrackCommandError, 'End Date must be given. Track has no End DateTime.'
+						end
+					elsif @end_date_opt && @end_time_opt.nil?
+						if edt
+							track.end_datetime = "#{@end_date_opt}T#{edt.strftime('%T%z')}"
+						else
+							raise TrackCommandError, 'End Time must be given. Track has no End DateTime.'
+						end
+					# elsif @end_date_opt.nil? && @end_time_opt.nil?
+					# 	raise TrackCommandError, 'End Date or End Time must be given.'
+					end
+					
+					if @message_opt
+						track.message = @message_opt
+					end
+					
+					task = track.task
+					
+					if @task_id_opt
+						target_task = @timr.get_task_by_id(@task_id_opt)
+						
+						task.move_track(track, target_task)
+						
+						target_task.save_to_file
+					end
+					
+					task.save_to_file
+					
+					puts '--- NEW ---'
+					puts track_to_array(track).join("\n")
 				end
 				
 				# Is used to print the Task to STDOUT.
@@ -215,24 +273,82 @@ module TheFox
 					track_s
 				end
 				
+				def check_task_id
+					if @tracks_opt.count == 0
+						raise TrackCommandError, 'No Task ID given.'
+					end
+					@tracks_opt.first
+				end
+				
+				def check_track_id
+					if @tracks_opt.count == 0
+						raise TrackCommandError, 'No Track ID given.'
+					end
+					@tracks_opt.first
+				end
+				
+				def check_opts_add
+					if @start_date_opt.nil? && @start_time_opt.nil? &&
+						@end_date_opt.nil? && @end_time_opt.nil? &&
+						@message_opt.nil?
+						
+						raise TaskCommandError, "No option given. See 'timr track --help'."
+					end
+					
+					if @start_date_opt || @start_time_opt ||
+						@end_date_opt || @end_time_opt
+						
+						if @start_date_opt.nil?
+							raise TaskCommandError, 'Start Date must be given.'
+						end
+						if @start_time_opt.nil?
+							raise TaskCommandError, 'Start Time must be given.'
+						end
+						
+						if @end_date_opt.nil?
+							raise TaskCommandError, 'End Date must be given.'
+						end
+						if @end_time_opt.nil?
+							raise TaskCommandError, 'End Time must be given.'
+						end
+					end
+				end
+				
+				def check_opts_set
+					if @start_date_opt.nil? && @start_time_opt.nil? &&
+						@end_date_opt.nil? && @end_time_opt.nil? &&
+						@message_opt.nil? && @task_id_opt.nil?
+						
+						raise TaskCommandError, "No option given. See 'timr track --help'."
+					end
+				end
+				
 				def help
 					puts 'usage: timr track [show] [-t|--task] <track_ids...>'
 					puts '   or: timr track add [-m|--message <message>]'
 					puts '                      [--start-date <YYYY-MM-DD> --start-time <HH:MM[:SS]>'
 					puts '                        [--end-date <YYYY-MM-DD> --end-time <HH:MM[:SS]>]]'
 					puts '                      <task_id>'
+					puts '   or: timr track set [-m|--message <message>]'
+					puts '                      [--start-date <YYYY-MM-DD> --start-time <HH:MM[:SS]>]'
+					puts '                      [--end-date <YYYY-MM-DD> --end-time <HH:MM[:SS]>]'
+					puts '                      [-t|--task <task_id>]'
+					puts '                      <track_id>'
 					puts '   or: timr track remove <track_ids...>'
 					puts '   or: timr track [-h|--help]'
 					puts
 					puts 'Show Options'
 					puts "    -t, --task       Show Task of Track. Same as 'timr task <task_id>'."
 					puts
-					puts 'Add Options'
-					puts '    -m, --message                          Track Message. What have you done?'
-					puts '    --sd, --start-date <YYYY-MM-DD>        Start Date'
-					puts '    --st, --start-time <HH:MM[:SS]>        Start Time'
-					puts '    --ed, --end-date <YYYY-MM-DD>          End Date'
-					puts '    --et, --end-time <HH:MM[:SS]>          End Time'
+					puts 'Add/Set Options'
+					puts '    -m, --message                      Track Message. What have you done?'
+					puts '    --sd, --start-date <YYYY-MM-DD>    Start Date'
+					puts '    --st, --start-time <HH:MM[:SS]>    Start Time'
+					puts '    --ed, --end-date <YYYY-MM-DD>      End Date'
+					puts '    --et, --end-time <HH:MM[:SS]>      End Time'
+					puts
+					puts 'Set Options'
+					puts '    --task <task_id>                   Move Track to another Task.'
 					puts
 					puts 'Start DateTime must be given when End DateTime is given. A Track cannot have a'
 					puts 'End DateTime without a Start DateTime.'

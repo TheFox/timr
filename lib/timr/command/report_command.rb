@@ -71,7 +71,7 @@ module TheFox
 					end
 					
 					@filter_options = {:format => '%y-%m-%d %H:%M', :from => @from_opt, :to => @to_opt}
-					@csv_filter_options = {:format => '%Y-%m-%d %H:%M', :from => @from_opt, :to => @to_opt}
+					@csv_filter_options = {:format => '%F %H:%M', :from => @from_opt, :to => @to_opt}
 					
 					if @csv_opt
 						if @csv_opt == '-'

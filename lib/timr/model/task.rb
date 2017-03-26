@@ -73,6 +73,18 @@ module TheFox
 					changed
 				end
 				
+				# Move a Track to another Task.
+				def move_track(track, target_task)
+					if eql?(target_task)
+						return false
+					end
+					
+					remove_track(track)
+					target_task.add_track(track)
+					
+					true
+				end
+				
 				# Select Track by Time Range and/or Status.
 				# 
 				# Options:
@@ -549,6 +561,14 @@ module TheFox
 					end
 					
 					@tracks[track_id]
+				end
+				
+				def eql?(task)
+					unless task.is_a?(Task)
+						raise StackError, "task variable must be a Task instance. #{task.class} given."
+					end
+					
+					self.id == task.id
 				end
 				
 				def to_s
