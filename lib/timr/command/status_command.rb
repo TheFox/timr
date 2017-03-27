@@ -9,6 +9,8 @@ module TheFox
 				
 				include TheFox::Timr::Error
 				
+				MAN_PATH = 'man/status.1'
+				
 				def initialize(argv = Array.new)
 					#puts "argv '#{argv}'"
 					super()

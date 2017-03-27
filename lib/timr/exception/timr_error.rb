@@ -25,6 +25,7 @@ module TheFox
 		# 		- StopCommandError
 		# 		- TaskCommandError
 		# 		- TrackCommandError
+		# 		- HelpCommandError
 		# 	- DurationError
 		module Error
 		
@@ -83,6 +84,9 @@ module TheFox
 			end
 			
 			class TrackCommandError < CommandError
+			end
+			
+			class HelpCommandError < CommandError
 			end
 			
 			class DurationError < TimrError

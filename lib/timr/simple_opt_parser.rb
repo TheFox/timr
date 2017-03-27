@@ -82,7 +82,7 @@ module TheFox
 				end
 				puts "pre_argv '#{pre_argv}'"
 				
-				argv = []
+				argv = Array.new
 				
 				# Pre-process Special Argument (Compact)
 				# For example '-abcd' is '-a -b -c -d'.

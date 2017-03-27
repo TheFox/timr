@@ -19,6 +19,20 @@ A Track is atomic. It's the smallest time unit. It's a time span presented by a 
 
 When a Track gets *continued* or *restarted* it's actual a copy using the same message.
 
+## Projects
+
+## Clients
+
+It's recommended to put each client in a separate directory.
+
+	$HOME/.timr/client1
+	$HOME/.timr/client2
+	$HOME/.timr/client3
+
+Use `-C` to change the directory in which Timr should operate:
+
+	timr -C "$HOME/.timr/client1"
+
 ## Commands
 
 ### Start Command

@@ -11,7 +11,7 @@ module TheFox
 				include TheFox::Timr::Helper
 				include TheFox::Timr::Error
 				
-				def initialize(argv = [])
+				def initialize(argv = Array.new)
 					super()
 					# puts "argv '#{argv}'"
 					

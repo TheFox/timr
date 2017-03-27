@@ -39,40 +39,24 @@ module TheFox
 					# 
 					# Primary used by `bin/timr`.
 					def create_command_from_argv(argv)
-						# optparser = SimpleOptParser.new
-						
-						help_opt = false # --help
-						# optparser.register_option(['-h', '--help'])
-						
-						version_opt = false # --version
-						# optparser.register_option(['-V', '--version'])
-						
 						# -C <path>
-						cwd_opt = Pathname.new("#{Dir.home}/.timr/project").expand_path
-						# optparser.register_option(['-C'], 1)
-						
-						# opts = optparser.parse(argv)
-						# puts "opts '#{opts}'"
-						# puts "opts unknown '#{optparser.unknown_options}'"
+						cwd_opt = Pathname.new("#{Dir.home}/.timr/defaultc").expand_path # Default Client
 						
 						command_name = nil
-						command_argv = []
+						command_argv = Array.new
 						loop_c = 0
 						while loop_c < 1024 && argv.length > 0
 							loop_c += 1
 							arg = argv.shift
-							#puts "arg: '#{arg}'"
 							
 							if command_name
-								# puts "command_name already set"
-								
 								command_argv << arg
 							else
 								case arg
 								when '-h', '--help', 'help'
-									help_opt = true
+									command_name = 'help'
 								when '-V', '--version'
-									version_opt = true
+									command_name = 'version'
 								when '-C'
 									cwd_opt = Pathname.new(argv.shift).expand_path
 									# puts "cwd_opt: #{cwd_opt}"
@@ -88,43 +72,44 @@ module TheFox
 							end
 						end
 						
-						if help_opt
-							command = HelpCommand.new
-						elsif version_opt
-							command = VersionCommand.new
-						else
-							case command_name
-							when 'help'
-								command = HelpCommand.new
-							when 'status', 's'
-								command = StatusCommand.new(command_argv)
-							when 'start'
-								command = StartCommand.new(command_argv)
-							when 'stop'
-								command = StopCommand.new(command_argv)
-							when 'push'
-								command = PushCommand.new(command_argv)
-							when 'pop'
-								command = PopCommand.new(command_argv)
-							when 'continue', 'cont', 'c'
-								command = ContinueCommand.new(command_argv)
-							when 'pause', 'p'
-								command = PauseCommand.new(command_argv)
-							when 'log'
-								command = LogCommand.new(command_argv)
-							when 'task'
-								command = TaskCommand.new(command_argv)
-							when 'track'
-								command = TrackCommand.new(command_argv)
-							when 'report'
-								command = ReportCommand.new(command_argv)
-							else
-								raise CommandError, "'%s' is not a timr command. See 'timr --help'." % [command_name]
-							end
-						end
-						
+						command_class = get_command_class_by_name(command_name)
+						command = command_class.new(command_argv)
 						command.cwd = cwd_opt
 						command
+					end
+					
+					def get_command_class_by_name(name)
+						case name
+						when 'help'
+							command = HelpCommand
+						when 'version'
+							command = VersionCommand
+						
+						when 'status', 's'
+							command = StatusCommand
+						when 'start'
+							command = StartCommand
+						when 'stop'
+							command = StopCommand
+						when 'push'
+							command = PushCommand
+						when 'pop'
+							command = PopCommand
+						when 'continue', 'cont', 'c'
+							command = ContinueCommand
+						when 'pause', 'p'
+							command = PauseCommand
+						when 'log'
+							command = LogCommand
+						when 'task'
+							command = TaskCommand
+						when 'track'
+							command = TrackCommand
+						when 'report'
+							command = ReportCommand
+						else
+							raise CommandError, "'%s' is not a timr command. See 'timr --help'." % [name]
+						end
 					end
 					
 				end

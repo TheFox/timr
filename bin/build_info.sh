@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 DATE=$(date +"%F %T %z")
-SCRIPT_BASEDIR=$(dirname $0)
+SCRIPT_BASEDIR=$(dirname "$0")
 
 
-cd "${SCRIPT_BASEDIR}/.."
+pushd "${SCRIPT_BASEDIR}/.."
 
 RUBY_VERSION=$(ruby -e "print RUBY_VERSION")
 TERMKIT_VERSION=$(ruby -rtermkit -e "print %{#{TheFox::TermKit::VERSION} (#{TheFox::TermKit::DATE})}")
