@@ -1,4 +1,6 @@
 
+require 'chronic_duration'
+
 module TheFox
 	module Timr
 		
@@ -11,14 +13,14 @@ module TheFox
 			attr_reader :seconds
 			
 			def initialize(seconds = 0)
-				@seconds = seconds
+				@seconds = seconds.to_i
 				
 				@smh_seconds = nil
 				@smh_minutes = nil
 				@smh_hours = nil
 			end
 			
-			# Seconds, Minutes, Hours
+			# Seconds, Minutes, Hours as Array
 			def to_smh
 				@smh_seconds = @seconds
 				
@@ -34,20 +36,18 @@ module TheFox
 			
 			# Converts seconds to `nh nm ns` format. Where `n` is a number.
 			def to_human
-				if @smh_seconds.nil? || @smh_minutes.nil? || @smh_hours.nil?
-					to_smh
-				end
-				
-				if @smh_hours > 160
-					'%dh' % [@smh_hours]
-				elsif @smh_hours > 0
-					'%dh %dm' % [@smh_hours, @smh_minutes]
-				elsif @smh_minutes > 0
-					'%dm %ds' % [@smh_minutes, @smh_seconds]
-				elsif @smh_seconds > 0
-					'%ds' % [@smh_seconds]
+				dur_opt = {
+					:format => :short,
+					:limit_to_hours => true,
+					:keep_zero => false,
+					#:keep_zero => true,
+					:units => 2,
+				}
+				h = ChronicDuration.output(@seconds, dur_opt)
+				if h
+					h
 				else
-					'--'
+					'---'
 				end
 			end
 			
@@ -89,6 +89,19 @@ module TheFox
 				Duration.new(@seconds + duration.seconds)
 			end
 			
+			# Subtract two Durations.
+			def -(duration)
+				unless duration.is_a?(Duration)
+					raise DurationError, "Wrong type #{duration.class} for '-' function. #{duration}"
+				end
+				
+				Duration.new(@seconds - duration.seconds)
+			end
+			
+			def <(seconds)
+				@seconds < seconds
+			end
+			
 			# String
 			def to_s
 				@seconds.to_s
@@ -96,6 +109,15 @@ module TheFox
 			
 			def to_i
 				@seconds
+			end
+			
+			# All methods in this block are static.
+			class << self
+				
+				def parse(str)
+					Duration.new(ChronicDuration.parse(str))
+				end
+				
 			end
 			
 		end # class Duration

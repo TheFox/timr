@@ -41,6 +41,7 @@ module TheFox
 							@tracks_opt = true
 						when '-n', '--name'
 							@name_opt = argv.shift
+							#puts "name: #{@name_opt.class} #{@name_opt.is_digit?}" # @TODO remove
 						when '--desc', '--description', '-d' # -d not official
 							@description_opt = argv.shift
 						
@@ -101,15 +102,7 @@ module TheFox
 					}
 					task = @timr.add_task(options)
 					
-					task_s = Array.new
-					task_s << 'Task: %s %s' % [task.short_id, task.name]
-					if task.description
-						task_s << 'Description: %s' % [task.description]
-					end
-					
-					if task_s.count > 0
-						puts task_s.join("\n")
-					end
+					puts task.to_compact_str
 				end
 				
 				def run_remove
@@ -134,9 +127,7 @@ module TheFox
 					task = @timr.get_task_by_id(task_id)
 					
 					puts '--- OLD ---'
-					puts 'Task: %s' % [task.short_id]
-					puts '  Name: %s' % [task.name]
-					puts '  Description: %s' % [task.description]
+					puts task.to_detailed_str
 					puts
 					
 					if @name_opt
@@ -149,9 +140,7 @@ module TheFox
 					task.save_to_file
 					
 					puts '--- NEW ---'
-					puts 'Task: %s' % [task.short_id]
-					puts '  Name: %s' % [task.name]
-					puts '  Description: %s' % [task.description]
+					puts task.to_detailed_str
 				end
 				
 				def run_show
@@ -163,7 +152,8 @@ module TheFox
 							task = @timr.get_task_by_id(task_id_or_instance)
 						end
 						
-						tasks << task_to_array(task)
+						# tasks << task_to_array(task)
+						tasks << task.to_detailed_array
 					end
 					
 					if tasks.count > 0
@@ -178,57 +168,57 @@ module TheFox
 				end
 				
 				# Is used to print the Task to STDOUT.
-				def task_to_array(task)
-					task_s = Array.new
-					task_s << 'Task: %s %s' % [task.short_id, task.name]
+				# def task_to_array(task)
+				# 	task_s = Array.new
+				# 	task_s << 'Task: %s %s' % [task.short_id, task.name]
 					
-					duration_human = task.duration.to_human
-					task_s << '  Duration: %s' % [duration_human]
+				# 	duration_human = task.duration.to_human
+				# 	task_s << '  Duration: %s' % [duration_human]
 					
-					duration_man_days = task.duration.to_man_days
-					if duration_human != duration_man_days
-						task_s << '  Man Unit: %s' % [duration_man_days]
-					end
+				# 	duration_man_days = task.duration.to_man_days
+				# 	if duration_human != duration_man_days
+				# 		task_s << '  Man Unit: %s' % [duration_man_days]
+				# 	end
 					
-					tracks = task.tracks
-					first_track = tracks
-						.select{ |track_id, track| track.begin_datetime }
-						.sort_by{ |track_id, track| track.begin_datetime }
-						.to_h
-						.values
-						.first
-					if first_track
-						task_s << '  Begin Track: %s  %s' % [first_track.short_id, first_track.begin_datetime_s]
-					end
+				# 	tracks = task.tracks
+				# 	first_track = tracks
+				# 		.select{ |track_id, track| track.begin_datetime }
+				# 		.sort_by{ |track_id, track| track.begin_datetime }
+				# 		.to_h
+				# 		.values
+				# 		.first
+				# 	if first_track
+				# 		task_s << '  Begin Track: %s  %s' % [first_track.short_id, first_track.begin_datetime_s]
+				# 	end
 					
-					last_track = tracks
-						.select{ |track_id, track| track.end_datetime }
-						.sort_by{ |track_id, track| track.end_datetime }
-						.to_h
-						.values
-						.last
-					if last_track
-						task_s << '  End   Track: %s  %s' % [last_track.short_id, last_track.end_datetime_s]
-					end
+				# 	last_track = tracks
+				# 		.select{ |track_id, track| track.end_datetime }
+				# 		.sort_by{ |track_id, track| track.end_datetime }
+				# 		.to_h
+				# 		.values
+				# 		.last
+				# 	if last_track
+				# 		task_s << '  End   Track: %s  %s' % [last_track.short_id, last_track.end_datetime_s]
+				# 	end
 					
-					status = task.status.colorized
-					task_s << '  Status: %s' % [status]
+				# 	status = task.status.colorized
+				# 	task_s << '  Status: %s' % [status]
 					
-					tracks_count = tracks.count
-					task_s << '  Tracks: %d' % [tracks_count]
+				# 	tracks_count = tracks.count
+				# 	task_s << '  Tracks: %d' % [tracks_count]
 					
-					if tracks_count > 0 && @tracks_opt # --tracks
-						task_s << '  Track IDs: %s' % [tracks.map{ |track_id, track| track.short_id }.join(' ')]
-					end
+				# 	if tracks_count > 0 && @tracks_opt # --tracks
+				# 		task_s << '  Track IDs: %s' % [tracks.map{ |track_id, track| track.short_id }.join(' ')]
+				# 	end
 					
-					if task.description
-						task_s << '  Description: %s' % [task.description]
-					end
+				# 	if task.description
+				# 		task_s << '  Description: %s' % [task.description]
+				# 	end
 					
-					task_s << '  File path: %s' % [task.file_path]
+				# 	task_s << '  File path: %s' % [task.file_path]
 					
-					task_s
-				end
+				# 	task_s
+				# end
 				
 				def help
 					puts 'usage: timr task [show] [[-t|--tracks] <task_ids...>]'

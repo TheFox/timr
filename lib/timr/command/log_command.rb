@@ -14,7 +14,7 @@ module TheFox
 				
 				def initialize(argv = Array.new)
 					super()
-					# puts "#{Time.now.to_ms} #{self.class} #{__method__}"
+					# puts "#{Time.now.to_ms} #{self.class} #{__method__}" # @TODO remove
 					
 					@help_opt = false
 					
@@ -71,8 +71,8 @@ module TheFox
 						@from_opt = Time.parse("#{@start_date.strftime('%F')} #{@start_time.strftime('%T')}")
 						@to_opt   = Time.parse("#{@end_date.strftime('%F')} #{@end_time.strftime('%T')}")
 						
-						# puts "from parsed: #{@from_opt.strftime('%F %T')}"
-						# puts "to   parsed: #{@to_opt.strftime('%F %T')}"
+						# puts "from parsed: #{@from_opt.strftime('%F %T')}" # @TODO remove
+						# puts "to   parsed: #{@to_opt.strftime('%F %T')}" # @TODO remove
 						@daytime_filter = true
 					end
 					
@@ -86,11 +86,11 @@ module TheFox
 					
 					@filter_options = {:from => @from_opt, :to => @to_opt}
 					
-					# puts "#{Time.now.to_ms} #{self.class} #{__method__} END"
+					# puts "#{Time.now.to_ms} #{self.class} #{__method__} END" # @TODO remove
 				end
 				
 				def run
-					# puts "#{Time.now.to_ms} #{self.class} #{__method__}"
+					# puts "#{Time.now.to_ms} #{self.class} #{__method__}" # @TODO remove
 					if @help_opt
 						help
 						return
@@ -104,7 +104,7 @@ module TheFox
 				private
 				
 				def print_small_table
-					# puts "#{Time.now.to_ms} #{self.class} #{__method__}"
+					# puts "#{Time.now.to_ms} #{self.class} #{__method__}" # @TODO remove
 					
 					puts 'Selected datetime range:'
 					if @daytime_filter
@@ -226,11 +226,15 @@ module TheFox
 					
 					table << []
 					
+					totals[:begin_datetime_s] = totals[:begin_datetime] ? totals[:begin_datetime].localtime.strftime(glob_begin_options[:format]) : '---'
+					
+					totals[:end_datetime_s] = totals[:end_datetime] ? totals[:end_datetime].localtime.strftime(glob_end_options[:format]) : '---'
+					
 					# Add totals to the bottom.
 					table << [
 						nil,        # track_c
-						totals[:begin_datetime].strftime(glob_begin_options[:format]),
-						totals[:end_datetime].strftime(glob_end_options[:format]),
+						totals[:begin_datetime_s],
+						totals[:end_datetime_s],
 						totals[:duration].to_human, # duration
 						'TOTAL',    # task
 						nil,        # track
@@ -242,7 +246,7 @@ module TheFox
 						puts 'No tracks found.'
 					end
 					
-					# puts "#{Time.now.to_ms} #{self.class} #{__method__} END"
+					# puts "#{Time.now.to_ms} #{self.class} #{__method__} END" # @TODO remove
 				end
 				
 				def help

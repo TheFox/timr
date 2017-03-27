@@ -7,6 +7,11 @@ class TestDuration < MiniTest::Test
 	
 	include TheFox::Timr
 	
+	def test_to_smh
+		duration1 = Duration.new(7200 + 1800 + 35)
+		assert_equal([35, 30, 2], duration1.to_smh)
+	end
+	
 	def test_man_days
 		duration1 = Duration.new(7200 + 1800)
 		assert_equal('2h 30m', duration1.to_man_days)

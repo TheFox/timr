@@ -64,6 +64,9 @@ module TheFox
 							{:format => '%-5s', :label => 'START', :padding_left => ' '},
 							{:format => '%-5s', :label => 'END'},
 							{:format => '%8s', :label => 'DUR', :padding_right => ' '},
+							{:format => '%7s', :label => 'EST', :padding_right => ' '},
+							{:format => '%7s', :label => 'ETR', :padding_right => ' '},
+							{:format => '%7s', :label => 'ETR%', :padding_right => ' '},
 							{:format => '%-6s', :label => 'TASK', :padding_right => ' '},
 							{:format => '%s', :label => 'TRACK'},
 						],
@@ -78,7 +81,20 @@ module TheFox
 						task = track.task
 						
 						status = track.status.short_status
-						duration = track.duration.to_human
+						duration = track.duration
+						estimation = task.estimation
+						estimation_s = task.estimation_s
+						remaining_time = task.remaining_time
+						remaining_time_s = task.remaining_time_s
+						remaining_time_percent_s = task.remaining_time_percent_s
+						
+						# puts
+						# puts "duration:         #{duration.class} #{duration}" # @TODO remove
+						# puts "estimation:       #{estimation.class} #{estimation}" # @TODO remove
+						# puts "remaining_time:   #{remaining_time.class} #{remaining_time}" # @TODO remove
+						# puts "remaining_time_s: #{remaining_time_s.class} #{remaining_time_s}" # @TODO remove
+						# puts "remaining_time_percent_s: #{remaining_time_percent_s.class} #{remaining_time_percent_s}" # @TODO remove
+						# puts
 						
 						if track.begin_datetime
 							begin_datetime_s = track.begin_datetime_s({:format => '%H:%M'})
@@ -93,9 +109,12 @@ module TheFox
 							status,
 							begin_datetime_s,
 							end_datetime_s,
-							duration,
+							duration.to_human,
+							estimation_s,
+							remaining_time_s,
+							remaining_time_percent_s,
 							task.short_id,
-							'%s %s' % [track.short_id, track.title(15)],
+							'%s %s' % [track.short_id, track.title(12)],
 						]
 					end
 					
@@ -112,19 +131,20 @@ module TheFox
 					get_tracks.each do |track|
 						track_c += 1
 						
-						task = track.task
-						duration = track.duration.to_human
+						# task = track.task
+						# duration = track.duration.to_human
 						
-						status = track.status.colorized
+						# status = track.status.colorized
 						
 						track_s = Array.new
 						track_s << '--- #%d ---' % [track_c]
-						track_s << ' Task: %s %s' % [task.short_id, task.name_s]
-						track_s << 'Track: %s %s' % [track.short_id, track.title]
-						track_s << '  Start: %s' % [track.begin_datetime_s]
-						track_s << '  End:   %s' % [track.end_datetime_s || '--']
-						track_s << '  Duration: %16s' % [duration]
-						track_s << '  Status: %s' % [status]
+						# track_s << ' Task: %s %s' % [task.short_id, task.name_s]
+						# track_s << 'Track: %s %s' % [track.short_id, track.title]
+						# track_s << '  Start: %s' % [track.begin_datetime_s]
+						# track_s << '  End:   %s' % [track.end_datetime_s || '--']
+						# track_s << '  Duration: %16s' % [duration]
+						# track_s << '  Status: %s' % [status]
+						track_s.concat(track.to_detailed_array)
 						tracks << track_s
 					end
 					
@@ -159,6 +179,9 @@ module TheFox
 					puts '    START    Track Start Date'
 					puts '    END      Track End Date'
 					puts '    DUR      Track Duration'
+					puts '    EST      Task Estimation'
+					puts '    ETR      Task Estimated Time Remaining'
+					puts '    ETR%     Task Estimated Time Remaining in percent.'
 					puts '    TASK     Task ID'
 					puts '    TRACK    Track ID and Title.'
 					puts

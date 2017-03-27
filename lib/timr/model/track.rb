@@ -14,7 +14,7 @@ module TheFox
 				attr_accessor :task
 				
 				# Track Message. What have you done?
-				attr_accessor :message
+				attr_reader :message
 				
 				# Is this even in use? ;D
 				attr_accessor :paused
@@ -83,6 +83,8 @@ module TheFox
 					bdt = begin_datetime(options)
 					if bdt
 						bdt.strftime(options[:format])
+					else
+						'---'
 					end
 				end
 				
@@ -145,7 +147,16 @@ module TheFox
 					edt = end_datetime(options)
 					if edt
 						edt.strftime(options[:format])
+					else
+						'---'
 					end
+				end
+				
+				def message=(message)
+					@message = message
+					
+					# Mark Track as changed.
+					changed
 				end
 				
 				# Start this Track. A Track cannot be restarted because it's the smallest time unit.
@@ -346,6 +357,7 @@ module TheFox
 				# To String
 				def to_s
 					"Track_#{short_id}"
+					#to_a.join("\n")
 				end
 				
 				# To Hash
@@ -366,8 +378,47 @@ module TheFox
 					h
 				end
 				
+				def to_detailed_str
+					to_detailed_array.join("\n")
+				end
+				
+				def to_detailed_array(options = {})
+					options ||= {}
+					#options[:duration_man_days] ||= false
+					#options[:message] ||= false
+					# options[:file_path] ||= false
+					
+					duration_human = self.duration.to_human
+					duration_man_days = self.duration.to_man_days
+					
+					to_ax = Array.new
+					to_ax << ' Task: %s %s' % [@task.short_id, @task.name_s]
+					to_ax << 'Track: %s %s' % [self.short_id, self.title]
+					to_ax << '  Start: %s' % [self.begin_datetime_s]
+					to_ax << '  End:   %s' % [self.end_datetime_s]
+					to_ax << '  Duration: %s' % [duration_human]
+					# to_ax << "  Duration CLASS: #{duration_human.class}"
+					# if options[:duration_man_days] && duration_human != duration_man_days
+					if duration_human != duration_man_days
+						to_ax << '  Man Unit: %s' % [duration_man_days]
+					end
+					to_ax << '  Status: %s' % [self.status.colorized]
+					# if options[:message] && self.message
+					if self.message
+						to_ax << '  Message: %s' % [self.message]
+					end
+					# if options[:file_path]
+					# 	to_ax << '  File path: %s' % [self.file_path]
+					# end
+					to_ax
+				end
+				
 				def inspect
 					"#<Track #{short_id}>"
+				end
+				
+				def method_missing(method_name, *arguments, &block)
+					raise TrackError, "Method '#{method_name}' not defined for #{self.class}. Did you mean Task?"
 				end
 				
 				# All methods in this block are static.

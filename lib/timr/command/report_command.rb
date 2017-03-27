@@ -53,7 +53,7 @@ module TheFox
 							if !@csv_opt
 								raise ReportCommandError, 'Invalid value for --csv option.'
 							end
-						when '--force'
+						when '-f', '--force' # -f inofficial, maybe used for --file?
 							@force_opt = true
 						
 						else
@@ -71,7 +71,7 @@ module TheFox
 					end
 					
 					@filter_options = {:format => '%y-%m-%d %H:%M', :from => @from_opt, :to => @to_opt}
-					@csv_filter_options = {:format => '%F %H:%M', :from => @from_opt, :to => @to_opt}
+					@csv_filter_options = {:format => '%F %T %z', :from => @from_opt, :to => @to_opt}
 					
 					if @csv_opt
 						if @csv_opt == '-'
@@ -189,11 +189,15 @@ module TheFox
 					
 					table << []
 					
+					totals[:begin_datetime_s] = totals[:begin_datetime] ? totals[:begin_datetime].localtime.strftime(@filter_options[:format]) : '---'
+					
+					totals[:end_datetime_s] = totals[:end_datetime] ? totals[:end_datetime].localtime.strftime(@filter_options[:format]) : '---'
+					
 					# Add totals to the bottom.
 					table << [
 						nil, # task_c
-						totals[:begin_datetime].strftime(@filter_options[:format]),
-						totals[:end_datetime].strftime(@filter_options[:format]),
+						totals[:begin_datetime_s],
+						totals[:end_datetime_s],
 						totals[:duration].to_human, # duration
 						totals[:tracks_c],
 						'TOTAL', # task
@@ -273,11 +277,15 @@ module TheFox
 					
 					table << []
 					
+					totals[:begin_datetime_s] = totals[:begin_datetime] ? totals[:begin_datetime].localtime.strftime(@filter_options[:format]) : '---'
+					
+					totals[:end_datetime_s] = totals[:end_datetime] ? totals[:end_datetime].localtime.strftime(@filter_options[:format]) : '---'
+					
 					# Add totals to the bottom.
 					table << [
 						nil, # task_c
-						totals[:begin_datetime].strftime(@filter_options[:format]),
-						totals[:end_datetime].strftime(@filter_options[:format]),
+						totals[:begin_datetime_s],
+						totals[:end_datetime_s],
 						totals[:duration].to_human, # duration
 						'TOTAL', # task
 						nil, # track
@@ -386,6 +394,10 @@ module TheFox
 						]
 					end
 					
+					totals[:begin_datetime_s] = totals[:begin_datetime] ? totals[:begin_datetime].localtime.strftime(@csv_filter_options[:format]) : '---'
+					
+					totals[:end_datetime_s] = totals[:end_datetime] ? totals[:end_datetime].localtime.strftime(@csv_filter_options[:format]) : '---'
+					
 					totals[:row_c] += 1
 					csv << [
 						totals[:row_c],
@@ -393,8 +405,8 @@ module TheFox
 						'TOTAL',
 						'TOTAL',
 						
-						totals[:begin_datetime].strftime(@csv_filter_options[:format]),
-						totals[:end_datetime].strftime(@csv_filter_options[:format]),
+						totals[:begin_datetime_s],
+						totals[:end_datetime_s],
 						
 						totals[:duration].to_human,
 						totals[:duration].to_i,
@@ -406,7 +418,7 @@ module TheFox
 				end
 				
 				def export_tracks_csv
-					puts "export_tracks_csv" # @TODO remove
+					# puts "export_tracks_csv" # @TODO remove
 					
 					if @csv_opt == '-'
 						csv_file_handle = STDOUT
@@ -488,6 +500,10 @@ module TheFox
 						]
 					end
 					
+					totals[:begin_datetime_s] = totals[:begin_datetime] ? totals[:begin_datetime].localtime.strftime(@csv_filter_options[:format]) : '---'
+					
+					totals[:end_datetime_s] = totals[:end_datetime] ? totals[:end_datetime].localtime.strftime(@csv_filter_options[:format]) : '---'
+					
 					totals[:row_c] += 1
 					csv << [
 						totals[:row_c],
@@ -497,8 +513,8 @@ module TheFox
 						'TOTAL',
 						
 						'TOTAL',
-						totals[:begin_datetime].strftime(@csv_filter_options[:format]),
-						totals[:end_datetime].strftime(@csv_filter_options[:format]),
+						totals[:begin_datetime_s],
+						totals[:end_datetime_s],
 						totals[:duration].to_human,
 						totals[:duration].to_i,
 					]

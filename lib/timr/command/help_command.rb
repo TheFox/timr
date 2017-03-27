@@ -6,7 +6,7 @@ module TheFox
 			class HelpCommand < BasicCommand
 				
 				def initialize(argv = Array.new)
-					puts "help #{argv}"
+					# puts "help #{argv}"
 					
 					super()
 					
@@ -47,9 +47,9 @@ module TheFox
 					puts
 					puts 'Commands'
 					puts '    status               Show the current Stack.'
-					puts '    log                  Show Tracks.'
+					puts '    log                  Show recent Tracks.'
 					puts
-					puts '    start                Start or continue working on a Task.'
+					puts '    start                Start working on a Task.'
 					puts '    stop                 Stop the current running Track.'
 					puts
 					puts '    continue             Continue the Top Track of the Stack.'

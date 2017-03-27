@@ -282,7 +282,8 @@ class TestTask < MiniTest::Test
 		to   = Time.parse('2015-06-28 15:00:00')
 		options = {:format => '%F %T', :from => from, :to => to}
 		assert_equal('2015-06-08 10:00:00', task.begin_datetime_s(options))
-		assert_nil(task.end_datetime_s(options))
+		# assert_nil(task.end_datetime_s(options))
+		assert_equal('---', task.end_datetime_s(options))
 	end
 	
 	def test_duration
@@ -312,6 +313,56 @@ class TestTask < MiniTest::Test
 		from = Time.parse('2015-06-01 10:30:00')
 		to   = Time.parse('2015-06-01 11:00:15')
 		assert_equal(3615, task.duration({:from => from, :to => to}).to_i)
+	end
+	
+	def test_estimation
+		task = Task.new
+		
+		assert_nil(task.estimation)
+		assert_equal('---', task.estimation_s)
+		
+		task.estimation = '2h 31m'
+		
+		assert_equal(3600 * 2 + 1800 + 60, task.estimation.to_i)
+		assert_equal('2h 31m', task.estimation_s)
+	end
+	
+	def test_remaining_time
+		track1 = Track.new
+		track1.begin_datetime = '2015-06-01 10:00:00'
+		track1.end_datetime   = '2015-06-01 11:00:00'
+		
+		track2 = Track.new
+		track2.begin_datetime = '2015-06-01 10:30:00'
+		track2.end_datetime   = '2015-06-01 11:30:00'
+		
+		task = Task.new
+		task.add_track(track1)
+		task.add_track(track2)
+		
+		assert_nil(task.remaining_time)
+		assert_equal('---', task.remaining_time_s)
+		assert_nil(task.remaining_time_percent)
+		assert_equal('---', task.remaining_time_percent_s)
+		
+		task.estimation = '2h 30m'
+		
+		assert_equal(1800, task.remaining_time.to_i)
+		assert_equal('30m', task.remaining_time_s)
+		assert_equal(20.0, task.remaining_time_percent)
+		assert_equal('20.0 %', task.remaining_time_percent_s)
+		
+		track3 = Track.new
+		track3.begin_datetime = '2015-06-01 15:00:00'
+		track3.end_datetime   = '2015-06-01 16:00:00'
+		
+		task.add_track(track3)
+		
+		assert_equal(0, task.remaining_time.to_i)
+		# assert_equal('0s', task.remaining_time_s)
+		assert_equal('---', task.remaining_time_s)
+		assert_equal(0.0, task.remaining_time_percent)
+		assert_equal('0.0 %', task.remaining_time_percent_s)
 	end
 	
 	def test_status_stopped

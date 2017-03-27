@@ -9,6 +9,8 @@ module TheFox
 			# will be paused.
 			class Stack < BasicModel
 				
+				include TheFox::Timr::Helper
+				
 				attr_accessor :timr
 				# attr_accessor :tasks_path
 				attr_reader :tracks
@@ -132,7 +134,10 @@ module TheFox
 				end
 				
 				def to_s
-					"Stack"
+					# "Stack"
+					
+					tracks_s = TranslationHelper.pluralize(@tracks.count, 'track', 'tracks')
+					'Stack: %s' % [tracks_s]
 				end
 				
 				def inspect

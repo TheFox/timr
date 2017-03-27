@@ -32,6 +32,7 @@ Gem::Specification.new do |spec|
 	spec.add_runtime_dependency 'term-ansicolor', '~>1.4'
 	#spec.add_runtime_dependency 'terminal-table', '~>1.7'
 	# spec.add_runtime_dependency 'activesupport', '~>5.0'
+	spec.add_runtime_dependency 'chronic_duration', '~>0.10'
 	spec.add_runtime_dependency 'thefox-ext', '~>1.5'
 	
 	# spec.add_runtime_dependency 'sqlite3', '~>1.3'

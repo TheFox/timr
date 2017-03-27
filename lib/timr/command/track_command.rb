@@ -5,6 +5,7 @@ module TheFox
 			
 			# - Print Track informations.
 			# - Add/remove a Track.
+			# - Edit (set) a Track.
 			class TrackCommand < BasicCommand
 				
 				include TheFox::Timr::Model
@@ -240,37 +241,40 @@ module TheFox
 				
 				# Is used to print the Task to STDOUT.
 				def track_to_array(track)
-					task = track.task
+					# task = track.task
 					
-					track_s = Array.new
-					track_s << ' Task: %s %s' % [task.short_id, task.name_s]
-					track_s << 'Track: %s %s' % [track.short_id, track.name]
+					# track_s = Array.new
+					# track_s << ' Task: %s %s' % [task.short_id, task.name_s]
+					# track_s << 'Track: %s %s' % [track.short_id, track.name]
 					
-					duration_human = track.duration.to_human
-					track_s << '  Duration: %s' % [duration_human]
+					# duration_human = track.duration.to_human
+					# track_s << '  Duration: %s' % [duration_human]
 					
-					duration_man_days = track.duration.to_man_days
-					if duration_human != duration_man_days
-						track_s << '  Man Unit: %s' % [duration_man_days]
-					end
+					# duration_man_days = track.duration.to_man_days
+					# if duration_human != duration_man_days
+					# 	track_s << '  Man Unit: %s' % [duration_man_days]
+					# end
 					
-					if track.begin_datetime
-						track_s << '  Begin: %s' % [track.begin_datetime_s]
-					end
+					# if track.begin_datetime
+					# 	track_s << '  Begin: %s' % [track.begin_datetime_s]
+					# end
 					
-					if track.end_datetime
-						track_s << '  End:   %s' % [track.end_datetime_s]
-					end
+					# if track.end_datetime
+					# 	track_s << '  End:   %s' % [track.end_datetime_s]
+					# end
 					
-					status = track.status.colorized
-					track_s << '  Status: %s' % [status]
-					if track.message
-						track_s << '  Message: %s' % [track.message]
-					end
+					# status = track.status.colorized
+					# track_s << '  Status: %s' % [status]
+					# if track.message
+					# 	track_s << '  Message: %s' % [track.message]
+					# end
 					
-					track_s << '  File path: %s' % [task.file_path]
+					# track_s << '  File path: %s' % [task.file_path]
 					
-					track_s
+					# track_s
+					
+					#track.to_detailed_array({:duration_man_days => true, :message => true})
+					track.to_detailed_array
 				end
 				
 				def check_task_id

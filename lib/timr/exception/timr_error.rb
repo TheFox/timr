@@ -27,6 +27,7 @@ module TheFox
 		# 		- TrackCommandError
 		# 		- HelpCommandError
 		# 	- DurationError
+		# 	- ThisShouldNeverHappenError
 		module Error
 		
 			class TimrError < StandardError
@@ -90,6 +91,9 @@ module TheFox
 			end
 			
 			class DurationError < TimrError
+			end
+			
+			class ThisShouldNeverHappenError < TimrError
 			end
 			
 		end # module Error
