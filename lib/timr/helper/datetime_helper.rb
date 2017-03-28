@@ -18,10 +18,6 @@ module TheFox
 						case date
 						when String
 							Time.parse(date).utc.to_date
-						# when DateTime
-						# 	date.to_time.utc.to_date
-						# when Time
-						# 	date.utc.to_date
 						when nil
 							Time.now.utc.to_date
 						end
@@ -31,10 +27,6 @@ module TheFox
 						case time
 						when String
 							Time.parse(time).utc
-						# when DateTime
-						# 	time.to_time.utc
-						# when Date
-						# 	Time.now.utc
 						when nil
 							Time.now.utc
 						end
@@ -90,21 +82,20 @@ module TheFox
 					# 
 					# - `:date` String
 					# - `:time` String
-					def get_datetime_from_options(options = {})
-						options ||= {}
-						options[:date] ||= nil
-						options[:time] ||= nil
+					def get_datetime_from_options(options = Hash.new)
+						date_opt = options.fetch(:date, nil)
+						time_opt = options.fetch(:time, nil)
 						
-						if options[:date] && !options[:time]
+						if date_opt && !time_opt
 							raise DateTimeError, 'You also need to set a time when giving a date.'
 						end
 						
 						datetime_a = []
-						if options[:date]
-							datetime_a << options[:date]
+						if date_opt
+							datetime_a << date_opt
 						end
-						if options[:time]
-							datetime_a << options[:time]
+						if time_opt
+							datetime_a << time_opt
 						end
 						
 						if datetime_a.count > 0

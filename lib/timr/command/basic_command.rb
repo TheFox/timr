@@ -11,8 +11,9 @@ module TheFox
 				# Current Working Directory
 				attr_accessor :cwd
 				
-				def initialize
-					# puts "#{Time.now.to_ms} #{self.class} #{__method__}"
+				def initialize(argv = Array.new)
+					# puts "#{Time.now.to_ms} #{self.class} #{__method__}" # @TODO remove
+					# puts "argv #{argv}" # @TODO remove
 					
 					@cwd = nil
 					@timr = nil
@@ -59,13 +60,13 @@ module TheFox
 									command_name = 'version'
 								when '-C'
 									cwd_opt = Pathname.new(argv.shift).expand_path
-									# puts "cwd_opt: #{cwd_opt}"
+									# puts "cwd_opt: #{cwd_opt}" # @TODO remove
 								else
 									# puts "ELSE '#{arg[0]}'"
 									if arg[0] == '-'
 										raise CommandError, "Unknown argument '#{arg}'. See 'timr --help'."
 									else
-										# puts "set command_name"
+										# puts "set command_name" # @TODO remove
 										command_name = arg
 									end
 								end

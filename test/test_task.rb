@@ -7,6 +7,7 @@ require 'pp' # @TODO remove pp
 
 class TestTask < MiniTest::Test
 	
+	include TheFox::Timr
 	include TheFox::Timr::Model
 	include TheFox::Timr::Error
 	
@@ -325,6 +326,30 @@ class TestTask < MiniTest::Test
 		
 		assert_equal(3600 * 2 + 1800 + 60, task.estimation.to_i)
 		assert_equal('2h 31m', task.estimation_s)
+		
+		task.estimation = '+1h 21s'
+		assert_equal(12681, task.estimation.to_i)
+		assert_equal('3h 31m', task.estimation_s)
+		
+		task.estimation = '-21s'
+		assert_equal(12660, task.estimation.to_i)
+		assert_equal('3h 31m', task.estimation_s)
+		
+		task.estimation = '-45m'
+		assert_equal(9960, task.estimation.to_i)
+		assert_equal('2h 46m', task.estimation_s)
+		
+		task.estimation = 25
+		assert_equal(25, task.estimation.to_i)
+		assert_equal('25s', task.estimation_s)
+		
+		task.estimation = Duration.new(3605)
+		assert_equal(3605, task.estimation.to_i)
+		assert_equal('1h 5s', task.estimation_s)
+		
+		assert_raises(TaskError) do
+			task.estimation = Time.new
+		end
 	end
 	
 	def test_remaining_time

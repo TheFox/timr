@@ -76,10 +76,10 @@ module TheFox
 						raise TrackError, 'Could not start a new Track.'
 					end
 					
-					task = track.task
-					unless task
-						raise TrackError, "Track #{track.id} has no Task."
-					end
+					# task = track.task
+					# unless task
+					# 	raise TrackError, "Track #{track.id} has no Task."
+					# end
 					
 					# status = track.status.colorized
 					# stack = TranslationHelper.pluralize(@timr.stack.tracks.count, 'track', 'tracks')

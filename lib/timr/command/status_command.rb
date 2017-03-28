@@ -82,9 +82,9 @@ module TheFox
 						
 						status = track.status.short_status
 						duration = track.duration
-						estimation = task.estimation
+						# estimation = task.estimation
 						estimation_s = task.estimation_s
-						remaining_time = task.remaining_time
+						# remaining_time = task.remaining_time
 						remaining_time_s = task.remaining_time_s
 						remaining_time_percent_s = task.remaining_time_percent_s
 						

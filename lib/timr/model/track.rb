@@ -57,8 +57,8 @@ module TheFox
 				# 
 				# - `:from` (Time)  
 				#   See documentation about `:to` on `end_datetime()`.
-				def begin_datetime(options = {})
-					options ||= {}
+				def begin_datetime(options = Hash.new)
+					options ||= Hash.new
 					options[:from] ||= nil
 					
 					if @begin_datetime
@@ -76,8 +76,8 @@ module TheFox
 				# Options:
 				# 
 				# - `:format` (String)
-				def begin_datetime_s(options = {})
-					options ||= {}
+				def begin_datetime_s(options = Hash.new)
+					options ||= Hash.new
 					options[:format] ||= HUMAN_DATETIME_FOMRAT
 					
 					bdt = begin_datetime(options)
@@ -121,8 +121,8 @@ module TheFox
 				#   This limits `@end_datetime`. If `:to` > `@end_datetime` it returns the
 				# original `@end_datetime`. Otherwise it will return `:to`. The same applies for
 				# `:from` on `begin_datetime()` but just the other way round.
-				def end_datetime(options = {})
-					options ||= {}
+				def end_datetime(options = Hash.new)
+					options ||= Hash.new
 					options[:to] ||= nil
 					
 					if @end_datetime
@@ -140,8 +140,8 @@ module TheFox
 				# Options:
 				# 
 				# - `:format` (String)
-				def end_datetime_s(options = {})
-					options ||= {}
+				def end_datetime_s(options = Hash.new)
+					options ||= Hash.new
 					options[:format] ||= HUMAN_DATETIME_FOMRAT
 					
 					edt = end_datetime(options)
@@ -160,8 +160,8 @@ module TheFox
 				end
 				
 				# Start this Track. A Track cannot be restarted because it's the smallest time unit.
-				def start(options = {})
-					options ||= {}
+				def start(options = Hash.new)
+					options ||= Hash.new
 					options[:message] ||= nil
 					
 					if @begin_datetime
@@ -176,10 +176,10 @@ module TheFox
 				end
 				
 				# Stop this Track.
-				def stop(options = {})
+				def stop(options = Hash.new)
 					# puts "Track stop"
 					
-					options ||= {}
+					options ||= Hash.new
 					options[:start_date] ||= nil
 					options[:start_time] ||= nil
 					options[:message] ||= nil
@@ -218,8 +218,8 @@ module TheFox
 				# 
 				# - `:from` (Time), `:to` (Time)  
 				#   Limit the begin and end datetimes to a specific range.
-				def duration(options = {})
-					options ||= {}
+				def duration(options = Hash.new)
+					options ||= Hash.new
 					options[:from] ||= nil
 					options[:to] ||= nil
 					
@@ -382,8 +382,8 @@ module TheFox
 					to_detailed_array.join("\n")
 				end
 				
-				def to_detailed_array(options = {})
-					options ||= {}
+				def to_detailed_array(options = Hash.new)
+					options ||= Hash.new
 					#options[:duration_man_days] ||= false
 					#options[:message] ||= false
 					# options[:file_path] ||= false
@@ -417,9 +417,9 @@ module TheFox
 					"#<Track #{short_id}>"
 				end
 				
-				def method_missing(method_name, *arguments, &block)
-					raise TrackError, "Method '#{method_name}' not defined for #{self.class}. Did you mean Task?"
-				end
+				# def method_missing(method_name, *arguments, &block)
+				# 	raise TrackError, "Method '#{method_name}' not defined for #{self.class}. Did you mean Task?"
+				# end
 				
 				# All methods in this block are static.
 				class << self

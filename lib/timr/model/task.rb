@@ -1,4 +1,7 @@
 
+# require 'progress_bar'
+# require 'ruby-progressbar'
+
 module TheFox
 	module Timr
 		module Model
@@ -141,103 +144,99 @@ module TheFox
 				# Track E            +---+
 				# Track F                                 +---+
 				# ```
-				def tracks(options = {})
-					options ||= {}
-					options[:from] ||= nil
-					options[:to] ||= nil
-					options[:status] ||= nil
-					unless options.has_key?(:sort)
-						options[:sort] = true
-					end
+				def tracks(options = Hash.new)
+					from_opt = options.fetch(:from, nil)
+					to_opt = options.fetch(:to, nil)
+					status_opt = options.fetch(:status, nil)
+					sort_opt = options.fetch(:sort, true)
 					
-					# Local variables.
-					from = options[:from]
-					to = options[:to]
-					
-					if options[:status]
-						case options[:status]
+					if status_opt
+						case status_opt
 						when String
-							status = [options[:status]]
+							status_opt = [status_opt]
 						when Array
-							status = options[:status]
+							# OK
 						else
-							raise TaskError, ":status needs to be an instance of String or Array, #{options[:status].class} given."
+							raise TaskError, ":status needs to be an instance of String or Array, #{status_opt.class} given."
 						end
-					else
-						status = nil
 					end
 					
-					if from && to && from > to
+					if from_opt && to_opt && from_opt > to_opt
 						raise TaskError, 'From cannot be bigger than To.'
 					end
 					
 					filtered_tracks = Hash.new
-					if from.nil? && to.nil?
+					if from_opt.nil? && to_opt.nil?
+						puts "TAKE ALL TRACKS" # @TODO remove
 						# Take all Tracks.
-						filtered_tracks = @tracks
-					elsif !from.nil? && to.nil?
+						filtered_tracks = @tracks.select{ |track_id, track|
+							# Filter Tracks with no Begin DateTime.
+							# This can happen when 'timr track add' without any DateTime.
+							!track.begin_datetime.nil?
+						}
+					elsif !from_opt.nil? && to_opt.nil?
 						# puts "open end" # @TODO remove
-						# Open End (to == nil)
+						# Open End (to_opt == nil)
 						filtered_tracks = @tracks.select{ |track_id, track|
 							bdt = track.begin_datetime
 							edt = track.end_datetime || Time.now
 							
 							bdt && (
-								bdt <  from && edt >  from || # Track A, B
-								bdt >= from && edt >= from    # Track C, D, F
+								bdt <  from_opt && edt >  from_opt || # Track A, B
+								bdt >= from_opt && edt >= from_opt    # Track C, D, F
 							)
 						}
-					elsif from.nil? && !to.nil?
-						# Open Start (from == nil)
+					elsif from_opt.nil? && !to_opt.nil?
+						# Open Start (from_opt == nil)
 						filtered_tracks = @tracks.select{ |track_id, track|
 							bdt = track.begin_datetime
 							edt = track.end_datetime || Time.now
 							
 							bdt && (
-								bdt <  to && edt <= to || # Track B, D, E
-								bdt <  to && edt >  to    # Track A, C
+								bdt <  to_opt && edt <= to_opt || # Track B, D, E
+								bdt <  to_opt && edt >  to_opt    # Track A, C
 							)
 						}
-					elsif !from.nil? && !to.nil?
-						# Fixed Start and End (from != nil && to != nil)
+					elsif !from_opt.nil? && !to_opt.nil?
+						# Fixed Start and End (from_opt != nil && to_opt != nil)
 						filtered_tracks = @tracks.select{ |track_id, track|
 							bdt = track.begin_datetime
 							edt = track.end_datetime || Time.now
 							
-							# puts "bdt to cmp: #{bdt}" # @TODO remove
-							# puts "edt to cmp: #{edt}" # @TODO remove
+							# puts "bdt to_opt cmp: #{bdt}" # @TODO remove
+							# puts "edt to_opt cmp: #{edt}" # @TODO remove
 							
 							bdt && (
-								bdt >= from && edt <= to ||               # Track D
-								bdt <  from && edt >  to ||               # Track A
-								bdt <  from && edt <= to && edt > from || # Track B
-								bdt >= from && edt >  to && bdt < to      # Track C
+								bdt >= from_opt && edt <= to_opt ||               # Track D
+								bdt <  from_opt && edt >  to_opt ||               # Track A
+								bdt <  from_opt && edt <= to_opt && edt > from_opt || # Track B
+								bdt >= from_opt && edt >  to_opt && bdt < to_opt      # Track C
 							)
 						}
 					else
 						raise ThisShouldNeverHappenError, 'Should never happen, bug shit happens.'
 					end
 					
-					if status
+					if status_opt
 						filtered_tracks.select!{ |track_id, track|
-							status.include?(track.status.short_status)
+							status_opt.include?(track.status.short_status)
 						}
 					end
 					
-					if options[:sort]
+					if sort_opt
 						#pp filtered_tracks # @TODO remove pp
 						filtered_tracks.sort{ |t1, t2|
-							# puts "t1 #{t1}" # @TODO remove
-							# puts "t2 #{t2}" # @TODO remove
+							puts "t1 #{t1}" # @TODO remove
+							puts "t2 #{t2}" # @TODO remove
 							
 							t1 = t1.last
 							t2 = t2.last
 							
-							# puts "t1 #{t1}" # @TODO remove
-							# puts "t2 #{t2}" # @TODO remove
+							puts "t1 #{t1}" # @TODO remove
+							puts "t2 #{t2}" # @TODO remove
 							
-							# puts "t1 bdt #{t1.begin_datetime.class}" # @TODO remove
-							# puts "t2 bdt #{t2.begin_datetime.class}" # @TODO remove
+							puts "t1 bdt #{t1.begin_datetime.class}" # @TODO remove
+							puts "t2 bdt #{t2.begin_datetime.class}" # @TODO remove
 							
 							cmp1 = t1.begin_datetime <=> t2.begin_datetime
 							if cmp1.nil? || cmp1 == 0
@@ -256,8 +255,8 @@ module TheFox
 				# Options:
 				# 
 				# - `:from`
-				def begin_datetime(options = {})
-					options ||= {}
+				def begin_datetime(options = Hash.new)
+					options ||= Hash.new
 					options[:from] ||= nil
 					
 					# Cache
@@ -294,8 +293,8 @@ module TheFox
 				# Options:
 				# 
 				# - `:format`
-				def begin_datetime_s(options = {})
-					options ||= {}
+				def begin_datetime_s(options = Hash.new)
+					options ||= Hash.new
 					options[:format] ||= HUMAN_DATETIME_FOMRAT
 					
 					bdt = begin_datetime(options)
@@ -311,8 +310,8 @@ module TheFox
 				# Options:
 				# 
 				# - `:to`
-				def end_datetime(options = {})
-					options ||= {}
+				def end_datetime(options = Hash.new)
+					options ||= Hash.new
 					options[:to] ||= nil
 					
 					# Cache
@@ -349,8 +348,8 @@ module TheFox
 				# Options:
 				# 
 				# - `:format`
-				def end_datetime_s(options = {})
-					options ||= {}
+				def end_datetime_s(options = Hash.new)
+					options ||= Hash.new
 					options[:format] ||= HUMAN_DATETIME_FOMRAT
 					
 					edt = end_datetime(options)
@@ -363,18 +362,53 @@ module TheFox
 				
 				# Set estimation.
 				# 
-				# Either using a Duration instance or a String like '2h 30m'.
+				# Either using a Duration instance, Integer or a String like `2h 30m`.
+				# Estimation is parsed by [chronic_duration](https://github.com/henrypoydar/chronic_duration).
+				# 
+				# Examples:
+				# 
+				# - `-e 2:10:5`  
+				#   Sets Estimation to 2h 10m 5s.
+				# 	
+				# - `-e '2h 10m 5s'`  
+				#   Sets Estimation to 2h 10m 5s.
+				#
+				# Use `+` or `-` to calculate with Estimation Times:
+				# 
+				# - `-e '-45m'`  
+				#   Subtracts 45 minutes from the original Estimation.
+				# - `-e '+1h 30m'`  
+				#   Adds 1 hour 30 minutes to the original Estimation.
+				# 
+				# See [chronic_duration](https://github.com/henrypoydar/chronic_duration) for more examples.
 				def estimation=(estimation)
 					case estimation
 					when String
-						estimation = Duration.parse(estimation)
+						# puts "estimation = #{estimation}" # @TODO remove
+						
+						# Cannot use estimation.strip! because frozen.
+						estimation = estimation.strip
+						
+						if estimation[0] == '+'
+							estimation = estimation[1..-1]
+							@estimation += Duration.parse(estimation)
+						elsif estimation[0] == '-'
+							estimation = estimation[1..-1]
+							@estimation -= Duration.parse(estimation)
+							# pp @estimation # @TODO remove
+						else
+							@estimation = Duration.parse(estimation)
+						end
+					when Integer
+						@estimation = Duration.new(estimation)
 					when Duration
-						# OK
+						@estimation = estimation
 					else
-						raise TaskError, "estimation needs to be an instance of String or Duration, #{estimation.class} given."
+						raise TaskError, "estimation needs to be an instance of String, Integer or Duration, #{estimation.class} given."
 					end
 					
-					@estimation = estimation
+					# Mark Task as changed.
+					changed
 				end
 				
 				def estimation
@@ -389,72 +423,11 @@ module TheFox
 					end
 				end
 				
-				# BasicModel Hook
-				def pre_save_to_file
-					# Meta
-					@meta['name'] = @name
-					@meta['description'] = @description
-					
-					@meta['current_track_id'] = nil
-					if @current_track
-						@meta['current_track_id'] = @current_track.id
-					end
-					
-					if @estimation
-						@meta['estimation'] = @estimation.to_i
-					end
-					
-					# Tracks
-					@data = @tracks.map{ |track_id, track|
-						#puts "map track: #{track_id} #{track}" # @TODO remove
-						[track_id, track.to_h]
-					}.to_h
-					
-					super()
-				end
-				
-				# BasicModel Hook
-				def post_load_from_file
-					#puts "#{self.class} post_load_from_file" # @TODO remove
-					
-					#puts "#{self.class} data: '#{@data}'" # @TODO remove
-					
-					@tracks = @data.map{ |track_id, track_h|
-						#puts "load track #{track_id}" # @TODO remove
-						
-						track = Track.create_track_from_hash(track_h)
-						track.task = self
-						[track_id, track]
-					}.to_h
-					
-					#puts "tracks loaded: #{@tracks.count}" # @TODO remove
-					
-					current_track_id = @meta['current_track_id']
-					if current_track_id
-						@current_track = @tracks[current_track_id]
-						
-						# if @current_track # @TODO remove whole if-else block and everyting inside
-						# 	puts "current_track loaded: #{@current_track.short_id}"
-						# else
-						# 	puts "no current track found"
-						# end
-					end
-					
-					@name = @meta['name']
-					@description = @meta['description']
-					
-					# puts "LOAD ESTIMATION: #{@meta['estimation'].class}" # @TODO remove
-					
-					if @meta['estimation']
-						@estimation = Duration.new(@meta['estimation'])
-					end
-				end
-				
-				def start(options = {})
+				def start(options = Hash.new)
 					# puts "#{short_id} Task start"
 					
 					# Track Options
-					options ||= {}
+					options ||= Hash.new
 					options[:track_id] ||= nil
 					
 					# Used by Push.
@@ -493,8 +466,8 @@ module TheFox
 				end
 				
 				# Stops a current running Track.
-				def stop(options = {})
-					options ||= {}
+				def stop(options = Hash.new)
+					options ||= Hash.new
 					
 					if @current_track
 						# puts "#{short_id} Task stop"
@@ -512,8 +485,8 @@ module TheFox
 				end
 				
 				# Pauses a current running Track.
-				def pause(options = {})
-					options ||= {}
+				def pause(options = Hash.new)
+					options ||= Hash.new
 					
 					if @current_track
 						# puts "#{short_id} Task pause"
@@ -529,8 +502,8 @@ module TheFox
 				
 				# Continues the current Track.
 				# Only if it isn't already running.
-				def continue(options = {})
-					options ||= {}
+				def continue(options = Hash.new)
+					options ||= Hash.new
 					options[:track] ||= nil
 					
 					# puts "continue" # @TODO remove
@@ -569,8 +542,8 @@ module TheFox
 					@current_track
 				end
 				
-				def duration(options = {})
-					options ||= {}
+				def duration(options = Hash.new)
+					options ||= Hash.new
 					
 					duration = Duration.new
 					@tracks.each do |track_id, track|
@@ -644,7 +617,7 @@ module TheFox
 				end
 				
 				# Find a Track by ID even if the ID is not 40 characters long.
-				# When the ID is 40 characters long @tracks[id] is faster. ;)
+				# When the ID is 40 characters long `@tracks[id]` is faster. ;)
 				def find_track_by_id(track_id)
 					track_id_len = track_id.length
 					
@@ -671,6 +644,9 @@ module TheFox
 					@tracks[track_id]
 				end
 				
+				# Are two Tasks equal?
+				# 
+				# Uses ID for comparision.
 				def eql?(task)
 					unless task.is_a?(Task)
 						raise StackError, "task variable must be a Task instance. #{task.class} given."
@@ -683,6 +659,7 @@ module TheFox
 					"Task_#{short_id}"
 				end
 				
+				# Used to print informations to STDOUT.
 				def to_compact_str
 					to_compact_array.join("\n")
 				end
@@ -691,11 +668,16 @@ module TheFox
 					to_ax = Array.new
 					to_ax << 'Task: %s %s' % [self.short_id, self.name]
 					if self.description
-						to_ax << 'Description: %s' % [self.description]
+						to_ax << '  Description: %s' % [self.description]
 					end
+					if self.estimation
+						to_ax << '  Estimation: %s' % [self.estimation.to_human]
+					end
+					to_ax << '  File path: %s' % [self.file_path]
 					to_ax
 				end
 				
+				# Used to print informations to STDOUT.
 				def to_detailed_str
 					to_detailed_array.join("\n")
 				end
@@ -706,7 +688,7 @@ module TheFox
 					to_ax << '  Name: %s' % [self.name]
 					
 					if self.description
-						to_ax << 'Description: %s' % [self.description]
+						to_ax << '  Description: %s' % [self.description]
 					end
 					
 					duration_human = self.duration.to_human
@@ -715,6 +697,31 @@ module TheFox
 					duration_man_days = self.duration.to_man_days
 					if duration_human != duration_man_days
 						to_ax << '  Man Unit: %s' % [duration_man_days]
+					end
+					
+					if self.estimation
+						# puts # @TODO remove
+						# puts # @TODO remove
+						# puts # @TODO remove
+						
+						to_ax << '  Estimation:     %s' % [self.estimation.to_human]
+						
+						to_ax << '  Time Remaining: %s (%s)' % [self.remaining_time_s, self.remaining_time_percent_s]
+						
+						bar_options = {
+							:total => self.estimation.to_i,
+							:progress => self.duration.to_i,
+							:length => 50,
+							:progress_mark => '#',
+							:remainder_mark => '-',
+						}
+						bar = ProgressBar.new(bar_options)
+						
+						to_ax << '                  |%s|' % [bar.render]
+						
+						# puts # @TODO remove
+						# puts # @TODO remove
+						# puts # @TODO remove
 					end
 					
 					tracks = self.tracks
@@ -761,9 +768,9 @@ module TheFox
 					"#<Task_#{short_id} tracks=#{@tracks.count}>"
 				end
 				
-				def method_missing(method_name, *arguments, &block)
-					raise TrackError, "Method '#{method_name}' not defined for #{self.class}. Did you mean Track?"
-				end
+				# def method_missing(method_name, *arguments, &block)
+				# 	raise TrackError, "Method '#{method_name}' not defined for #{self.class}. Did you mean Track?"
+				# end
 				
 				# All methods in this block are static.
 				class << self
@@ -791,13 +798,77 @@ module TheFox
 					# 
 					# - `:name` (String)
 					# - `:description` (String)
-					def create_task_from_hash(hash)
+					# - `:estimation` (String|Integer|Duration)
+					def create_task_from_hash(options)
 						task = Task.new
-						task.name = hash[:name] # || hash['name']
-						task.description = hash[:description] # || hash['description']
+						task.name = options[:name]
+						task.description = options[:description]
+						task.estimation = options[:estimation]
 						task
 					end
 					
+				end
+				
+				private
+				
+				# BasicModel Hook
+				def pre_save_to_file
+					# Meta
+					@meta['name'] = @name
+					@meta['description'] = @description
+					
+					@meta['current_track_id'] = nil
+					if @current_track
+						@meta['current_track_id'] = @current_track.id
+					end
+					
+					if @estimation
+						@meta['estimation'] = @estimation.to_i
+					end
+					
+					# Tracks
+					@data = @tracks.map{ |track_id, track|
+						#puts "map track: #{track_id} #{track}" # @TODO remove
+						[track_id, track.to_h]
+					}.to_h
+					
+					super()
+				end
+				
+				# BasicModel Hook
+				def post_load_from_file
+					# puts "#{self.class} post_load_from_file" # @TODO remove
+					#puts "#{self.class} data: '#{@data}'" # @TODO remove
+					
+					@tracks = @data.map{ |track_id, track_h|
+						#puts "load track #{track_id}" # @TODO remove
+						
+						track = Track.create_track_from_hash(track_h)
+						track.task = self
+						[track_id, track]
+					}.to_h
+					
+					#puts "tracks loaded: #{@tracks.count}" # @TODO remove
+					
+					current_track_id = @meta['current_track_id']
+					if current_track_id
+						@current_track = @tracks[current_track_id]
+						
+						# if @current_track # @TODO remove whole if-else block and everyting inside
+						# 	puts "current_track loaded: #{@current_track.short_id}"
+						# else
+						# 	puts "no current track found"
+						# end
+					end
+					
+					@name = @meta['name']
+					@description = @meta['description']
+					
+					# puts "LOAD ESTIMATION: #{@meta['estimation'].class}" # @TODO remove
+					
+					if @meta['estimation']
+						@estimation = Duration.new(@meta['estimation'])
+					end
 				end
 				
 			end # class Task

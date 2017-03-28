@@ -74,10 +74,10 @@ module TheFox
 						return
 					end
 					
-					task = track.task
-					unless task
-						raise TrackError, "Track #{track.id} has no Task."
-					end
+					# task = track.task
+					# unless task
+					# 	raise TrackError, "Track #{track.id} has no Task."
+					# end
 					
 					# duration = track.duration.to_human
 					# status = track.status.colorized

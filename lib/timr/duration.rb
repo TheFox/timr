@@ -40,7 +40,6 @@ module TheFox
 					:format => :short,
 					:limit_to_hours => true,
 					:keep_zero => false,
-					#:keep_zero => true,
 					:units => 2,
 				}
 				h = ChronicDuration.output(@seconds, dur_opt)
@@ -95,7 +94,11 @@ module TheFox
 					raise DurationError, "Wrong type #{duration.class} for '-' function. #{duration}"
 				end
 				
-				Duration.new(@seconds - duration.seconds)
+				diff = @seconds - duration.seconds
+				if diff < 0
+					diff = 0
+				end
+				Duration.new(diff)
 			end
 			
 			def <(seconds)

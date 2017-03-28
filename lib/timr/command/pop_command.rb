@@ -104,8 +104,8 @@ module TheFox
 						raise TrackError, "Track #{track.id} has no Task."
 					end
 					
-					duration = track.duration.to_human
-					status = track.status.colorized
+					# duration = track.duration.to_human
+					# status = track.status.colorized
 					
 					puts '--- POPED ---'
 					# puts ' Task: %s %s' % [task.short_id, task.name_s]
@@ -136,8 +136,8 @@ module TheFox
 						raise TrackError, "Track #{track.id} has no Task."
 					end
 					
-					duration = track.duration.to_human
-					status = track.status.colorized
+					# duration = track.duration.to_human
+					# status = track.status.colorized
 					
 					puts '--- CONTINUED ---'
 					# puts ' Task: %s %s' % [task.short_id, task.name_s]

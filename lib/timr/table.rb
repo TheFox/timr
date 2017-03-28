@@ -6,21 +6,16 @@ module TheFox
 			
 			attr_reader :rows
 			
-			def initialize(options = {})
-				@options = options || {}
-				#@options[:hide_empty_columns] ||= true
-				@options[:headings] ||= Array.new
+			def initialize(options = Hash.new)
+				@headings = options.fetch(:headings, Array.new)
 				
-				#@columns = Array.new
 				@rows = Array.new
 			end
 			
 			def <<(row)
 				col_n = 0
 				row.each do |col|
-					# "col: #{col_n} #{col}"
-					
-					header = @options[:headings][col_n]
+					header = @headings[col_n]
 					if header
 						unless header.has_key?(:empty)
 							header[:empty] = true
@@ -51,16 +46,13 @@ module TheFox
 					
 					col_n += 1
 				end
-				#puts
 				@rows << row
 			end
 			
 			def to_s
 				s = ''
 				
-				#header_row = []
-				s << @options[:headings].map{ |header|
-					#puts "build header: '#{header[:label]}'"
+				s << @headings.map{ |header|
 					unless header[:empty]
 						#('%%-%ds' % [header[:max_length]]) % [header[:label]]
 						"%s#{header[:format]}%s" % [header[:padding_left], header[:label], header[:padding_right]]
@@ -72,7 +64,7 @@ module TheFox
 					col_n = 0
 					columns = []
 					row.each do |col|
-						header = @options[:headings][col_n]
+						header = @headings[col_n]
 						unless header[:empty]
 							#s << header[:format] % [col] << ' '
 							col_s = "%s#{header[:format]}%s" % [header[:padding_left], col, header[:padding_right]]

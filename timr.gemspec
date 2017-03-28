@@ -33,10 +33,13 @@ Gem::Specification.new do |spec|
 	#spec.add_runtime_dependency 'terminal-table', '~>1.7'
 	# spec.add_runtime_dependency 'activesupport', '~>5.0'
 	spec.add_runtime_dependency 'chronic_duration', '~>0.10'
+	# spec.add_runtime_dependency 'progress_bar', '~>1.1'
+	# spec.add_runtime_dependency 'ruby-progressbar', '~>1.8'
 	spec.add_runtime_dependency 'thefox-ext', '~>1.5'
 	
 	# spec.add_runtime_dependency 'sqlite3', '~>1.3'
 	# spec.add_runtime_dependency 'rom-sql', '~>1.2'
 	# spec.add_runtime_dependency 'rom-yaml', '~>1.0'
 	# spec.add_runtime_dependency 'rom-repository', '~>1.3'
+	# spec.add_runtime_dependency 'timecop', '~>0.8'
 end

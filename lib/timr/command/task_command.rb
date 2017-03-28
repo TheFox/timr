@@ -14,7 +14,7 @@ module TheFox
 				
 				def initialize(argv = Array.new)
 					super()
-					# puts "argv '#{argv}'"
+					# puts "argv #{argv.frozen?} '#{argv}'"
 					
 					@help_opt = false
 					@show_opt = false
@@ -25,6 +25,7 @@ module TheFox
 					@tracks_opt = false
 					@name_opt = nil
 					@description_opt = nil
+					@estimation_opt = nil
 					
 					# Holds Task instances.
 					@tasks_opt = Set.new
@@ -44,6 +45,8 @@ module TheFox
 							#puts "name: #{@name_opt.class} #{@name_opt.is_digit?}" # @TODO remove
 						when '--desc', '--description', '-d' # -d not official
 							@description_opt = argv.shift
+						when '-e', '--est', '--estimation'
+							@estimation_opt = argv.shift
 						
 						when 'show'
 							@show_opt = true
@@ -95,10 +98,12 @@ module TheFox
 				
 				private
 				
+				# Uses TheFox::Timr::Timr.add_task.
 				def run_add
 					options = {
 						:name => @name_opt,
 						:description => @description_opt,
+						:estimation => @estimation_opt,
 					}
 					task = @timr.add_task(options)
 					
@@ -120,7 +125,7 @@ module TheFox
 					end
 					task_id = @tasks_opt.first
 					
-					if @name_opt.nil? && @description_opt.nil?
+					if @name_opt.nil? && @description_opt.nil? && @estimation_opt.nil?
 						raise TaskCommandError, 'No option given. Use --name or --description.'
 					end
 					
@@ -135,6 +140,9 @@ module TheFox
 					end
 					if @description_opt
 						task.description = @description_opt
+					end
+					if @estimation_opt
+						task.estimation = @estimation_opt
 					end
 					
 					task.save_to_file
@@ -237,11 +245,25 @@ module TheFox
 					puts '    -t, --tracks             Show a list of Track IDs for each Task.'
 					puts
 					puts 'Add/Set Options'
-					puts '    -n, --name <name>              Name of the Task.'
-					puts '    --desc, --description <str>    Description of the Task.'
+					puts '    -n, --name <name>                 Name of the Task.'
+					puts '    --desc, --description <str>       Description of the Task.'
+					puts '    -e, --est, --estimation <time>    Estimation of the Task. See details below.'
 					puts
 					puts 'Man Unit: 8 hours are 1 man-day.'
 					puts '          5 man-days are 1 man-week, and so on.'
+					puts
+					puts 'Estimation'
+					puts '  Estimation is parsed by chronic_duration.'
+					puts '  Examples:'
+					puts "      -e 2:10:5           # Sets Estimation to 2h 10m 5s."
+					puts "      -e '2h 10m 5s'      # Sets Estimation to 2h 10m 5s."
+					puts
+					puts "  Use '+' or '-' to calculate with Estimation Times:"
+					puts "      -e '-45m'           # Subtracts 45 minutes from the original Estimation."
+					puts "      -e '+1h 30m'        # Adds 1 hour 30 minutes to the original Estimation."
+					puts
+					puts '  See chronic_duration for more examples.'
+					puts '  https://github.com/henrypoydar/chronic_duration'
 					puts
 				end
 				

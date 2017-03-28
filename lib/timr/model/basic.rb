@@ -8,9 +8,13 @@ require 'pathname'
 
 module TheFox
 	module Timr
+		
+		# See BasicModel for more details.
 		module Model
 			
 			# Basic Class
+			# 
+			# Models hold data and can be stored to YAML files. Except for [Tracks](rdoc-ref:Track). Tracks are stored to a Task file.
 			class BasicModel
 				
 				attr_accessor :changed
@@ -141,7 +145,7 @@ module TheFox
 				# All methods in this block are static.
 				class << self
 					
-					# Converts an SHA1 Hash into a path.
+					# Converts an [SHA1](http://ruby-doc.org/stdlib-2.4.1/libdoc/digest/rdoc/Digest/SHA1.html) Hash into a path.
 					# 
 					# Function IO:
 					# 

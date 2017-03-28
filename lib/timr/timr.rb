@@ -53,8 +53,8 @@ module TheFox
 			end
 			
 			# Removes all previous Tracks and starts a new one.
-			def start(options = {})
-				options ||= {}
+			def start(options = Hash.new)
+				options ||= Hash.new
 				options[:task_id] ||= nil
 				options[:track_id] ||= nil
 				
@@ -142,8 +142,8 @@ module TheFox
 			end
 			
 			# Stops the current running Track and removes it from the Stack.
-			def stop(options = {})
-				options ||= {}
+			def stop(options = Hash.new)
+				options ||= Hash.new
 				
 				# Get current Track from Stack.
 				track = @stack.current_track
@@ -167,8 +167,8 @@ module TheFox
 			end
 			
 			# Stops the current running Track but does not remove it from the Stack.
-			def pause(options = {})
-				options ||= {}
+			def pause(options = Hash.new)
+				options ||= Hash.new
 				
 				# Get current Track from Stack.
 				track = @stack.current_track
@@ -196,8 +196,8 @@ module TheFox
 			end
 			
 			# Continues the Top Track.
-			def continue(options = {})
-				options ||= {}
+			def continue(options = Hash.new)
+				options ||= Hash.new
 				
 				# Get current Track from Stack.
 				track = @stack.current_track
@@ -223,8 +223,8 @@ module TheFox
 			end
 			
 			# Starts a new Track and pauses the underlying one.
-			def push(options = {})
-				options ||= {}
+			def push(options = Hash.new)
+				options ||= Hash.new
 				options[:task_id] ||= nil
 				options[:track_id] ||= nil
 				
@@ -313,16 +313,20 @@ module TheFox
 			
 			# Stops the Top Track, removes it from the Stack and
 			# continues the next underlying (new Top) Track.
-			def pop(options = {})
-				options ||= {}
+			def pop(options = Hash.new)
+				options ||= Hash.new
 				
 				stop(options)
 				continue(options)
 			end
 			
-			# Just add a new Task. Will not be started or something else.
-			def add_task(options = {})
-				options ||= {}
+			# Just add a new [Task](rdoc-ref:TheFox::Timr::Model::Task). Will not be started or something else.
+			# 
+			# Uses [Task.create_task_from_hash](rdoc-ref:TheFox::Timr::Model::Task::create_task_from_hash) to create a new Task instance and [BasicModel.create_path_by_id](rdoc-ref:TheFox::Timr::Model::BasicModel.create_path_by_id) to create a new file path.
+			# 
+			# Returns the new created Task instance.
+			def add_task(options = Hash.new)
+				options ||= Hash.new
 				
 				task = Task.create_task_from_hash(options)
 				
@@ -342,8 +346,8 @@ module TheFox
 			# Options:
 			# 
 			# - `:task_id` (String) 
-			def remove_task(options = {})
-				options ||= {}
+			def remove_task(options = Hash.new)
+				options ||= Hash.new
 				options[:task_id] ||= nil
 				unless options[:task_id]
 					raise TaskError, 'task_id cannot be nil.'
@@ -370,8 +374,8 @@ module TheFox
 			# Options:
 			# 
 			# - `:track_id` (String) 
-			def remove_track(options = {})
-				options ||= {}
+			def remove_track(options = Hash.new)
+				options ||= Hash.new
 				options[:track_id] ||= nil
 				
 				unless options[:track_id]
@@ -451,8 +455,8 @@ module TheFox
 			# Options:
 			# 
 			# - `:sort` (Boolean)
-			def tracks(options = {})
-				options ||= {}
+			def tracks(options = Hash.new)
+				options ||= Hash.new
 				unless options.has_key?(:sort)
 					options[:sort] = true
 				end

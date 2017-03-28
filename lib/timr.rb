@@ -17,6 +17,7 @@ require 'timr/model/config'
 require 'timr/duration'
 require 'timr/status'
 require 'timr/table'
+require 'timr/progressbar'
 
 require 'timr/command/basic_command'
 require 'timr/command/help_command'
