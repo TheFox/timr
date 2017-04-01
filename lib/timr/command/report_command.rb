@@ -45,7 +45,7 @@ module TheFox
 						
 						when '--tasks'
 							@tasks_opt = true
-						when '--tracks'
+						when '-t', '--tracks'
 							@tracks_opt = true
 						
 						when '--csv'
@@ -168,12 +168,12 @@ module TheFox
 						edt = task.end_datetime(@filter_options)
 						
 						# Determine First Begin DateTime of the table.
-						if !totals[:begin_datetime] || bdt < totals[:begin_datetime]
+						if bdt && (!totals[:begin_datetime] || bdt < totals[:begin_datetime])
 							totals[:begin_datetime] = bdt
 						end
 						
 						# Determine Last End DateTime of the table.
-						if !totals[:end_datetime] || edt > totals[:end_datetime]
+						if edt && (!totals[:end_datetime] || edt > totals[:end_datetime])
 							totals[:end_datetime] = edt
 						end
 						
@@ -253,12 +253,12 @@ module TheFox
 						edt = track.end_datetime(@filter_options)
 						
 						# Determine First Begin DateTime of the table.
-						if !totals[:begin_datetime] || bdt < totals[:begin_datetime]
+						if bdt && (!totals[:begin_datetime] || bdt < totals[:begin_datetime])
 							totals[:begin_datetime] = bdt
 						end
 						
 						# Determine Last End DateTime of the table.
-						if !totals[:end_datetime] || edt > totals[:end_datetime]
+						if edt && (!totals[:end_datetime] || edt > totals[:end_datetime])
 							totals[:end_datetime] = edt
 						end
 						
@@ -369,12 +369,12 @@ module TheFox
 						edt = task.end_datetime(@csv_filter_options)
 						
 						# Determine First Begin DateTime of the table.
-						if !totals[:begin_datetime] || bdt < totals[:begin_datetime]
+						if bdt && (!totals[:begin_datetime] || bdt < totals[:begin_datetime])
 							totals[:begin_datetime] = bdt
 						end
 						
 						# Determine Last End DateTime of the table.
-						if !totals[:end_datetime] || edt > totals[:end_datetime]
+						if edt && (!totals[:end_datetime] || edt > totals[:end_datetime])
 							totals[:end_datetime] = edt
 						end
 						
@@ -476,12 +476,12 @@ module TheFox
 						edt = track.end_datetime(@csv_filter_options)
 						
 						# Determine First Begin DateTime of the table.
-						if !totals[:begin_datetime] || bdt < totals[:begin_datetime]
+						if bdt && (!totals[:begin_datetime] || bdt < totals[:begin_datetime])
 							totals[:begin_datetime] = bdt
 						end
 						
 						# Determine Last End DateTime of the table.
-						if !totals[:end_datetime] || edt > totals[:end_datetime]
+						if edt && (!totals[:end_datetime] || edt > totals[:end_datetime])
 							totals[:end_datetime] = edt
 						end
 						
@@ -539,6 +539,8 @@ module TheFox
 					puts '    -m, --month <[YYYY-]MM>     A single month from 01 to 31.'
 					puts '    -y, --year  [<YYYY>]        A single year from 01-01 to 12-31.'
 					puts '    -a, --all                   All.'
+					puts '    --tasks                     Export Tasks. Default.'
+					puts '    --tracks                    Export Tracks'
 					puts "    --csv <path>                Export as CSV file. Use '--csv -' to use STDOUT."
 					puts
 					puts 'Task Table Columns'

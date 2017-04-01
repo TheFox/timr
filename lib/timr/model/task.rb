@@ -167,7 +167,7 @@ module TheFox
 					
 					filtered_tracks = Hash.new
 					if from_opt.nil? && to_opt.nil?
-						puts "TAKE ALL TRACKS" # @TODO remove
+						# puts "TAKE ALL TRACKS" # @TODO remove
 						# Take all Tracks.
 						filtered_tracks = @tracks.select{ |track_id, track|
 							# Filter Tracks with no Begin DateTime.
@@ -226,17 +226,17 @@ module TheFox
 					if sort_opt
 						#pp filtered_tracks # @TODO remove pp
 						filtered_tracks.sort{ |t1, t2|
-							puts "t1 #{t1}" # @TODO remove
-							puts "t2 #{t2}" # @TODO remove
+							# puts "t1 #{t1}" # @TODO remove
+							# puts "t2 #{t2}" # @TODO remove
 							
 							t1 = t1.last
 							t2 = t2.last
 							
-							puts "t1 #{t1}" # @TODO remove
-							puts "t2 #{t2}" # @TODO remove
+							# puts "t1 #{t1}" # @TODO remove
+							# puts "t2 #{t2}" # @TODO remove
 							
-							puts "t1 bdt #{t1.begin_datetime.class}" # @TODO remove
-							puts "t2 bdt #{t2.begin_datetime.class}" # @TODO remove
+							# puts "t1 bdt #{t1.begin_datetime.class}" # @TODO remove
+							# puts "t2 bdt #{t2.begin_datetime.class}" # @TODO remove
 							
 							cmp1 = t1.begin_datetime <=> t2.begin_datetime
 							if cmp1.nil? || cmp1 == 0
