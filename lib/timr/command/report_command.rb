@@ -345,10 +345,14 @@ module TheFox
 					end
 					
 					totals = {
+						:row_c => 0,
+						
 						:duration => Duration.new,
+						:estimation => Duration.new,
+						:remaining_time => Duration.new,
 						:billed_duration => Duration.new,
 						:unbilled_duration => Duration.new,
-						:row_c => 0,
+						
 						:tracks_c => 0,
 						:billed_tracks_c => 0,
 						:unbilled_tracks_c => 0,
@@ -369,6 +373,11 @@ module TheFox
 							
 							'TASK_DURATION_HUMAN',
 							'TASK_DURATION_SECONDS',
+							
+							'TASK_ESTIMATION_HUMAN',
+							'TASK_ESTIMATION_SECONDS',
+							'TASK_REMAINING_TIME_HUMAN',
+							'TASK_REMAINING_TIME_SECONDS',
 							
 							'TASK_BILLED_DURATION_HUMAN',
 							'TASK_BILLED_DURATION_SECONDS',
@@ -406,11 +415,15 @@ module TheFox
 						
 						# Task Duration
 						duration = task.duration(@csv_filter_options)
+						estimation = task.estimation
+						remaining_time = task.remaining_time
 						billed_duration = task.billed_duration(@csv_filter_options)
 						unbilled_duration = task.unbilled_duration(@csv_filter_options)
 						
 						# Global Duration Sum
 						totals[:duration] += duration
+						totals[:estimation] += estimation
+						totals[:remaining_time] += remaining_time
 						totals[:billed_duration] += billed_duration
 						totals[:unbilled_duration] += unbilled_duration
 						
@@ -441,6 +454,10 @@ module TheFox
 							
 							duration.to_human,
 							duration.to_i,
+							estimation.to_human,
+							estimation.to_i,
+							remaining_time.to_human,
+							remaining_time.to_i,
 							billed_duration.to_human,
 							billed_duration.to_i,
 							unbilled_duration.to_human,
@@ -468,6 +485,10 @@ module TheFox
 						
 						totals[:duration].to_human,
 						totals[:duration].to_i,
+						totals[:estimation].to_human,
+						totals[:estimation].to_i,
+						totals[:remaining_time].to_human,
+						totals[:remaining_time].to_i,
 						totals[:billed_duration].to_human,
 						totals[:billed_duration].to_i,
 						totals[:unbilled_duration].to_human,
@@ -657,12 +678,19 @@ module TheFox
 					puts '    TASK_NAME                          Task Name'
 					puts '    TASK_BEGIN_DATETIME                Begin DateTime of the first Track.'
 					puts '    TASK_END_DATETIME                  End DateTime of the last Track.'
+					puts
 					puts '    TASK_DURATION_HUMAN                Task Duration in human format: 5m 6s'
 					puts '    TASK_DURATION_SECONDS              Task Duration in seconds: 306'
+					puts '    TASK_ESTIMATION_HUMAN'
+					puts '    TASK_ESTIMATION_SECONDS'
+					puts '    TASK_REMAINING_TIME_HUMAN'
+					puts '    TASK_REMAINING_TIME_SECONDS'
+					puts
 					puts '    TASK_BILLED_DURATION_HUMAN         Billed Task Duration in human format.'
 					puts '    TASK_BILLED_DURATION_SECONDS       Billed Task Duration in seconds.'
 					puts '    TASK_UNBILLED_DURATION_HUMAN       Unbilled Task Duration in human format.'
 					puts '    TASK_UNBILLED_DURATION_SECONDS     Unbilled Task Duration in seconds.'
+					puts
 					puts '    TASK_TRACK_COUNT                   Task Track count.'
 					puts '    TASK_BILLED_TRACK_COUNT            Task Billed Track count.'
 					puts '    TASK_UNBILLED_TRACK_COUNT          Task Unbilled Track count.'

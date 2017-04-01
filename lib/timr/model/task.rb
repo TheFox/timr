@@ -617,7 +617,7 @@ module TheFox
 				# Returns a Duration instance.
 				def remaining_time
 					if @estimation
-						rmt = @estimation - duration
+						rmt = estimation - duration
 						if rmt < 0
 							#rmt
 							rmt = Duration.new(0)

@@ -9,6 +9,7 @@ dev:
 
 .PHONY: test
 test:
+	grep -r -i taks lib; [[ $$? -gt 0 ]] # What should 'taks' mean? Task?
 	RUBYOPT=-w TZ=Europe/Vienna $(BUNDLER) exec ./test/suite_all.rb -v
 
 .PHONY: test_local
