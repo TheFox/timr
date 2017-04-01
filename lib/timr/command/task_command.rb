@@ -26,6 +26,8 @@ module TheFox
 					@name_opt = nil
 					@description_opt = nil
 					@estimation_opt = nil
+					@billed_opt = nil
+					@unbilled_opt = nil
 					
 					# Holds Task instances.
 					@tasks_opt = Set.new
@@ -47,6 +49,10 @@ module TheFox
 							@description_opt = argv.shift
 						when '-e', '--est', '--estimation'
 							@estimation_opt = argv.shift
+						when '-b', '--billed'
+							@billed_opt = true
+						when '--unbilled'
+							@unbilled_opt = true
 						
 						when 'show'
 							@show_opt = true
@@ -68,6 +74,10 @@ module TheFox
 								raise TaskCommandError, "Unknown argument '#{arg}'. See 'timr task --help'."
 							end
 						end
+					end
+					
+					if @billed_opt && @unbilled_opt
+						raise TaskCommandError, 'Cannot use --billed and --unbilled.'
 					end
 					
 					# pp @tasks_opt
@@ -125,8 +135,8 @@ module TheFox
 					end
 					task_id = @tasks_opt.first
 					
-					if @name_opt.nil? && @description_opt.nil? && @estimation_opt.nil?
-						raise TaskCommandError, 'No option given. Use --name or --description.'
+					if @name_opt.nil? && @description_opt.nil? && @estimation_opt.nil? && @billed_opt.nil? && @unbilled_opt.nil?
+						raise TaskCommandError, "No option given. See 'time task -h'."
 					end
 					
 					task = @timr.get_task_by_id(task_id)
@@ -143,6 +153,13 @@ module TheFox
 					end
 					if @estimation_opt
 						task.estimation = @estimation_opt
+					end
+					if @billed_opt || @unbilled_opt
+						if @billed_opt
+							task.is_billed = true
+						else
+							task.is_billed = false
+						end
 					end
 					
 					task.save_to_file
@@ -230,9 +247,10 @@ module TheFox
 				
 				def help
 					puts 'usage: timr task [show] [[-t|--tracks] <task_ids...>]'
-					puts 'usage: timr task add [-n|--name <name>] [--description <str>]'
-					puts 'usage: timr task set [-n|--name <name>] [--description <str>] <task_id>'
-					puts 'usage: timr task remove <task_ids...>'
+					puts '   or: timr task add [-n|--name <name>] [--description <str>]'
+					puts '   or: timr task set [-n|--name <name>] [--description <str>]'
+					puts '                     [--estimation <time>] [--billed|--unbilled] <task_id>'
+					puts '   or: timr task remove <task_ids...>'
 					puts '   or: timr task [-h|--help]'
 					puts
 					puts 'Subcommands'
@@ -248,6 +266,8 @@ module TheFox
 					puts '    -n, --name <name>                 Name of the Task.'
 					puts '    --desc, --description <str>       Description of the Task.'
 					puts '    -e, --est, --estimation <time>    Estimation of the Task. See details below.'
+					puts '    -b, --billed                      Mark Task as billed.'
+					puts '    --unbilled                        Mark Task as unbilled.'
 					puts
 					puts 'Man Unit: 8 hours are 1 man-day.'
 					puts '          5 man-days are 1 man-week, and so on.'
@@ -264,6 +284,10 @@ module TheFox
 					puts
 					puts '  See chronic_duration for more examples.'
 					puts '  https://github.com/henrypoydar/chronic_duration'
+					puts
+					puts 'Billed/Unbilled'
+					puts '  If a whole Task gets billed/unbilled all Tracks are changed to'
+					puts "  billed/unbilled. Each Track has a flag 'is_billed'."
 					puts
 				end
 				

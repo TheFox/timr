@@ -421,4 +421,63 @@ class TestTask < MiniTest::Test
 		assert_equal('R', task.status.short_status)
 	end
 	
+	def test_billed
+		track1 = Track.new
+		track1.begin_datetime = '2015-06-01 10:00:00'
+		track1.end_datetime   = '2015-06-01 10:00:01'
+		track1.is_billed = false
+		
+		track2 = Track.new
+		track2.begin_datetime = '2015-06-01 10:00:00'
+		track2.end_datetime   = '2015-06-01 10:00:02'
+		track2.is_billed = false
+		
+		track3 = Track.new
+		track3.begin_datetime = '2015-06-01 10:00:00'
+		track3.end_datetime   = '2015-06-01 10:00:03'
+		track3.is_billed = false
+		
+		track4 = Track.new
+		track4.begin_datetime = '2015-06-01 10:00:00'
+		track4.end_datetime   = '2015-06-01 10:00:04'
+		track4.is_billed = true
+		
+		track5 = Track.new
+		track5.begin_datetime = '2015-06-01 10:00:00'
+		track5.end_datetime   = '2015-06-01 10:00:05'
+		track5.is_billed = true
+		
+		task = Task.new
+		task.add_track(track1)
+		task.add_track(track2)
+		task.add_track(track3)
+		task.add_track(track4)
+		task.add_track(track5)
+		
+		tracks = task.tracks
+		assert_equal(5, tracks.count)
+		
+		tracks = task.tracks({:billed => false})
+		assert_equal(3, tracks.count)
+		
+		tracks = task.tracks({:billed => true})
+		assert_equal(2, tracks.count)
+		
+		# tracks = task.tracks({:billed => false, :unbilled => false})
+		# assert_equal(5, tracks.count)
+		
+		# tracks = task.tracks({:billed => true, :unbilled => false})
+		# assert_equal(2, tracks.count)
+		
+		# tracks = task.tracks({:billed => false, :unbilled => true})
+		# assert_equal(3, tracks.count)
+		
+		# tracks = task.tracks({:billed => true, :unbilled => true})
+		# assert_equal(2, tracks.count)
+		
+		assert_equal(15, task.duration.to_i)
+		assert_equal(6, task.duration({:billed => false}).to_i)
+		assert_equal(9, task.duration({:billed => true}).to_i)
+	end
+	
 end

@@ -274,6 +274,34 @@ class TestTrack < MiniTest::Test
 		from = Time.parse('2017-01-01 01:00:05')
 		to   = Time.parse('2017-01-01 01:55:00')
 		assert_equal(3295, track.duration({:from => from, :to => to}).to_i)
+		
+		
+		track.end_datetime   = '2017-03-28 16:00:00 +0000'
+		track.begin_datetime = '2017-03-28 15:00:00 +0000'
+		
+		from = Time.parse('2017-03-31 22:00:00 +0000')
+		to   = Time.parse('2017-04-30 21:59:59 +0000')
+		assert_equal(0, track.duration({:from => from, :to => to}).to_i)
+	end
+	
+	def test_billed_duration
+		track = Track.new
+		track.begin_datetime = '2017-01-01 01:00:00'
+		track.end_datetime   = '2017-01-01 02:00:00'
+		track.is_billed = true
+		
+		assert_equal(3600, track.billed_duration.to_i)
+		assert_equal(0, track.unbilled_duration.to_i)
+	end
+	
+	def test_unbilled_duration
+		track = Track.new
+		track.begin_datetime = '2017-01-01 01:00:00'
+		track.end_datetime   = '2017-01-01 02:00:00'
+		track.is_billed = false
+		
+		assert_equal(0, track.billed_duration.to_i)
+		assert_equal(3600, track.unbilled_duration.to_i)
 	end
 	
 	def test_title_nil

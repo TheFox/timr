@@ -19,6 +19,8 @@ module TheFox
 				# Is this even in use? ;D
 				attr_accessor :paused
 				
+				attr_reader :is_billed
+				
 				def initialize
 					super()
 					
@@ -26,6 +28,7 @@ module TheFox
 					
 					@begin_datetime = nil
 					@end_datetime = nil
+					@is_billed = false
 					@message = nil
 					@paused = false
 				end
@@ -219,37 +222,66 @@ module TheFox
 				# - `:from` (Time), `:to` (Time)  
 				#   Limit the begin and end datetimes to a specific range.
 				def duration(options = Hash.new)
-					options ||= Hash.new
-					options[:from] ||= nil
-					options[:to] ||= nil
+					# puts "dur" # @TODO remove
+					
+					from_opt = options.fetch(:from, nil)
+					to_opt = options.fetch(:to, nil)
 					
 					if @begin_datetime
 						bdt = @begin_datetime.utc
-						#puts "Track duration: bdt #{bdt}"
+						# puts "#{self} A duration: bdt #{bdt.strftime('%F %T %z')}" # @TODO remove
 					end
 					if @end_datetime
 						edt = @end_datetime.utc
+						# puts "#{self} A duration: edt #{edt.strftime('%F %T %z')}" # @TODO remove
 					else
 						edt = Time.now.utc
 					end
 					
 					# Cut Start
-					if options[:from] && bdt && options[:from] > bdt
-						bdt = options[:from].utc
+					if from_opt && bdt && from_opt > bdt
+						# puts "cut start" # @TODO remove
+						bdt = from_opt.utc
 					end
 					
 					# Cut End
-					if options[:to] && options[:to] < edt
-						edt = options[:to].utc
+					if to_opt && edt && to_opt < edt
+						# puts "cut end" # @TODO remove
+						edt = to_opt.utc
 					end
 					
-					seconds = if bdt
-							(edt - bdt).to_i
-						else
-							0
+					# puts "#{self} B duration: bdt #{bdt}" # @TODO remove
+					# puts "#{self} B duration: edt #{edt}" # @TODO remove
+					
+					seconds = 0
+					if bdt && edt
+						# puts "  -> #{(edt - bdt).to_i}   #{bdt < edt}" # @TODO remove
+						if bdt < edt
+							seconds = (edt - bdt).to_i
 						end
+					end
 					
 					Duration.new(seconds)
+				end
+				
+				def billed_duration(options = Hash.new)
+					# puts "billed_duration"
+					
+					if self.is_billed
+						duration(options)
+					else
+						Duration.new(0)
+					end
+				end
+				
+				def unbilled_duration(options = Hash.new)
+					# puts "unbilled_duration"
+					
+					if !self.is_billed
+						duration(options)
+					else
+						Duration.new(0)
+					end
 				end
 				
 				# When begin_datetime is `2017-01-01 01:15`  
@@ -320,6 +352,13 @@ module TheFox
 					title(max_length)
 				end
 				
+				def is_billed=(is_billed)
+					@is_billed = is_billed
+					
+					# Mark Track as changed.
+					changed
+				end
+				
 				# When the Track is marked as changed it needs to mark the Task as changed.
 				# A single Track cannot be stored to a file. Tracks are assiged to a Task and are stored
 				# to the Task file.
@@ -367,6 +406,7 @@ module TheFox
 						'short_id' => short_id, # Not used.
 						'created' => @meta['created'],
 						'modified' => @meta['modified'],
+						'is_billed' => @is_billed,
 						'message' => @message,
 					}
 					if @begin_datetime
@@ -402,6 +442,7 @@ module TheFox
 					if duration_human != duration_man_days
 						to_ax << '  Man Unit: %s' % [duration_man_days]
 					end
+					to_ax << '  Billed: %s' % [self.is_billed ? 'Yes' : 'No']
 					to_ax << '  Status: %s' % [self.status.colorized]
 					# if options[:message] && self.message
 					if self.message
@@ -426,6 +467,13 @@ module TheFox
 					
 					# Create a new Track instance from a Hash.
 					def create_track_from_hash(hash)
+						unless hash.is_a?(Hash)
+							raise TrackError, "hash variable must be a Hash instance. #{hash.class} given."
+						end
+						
+						# puts "create_track_from_hash" # @TODO remove
+						# pp hash # @TODO remove
+						
 						track = Track.new
 						if hash['id']
 							track.id = hash['id']
@@ -435,6 +483,9 @@ module TheFox
 						end
 						if hash['modified']
 							track.modified = hash['modified']
+						end
+						if hash['is_billed']
+							track.is_billed = hash['is_billed']
 						end
 						if hash['message']
 							track.message = hash['message']

@@ -95,6 +95,10 @@ module TheFox
 				# 
 				# - `:from`, `:to` limit the begin and end datetimes to a specific range.
 				# - `:status` filter Tracks by Short Status.
+				# - `:billed` filter Tracks by is_billed flag.
+				# 	- `true` filter billed Tracks.
+				# 	- `false` filter unbilled Tracks.
+				# 	- `nil` filter off.
 				# 
 				# Fixed Start and End (`from != nil && to != nil`)
 				# 
@@ -149,6 +153,7 @@ module TheFox
 					to_opt = options.fetch(:to, nil)
 					status_opt = options.fetch(:status, nil)
 					sort_opt = options.fetch(:sort, true)
+					billed_opt = options.fetch(:billed, nil)
 					
 					if status_opt
 						case status_opt
@@ -221,6 +226,32 @@ module TheFox
 						filtered_tracks.select!{ |track_id, track|
 							status_opt.include?(track.status.short_status)
 						}
+					end
+					
+					# if billed_opt || unbilled_opt
+					# 	if billed_opt
+							# filtered_tracks.select!{ |track_id, track|
+							# 	track.is_billed
+							# }
+					# 	else
+					# 		if unbilled_opt
+					# 			filtered_tracks.select!{ |track_id, track|
+					# 				!track.is_billed
+					# 			}
+					# 		end
+					# 	end
+					# end
+					
+					unless billed_opt.nil?
+						if billed_opt
+							filtered_tracks.select!{ |track_id, track|
+								track.is_billed
+							}
+						else
+							filtered_tracks.select!{ |track_id, track|
+								!track.is_billed
+							}
+						end
 					end
 					
 					if sort_opt
@@ -542,16 +573,43 @@ module TheFox
 					@current_track
 				end
 				
+				# Options:
+				# 
+				# - `:billed`
 				def duration(options = Hash.new)
-					options ||= Hash.new
+					# puts "Task duration" # @TODO remove
+					# pp options # @TODO remove
+					
+					billed_opt = options.fetch(:billed, nil)
 					
 					duration = Duration.new
 					@tracks.each do |track_id, track|
-						duration += track.duration(options)
+						
+						if billed_opt.nil? || (billed_opt && track.is_billed) || (!billed_opt && !track.is_billed)
+							duration += track.duration(options)
+						end
 						
 						#puts "track #{track.short_id} #{duration}" # @TODO remove
 					end
 					duration
+				end
+				
+				# Alias for `duration()`.
+				
+				# Options:
+				# 
+				# - `:billed` (Boolean)
+				def billed_duration(options = Hash.new)
+					duration(options.merge({:billed => true}))
+				end
+				
+				# Alias for `duration()`.
+				# 
+				# Options:
+				# 
+				# - `:billed` (Boolean)
+				def unbilled_duration(options = Hash.new)
+					duration(options.merge({:billed => false}))
 				end
 				
 				# Get the remaining Time of estimation.
@@ -616,6 +674,12 @@ module TheFox
 					Status.new(status)
 				end
 				
+				def is_billed=(is_billed)
+					@tracks.each do |track_id, track|
+						track.is_billed = is_billed
+					end
+				end
+				
 				# Find a Track by ID even if the ID is not 40 characters long.
 				# When the ID is 40 characters long `@tracks[id]` is faster. ;)
 				def find_track_by_id(track_id)
@@ -649,7 +713,7 @@ module TheFox
 				# Uses ID for comparision.
 				def eql?(task)
 					unless task.is_a?(Task)
-						raise StackError, "task variable must be a Task instance. #{task.class} given."
+						raise TaskError, "task variable must be a Task instance. #{task.class} given."
 					end
 					
 					self.id == task.id
@@ -691,13 +755,22 @@ module TheFox
 						to_ax << '  Description: %s' % [self.description]
 					end
 					
+					# Duration
 					duration_human = self.duration.to_human
-					to_ax << '  Duration: %s' % [duration_human]
+					to_ax << '  Duration:          %s' % [duration_human]
 					
 					duration_man_days = self.duration.to_man_days
 					if duration_human != duration_man_days
-						to_ax << '  Man Unit: %s' % [duration_man_days]
+						to_ax << '  Man Unit:          %s' % [duration_man_days]
 					end
+					
+					# Billed Duration
+					billed_duration_human = self.billed_duration.to_human
+					to_ax << '  Billed Duration:   %s' % [billed_duration_human]
+					
+					# Unbilled Duration
+					unbilled_duration_human = self.unbilled_duration.to_human
+					to_ax << '  Unbilled Duration: %s' % [unbilled_duration_human]
 					
 					if self.estimation
 						# puts # @TODO remove
@@ -749,7 +822,13 @@ module TheFox
 					to_ax << '  Status: %s' % [status]
 					
 					tracks_count = tracks.count
-					to_ax << '  Tracks: %d' % [tracks_count]
+					to_ax << '  Tracks:          %d' % [tracks_count]
+					
+					billed_tracks_count = tracks({:billed => true}).count
+					to_ax << '  Billed tracks:   %d' % [billed_tracks_count]
+					
+					unbilled_tracks_count = tracks({:billed => false}).count
+					to_ax << '  Unbilled tracks: %d' % [unbilled_tracks_count]
 					
 					if tracks_count > 0 && @tracks_opt # --tracks
 						to_ax << '  Track IDs: %s' % [tracks.map{ |track_id, track| track.short_id }.join(' ')]

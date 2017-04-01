@@ -29,6 +29,8 @@ module TheFox
 					@start_time_opt = nil
 					@end_date_opt = nil
 					@end_time_opt = nil
+					@billed_opt = nil
+					@unbilled_opt = nil
 					
 					loop_c = 0 # Limit the loop.
 					while loop_c < 1024 && argv.length > 0
@@ -55,6 +57,10 @@ module TheFox
 							@end_date_opt = argv.shift
 						when '--et', '--end-time'
 							@end_time_opt = argv.shift
+						when '-b', '--billed'
+							@billed_opt = true
+						when '--unbilled'
+							@unbilled_opt = true
 						
 						when 'show'
 							@show_opt = true
@@ -72,6 +78,10 @@ module TheFox
 								raise TrackCommandError, "Unknown argument '#{arg}'. See 'timr track --help'."
 							end
 						end
+					end
+					
+					if @billed_opt && @unbilled_opt
+						raise TrackCommandError, 'Cannot use --billed and --unbilled.'
 					end
 				end
 				
@@ -148,6 +158,13 @@ module TheFox
 					if @message_opt
 						track.message = @message_opt
 					end
+					if @billed_opt || @unbilled_opt
+						if @billed_opt
+							track.is_billed = true
+						else
+							track.is_billed = false
+						end
+					end
 					
 					task.add_track(track)
 					task.save_to_file
@@ -183,6 +200,7 @@ module TheFox
 					bdt = track.begin_datetime
 					edt = track.end_datetime
 					
+					# Start DateTime
 					if @start_date_opt && @start_time_opt
 						track.begin_datetime = "#{@start_date_opt}T#{@start_time_opt}"
 					elsif @start_date_opt.nil? && @start_time_opt
@@ -201,6 +219,7 @@ module TheFox
 					# 	raise TrackCommandError, 'Start Date or Start Time must be given.'
 					end
 					
+					# End DateTime
 					if @end_date_opt && @end_time_opt
 						track.end_datetime = "#{@end_date_opt}T#{@end_time_opt}"
 					elsif @end_date_opt.nil? && @end_time_opt
@@ -219,8 +238,18 @@ module TheFox
 					# 	raise TrackCommandError, 'End Date or End Time must be given.'
 					end
 					
+					# Message
 					if @message_opt
 						track.message = @message_opt
+					end
+					
+					# Billed / Unbilled
+					if @billed_opt || @unbilled_opt
+						if @billed_opt
+							track.is_billed = true
+						else
+							track.is_billed = false
+						end
 					end
 					
 					task = track.task
@@ -292,28 +321,29 @@ module TheFox
 				end
 				
 				def check_opts_add
-					if @start_date_opt.nil? && @start_time_opt.nil? &&
-						@end_date_opt.nil? && @end_time_opt.nil? &&
-						@message_opt.nil?
+					# if @start_date_opt.nil? && @start_time_opt.nil? &&
+					# 	@end_date_opt.nil? && @end_time_opt.nil? &&
+					# 	@message_opt.nil? &&
+					# 	@billed_opt.nil? && @unbilled_opt.nil?
 						
-						raise TaskCommandError, "No option given. See 'timr track --help'."
-					end
+					# 	raise TrackCommandError, "No option given. See 'timr track --help'."
+					# end
 					
 					if @start_date_opt || @start_time_opt ||
 						@end_date_opt || @end_time_opt
 						
 						if @start_date_opt.nil?
-							raise TaskCommandError, 'Start Date must be given.'
+							raise TrackCommandError, 'Start Date must be given.'
 						end
 						if @start_time_opt.nil?
-							raise TaskCommandError, 'Start Time must be given.'
+							raise TrackCommandError, 'Start Time must be given.'
 						end
 						
 						if @end_date_opt.nil?
-							raise TaskCommandError, 'End Date must be given.'
+							raise TrackCommandError, 'End Date must be given.'
 						end
 						if @end_time_opt.nil?
-							raise TaskCommandError, 'End Time must be given.'
+							raise TrackCommandError, 'End Time must be given.'
 						end
 					end
 				end
@@ -321,9 +351,10 @@ module TheFox
 				def check_opts_set
 					if @start_date_opt.nil? && @start_time_opt.nil? &&
 						@end_date_opt.nil? && @end_time_opt.nil? &&
-						@message_opt.nil? && @task_id_opt.nil?
+						@message_opt.nil? && @task_id_opt.nil? &&
+						@billed_opt.nil? && @unbilled_opt.nil?
 						
-						raise TaskCommandError, "No option given. See 'timr track --help'."
+						raise TrackCommandError, "No option given. See 'timr track --help'."
 					end
 				end
 				
@@ -332,11 +363,11 @@ module TheFox
 					puts '   or: timr track add [-m|--message <message>]'
 					puts '                      [--start-date <YYYY-MM-DD> --start-time <HH:MM[:SS]>'
 					puts '                        [--end-date <YYYY-MM-DD> --end-time <HH:MM[:SS]>]]'
-					puts '                      <task_id>'
+					puts '                      [--billed|--unbilled] <task_id>'
 					puts '   or: timr track set [-m|--message <message>]'
 					puts '                      [--start-date <YYYY-MM-DD> --start-time <HH:MM[:SS]>]'
 					puts '                      [--end-date <YYYY-MM-DD> --end-time <HH:MM[:SS]>]'
-					puts '                      [-t|--task <task_id>]'
+					puts '                      [-t|--task <task_id>] [--billed|--unbilled]'
 					puts '                      <track_id>'
 					puts '   or: timr track remove <track_ids...>'
 					puts '   or: timr track [-h|--help]'
@@ -350,6 +381,8 @@ module TheFox
 					puts '    --st, --start-time <HH:MM[:SS]>    Start Time'
 					puts '    --ed, --end-date <YYYY-MM-DD>      End Date'
 					puts '    --et, --end-time <HH:MM[:SS]>      End Time'
+					puts '    -b, --billed                       Mark Track as billed.'
+					puts '    --unbilled                         Mark Track as unbilled.'
 					puts
 					puts 'Set Options'
 					puts '    --task <task_id>                   Move Track to another Task.'
