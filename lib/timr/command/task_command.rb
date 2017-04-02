@@ -29,6 +29,11 @@ module TheFox
 					@billed_opt = nil
 					@unbilled_opt = nil
 					
+					@hourly_rate_opt = nil
+					@unset_hourly_rate_opt = false
+					@has_flat_rate_opt = nil
+					@unset_flat_rate_opt = nil
+					
 					# Holds Task instances.
 					@tasks_opt = Set.new
 					
@@ -54,6 +59,15 @@ module TheFox
 						when '--unbilled'
 							@unbilled_opt = true
 						
+						when '-r', '--hourly-rate'
+							@hourly_rate_opt = argv.shift
+						when '--no-hourly-rate'
+							@unset_hourly_rate_opt = true
+						when '--fr', '--flat', '--flat-rate'
+							@has_flat_rate_opt = true
+						when '--no-flat', '--no-flat-rate'
+							@unset_flat_rate_opt = true
+						
 						when 'show'
 							@show_opt = true
 						when 'add'
@@ -78,6 +92,12 @@ module TheFox
 					
 					if @billed_opt && @unbilled_opt
 						raise TaskCommandError, 'Cannot use --billed and --unbilled.'
+					end
+					if !@hourly_rate_opt.nil? && @unset_hourly_rate_opt
+						raise TaskCommandError, 'Cannot use --hourly-rate and --no-hourly-rate.'
+					end
+					if @has_flat_rate_opt && @unset_flat_rate_opt
+						raise TaskCommandError, 'Cannot use --flat-rate and --no-flat-rate.'
 					end
 					
 					# pp @tasks_opt
@@ -135,7 +155,12 @@ module TheFox
 					end
 					task_id = @tasks_opt.first
 					
-					if @name_opt.nil? && @description_opt.nil? && @estimation_opt.nil? && @billed_opt.nil? && @unbilled_opt.nil?
+					if @name_opt.nil? && @description_opt.nil? &&
+						@estimation_opt.nil? &&
+						@billed_opt.nil? && @unbilled_opt.nil? &&
+						@hourly_rate_opt.nil? && @unset_hourly_rate_opt.nil? &&
+						@has_flat_rate_opt.nil? && @unset_flat_rate_opt.nil?
+						
 						raise TaskCommandError, "No option given. See 'time task -h'."
 					end
 					
@@ -160,6 +185,18 @@ module TheFox
 						else
 							task.is_billed = false
 						end
+					end
+					if @hourly_rate_opt
+						task.hourly_rate = @hourly_rate_opt
+					end
+					if @unset_hourly_rate_opt
+						task.hourly_rate = nil
+					end
+					if @has_flat_rate_opt
+						task.has_flat_rate = true
+					end
+					if @unset_flat_rate_opt
+						task.has_flat_rate = false
 					end
 					
 					task.save_to_file
@@ -268,6 +305,10 @@ module TheFox
 					puts '    -e, --est, --estimation <time>    Estimation of the Task. See details below.'
 					puts '    -b, --billed                      Mark Task as billed.'
 					puts '    --unbilled                        Mark Task as unbilled.'
+					puts '    -r, --hourly-rate <value>         Set the Hourly Rate for this Task.'
+					puts '    --no-hourly-rate                  Unset Hourly Rate.'
+					puts '    --fr, --flat-rate, --flat         Has Task a Flat Rate?'
+					puts '    --no-flat-rate, --no-flat         Unset Flat Rate.'
 					puts
 					puts 'Man Unit: 8 hours are 1 man-day.'
 					puts '          5 man-days are 1 man-week, and so on.'

@@ -11,6 +11,8 @@ module TheFox
 				include TheFox::Timr::Error
 				
 				attr_reader :description
+				attr_reader :hourly_rate
+				attr_reader :has_flat_rate
 				
 				def initialize
 					super()
@@ -20,6 +22,8 @@ module TheFox
 					@description = nil
 					@current_track = nil
 					@estimation = nil
+					@hourly_rate = nil
+					@has_flat_rate = false
 					
 					# Data
 					@tracks = Hash.new
@@ -430,8 +434,10 @@ module TheFox
 						@estimation = Duration.new(estimation)
 					when Duration
 						@estimation = estimation
+					when nil
+						@estimation = estimation
 					else
-						raise TaskError, "estimation needs to be an instance of String, Integer or Duration, #{estimation.class} given."
+						raise TaskError, "estimation needs to be an instance of String, Integer, Duration or nil, #{estimation.class} given."
 					end
 					
 					# Mark Task as changed.
@@ -447,6 +453,42 @@ module TheFox
 						@estimation.to_human
 					else
 						'---'
+					end
+				end
+				
+				def hourly_rate=(new_hourly_rate)
+					if new_hourly_rate.nil?
+						@hourly_rate = nil
+					else
+						@hourly_rate = new_hourly_rate.to_f
+					end
+					
+					# Mark Task as changed.
+					changed
+				end
+				
+				def has_flat_rate=(has_flat_rate)
+					@has_flat_rate = has_flat_rate
+					
+					# Mark Task as changed.
+					changed
+				end
+				
+				def consumed_budge
+					duration.to_i.to_f / 3600.0 * @hourly_rate
+				end
+				
+				def estimated_budge
+					estimation.to_i.to_f / 3600.0 * @hourly_rate
+				end
+				
+				def loss_budge
+					if @has_flat_rate
+						if duration > estimation
+							(duration - estimation).to_i.to_f / 3600.0 * @hourly_rate
+						end
+					else
+						0.0
 					end
 				end
 				
@@ -779,9 +821,34 @@ module TheFox
 						
 						to_ax << '                  |%s|' % [bar.render]
 						
+						# estimated_budge = self.estimated_budge
+						# if estimated_budge
+						# 	to_ax << '  Estimated Budge: %.2f' % [estimated_budge]
+						# end
+						
 						# puts # @TODO remove
 						# puts # @TODO remove
 						# puts # @TODO remove
+					end
+					
+					if self.hourly_rate
+						to_ax << '  Hourly Rate:     %.2f' % [self.hourly_rate]
+						to_ax << '  Flat Rate:       %s' % [@has_flat_rate ? 'Yes' : 'No']
+						
+						if @has_flat_rate
+							#to_ax << '  Consumed Budge:  %.2f (%.2f)' % [self.consumed_budge]
+						else
+							# to_ax << '  Consumed Budge:  %.2f' % [self.consumed_budge]
+						end
+						to_ax << '  Consumed Budge:  %.2f' % [self.consumed_budge]
+						
+						if self.estimation
+							to_ax << '  Estimated Budge: %.2f' % [self.estimated_budge]
+						end
+						
+						if @has_flat_rate
+							to_ax << '  Loss Budge:      %.2f' % [self.loss_budge]
+						end
 					end
 					
 					tracks = self.tracks
@@ -812,17 +879,13 @@ module TheFox
 					to_ax << '  Tracks:          %d' % [tracks_count]
 					
 					billed_tracks_count = tracks({:billed => true}).count
-					to_ax << '  Billed tracks:   %d' % [billed_tracks_count]
+					to_ax << '  Billed Tracks:   %d' % [billed_tracks_count]
 					
 					unbilled_tracks_count = tracks({:billed => false}).count
-					to_ax << '  Unbilled tracks: %d' % [unbilled_tracks_count]
+					to_ax << '  Unbilled Tracks: %d' % [unbilled_tracks_count]
 					
 					if tracks_count > 0 && @tracks_opt # --tracks
 						to_ax << '  Track IDs: %s' % [tracks.map{ |track_id, track| track.short_id }.join(' ')]
-					end
-					
-					if self.description
-						to_ax << '  Description: %s' % [self.description]
 					end
 					
 					to_ax << '  File path: %s' % [self.file_path]
@@ -891,6 +954,16 @@ module TheFox
 					if @estimation
 						@meta['estimation'] = @estimation.to_i
 					end
+					if @hourly_rate
+						@meta['hourly_rate'] = @hourly_rate.to_f
+					else
+						@meta['hourly_rate'] = nil
+					end
+					if @has_flat_rate
+						@meta['has_flat_rate'] = @has_flat_rate
+					else
+						@meta['has_flat_rate'] = false
+					end
 					
 					# Tracks
 					@data = @tracks.map{ |track_id, track|
@@ -934,6 +1007,12 @@ module TheFox
 					
 					if @meta['estimation']
 						@estimation = Duration.new(@meta['estimation'])
+					end
+					if @meta['hourly_rate']
+						@hourly_rate = @meta['hourly_rate'].to_f
+					end
+					if @meta['has_flat_rate']
+						@has_flat_rate = @meta['has_flat_rate']
 					end
 				end
 				

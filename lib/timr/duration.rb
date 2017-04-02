@@ -105,6 +105,10 @@ module TheFox
 				@seconds < seconds
 			end
 			
+			def >(duration)
+				@seconds > duration.to_i
+			end
+			
 			# String
 			def to_s
 				@seconds.to_s
