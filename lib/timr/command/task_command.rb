@@ -30,7 +30,7 @@ module TheFox
 					@unbilled_opt = nil
 					
 					@hourly_rate_opt = nil
-					@unset_hourly_rate_opt = false
+					@unset_hourly_rate_opt = nil
 					@has_flat_rate_opt = nil
 					@unset_flat_rate_opt = nil
 					
@@ -163,6 +163,16 @@ module TheFox
 						
 						raise TaskCommandError, "No option given. See 'time task -h'."
 					end
+					
+					# puts "@name_opt #{@name_opt.nil?}"
+					# puts "@description_opt #{@description_opt.nil?}"
+					# puts "@estimation_opt #{@estimation_opt.nil?}"
+					# puts "@billed_opt #{@billed_opt.nil?}"
+					# puts "@unbilled_opt #{@unbilled_opt.nil?}"
+					# puts "@hourly_rate_opt #{@hourly_rate_opt.nil?}"
+					# puts "@unset_hourly_rate_opt #{@unset_hourly_rate_opt.nil?}"
+					# puts "@has_flat_rate_opt #{@has_flat_rate_opt.nil?}"
+					# puts "@unset_flat_rate_opt #{@unset_flat_rate_opt.nil?}"
 					
 					task = @timr.get_task_by_id(task_id)
 					

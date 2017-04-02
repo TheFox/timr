@@ -57,7 +57,7 @@ module TheFox
 						#('%%-%ds' % [header[:max_length]]) % [header[:label]]
 						"%s#{header[:format]}%s" % [header[:padding_left], header[:label], header[:padding_right]]
 					end
-				}.select{ |s| !s.nil? }.join(' ')
+				}.select{ |ts| !ts.nil? }.join(' ')
 				s << "\n"
 				
 				@rows.each do |row|

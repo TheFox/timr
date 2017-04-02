@@ -75,7 +75,8 @@ module TheFox
 					# 	puts "stack track: #{track.short_id} #{track.object_id}" # @TODO remove
 					# end
 					
-					r = @tracks.delete(track)
+					@tracks.delete(track)
+					# r = @tracks.delete(track)
 					
 					# puts "stack tracks delete: #{r.class}" # @TODO remove
 					# puts "stack left tracks: #{@tracks.count}" # @TODO remove
@@ -119,7 +120,9 @@ module TheFox
 									track
 								end
 							end
-						rescue Exception => e
+						# @TODO not use Exception
+						# see http://stackoverflow.com/questions/10048173/why-is-it-a-bad-style-to-rescue-exception-e-in-ruby
+						rescue Exception
 							# Task file for ID from Stack was not found.
 							
 							# Mark Stack as changed.

@@ -17,7 +17,7 @@ module TheFox
 			# Models hold data and can be stored to YAML files. Except for [Tracks](rdoc-ref:Track). Tracks are stored to a Task file.
 			class BasicModel
 				
-				attr_accessor :changed
+				attr_accessor :changed # @TODO rename to has_changed
 				attr_accessor :file_path
 				
 				def initialize
