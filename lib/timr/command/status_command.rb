@@ -131,19 +131,8 @@ module TheFox
 					get_tracks.each do |track|
 						track_c += 1
 						
-						# task = track.task
-						# duration = track.duration.to_human
-						
-						# status = track.status.colorized
-						
 						track_s = Array.new
 						track_s << '--- #%d ---' % [track_c]
-						# track_s << ' Task: %s %s' % [task.short_id, task.name_s]
-						# track_s << 'Track: %s %s' % [track.short_id, track.title]
-						# track_s << '  Start: %s' % [track.begin_datetime_s]
-						# track_s << '  End:   %s' % [track.end_datetime_s || '--']
-						# track_s << '  Duration: %16s' % [duration]
-						# track_s << '  Status: %s' % [status]
 						track_s.concat(track.to_detailed_array)
 						tracks << track_s
 					end

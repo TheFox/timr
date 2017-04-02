@@ -54,9 +54,8 @@ module TheFox
 			
 			# Removes all previous Tracks and starts a new one.
 			def start(options = Hash.new)
-				options ||= Hash.new
-				options[:task_id] ||= nil
-				options[:track_id] ||= nil
+				task_id_opt = options.fetch(:task_id, nil)
+				track_id_opt = options.fetch(:track_id, nil)
 				
 				#pp options # @TODO remove pp
 				
@@ -80,8 +79,8 @@ module TheFox
 					old_task = nil
 				end
 				
-				if options[:task_id]
-					task = get_task_by_id(options[:task_id])
+				if task_id_opt
+					task = get_task_by_id(task_id_opt)
 					
 					track = task.start(options)
 					# puts "new task: #{task.id}"
@@ -93,13 +92,13 @@ module TheFox
 					@stack.start(track)
 					@stack.save_to_file
 				else
-					if options[:track_id]
+					if track_id_opt
 						# The long way. Should be avoided.
 						# Search all files.
 						
 						# puts 'the long way'
 						
-						track = Track.find_track_by_id(@tasks_path, options[:track_id])
+						track = Track.find_track_by_id(@tasks_path, track_id_opt)
 						if track
 							# puts "track: #{track.id}"
 							options[:track_id] = track.id
@@ -143,8 +142,6 @@ module TheFox
 			
 			# Stops the current running Track and removes it from the Stack.
 			def stop(options = Hash.new)
-				options ||= Hash.new
-				
 				# Get current Track from Stack.
 				track = @stack.current_track
 				unless track
@@ -168,8 +165,6 @@ module TheFox
 			
 			# Stops the current running Track but does not remove it from the Stack.
 			def pause(options = Hash.new)
-				options ||= Hash.new
-				
 				# Get current Track from Stack.
 				track = @stack.current_track
 				unless track
@@ -197,8 +192,6 @@ module TheFox
 			
 			# Continues the Top Track.
 			def continue(options = Hash.new)
-				options ||= Hash.new
-				
 				# Get current Track from Stack.
 				track = @stack.current_track
 				unless track
@@ -224,9 +217,8 @@ module TheFox
 			
 			# Starts a new Track and pauses the underlying one.
 			def push(options = Hash.new)
-				options ||= Hash.new
-				options[:task_id] ||= nil
-				options[:track_id] ||= nil
+				task_id_opt = options.fetch(:task_id, nil)
+				track_id_opt = options.fetch(:track_id, nil)
 				
 				#pp options # @TODO remove pp
 				
@@ -238,7 +230,7 @@ module TheFox
 					# Get Task from Track.
 					old_task = old_track.task
 					unless old_task
-						raise "Track #{old_track.short_id} has no Task."
+						raise TrackError, "Track #{old_track.short_id} has no Task."
 					end
 					
 					# Stop Task here because on pop we need to take the
@@ -253,12 +245,12 @@ module TheFox
 					old_task = nil
 				end
 				
-				if options[:task_id]
-					puts "get_task_by_id(#{options[:task_id]})"
-					task = get_task_by_id(options[:task_id])
+				if task_id_opt
+					# puts "get_task_by_id(#{task_id_opt})" # @TODO remove
+					task = get_task_by_id(task_id_opt)
 					
 					# Start Task
-					puts "start task"
+					# puts "start task" # @TODO remove
 					track = task.start(options)
 					
 					# Save Task
@@ -267,18 +259,18 @@ module TheFox
 					@stack.push(track)
 					@stack.save_to_file
 				else
-					if options[:track_id]
+					if track_id_opt
 						# The long way. Should be avoided.
 						# Search all files.
 						
-						track = Track.find_track_by_id(@tasks_path, options[:track_id])
+						track = Track.find_track_by_id(@tasks_path, track_id_opt)
 						if track
 							options[:track_id] = track.id
 							
 							# Get Task from Track.
 							task = track.task
 							unless task
-								raise "Track #{track.short_id} has no Task."
+								raise TrackError, "Track #{track.short_id} has no Task."
 							end
 							
 							# Start Task
@@ -314,8 +306,6 @@ module TheFox
 			# Stops the Top Track, removes it from the Stack and
 			# continues the next underlying (new Top) Track.
 			def pop(options = Hash.new)
-				options ||= Hash.new
-				
 				stop(options)
 				continue(options)
 			end
@@ -326,8 +316,6 @@ module TheFox
 			# 
 			# Returns the new created Task instance.
 			def add_task(options = Hash.new)
-				options ||= Hash.new
-				
 				task = Task.create_task_from_hash(options)
 				
 				# Task Path
@@ -347,13 +335,13 @@ module TheFox
 			# 
 			# - `:task_id` (String) 
 			def remove_task(options = Hash.new)
-				options ||= Hash.new
-				options[:task_id] ||= nil
-				unless options[:task_id]
-					raise TaskError, 'task_id cannot be nil.'
+				task_id_opt = options.fetch(:task_id, nil)
+				
+				unless task_id_opt
+					raise TaskError, 'No Task ID given.'
 				end
 				
-				task = get_task_by_id(options[:task_id])
+				task = get_task_by_id(task_id_opt)
 				
 				@tasks.delete(task.id)
 				
@@ -375,16 +363,15 @@ module TheFox
 			# 
 			# - `:track_id` (String) 
 			def remove_track(options = Hash.new)
-				options ||= Hash.new
-				options[:track_id] ||= nil
+				track_id_opt = options.fetch(:track_id, nil)
 				
-				unless options[:track_id]
-					raise TrackError, 'track_id cannot be nil.'
+				unless track_id_opt
+					raise TrackError, 'No Track ID given.'
 				end
 				
-				track = get_track_by_id(options[:track_id])
+				track = get_track_by_id(track_id_opt)
 				unless track
-					raise TrackError, "Track for ID '#{options[:track_id]}' not found."
+					raise TrackError, "Track for ID '#{track_id_opt}' not found."
 				end
 				
 				task = track.task
@@ -456,10 +443,7 @@ module TheFox
 			# 
 			# - `:sort` (Boolean)
 			def tracks(options = Hash.new)
-				options ||= Hash.new
-				unless options.has_key?(:sort)
-					options[:sort] = true
-				end
+				sort_opt = options.fetch(:sort, true)
 				
 				load_all_tracks
 				
@@ -476,7 +460,7 @@ module TheFox
 				
 				# puts "#{Time.now.to_ms} #{self.class} #{__method__} END #{filtered_tracks.count}" # @TODO remove
 				
-				if options[:sort]
+				if sort_opt
 					# Sort ASC by Begin DateTime, End DateTime.
 					filtered_tracks.sort{ |t1, t2|
 						t1 = t1.last

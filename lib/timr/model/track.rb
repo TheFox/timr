@@ -61,12 +61,11 @@ module TheFox
 				# - `:from` (Time)  
 				#   See documentation about `:to` on `end_datetime()`.
 				def begin_datetime(options = Hash.new)
-					options ||= Hash.new
-					options[:from] ||= nil
+					from_opt = options.fetch(:from, nil)
 					
 					if @begin_datetime
-						if options[:from] && options[:from] > @begin_datetime
-							bdt = options[:from]
+						if from_opt && from_opt > @begin_datetime
+							bdt = from_opt
 						else
 							bdt = @begin_datetime
 						end
@@ -80,12 +79,11 @@ module TheFox
 				# 
 				# - `:format` (String)
 				def begin_datetime_s(options = Hash.new)
-					options ||= Hash.new
-					options[:format] ||= HUMAN_DATETIME_FOMRAT
+					format_opt = options.fetch(:format, HUMAN_DATETIME_FOMRAT)
 					
 					bdt = begin_datetime(options)
 					if bdt
-						bdt.strftime(options[:format])
+						bdt.strftime(format_opt)
 					else
 						'---'
 					end
@@ -125,12 +123,11 @@ module TheFox
 				# original `@end_datetime`. Otherwise it will return `:to`. The same applies for
 				# `:from` on `begin_datetime()` but just the other way round.
 				def end_datetime(options = Hash.new)
-					options ||= Hash.new
-					options[:to] ||= nil
+					to_opt = options.fetch(:to, nil)
 					
 					if @end_datetime
-						if options[:to] && options[:to] < @end_datetime
-							edt = options[:to]
+						if to_opt && to_opt < @end_datetime
+							edt = to_opt
 						else
 							edt = @end_datetime
 						end
@@ -144,12 +141,11 @@ module TheFox
 				# 
 				# - `:format` (String)
 				def end_datetime_s(options = Hash.new)
-					options ||= Hash.new
-					options[:format] ||= HUMAN_DATETIME_FOMRAT
+					format_opt = options.fetch(:format, HUMAN_DATETIME_FOMRAT)
 					
 					edt = end_datetime(options)
 					if edt
-						edt.strftime(options[:format])
+						edt.strftime(format_opt)
 					else
 						'---'
 					end
@@ -164,8 +160,7 @@ module TheFox
 				
 				# Start this Track. A Track cannot be restarted because it's the smallest time unit.
 				def start(options = Hash.new)
-					options ||= Hash.new
-					options[:message] ||= nil
+					message_opt = options.fetch(:message, nil)
 					
 					if @begin_datetime
 						raise TrackError, 'Cannot restart Track. Use dup() on this instance or create a new instance by using Track.new().'
@@ -173,27 +168,26 @@ module TheFox
 					
 					@begin_datetime = DateTimeHelper.get_datetime_from_options(options)
 					
-					if options[:message]
-						@message = options[:message]
+					if message_opt
+						@message = message_opt
 					end
 				end
 				
 				# Stop this Track.
 				def stop(options = Hash.new)
-					# puts "Track stop"
-					
-					options ||= Hash.new
-					options[:start_date] ||= nil
-					options[:start_time] ||= nil
-					options[:message] ||= nil
-					options[:paused] ||= false
+					start_date_opt = options.fetch(:start_date, nil)
+					start_time_opt = options.fetch(:start_time, nil)
+					message_opt = options.fetch(:message, nil)
+					append_opt = options.fetch(:append, false)
+					# paused_opt = options.fetch(:paused, false)
 					
 					# Set Start DateTime
-					if options[:start_date] || options[:start_time]
-						puts "set start date/time: #{options[:start_date]} #{options[:start_time]}"
+					if start_date_opt || start_time_opt
+						# puts "set start date/time: #{start_date_opt} #{start_time_opt}" # @TODO remove
+						
 						begin_options = {
-							:date => options[:start_date],
-							:time => options[:start_time],
+							:date => start_date_opt,
+							:time => start_time_opt,
 						}
 						@begin_datetime = DateTimeHelper.get_datetime_from_options(begin_options)
 					end
@@ -201,15 +195,15 @@ module TheFox
 					# Set End DateTime
 					@end_datetime = DateTimeHelper.get_datetime_from_options(options)
 					
-					if options[:message]
-						if options[:append]
-							@message << ' ' << options[:message]
+					if message_opt
+						if append_opt
+							@message << ' ' << message_opt
 						else
-							@message = options[:message]
+							@message = message_opt
 						end
 					end
 					
-					@paused = options[:paused]
+					# @paused = paused_opt
 					
 					# Mark Track as changed.
 					changed
@@ -423,7 +417,6 @@ module TheFox
 				end
 				
 				def to_detailed_array(options = Hash.new)
-					options ||= Hash.new
 					#options[:duration_man_days] ||= false
 					#options[:message] ||= false
 					# options[:file_path] ||= false

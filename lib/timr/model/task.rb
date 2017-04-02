@@ -287,8 +287,7 @@ module TheFox
 				# 
 				# - `:from`
 				def begin_datetime(options = Hash.new)
-					options ||= Hash.new
-					options[:from] ||= nil
+					from_opt = options.fetch(:from, nil)
 					
 					# Cache
 					# if @begin_datetime
@@ -314,8 +313,8 @@ module TheFox
 						bdt = first_track.begin_datetime(options)
 					end
 					
-					if options[:from] && bdt && options[:from] > bdt
-						bdt = options[:from]
+					if from_opt && bdt && from_opt > bdt
+						bdt = from_opt
 					end
 					
 					bdt
@@ -325,12 +324,11 @@ module TheFox
 				# 
 				# - `:format`
 				def begin_datetime_s(options = Hash.new)
-					options ||= Hash.new
-					options[:format] ||= HUMAN_DATETIME_FOMRAT
+					format_opt = options.fetch(:format, HUMAN_DATETIME_FOMRAT)
 					
 					bdt = begin_datetime(options)
 					if bdt
-						bdt.strftime(options[:format])
+						bdt.strftime(format_opt)
 					else
 						'---'
 					end
@@ -342,8 +340,7 @@ module TheFox
 				# 
 				# - `:to`
 				def end_datetime(options = Hash.new)
-					options ||= Hash.new
-					options[:to] ||= nil
+					to_opt = options.fetch(:to, nil)
 					
 					# Cache
 					# if @end_datetime
@@ -369,8 +366,8 @@ module TheFox
 						edt = last_track.end_datetime(options)
 					end
 					
-					if options[:to] && edt && options[:to] < edt
-						edt = options[:to]
+					if to_opt && edt && to_opt < edt
+						edt = to_opt
 					end
 					
 					edt
@@ -380,12 +377,11 @@ module TheFox
 				# 
 				# - `:format`
 				def end_datetime_s(options = Hash.new)
-					options ||= Hash.new
-					options[:format] ||= HUMAN_DATETIME_FOMRAT
+					format_opt = options.fetch(:format, HUMAN_DATETIME_FOMRAT)
 					
 					edt = end_datetime(options)
 					if edt
-						edt.strftime(options[:format])
+						edt.strftime(format_opt)
 					else
 						'---'
 					end
@@ -455,31 +451,27 @@ module TheFox
 				end
 				
 				def start(options = Hash.new)
-					# puts "#{short_id} Task start"
-					
-					# Track Options
-					options ||= Hash.new
-					options[:track_id] ||= nil
+					track_id_opt = options.fetch(:track_id, nil)
 					
 					# Used by Push.
-					options[:no_stop] ||= false
+					no_stop_opt = options.fetch(:no_stop, false)
 					
-					unless options[:no_stop]
+					unless no_stop_opt
 						# End current Track before starting a new one.
 						# Leave options empty here for stop().
 						stop
 					end
 					
-					if options[:track_id]
-						# puts "find_track_by_id #{options[:track_id]}"
-						found_track = find_track_by_id(options[:track_id])
+					if track_id_opt
+						# puts "find_track_by_id #{track_id_opt}"
+						found_track = find_track_by_id(track_id_opt)
 						if found_track
 							# puts "clone this track: #{found_track.short_id}" # @TODO remove
 							
 							@current_track = found_track.dup
 							# puts "cloned track: #{@current_track.short_id}"
 						else
-							raise TrackError, "No Track found for Track ID '#{options[:track_id]}'."
+							raise TrackError, "No Track found for Track ID '#{track_id_opt}'."
 						end
 					else
 						@current_track = Track.new
@@ -498,8 +490,6 @@ module TheFox
 				
 				# Stops a current running Track.
 				def stop(options = Hash.new)
-					options ||= Hash.new
-					
 					if @current_track
 						# puts "#{short_id} Task stop"
 						
@@ -517,8 +507,6 @@ module TheFox
 				
 				# Pauses a current running Track.
 				def pause(options = Hash.new)
-					options ||= Hash.new
-					
 					if @current_track
 						# puts "#{short_id} Task pause"
 						
@@ -534,8 +522,7 @@ module TheFox
 				# Continues the current Track.
 				# Only if it isn't already running.
 				def continue(options = Hash.new)
-					options ||= Hash.new
-					options[:track] ||= nil
+					track_opt = options.fetch(:track, nil)
 					
 					# puts "continue" # @TODO remove
 					
@@ -556,14 +543,14 @@ module TheFox
 					else
 						#raise NotImplementedError
 						
-						unless options[:track]
-							raise TrackError, 'Track not set.'
+						unless track_opt
+							raise TaskError, 'No Track given.'
 						end
 						
-						# puts "continue clone track: #{options[:track].id}" # @TODO remove
+						# puts "continue clone track: #{track_opt.id}" # @TODO remove
 						
 						# Duplicate and start.
-						@current_track = options[:track].dup
+						@current_track = track_opt.dup
 						@current_track.start(options)
 						# puts "clone started: #{@current_track.id}" # @TODO remove
 						

@@ -53,24 +53,7 @@ module TheFox
 						return
 					end
 					
-					# task = track.task
-					# unless task
-					# 	raise TrackError, "Track #{track.id} has no Task."
-					# end
-					
-					# duration = track.duration.to_human
-					# status = track.status.colorized
-					# stack = TranslationHelper.pluralize(@timr.stack.tracks.count, 'track', 'tracks')
-					
 					puts '--- PAUSED ---'
-					# puts ' Task: %s %s' % [task.short_id, task.name]
-					# puts 'Track: %s %s' % [track.short_id, track.title]
-					# puts '  Start: %s' % [track.begin_datetime_s]
-					# puts '  End:   %s' % [track.end_datetime_s]
-					# puts '  Duration: %16s' % [duration]
-					# puts '  Status: %s' % [status]
-					# puts 'Stack: %s' % [stack]
-					
 					puts track.to_detailed_str
 					puts @timr.stack
 				end
