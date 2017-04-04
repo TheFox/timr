@@ -5,6 +5,7 @@ module TheFox
 	module Timr
 		module Command
 			
+			# Print [Stack](rdoc-ref:TheFox::Timr::Model::Stack) Status.
 			class StatusCommand < BasicCommand
 				
 				include TheFox::Timr::Error
@@ -37,6 +38,7 @@ module TheFox
 					end
 				end
 				
+				# See BasicCommand#run.
 				def run
 					if @help_opt
 						help

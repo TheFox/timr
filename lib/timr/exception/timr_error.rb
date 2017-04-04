@@ -4,7 +4,7 @@ module TheFox
 		
 		# # Errors Inheritance Tree
 		# 
-		# TimrError is the basic class for all Timr Error classes. It subclasses from Rubys StandardError.
+		# TimrError is the basic class for all Timr Error classes. It subclasses from [Rubys StandardError](http://ruby-doc.org/core-2.4.1/Exception.html).
 		# 
 		# - TimrError
 		# 	- ModelError
@@ -12,7 +12,7 @@ module TheFox
 		# 		- TaskError
 		# 		- TrackError
 		# 		- StackError
-		# 	- DateTimeError
+		# 	- DateTimeHelperError
 		# 	- CommandError
 		# 		- ContinueCommandError
 		# 		- LogCommandError
@@ -48,7 +48,8 @@ module TheFox
 			class StackError < ModelError
 			end
 			
-			class DateTimeError < TimrError
+			# Use by TheFox::Timr::Helper::DateTimeHelper.
+			class DateTimeHelperError < TimrError
 			end
 			
 			class CommandError < TimrError
@@ -93,6 +94,7 @@ module TheFox
 			class DurationError < TimrError
 			end
 			
+			# This should really never happen. But you never know. ;)
 			class ThisShouldNeverHappenError < TimrError
 			end
 			

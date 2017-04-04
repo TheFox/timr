@@ -12,6 +12,7 @@ module TheFox
 				@rows = Array.new
 			end
 			
+			# Append a row.
 			def <<(row)
 				col_n = 0
 				row.each do |col|
@@ -49,6 +50,7 @@ module TheFox
 				@rows << row
 			end
 			
+			# Render Table to String.
 			def to_s
 				s = ''
 				

@@ -3,7 +3,7 @@ module TheFox
 	module Timr
 		module Command
 			
-			# - Print Track informations.
+			# - Print informations about a specific [Track](rdoc-ref:TheFox::Timr::Model::Track).
 			# - Add/remove a Track.
 			# - Edit (set) a Track.
 			class TrackCommand < BasicCommand
@@ -85,6 +85,7 @@ module TheFox
 					end
 				end
 				
+				# See BasicCommand#run.
 				def run
 					if @help_opt
 						help

@@ -5,7 +5,7 @@ module TheFox
 	module Timr
 		module Command
 			
-			# Stop a Track.
+			# Stop the current running [Track](rdoc-ref:TheFox::Timr::Model::Track).
 			class StopCommand < BasicCommand
 				
 				include TheFox::Timr::Helper
@@ -50,6 +50,7 @@ module TheFox
 					end
 				end
 				
+				# See BasicCommand#run.
 				def run
 					if @help_opt
 						help

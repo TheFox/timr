@@ -3,6 +3,7 @@ module TheFox
 	module Timr
 		module Command
 			
+			# Pause the current running [Track](rdoc-ref:TheFox::Timr::Model::Track).
 			class PauseCommand < BasicCommand
 				
 				include TheFox::Timr::Helper
@@ -34,6 +35,7 @@ module TheFox
 					end
 				end
 				
+				# See BasicCommand.
 				def run
 					if @help_opt
 						help

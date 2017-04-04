@@ -5,6 +5,7 @@ module TheFox
 			
 			class VersionCommand < BasicCommand
 				
+				# See BasicCommand#run.
 				def run
 					puts "#{NAME} #{VERSION} (#{DATE})"
 					puts "#{HOMEPAGE}"

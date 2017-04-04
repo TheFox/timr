@@ -3,6 +3,7 @@ module TheFox
 	module Timr
 		module Command
 			
+			# Print the overview help page.
 			class HelpCommand < BasicCommand
 				
 				def initialize(argv = Array.new)
@@ -23,6 +24,7 @@ module TheFox
 					end
 				end
 				
+				# See BasicCommand#run.
 				def run
 					if @command_opt
 						command_class = BasicCommand.get_command_class_by_name(@command_opt)

@@ -5,7 +5,7 @@ module TheFox
 	module Timr
 		module Command
 			
-			# This Command is very similar to LogCommand. By default it prints all Tasks of the current month.
+			# This Command is very similar to LogCommand. By default it prints all [Tasks](rdoc-ref:TheFox::Timr::Model::Task) of the current month.
 			class ReportCommand < BasicCommand
 				
 				include TheFox::Timr::Helper
@@ -109,6 +109,7 @@ module TheFox
 					end
 				end
 				
+				# See BasicCommand#run.
 				def run
 					if @help_opt
 						help

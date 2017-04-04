@@ -18,6 +18,8 @@ module TheFox
 					@last_used_version = nil
 				end
 				
+				private
+				
 				# BasicModel Hook
 				def pre_save_to_file
 					@data = {

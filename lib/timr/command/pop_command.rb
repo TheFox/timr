@@ -3,8 +3,8 @@ module TheFox
 	module Timr
 		module Command
 			
-			# This command pops the Top Track,
-			# makes a duplication of the next Track on the Stack, pops the next,
+			# This command pops the Top [Track](rdoc-ref:TheFox::Timr::Model::Track),
+			# makes a duplication of the next Track on the [Stack](rdoc-ref:TheFox::Timr::Model::Stack), pops the next,
 			# and pushes the duplication Track back on the Stack. There are
 			# at least 3 Tracks involved.
 			# 
@@ -79,6 +79,7 @@ module TheFox
 					end
 				end
 				
+				# See BasicCommand#run.
 				def run
 					if @help_opt
 						help

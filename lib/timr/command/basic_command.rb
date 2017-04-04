@@ -19,10 +19,12 @@ module TheFox
 					@timr = nil
 				end
 				
+				# This is the actual execution of the Command.
 				def run
 					raise NotImplementedError
 				end
 				
+				# Should be executed after `run` to gently save everything.
 				def shutdown
 					if @timr
 						@timr.shutdown
@@ -79,6 +81,7 @@ module TheFox
 						command
 					end
 					
+					# Get the Class for each command string.
 					def get_command_class_by_name(name)
 						case name
 						when 'help'

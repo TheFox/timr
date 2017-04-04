@@ -1,12 +1,9 @@
 
-# https://github.com/jfelchner/ruby-progressbar/issues/131
-
 module TheFox
 	module Timr
 		
+		# See [ruby-progressbar Issue #131](https://github.com/jfelchner/ruby-progressbar/issues/131).
 		class ProgressBar
-			
-			# include Error
 			
 			def initialize(options = Hash.new)
 				@total = options.fetch(:total, 100)
@@ -18,6 +15,7 @@ module TheFox
 				# puts "ProgressBar: #{@progress} / #{@total}" # @TODO remove
 			end
 			
+			# Render ProgressBar as String.
 			def render(progress = nil)
 				if progress
 					@progress = progress

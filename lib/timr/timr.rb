@@ -1,17 +1,21 @@
 
-# require 'fileutils'
-# require 'yaml/store'
 require 'pp' # @TODO remove pp
 require 'pathname'
 
 module TheFox
 	module Timr
 		
+		# Core Class
+		# 
+		# Loads and saves Models to files. Tasks are loaded to `@tasks`.
+		# 
+		# Holds the [Stack](rdoc-ref:TheFox::Timr::Model::Stack) instance. Responsible to call Stack methods.
 		class Timr
 			
 			include Model
 			include Error
 			
+			# Stack instance.
 			attr_reader :stack
 			
 			def initialize(cwd)
@@ -52,7 +56,7 @@ module TheFox
 				# puts "timr for stack: #{@stack.timr}"
 			end
 			
-			# Removes all previous Tracks and starts a new one.
+			# Removes all previous [Tracks](rdoc-ref:TheFox::Timr::Model::Track) and starts a new one.
 			def start(options = Hash.new)
 				task_id_opt = options.fetch(:task_id, nil)
 				track_id_opt = options.fetch(:track_id, nil)
@@ -140,7 +144,7 @@ module TheFox
 				track
 			end
 			
-			# Stops the current running Track and removes it from the Stack.
+			# Stops the current running [Track](rdoc-ref:TheFox::Timr::Model::Track) and removes it from the Stack.
 			def stop(options = Hash.new)
 				# Get current Track from Stack.
 				track = @stack.current_track
@@ -163,7 +167,7 @@ module TheFox
 				track
 			end
 			
-			# Stops the current running Track but does not remove it from the Stack.
+			# Stops the current running [Track](rdoc-ref:TheFox::Timr::Model::Track) but does not remove it from the Stack.
 			def pause(options = Hash.new)
 				# Get current Track from Stack.
 				track = @stack.current_track
@@ -190,7 +194,7 @@ module TheFox
 				track
 			end
 			
-			# Continues the Top Track.
+			# Continues the Top [Track](rdoc-ref:TheFox::Timr::Model::Track).
 			def continue(options = Hash.new)
 				# Get current Track from Stack.
 				track = @stack.current_track
@@ -215,7 +219,7 @@ module TheFox
 				track
 			end
 			
-			# Starts a new Track and pauses the underlying one.
+			# Starts a new [Track](rdoc-ref:TheFox::Timr::Model::Track) and pauses the underlying one.
 			def push(options = Hash.new)
 				task_id_opt = options.fetch(:task_id, nil)
 				track_id_opt = options.fetch(:track_id, nil)
@@ -303,16 +307,16 @@ module TheFox
 				track
 			end
 			
-			# Stops the Top Track, removes it from the Stack and
+			# Stops the Top [Track](rdoc-ref:TheFox::Timr::Model::Track), removes it from the [Stack](rdoc-ref:TheFox::Timr::Model::Stack) and
 			# continues the next underlying (new Top) Track.
 			def pop(options = Hash.new)
 				stop(options)
 				continue(options)
 			end
 			
-			# Just add a new [Task](rdoc-ref:TheFox::Timr::Model::Task). Will not be started or something else.
+			# Create a new [Task](rdoc-ref:TheFox::Timr::Model::Task) based on the `options` Hash. Will not be started or something else.
 			# 
-			# Uses [Task.create_task_from_hash](rdoc-ref:TheFox::Timr::Model::Task::create_task_from_hash) to create a new Task instance and [BasicModel.create_path_by_id](rdoc-ref:TheFox::Timr::Model::BasicModel.create_path_by_id) to create a new file path.
+			# Uses [Task#create_task_from_hash](rdoc-ref:TheFox::Timr::Model::Task::create_task_from_hash) to create a new Task instance and [BasicModel#create_path_by_id](rdoc-ref:TheFox::Timr::Model::BasicModel.create_path_by_id) to create a new file path.
 			# 
 			# Returns the new created Task instance.
 			def add_task(options = Hash.new)
@@ -329,7 +333,7 @@ module TheFox
 				task
 			end
 			
-			# Remove a Task.
+			# Remove a [Task](rdoc-ref:TheFox::Timr::Model::Task).
 			# 
 			# Options:
 			# 
@@ -390,7 +394,11 @@ module TheFox
 				}
 			end
 			
-			# Find a Task by ID.
+			# Find a [Task](rdoc-ref:TheFox::Timr::Model::Task) by ID.
+			# 
+			# Tasks always should be loaded with this methods to check if a Task instance already exist at `@tasks`. This is like a cache.
+			# 
+			# `task_id` can be a short ID. If a Task is already loaded with full ID another search by short ID would lead to generate a new object_id. Then there would be two Tasks instances loaded for the same Task ID. The Check Cache if condition prohibits this.
 			def get_task_by_id(task_id)
 				task = @tasks[task_id]
 				
@@ -401,12 +409,12 @@ module TheFox
 				else
 					task = Task.load_task_from_file_with_id(@tasks_path, task_id)
 					
-					# task_id can be a short ID. If a Task is already loaded with full ID
-					# another search by short ID leads to generate a new object_id. Then there are
-					# two Tasks instances loaded for the same Task ID. The if-condition prohibits this.
+					# Check cache.
 					if @tasks[task.id]
+						# Task already loaded.
 						task = @tasks[task.id]
 					else
+						# Set new loaded Task.
 						@tasks[task.id] = task
 					end
 				end
@@ -416,7 +424,7 @@ module TheFox
 				task
 			end
 			
-			# Find a Track by ID.
+			# Find a [Track](rdoc-ref:TheFox::Timr::Model::Track) by ID.
 			def get_track_by_id(track_id)
 				@tasks.each do |task_id, task|
 					# puts "Timr search track: #{task}" # @TODO remove
@@ -430,14 +438,14 @@ module TheFox
 				nil
 			end
 			
-			# Get all Tasks.
+			# Get all [Tasks](rdoc-ref:TheFox::Timr::Model::Task).
 			def tasks
 				load_all_tracks
 				
 				@tasks
 			end
 			
-			# Get all Tracks.
+			# Get all [Tracks](rdoc-ref:TheFox::Timr::Model::Track).
 			# 
 			# Options:
 			# 
@@ -480,6 +488,7 @@ module TheFox
 				end
 			end
 			
+			# Save [Stack](rdoc-ref:TheFox::Timr::Model::Stack) and [Config](rdoc-ref:TheFox::Timr::Model::Config).
 			def shutdown
 				# puts 'Timr shutdown'
 				
@@ -490,6 +499,7 @@ module TheFox
 				@config.save_to_file
 			end
 			
+			# Load all [Tracks](rdoc-ref:TheFox::Timr::Model::Track) using `get_task_by_id`.
 			def load_all_tracks
 				# Iterate all files.
 				@tasks_path.find.each do |file|

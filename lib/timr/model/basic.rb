@@ -36,24 +36,29 @@ module TheFox
 					# pp @meta # @TODO remove pp
 				end
 				
+				# Set ID.
 				def id=(id)
 					@meta['id'] = id
 					
 					changed
 				end
 				
+				# Get ID.
 				def id
 					@meta['id']
 				end
 				
+				# Get Short ID. Only 6 chars long.
 				def short_id
 					@meta['id'][0, 6]
 				end
 				
+				# Set created Time String.
 				def created=(created)
 					@meta['created'] = created
 				end
 				
+				# Set modified Time String.
 				def modified=(modified)
 					@meta['modified'] = modified
 				end
@@ -64,6 +69,9 @@ module TheFox
 					@has_changed = true
 				end
 				
+				# Load an entity into the current instance.
+				# 
+				# If `path` is not given `@file_path` will be taken. If `@file_path` is also not given throw ModelError exception.
 				def load_from_file(path = nil)
 					load = pre_load_from_file
 					
@@ -177,6 +185,8 @@ module TheFox
 						Pathname.new(path_s).expand_path(base_path)
 					end
 					
+					# Opposite of `find_file_by_id`.
+					# 
 					# Function IO:
 					# 
 					# ```
@@ -187,6 +197,7 @@ module TheFox
 						path.relative_path_from(base_path).to_s.gsub('/', '')[0..-5]
 					end
 					
+					# Opposite of `get_id_from_path`.
 					def find_file_by_id(base_path, id)
 						if base_path.is_a?(String)
 							base_path = Pathname.new(base_path)

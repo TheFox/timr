@@ -7,6 +7,7 @@ module TheFox
 	module Timr
 		module Helper
 			
+			# This class should *NOT* replace [Time](http://ruby-doc.org/core-2.4.1/Time.html), [Date](http://ruby-doc.org/stdlib-2.4.1/libdoc/date/rdoc/Date.html) or [DateTime](http://ruby-doc.org/stdlib-2.4.1/libdoc/date/rdoc/DateTime.html).
 			class DateTimeHelper
 				
 				# All methods in this block are static.
@@ -14,6 +15,7 @@ module TheFox
 					
 					include TheFox::Timr::Error
 					
+					# Convert String to Date.
 					def convert_date(date)
 						case date
 						when String
@@ -23,6 +25,7 @@ module TheFox
 						end
 					end
 					
+					# Convert String to Time.
 					def convert_time(time)
 						case time
 						when String
@@ -32,6 +35,9 @@ module TheFox
 						end
 					end
 					
+					# Parse an argv Array.
+					# 
+					# Create a `from` and `to` for a day.
 					def parse_day_argv(argv)
 						day = argv.shift
 						from = Time.parse("#{day} 00:00:00")
@@ -39,6 +45,9 @@ module TheFox
 						[from, to]
 					end
 					
+					# Parse an argv Array.
+					# 
+					# Create a `from` and `to` for a month.
 					def parse_month_argv(argv)
 						parts = argv.shift.split('-').map{ |s| s.to_i }
 						if parts.count == 1
@@ -59,6 +68,9 @@ module TheFox
 						[from, to]
 					end
 					
+					# Parse an argv Array.
+					# 
+					# Create a `from` and `to` for a year.
 					def parse_year_argv(argv)
 						y = argv.shift
 						if y
@@ -78,6 +90,8 @@ module TheFox
 						[from, to]
 					end
 					
+					# Create a Time instance from a Hash.
+					# 
 					# Options:
 					# 
 					# - `:date` String
@@ -87,7 +101,7 @@ module TheFox
 						time_opt = options.fetch(:time, nil)
 						
 						if date_opt && !time_opt
-							raise DateTimeError, 'You also need to set a time when giving a date.'
+							raise DateTimeHelperError, 'You also need to set a time when giving a date.'
 						end
 						
 						datetime_a = []

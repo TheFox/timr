@@ -3,7 +3,7 @@ module TheFox
 	module Timr
 		module Command
 			
-			# Push a new Track to the Stack.
+			# Push a new [Track](rdoc-ref:TheFox::Timr::Model::Track) to the [Stack](rdoc-ref:TheFox::Timr::Model::Stack).
 			class PushCommand < BasicCommand
 				
 				include TheFox::Timr::Helper
@@ -54,6 +54,7 @@ module TheFox
 					end
 				end
 				
+				# See BasicCommand#run.
 				def run
 					if @help_opt
 						help

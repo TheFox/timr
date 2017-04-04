@@ -4,20 +4,21 @@ require 'term/ansicolor'
 module TheFox
 	module Timr
 		
-		# Used as Task or Track Status.
-		# 'R'  running
-		# 'S'  stopped
+		# Used as [Task](rdoc-ref:TheFox::Timr::Model::Task) and [Track](rdoc-ref:TheFox::Timr::Model::Track) Status.
 		# 
-		# 'P'  paused
-		#      It's actually stopped but with an additional flag.
-		#     
-		# '-'  not started
-		# 'U'  unknown
+		# - `R`  running
+		# - `S`  stopped
+		# - `P`  paused. It's actually stopped but with an additional flag.
+		# - `-` (dash) not started
+		# - `U`  unknown
 		class Status
 			
 			include Term::ANSIColor
 			
+			# Source Data
 			attr_reader :short_status
+			
+			# Resolved by `short_status`. See `set_long_status` method.
 			attr_reader :long_status
 			
 			def initialize(short_status)
@@ -27,6 +28,7 @@ module TheFox
 				set_long_status
 			end
 			
+			# Use `term/ansicolor` to colorize the Long Status.
 			def colorized
 				case @short_status
 				when ?R
@@ -38,6 +40,7 @@ module TheFox
 				end
 			end
 			
+			# To String
 			def to_s
 				long_status
 			end

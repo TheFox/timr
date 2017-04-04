@@ -19,8 +19,6 @@ A Track is atomic. It's the smallest time unit. It's a time span presented by a 
 
 When a Track gets *continued* or *restarted* it's actual a copy using the same message.
 
-## Projects
-
 ## Clients
 
 It's recommended to put each client in a separate directory.

@@ -9,7 +9,9 @@ module TheFox
 			
 			include Error
 			
-			# Basis Data (int)
+			# Basis Data (Integer)
+			# 
+			# A Duration is stored as seconds.
 			attr_reader :seconds
 			
 			def initialize(seconds = 0)
@@ -51,7 +53,11 @@ module TheFox
 			end
 			
 			# Man-days, Man-hours
-			# Man Unit: 8 hours are 1 man-day. 5 man-days are 1 man-week, and so on.
+			# 
+			# Man Unit:
+			# 
+			# - 8 hours are 1 man-day.
+			# - 5 man-days are 1 man-week, and so on.
 			def to_man_days
 				if @seconds < 28800 # 8 * 3600 = 1 man-day
 					to_human
@@ -101,12 +107,14 @@ module TheFox
 				Duration.new(diff)
 			end
 			
+			# Lesser
 			def <(seconds)
-				@seconds < seconds
+				@seconds < seconds # @TODO use Duration as well
 			end
 			
+			# Greater
 			def >(duration)
-				@seconds > duration.to_i
+				@seconds > duration.to_i # @TODO use Integer as well
 			end
 			
 			# String
@@ -114,6 +122,7 @@ module TheFox
 				@seconds.to_s
 			end
 			
+			# Use this instead of `Duration.seconds`.
 			def to_i
 				@seconds
 			end
@@ -121,6 +130,7 @@ module TheFox
 			# All methods in this block are static.
 			class << self
 				
+				# Parse a String using [ChronicDuration](https://rubygems.org/gems/chronic_duration) and create a new Duration instance.
 				def parse(str)
 					Duration.new(ChronicDuration.parse(str))
 				end

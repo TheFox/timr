@@ -6,7 +6,7 @@ module TheFox
 	module Timr
 		module Command
 			
-			# By default this Command prints all todays Tracks.
+			# By default this Command prints all todays [Tracks](rdoc-ref:TheFox::Timr::Model::Track).
 			class LogCommand < BasicCommand
 				
 				include TheFox::Timr::Helper
@@ -89,6 +89,7 @@ module TheFox
 					# puts "#{Time.now.to_ms} #{self.class} #{__method__} END" # @TODO remove
 				end
 				
+				# See BasicCommand#run.
 				def run
 					# puts "#{Time.now.to_ms} #{self.class} #{__method__}" # @TODO remove
 					if @help_opt

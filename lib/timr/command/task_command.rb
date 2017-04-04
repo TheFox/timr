@@ -3,7 +3,7 @@ module TheFox
 	module Timr
 		module Command
 			
-			# - Print informations about a Task.
+			# - Print informations about a specific [Task](rdoc-ref:TheFox::Timr::Model::Task).
 			# - Add/remove a Task.
 			# - Edit (set) a Task.
 			class TaskCommand < BasicCommand
@@ -103,6 +103,7 @@ module TheFox
 					# pp @tasks_opt
 				end
 				
+				# See BasicCommand#run.
 				def run
 					if @help_opt
 						help

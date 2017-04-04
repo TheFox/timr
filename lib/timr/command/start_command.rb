@@ -5,7 +5,7 @@ module TheFox
 	module Timr
 		module Command
 			
-			# Start a new Track.
+			# Start a new [Track](rdoc-ref:TheFox::Timr::Model::Track).
 			class StartCommand < BasicCommand
 				
 				include TheFox::Timr::Model
@@ -57,6 +57,7 @@ module TheFox
 					end
 				end
 				
+				# See BasicCommand#run.
 				def run
 					if @help_opt
 						help

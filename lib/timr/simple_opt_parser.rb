@@ -1,32 +1,38 @@
 
-# Simple Option Parser
-# Because OptParse sucks. Parsing arguments should be easy. :(
-
-# Covered Usecases
-#   -a
-#   --all
-#   -a --all
-#   -a -b val
-#   -a -b val cmd
-#   -a -b val cmd1 cmd2
-#   -a -b val1 val2
-#   -a -b val1 val2 cmd1 cmd2
-#   -ab
-#   -ab val
-
-# Usage
-# optparser = SimpleOptParser.new
-# optparser.register_option(['-a'])
-# optparser.register_option(['-b'])
-# optparser.register_option(['-c'], 1)
-# opts = optparser.parse('-a -b -c val')
-
 module TheFox
 	module Timr
 		
+		# Simple Option Parser
+		# 
+		# Because OptParse sucks. Parsing arguments should be easy. :(
+		# 
+		# Covered Usecases
+		# 
+		# - -a
+		# - --all
+		# - -a --all
+		# - -a -b val
+		# - -a -b val cmd
+		# - -a -b val cmd1 cmd2
+		# - -a -b val1 val2
+		# - -a -b val1 val2 cmd1 cmd2
+		# - -ab
+		# - -ab val
+		# 
+		# ### Usage
+		# ```
+		# optparser = SimpleOptParser.new
+		# optparser.register_option(['-a'])
+		# optparser.register_option(['-b'])
+		# optparser.register_option(['-c'], 1)
+		# opts = optparser.parse('-a -b -c val')
+		# ```
 		class SimpleOptParser
 			
+			# Parsed Options (+Commands)
 			attr_reader :options
+			
+			# Not Recognized Options
 			attr_reader :unknown_options
 			
 			def initialize
@@ -47,10 +53,13 @@ module TheFox
 				@unknown_options = Array.new
 			end
 			
-			# number_values
-			#   0 = no value, just a switch
-			#  -1 = unlimited
-			#   n = n values
+			# `aliases` (Array)
+			#
+			# `number_values`
+			# 
+			# -  0 = no value, just a switch
+			# - -1 = unlimited
+			# -  n = n values
 			def register_option(aliases, number_values = 0)
 				aliases.each do |ali|
 					@valid_options[ali] = number_values
@@ -69,6 +78,7 @@ module TheFox
 				end
 			end
 			
+			# `args` (Array|String)
 			def parse(args)
 				# Reset previous options.
 				@options = []

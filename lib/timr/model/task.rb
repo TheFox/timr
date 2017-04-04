@@ -1,7 +1,4 @@
 
-# require 'progress_bar'
-# require 'ruby-progressbar'
-
 module TheFox
 	module Timr
 		module Model
@@ -56,6 +53,7 @@ module TheFox
 					end
 				end
 				
+				# Set description.
 				def description=(description)
 					@description = description
 					
@@ -63,6 +61,7 @@ module TheFox
 					changed
 				end
 				
+				# Add a Track.
 				def add_track(track)
 					track.task = self
 					
@@ -72,6 +71,7 @@ module TheFox
 					changed
 				end
 				
+				# Remove a Track.
 				def remove_track(track)
 					track.task = nil
 					
@@ -444,10 +444,12 @@ module TheFox
 					changed
 				end
 				
+				# Get estimation.
 				def estimation
 					@estimation
 				end
 				
+				# Get estimation as String.
 				def estimation_s
 					if @estimation
 						@estimation.to_human
@@ -456,6 +458,7 @@ module TheFox
 					end
 				end
 				
+				# Set hourly_rate.
 				def hourly_rate=(new_hourly_rate)
 					if new_hourly_rate.nil?
 						@hourly_rate = nil
@@ -467,6 +470,7 @@ module TheFox
 					changed
 				end
 				
+				# Set has_flat_rate.
 				def has_flat_rate=(has_flat_rate)
 					@has_flat_rate = has_flat_rate
 					
@@ -474,14 +478,17 @@ module TheFox
 					changed
 				end
 				
+				# Get the actual consumed budge.
 				def consumed_budge
 					duration.to_i.to_f / 3600.0 * @hourly_rate
 				end
 				
+				# Calculate the budge based on estimation.
 				def estimated_budge
 					estimation.to_i.to_f / 3600.0 * @hourly_rate
 				end
 				
+				# Calculates the budge loss when a Flat Rate is used and the consumed duration is greater than the estimation.
 				def loss_budge
 					if @has_flat_rate
 						if duration > estimation
@@ -602,6 +609,8 @@ module TheFox
 					@current_track
 				end
 				
+				# Consumed duration.
+				# 
 				# Options:
 				# 
 				# - `:billed`
@@ -775,6 +784,7 @@ module TheFox
 					to_detailed_array.join("\n")
 				end
 				
+				# Used to print informations to STDOUT.
 				def to_detailed_array
 					to_ax = Array.new
 					to_ax << 'Task: %s' % [self.short_id]

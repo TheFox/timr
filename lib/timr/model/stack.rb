@@ -3,32 +3,36 @@ module TheFox
 	module Timr
 		module Model
 			
-			# The Stack holds one or more Tracks.
-			# Only one Track can run at a time.
-			# If you push a new Track on the Stack the underlying running
-			# will be paused.
+			# The Stack holds one or more Tracks. Only one Track can run at a time.
+			# 
+			# If you push a new Track on the Stack the underlying running will be paused.
+			# 
+			# Do not call Stack methods from extern. Only the Timr class is responsible to call Stack methods.
 			class Stack < BasicModel
 				
 				include TheFox::Timr::Helper
 				
+				# Timr instance
 				attr_accessor :timr
-				# attr_accessor :tasks_path
+				
+				# Holds all Tracks.
 				attr_reader :tracks
 				
 				def initialize
 					super()
 					
 					@timr = nil
-					# @tasks_path = nil
 					
 					# Data
 					@tracks = Array.new
 				end
 				
+				# Get the current Track (Top Track).
 				def current_track
 					@tracks.last
 				end
 				
+				# Start a Track.
 				def start(track)
 					unless track.is_a?(Track)
 						raise StackError, "track variable must be a Track instance. #{track.class} given."
@@ -43,6 +47,7 @@ module TheFox
 					changed
 				end
 				
+				# Stop current running Track.
 				def stop
 					if @tracks.count > 0
 						@tracks.pop
@@ -52,6 +57,7 @@ module TheFox
 					end
 				end
 				
+				# Push a Track.
 				def push(track)
 					unless track.is_a?(Track)
 						raise StackError, "track variable must be a Track instance. #{track.class} given."
@@ -63,6 +69,7 @@ module TheFox
 					changed
 				end
 				
+				# Remove a Track.
 				def remove(track)
 					unless track.is_a?(Track)
 						raise StackError, "track variable must be a Track instance. #{track.class} given."
@@ -84,6 +91,20 @@ module TheFox
 					# Mark Stack as changed.
 					changed
 				end
+				
+				# To String
+				def to_s
+					# "Stack"
+					
+					tracks_s = TranslationHelper.pluralize(@tracks.count, 'track', 'tracks')
+					'Stack: %s' % [tracks_s]
+				end
+				
+				def inspect
+					"#<Stack tracks=#{@tracks.count} current=#{@current_track.short_id}>"
+				end
+				
+				private
 				
 				# BasicModel Hook
 				def pre_save_to_file
@@ -134,17 +155,6 @@ module TheFox
 						# puts "track found B: #{track.class}" # @TODO remove
 						!track.nil?
 					}
-				end
-				
-				def to_s
-					# "Stack"
-					
-					tracks_s = TranslationHelper.pluralize(@tracks.count, 'track', 'tracks')
-					'Stack: %s' % [tracks_s]
-				end
-				
-				def inspect
-					"#<Stack tracks=#{@tracks.count} current=#{@current_track.short_id}>"
 				end
 				
 			end # class Task

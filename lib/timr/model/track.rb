@@ -151,6 +151,7 @@ module TheFox
 					end
 				end
 				
+				# Set message.
 				def message=(message)
 					@message = message
 					
@@ -258,6 +259,7 @@ module TheFox
 					Duration.new(seconds)
 				end
 				
+				# Alias method.
 				def billed_duration(options = Hash.new)
 					# puts "billed_duration"
 					
@@ -268,6 +270,7 @@ module TheFox
 					end
 				end
 				
+				# Alias method.
 				def unbilled_duration(options = Hash.new)
 					# puts "unbilled_duration"
 					
@@ -346,6 +349,7 @@ module TheFox
 					title(max_length)
 				end
 				
+				# Set is_billed.
 				def is_billed=(is_billed)
 					@is_billed = is_billed
 					
@@ -354,8 +358,8 @@ module TheFox
 				end
 				
 				# When the Track is marked as changed it needs to mark the Task as changed.
-				# A single Track cannot be stored to a file. Tracks are assiged to a Task and are stored
-				# to the Task file.
+				# 
+				# A single Track cannot be stored to a file. Tracks are assiged to a Task and are stored to the Task file.
 				def changed
 					super()
 					
@@ -412,10 +416,12 @@ module TheFox
 					h
 				end
 				
+				# Used to print informations to STDOUT.
 				def to_detailed_str
 					to_detailed_array.join("\n")
 				end
 				
+				# Used to print informations to STDOUT.
 				def to_detailed_array(options = Hash.new)
 					#options[:duration_man_days] ||= false
 					#options[:message] ||= false
