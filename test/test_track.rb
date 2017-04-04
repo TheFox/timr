@@ -84,7 +84,7 @@ class TestTrack < MiniTest::Test
 		}
 		track = Track.new
 		
-		assert_raises(DateTimeError) do
+		assert_raises(DateTimeHelperError) do
 			track.start(options)
 		end
 	end
