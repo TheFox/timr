@@ -39,6 +39,8 @@ module TheFox
 					end
 				end
 				
+				private
+				
 				def help
 					puts 'usage: timr [-V|--version] [-h|--help] [-C <path>] <command> [<args>]'
 					puts

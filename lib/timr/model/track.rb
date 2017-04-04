@@ -489,7 +489,7 @@ module TheFox
 						if hash['end_datetime']
 							track.end_datetime = hash['end_datetime']
 						end
-						track.changed = false
+						track.has_changed = false
 						track
 					end
 					

@@ -17,7 +17,7 @@ module TheFox
 			# Models hold data and can be stored to YAML files. Except for [Tracks](rdoc-ref:Track). Tracks are stored to a Task file.
 			class BasicModel
 				
-				attr_accessor :changed # @TODO rename to has_changed
+				attr_accessor :has_changed # @TODO rename to has_changed
 				attr_accessor :file_path
 				
 				def initialize
@@ -31,14 +31,15 @@ module TheFox
 						'modified' => Time.now.utc.strftime(MODEL_DATETIME_FORMAT),
 					}
 					@data = nil
-					@changed = false
+					@has_changed = false
 					@file_path = nil
 					# pp @meta # @TODO remove pp
 				end
 				
 				def id=(id)
 					@meta['id'] = id
-					@changed = true
+					
+					changed
 				end
 				
 				def id
@@ -60,7 +61,7 @@ module TheFox
 				# Mark an object as changed. Only changed objects are stored to files on save_to_file().
 				def changed
 					@meta['modified'] = Time.now.utc.strftime(MODEL_DATETIME_FORMAT)
-					@changed = true
+					@has_changed = true
 				end
 				
 				def load_from_file(path = nil)
@@ -80,7 +81,7 @@ module TheFox
 						content = YAML::load_file(path)
 						@meta = content['meta']
 						@data = content['data']
-						@changed = false
+						@has_changed = false
 					end
 					
 					post_load_from_file
@@ -105,8 +106,8 @@ module TheFox
 						@file_path = path
 					end
 					
-					#puts "#{self.class} save_to_file: #{store} #{@changed}"
-					if force || (store && @changed)
+					#puts "#{self.class} save_to_file: #{store} #{@has_changed}"
+					if force || (store && @has_changed)
 						@meta['modified'] = Time.now.utc.strftime(MODEL_DATETIME_FORMAT)
 						
 						# Create underlying directories.
@@ -120,7 +121,7 @@ module TheFox
 							store['data'] = @data
 						end
 						
-						@changed = false
+						@has_changed = false
 					end
 					
 					post_save_to_file
