@@ -15,6 +15,7 @@ end
 require_relative 'test_basic_model'
 require_relative 'test_track'
 require_relative 'test_task'
+require_relative 'test_stack'
 require_relative 'test_config'
 require_relative 'test_duration'
 require_relative 'test_progressbar'

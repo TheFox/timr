@@ -3,7 +3,7 @@ module TheFox
 	module Timr
 		module Model
 			
-			# The Stack holds one or more Tracks. Only one Track can run at a time.
+			# The Stack holds one or more [Tracks](rdoc-ref:TheFox::Timr::Model::Track). Only one Track can run at a time.
 			# 
 			# If you push a new Track on the Stack the underlying running will be paused.
 			# 
@@ -90,6 +90,11 @@ module TheFox
 					
 					# Mark Stack as changed.
 					changed
+				end
+				
+				# Append a Track.
+				def <<(track)
+					@tracks << track
 				end
 				
 				# To String
