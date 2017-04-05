@@ -18,6 +18,8 @@ module TheFox
 				row.each do |col|
 					header = @headings[col_n]
 					if header
+						header[:format] ||= '%s'
+						header[:label] ||= ''
 						unless header.has_key?(:empty)
 							header[:empty] = true
 						end
