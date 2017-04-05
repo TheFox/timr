@@ -72,7 +72,7 @@ module TheFox
 							@set_opt = true
 						
 						else
-							if /[a-f0-9]+/i.match(arg)
+							if /^[a-f0-9]{4,40}$/i.match(arg)
 								@tracks_opt << arg
 							else
 								raise TrackCommandError, "Unknown argument '#{arg}'. See 'timr track --help'."

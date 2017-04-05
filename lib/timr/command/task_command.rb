@@ -81,7 +81,7 @@ module TheFox
 							@tasks_opt << arg
 						else
 							# puts 'opt else' # @TODO remove
-							if /[a-f0-9]+/i.match(arg)
+							if /^[a-f0-9]{4,40}$/i.match(arg)
 								# puts 'collect tasks' # @TODO remove
 								@tasks_opt << arg
 							else

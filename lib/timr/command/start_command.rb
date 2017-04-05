@@ -51,6 +51,8 @@ module TheFox
 							else
 								if @id_opts.length < 2
 									@id_opts << arg
+								else
+									raise StartCommandError, "Unknown argument '#{arg}'. See 'timr start --help'."
 								end
 							end
 						end

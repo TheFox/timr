@@ -48,6 +48,8 @@ module TheFox
 							else
 								if @id_opts.length < 2
 									@id_opts << arg
+								else
+									raise PushCommandError, "Unknown argument '#{arg}'. See 'timr push --help'."
 								end
 							end
 						end
