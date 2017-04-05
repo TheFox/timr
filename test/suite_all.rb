@@ -22,6 +22,7 @@ require_relative 'test_progressbar'
 require_relative 'test_status'
 require_relative 'test_translation_helper'
 require_relative 'test_table'
+require_relative 'test_timr'
 
 require_relative 'test_continue_command'
 require_relative 'test_help_command'
