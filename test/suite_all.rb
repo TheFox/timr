@@ -12,6 +12,7 @@ end
 
 # require_relative 'test_simple_opt_parser'
 
+require_relative 'test_basic_model'
 require_relative 'test_track'
 require_relative 'test_task'
 require_relative 'test_duration'

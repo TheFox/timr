@@ -17,6 +17,8 @@ module TheFox
 			# Models hold data and can be stored to YAML files. Except for [Tracks](rdoc-ref:Track). Tracks are stored to a Task file.
 			class BasicModel
 				
+				include TheFox::Timr::Error
+				
 				attr_accessor :has_changed # @TODO rename to has_changed
 				attr_accessor :file_path
 				
@@ -153,6 +155,8 @@ module TheFox
 				
 				# All methods in this block are static.
 				class << self
+					
+					include TheFox::Timr::Error
 					
 					# Converts an [SHA1](http://ruby-doc.org/stdlib-2.4.1/libdoc/digest/rdoc/Digest/SHA1.html) Hash into a path.
 					# 
