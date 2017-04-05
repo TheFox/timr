@@ -17,6 +17,15 @@ stages:
     - release
     - deploy
 
+test_feature:
+    image: ruby:2.1
+    stage: test
+    environment: test
+    only:
+        - /^feature/
+    script:
+        - make test
+
 test_21:
     image: ruby:2.1
     stage: test
