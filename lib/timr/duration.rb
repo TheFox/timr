@@ -87,20 +87,27 @@ module TheFox
 			
 			# Adds two Durations.
 			def +(duration)
-				unless duration.is_a?(Duration)
+				case duration
+				when Integer
+					Duration.new(@seconds + duration)
+				when Duration
+					Duration.new(@seconds + duration.seconds)
+				else
 					raise DurationError, "Wrong type #{duration.class} for '+' function."
 				end
-				
-				Duration.new(@seconds + duration.seconds)
 			end
 			
 			# Subtract two Durations.
 			def -(duration)
-				unless duration.is_a?(Duration)
-					raise DurationError, "Wrong type #{duration.class} for '-' function. #{duration}"
+				case duration
+				when Integer
+					diff = @seconds - duration
+				when Duration
+					diff = @seconds - duration.seconds
+				else
+					raise DurationError, "Wrong type #{duration.class} for '+' function."
 				end
 				
-				diff = @seconds - duration.seconds
 				if diff < 0
 					diff = 0
 				end
@@ -108,13 +115,23 @@ module TheFox
 			end
 			
 			# Lesser
-			def <(seconds)
-				@seconds < seconds # @TODO use Duration as well
+			def <(obj)
+				case obj
+				when Integer
+					@seconds < obj
+				when Duration
+					@seconds < obj.to_i
+				end
 			end
 			
 			# Greater
-			def >(duration)
-				@seconds > duration.to_i # @TODO use Integer as well
+			def >(obj)
+				case obj
+				when Integer
+					@seconds > obj
+				when Duration
+					@seconds > obj.to_i
+				end
 			end
 			
 			# String
