@@ -84,7 +84,8 @@ class TestBasicModel < MiniTest::Test
 		base_path = Pathname.new('/tmp')
 		path = Pathname.new('/tmp/3d/d5/0a/2b50eabc84022a23ad2c06d9bb6396f978.yml')
 		id = BasicModel.get_id_from_path(base_path, path)
-		puts "id: #{id}"
+		# puts "id: #{id}"
+		assert_equal('3dd50a2b50eabc84022a23ad2c06d9bb6396f978', id)
 	end
 	
 	def test_find_file_by_id

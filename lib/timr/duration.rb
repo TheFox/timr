@@ -45,11 +45,8 @@ module TheFox
 					:units => 2,
 				}
 				h = ChronicDuration.output(@seconds, dur_opt)
-				if h
-					h
-				else
-					'---'
-				end
+				
+				h ? h : '---'
 			end
 			
 			# Man-days, Man-hours

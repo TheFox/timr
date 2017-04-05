@@ -388,6 +388,8 @@ module TheFox
 				def remove
 					if @task
 						@task.remove_track(self)
+					else
+						false
 					end
 				end
 				
@@ -431,7 +433,9 @@ module TheFox
 					duration_man_days = self.duration.to_man_days
 					
 					to_ax = Array.new
-					to_ax << ' Task: %s %s' % [@task.short_id, @task.name_s]
+					if @task
+						to_ax << ' Task: %s %s' % [@task.short_id, @task.name_s]
+					end
 					to_ax << 'Track: %s %s' % [self.short_id, self.title]
 					to_ax << '  Start: %s' % [self.begin_datetime_s]
 					to_ax << '  End:   %s' % [self.end_datetime_s]
@@ -522,6 +526,8 @@ module TheFox
 									raise TrackError, "Track ID '#{track_id}' is not a unique identifier."
 								else
 									found_track = tmp_track
+									
+									# Do not break the loop here.
 								end
 							end
 						end

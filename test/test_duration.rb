@@ -83,6 +83,11 @@ class TestDuration < MiniTest::Test
 		assert_equal('1', duration1.to_s)
 	end
 	
+	def test_to_i
+		duration1 = Duration.new
+		assert_equal(0, duration1.to_i)
+	end
+	
 	def test_parse
 		duration1 = Duration.parse('-2m 30s')
 		assert_equal(150, duration1.to_i)

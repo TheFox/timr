@@ -75,10 +75,13 @@ module TheFox
 				def remove_track(track)
 					track.task = nil
 					
-					@tracks.delete(track.id)
-					
-					# Mark Task as changed.
-					changed
+					if @tracks.delete(track.id)
+						# Mark Task as changed.
+						changed
+					else
+						# Track is not assiged to this Task.
+						false
+					end
 				end
 				
 				# Move a Track to another Task.
@@ -87,7 +90,10 @@ module TheFox
 						return false
 					end
 					
-					remove_track(track)
+					unless remove_track(track)
+						return false
+					end
+					
 					target_task.add_track(track)
 					
 					true
@@ -480,19 +486,29 @@ module TheFox
 				
 				# Get the actual consumed budge.
 				def consumed_budge
-					duration.to_i.to_f / 3600.0 * @hourly_rate
+					if @hourly_rate
+						duration.to_i.to_f / 3600.0 * @hourly_rate
+					else
+						0.0
+					end
 				end
 				
 				# Calculate the budge based on estimation.
 				def estimated_budge
-					estimation.to_i.to_f / 3600.0 * @hourly_rate
+					if @hourly_rate
+						estimation.to_i.to_f / 3600.0 * @hourly_rate
+					else
+						0.0
+					end
 				end
 				
 				# Calculates the budge loss when a Flat Rate is used and the consumed duration is greater than the estimation.
 				def loss_budge
-					if @has_flat_rate
+					if @has_flat_rate && @hourly_rate
 						if duration > estimation
 							(duration - estimation).to_i.to_f / 3600.0 * @hourly_rate
+						else
+							0.0
 						end
 					else
 						0.0
@@ -655,26 +671,28 @@ module TheFox
 				# Returns a Duration instance.
 				def remaining_time
 					if @estimation
-						rmt = estimation - duration
-						if rmt < 0
-							#rmt
-							rmt = Duration.new(0)
-							#nil
-						else
-							rmt
-						end
+						estimation - duration
+						# rmt = estimation - duration
+						# if rmt < 0
+						# 	#rmt
+						# 	rmt = Duration.new(0)
+						# 	#nil
+						# else
+						# 	rmt
+						# end
 					end
 				end
 				
 				def remaining_time_s
 					rmt = remaining_time
 					if rmt
-						rmth = rmt.to_human
-						if rmth
-							rmth
-						else
-							'0s'
-						end
+						rmt.to_human
+						# rmth = rmt.to_human
+						# if rmth
+						# 	rmth
+						# else
+						# 	'0s'
+						# end
 					else
 						'---'
 					end
