@@ -81,7 +81,7 @@ deploy:
         - tags
     script:
         - make cov
-        - make doc
+        - ./bin/build_doc.sh
         - ./bin/build_man.sh
         - ./bin/build_info.sh > build.txt
         - ./bin/publish

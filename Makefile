@@ -23,6 +23,3 @@ cov:
 .PHONY: cov_local
 cov_local:
 	RUBYOPT=-w TZ=Europe/Vienna TERMKIT_LOAD_PATH=../termkit SIMPLECOV_PHPUNIT_LOAD_PATH=../simplecov-phpunit COVERAGE=1 $(BUNDLER) exec ./test/suite_all.rb -v
-
-doc:
-	rdoc README.md lib/timr
