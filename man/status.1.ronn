@@ -1,6 +1,9 @@
 timr-status(1) -- Show the current Stack.
-=========================================
+===
 
 ## SYNOPSIS
 
-`timr status` [-h|--help] [-f|--full] [-r|--reverse]
+`timr status` [<options>...]
+
+## DESCRIPTION
+## OPTIONS

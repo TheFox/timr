@@ -8,11 +8,13 @@ which ronn &> /dev/null || { echo 'ronn not found in PATH'; exit 1; }
 
 pushd "${SCRIPT_BASEDIR}/../man"
 
-while read -r dir; do
-	echo "dir: '$dir'"
-	pushd "$dir"
-	
-	find . -type f -name '*.ronn' -exec ronn -w --date=$DATE --manual='Timr Manual' --organization='FOX21.at' {} \;
-	
-	popd
-done <<< "$(find . -type d)"
+while read -r file; do
+	echo "file: '$file'"
+	tmp_file="${file}.tmp"
+	cp "$file" "$tmp_file"
+	{
+		echo
+		cat _footer
+	} >> "$tmp_file"
+	ronn -w --date=$DATE --manual='Timr Manual' --organization='FOX21.at' "$tmp_file"
+done <<< "$(find . -type f -name '*.ronn')"

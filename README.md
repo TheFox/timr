@@ -22,7 +22,7 @@ The preferred method of installation is via RubyGems.org:
 
 ## Tasks
 
-A Task can has a name and a description. A Task can has multiple Tracks. One Track can has only one Task as parent.
+A Task can have a name and a description. A Task can have multiple Tracks. One Track can have only one Task as parent.
 
 A Track is atomic. It's the smallest time unit. It's a time span presented by a begin date time and end date time. All date times are stored as UTC and converted temporary to your local timezone.
 
@@ -48,9 +48,7 @@ Use `-C` to change the directory in which Timr should operate:
 
 Options:
 
-- `-n`, `--name`
-
-	Track Name
+- `-n`, `--name` Track Name
 
 ### Status Command
 
@@ -82,17 +80,18 @@ fi
 
 Do not forget to remove all links when deinstalling Timr.
 
+## Project Links
+
+- [Homepage](https://timr.fox21.at/)
+- [Code Coverage](https://timr.fox21.at/coverage/)
+- [GitHub Page](https://github.com/TheFox/timr)
+- [RubyGems Page](https://rubygems.org/gems/timr)
+- [Travis CI Repository](https://travis-ci.org/TheFox/timr)
+
 ## API
 
 - [API Reference Mainpage](https://timr.fox21.at/doc/)
-- [Errors Inheritance Tree](https://timr.fox21.at/doc/TheFox/Timr/Error.html)
-
-## Project Links
-
-- [Timr Homepage](https://timr.fox21.at/)
-- [Timr Code Coverage](https://timr.fox21.at/coverage/)
-- [Timr Gem](https://rubygems.org/gems/timr)
-- [Travis CI Repository](https://travis-ci.org/TheFox/timr)
+- [Errors Inheritance Tree](https://timr.fox21.at/doc/TheFox/Timr/Error.html#module-TheFox::Timr::Error-label-Errors+Inheritance+Tree)
 
 ## Contributing
 
