@@ -175,9 +175,18 @@ module TheFox
 				end
 				
 				# Stop this Track.
+				# 
+				# Options:
+				# 
+				# - `:start_date`
+				# - `:start_time`
+				# - `:end_date`, `:date`
+				# - `:end_time`, `:time`
 				def stop(options = Hash.new)
 					start_date_opt = options.fetch(:start_date, nil)
 					start_time_opt = options.fetch(:start_time, nil)
+					end_date_opt = options.fetch(:end_date, options.fetch(:date, nil))
+					end_time_opt = options.fetch(:end_time, options.fetch(:time, nil))
 					message_opt = options.fetch(:message, nil)
 					append_opt = options.fetch(:append, false)
 					# paused_opt = options.fetch(:paused, false)
@@ -194,7 +203,11 @@ module TheFox
 					end
 					
 					# Set End DateTime
-					@end_datetime = DateTimeHelper.get_datetime_from_options(options)
+					end_options = {
+						:date => end_date_opt,
+						:time => end_time_opt,
+					}
+					@end_datetime = DateTimeHelper.get_datetime_from_options(end_options)
 					
 					if message_opt
 						if append_opt

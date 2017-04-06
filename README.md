@@ -6,10 +6,19 @@ Timr is a time tracking tool for the [Command-line](https://en.wikipedia.org/wik
 
 ## Install
 
+You can either install Timr via [RubyGems.org](https://rubygems.org/gems/timr) or from [source](https://github.com/TheFox/timr).
+
+## Install via RubyGems.org
+
 The preferred method of installation is via RubyGems.org:  
 <https://rubygems.org/gems/timr>
 
 	gem install timr
+
+## Install from Source
+
+1. Clone `git clone https://github.com/TheFox/timr.git && cd timr`.
+2. Run `make install` (see `Makefile.common`). This creates the `timr` gem local and installs it.
 
 ## Tasks
 
@@ -50,6 +59,28 @@ Options:
 	timr push
 
 Sometimes you need to work on a task only temporary. You want to track the time for this as well. For example fixing a bug. When you fixed the bug you want to continue your actual work. Here comes `push` and `pop` into the game. It works like a stack. If you know [Git Stashing](https://git-scm.com/book/en/v1/Git-Tools-Stashing) it's very similar. But only for tasks. If you `push` a new task the below task will be paused. On `pop` the top task will be stopped and the next below will continued.
+
+## Bash Completion
+
+Timr comes with a completion for Bash: `bin/timr_bash_completion.sh` file is included to the Timr gem. To get the full path to `bin/timr_bash_completion.sh` run:
+
+	echo $(timr --install-basepath)/bin/timr_bash_completion.sh
+
+In the following examples replace `/path/to/bin/timr_bash_completion.sh` with the output of the executed `echo` command.
+
+Create a link to this file in your `bash_completion.d` directory. Unter Linux the path is `/etc/bash_completion.d`. Under macOS the path is `/usr/local/etc/bash_completion.d`. In this example we will use the path for macOS:
+
+	ln -s /path/to/bin/timr_bash_completion.sh /usr/local/etc/bash_completion.d
+
+Alternatively you can direct source from your `~/.bashrc` file:
+
+```bash
+if [ -f /path/to/bin/timr_bash_completion.sh ]; then
+	source /path/to/bin/timr_bash_completion.sh
+fi
+```
+
+Do not forget to remove all links when deinstalling Timr.
 
 ## API
 

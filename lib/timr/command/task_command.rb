@@ -296,8 +296,13 @@ module TheFox
 				def help
 					puts 'usage: timr task [show] [[-t|--tracks] <task_ids...>]'
 					puts '   or: timr task add [-n|--name <name>] [--description <str>]'
+					puts '                     [--estimation <time>] [--billed|--unbilled]'
+					puts '                     [--hourly-rate <value>] [--no-hourly-rate]'
+					puts '                     [--flat-rate|--no-flat-rate]'
 					puts '   or: timr task set [-n|--name <name>] [--description <str>]'
-					puts '                     [--estimation <time>] [--billed|--unbilled] <task_id>'
+					puts '                     [--estimation <time>] [--billed|--unbilled]'
+					puts '                     [--flat-rate|--no-flat-rate]'
+					puts '                     <task_id>'
 					puts '   or: timr task remove <task_ids...>'
 					puts '   or: timr task [-h|--help]'
 					puts

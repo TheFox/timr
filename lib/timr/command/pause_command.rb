@@ -14,8 +14,8 @@ module TheFox
 					
 					@help_opt = false
 					
-					@date_opt = nil
-					@time_opt = nil
+					@end_date_opt = nil
+					@end_time_opt = nil
 					
 					loop_c = 0 # Limit the loop.
 					while loop_c < 1024 && argv.length > 0
@@ -25,10 +25,10 @@ module TheFox
 						case arg
 						when '-h', '--help'
 							@help_opt = true
-						when '-d', '--date'
-							@date_opt = argv.shift
-						when '-t', '--time'
-							@time_opt = argv.shift
+						when '--ed', '--end-date', '-d', '--date'
+							@end_date_opt = argv.shift
+						when '--et', '--end-time', '-t', '--time'
+							@end_time_opt = argv.shift
 						else
 							raise PauseCommandError, "Unknown argument '#{arg}'. See 'timr pause --help'."
 						end
@@ -45,8 +45,8 @@ module TheFox
 					@timr = Timr.new(@cwd)
 					
 					options = {
-						:date => @date_opt,
-						:time => @time_opt,
+						:end_date => @end_date_opt,
+						:end_time => @end_time_opt,
 					}
 					
 					track = @timr.pause(options)
@@ -67,8 +67,11 @@ module TheFox
 					puts '   or: timr pause [-h|--help]'
 					puts
 					puts 'Track Options'
-					puts '    -d, --date <YYYY-MM-DD>    End Date'
-					puts '    -t, --time <HH:MM[:SS]>    End Time'
+					puts '    --ed, --end-date <YYYY-MM-DD>    End Date'
+					puts '    --et, --end-time <HH:MM[:SS]>    End Time'
+					puts
+					puts '    -d, --date <YYYY-MM-DD>          Alias for --end-date.'
+					puts '    -t, --time <HH:MM[:SS]>          Alias for --end-time.'
 					puts
 				end
 				

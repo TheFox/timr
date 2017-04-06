@@ -8,9 +8,9 @@ class TestStack < MiniTest::Test
 	include TheFox::Timr::Model
 	include TheFox::Timr::Error
 	
-	def test_stack
-		stack1 = Stack.new
-	end
+	# def test_stack
+	# 	stack1 = Stack.new
+	# end
 	
 	def test_current_track
 		stack1 = Stack.new

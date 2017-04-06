@@ -65,7 +65,11 @@ module TheFox
 					puts "    task                 Task related commands. See 'timr task --help'."
 					puts "    track                Track related commands. See 'timr track --help'."
 					puts
-					puts "See 'timr <command> -h' to read details about a specific command."
+					puts '    report               Generate a report.'
+					puts
+					puts "See 'timr <command> -h' to read details about a specific command,"
+					puts " or 'timr help <command>' to open the man page for this command."
+					puts "See 'man' directory for available man pages."
 				end
 				
 			end # class HelpCommand

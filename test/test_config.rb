@@ -10,7 +10,8 @@ class TestConfig < MiniTest::Test
 	# include TheFox::Timr::Error
 	
 	def test_config
-		config1 = Config.new
+		# config1 = Config.new
+		Config.new # @TODO config test
 	end
 	
 end

@@ -42,4 +42,6 @@ Gem::Specification.new do |spec|
 	# spec.add_runtime_dependency 'rom-yaml', '~>1.0'
 	# spec.add_runtime_dependency 'rom-repository', '~>1.3'
 	# spec.add_runtime_dependency 'timecop', '~>0.8'
+	
+	spec.post_install_message = %q{See 'timr --help' for more details.}
 end
