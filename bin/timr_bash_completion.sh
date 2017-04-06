@@ -314,7 +314,7 @@ function _timr_main {
 }
 
 # Dev
-complete -F _timr_main -o bashdefault timr_dev
+# complete -F _timr_main -o bashdefault timr_dev
 
-# complete -F _timr_main -o bashdefault timr
+complete -F _timr_main -o bashdefault timr
 # complete -r timr # Remove timr.

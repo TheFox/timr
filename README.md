@@ -94,6 +94,10 @@ Do not forget to remove all links when deinstalling Timr.
 - [Timr Gem](https://rubygems.org/gems/timr)
 - [Travis CI Repository](https://travis-ci.org/TheFox/timr)
 
+## Contributing
+
+See [Contributing](.github/CONTRIBUTING.md) page.
+
 ## License
 
 Copyright (C) 2016 Christian Mayer <https://fox21.at>
