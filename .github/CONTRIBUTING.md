@@ -20,7 +20,8 @@ We use the :octocat: [GitHub issue tracker](https://github.com/TheFox/timr/issue
 
 ## Submitting a Pull Request
 
-1. [Fork](https://help.github.com/articles/fork-a-repo/) the official repository. :fearful:
+1. [Fork](https://help.github.com/articles/fork-a-repo/) the official repository. :fearful:  
+  Run `./bin/dev_setup.sh` to get started with development.
 2. Create a [topic branch](https://help.github.com/articles/creating-and-deleting-branches-within-your-repository/). :frowning:
 3. Implement your feature or bugfix. :smile:
 4. Add, commit, and push your changes. :sunglasses:

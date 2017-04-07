@@ -18,7 +18,7 @@ The preferred method of installation is via RubyGems.org:
 ## Install from Source
 
 1. Clone `git clone https://github.com/TheFox/timr.git && cd timr`.
-2. Run `make install` (see `Makefile.common`). This creates the `timr` gem local and installs it.
+2. Run `./bin/install.sh`. This creates the `timr` gem local and installs it.
 
 ## Tasks
 

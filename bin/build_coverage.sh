@@ -9,7 +9,7 @@ COVERAGE=1
 
 
 set -e
-which bundler &> /dev/null || { echo 'bundler not found in PATH'; exit 1; }
+which bundler &> /dev/null || { echo 'ERROR: bundler not found in PATH'; exit 1; }
 
 pushd "${SCRIPT_BASEDIR}/.."
 
@@ -17,7 +17,6 @@ is_local=$1
 
 if [[ "$is_local" = -l ]]; then
 	echo 'use local SimpleCov PHPUnit Formatter'
-	#TERMKIT_LOAD_PATH=../termkit
 	SIMPLECOV_PHPUNIT_LOAD_PATH=../simplecov-phpunit
 fi
 

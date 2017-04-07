@@ -8,7 +8,7 @@ TZ=Europe/Vienna
 
 
 set -e
-which bundler &> /dev/null || { echo 'bundler not found in PATH'; exit 1; }
+which bundler &> /dev/null || { echo 'ERROR: bundler not found in PATH'; exit 1; }
 
 pushd "${SCRIPT_BASEDIR}/.."
 

@@ -6,7 +6,7 @@ DATE=$(date +"%F %T %z")
 SCRIPT_BASEDIR=$(dirname "$0")
 
 
-pushd "${SCRIPT_BASEDIR}/.."
+cd "${SCRIPT_BASEDIR}/.."
 
 RUBY_VERSION=$(ruby -e "print RUBY_VERSION")
 TERMKIT_VERSION=$(ruby -rtermkit -e "print %{#{TheFox::TermKit::VERSION} (#{TheFox::TermKit::DATE})}")

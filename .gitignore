@@ -6,7 +6,6 @@ CHANGELOG-*.txt
 /coverage/
 Gemfile.lock
 /lib1/
-/releases/
 README.html
 /test1/
 /tmp/

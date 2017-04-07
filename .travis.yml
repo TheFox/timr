@@ -12,12 +12,12 @@ before_install:
     - gem install bundler -v '~>1.13'
     - bundler --version
 install:
-    - make
-    - gem build timr.gemspec
-    - gem install timr-*.gem
-    - gem list -l timr
+    - bundler install
+    - 'gem build "${GEMSPEC_FILE}"'
+    - 'gem install "${GEM_NAME}"-*.gem'
+    - 'gem list -l "${GEM_NAME}"'
 script:
-    - make test
+    - ./bin/test.sh
     - cd
     - which -a timr
     - timr --version
