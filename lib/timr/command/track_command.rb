@@ -11,6 +11,8 @@ module TheFox
 				include TheFox::Timr::Model
 				include TheFox::Timr::Error
 				
+				MAN_PATH = 'man/track.1'
+				
 				def initialize(argv = Array.new)
 					super()
 					# puts "argv '#{argv}'"
@@ -360,7 +362,7 @@ module TheFox
 				end
 				
 				def help
-					puts 'usage: timr track [show] [-t|--task] <track_ids...>'
+					puts 'usage: timr track [show] [-t|--task] <track_id>...'
 					puts '   or: timr track add [-m|--message <message>]'
 					puts '                      [--start-date <YYYY-MM-DD> --start-time <HH:MM[:SS]>'
 					puts '                        [--end-date <YYYY-MM-DD> --end-time <HH:MM[:SS]>]]'
@@ -370,7 +372,7 @@ module TheFox
 					puts '                      [--end-date <YYYY-MM-DD> --end-time <HH:MM[:SS]>]'
 					puts '                      [-t|--task <task_id>] [--billed|--unbilled]'
 					puts '                      <track_id>'
-					puts '   or: timr track remove <track_ids...>'
+					puts '   or: timr track remove <track_id>...'
 					puts '   or: timr track [-h|--help]'
 					puts
 					puts 'Show Options'

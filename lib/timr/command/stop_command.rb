@@ -11,6 +11,8 @@ module TheFox
 				include TheFox::Timr::Helper
 				include TheFox::Timr::Error
 				
+				MAN_PATH = 'man/stop.1'
+				
 				def initialize(argv = Array.new)
 					super()
 					# puts "argv '#{argv}'"

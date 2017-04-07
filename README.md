@@ -2,7 +2,7 @@
 
 Time Tracking for Hackers: CLI tool for tracking work hours.
 
-Timr is a time tracking tool for the [Command-line](https://en.wikipedia.org/wiki/Command-line_interface) written in [Ruby](https://www.ruby-lang.org/). You can track your time spent for a specific project. I know. There are (too) many time tracking tools and such blabla you can use. The main focus of this tool is to use it on the Command-line and make automatic reports. I love the Command-line, so I want the terminal to handle as much as possible. I don't want programms with fancy UIs. Text-based is good enough. All data are stored in YAML files. So editing can also be done by using your favorite editor.
+Timr is a time tracking tool for the [Command-line](https://en.wikipedia.org/wiki/Command-line_interface) written in [Ruby](https://www.ruby-lang.org/). You can track your time spent for a specific project. I know, there are (too) many time tracking tools and such blabla you can use. The main focus of this tool is to use it on the Command-line and make automatic reports. I love the Command-line, so I want the terminal to handle as much as possible. I don't want programms with fancy UIs. Text-based is good enough. All data are stored in YAML files. So editing can also be done by using your favorite editor.
 
 ## Install
 
@@ -20,13 +20,21 @@ The preferred method of installation is via RubyGems.org:
 1. Clone `git clone https://github.com/TheFox/timr.git && cd timr`.
 2. Run `./bin/install.sh`. This creates the `timr` gem local and installs it.
 
-## Tasks
+## Task
 
-A Task can have a name and a description. A Task can have multiple Tracks. One Track can have only one Task as parent.
+A Task can have a name, a description, an estimation and hourly rate. A Task can have multiple Tracks. One Track can have only one Task as parent. So a Task represents a collection of Tracks.
 
-A Track is atomic. It's the smallest time unit. It's a time span presented by a begin date time and end date time. All date times are stored as UTC and converted temporary to your local timezone.
+## Track
 
-When a Track gets *continued* or *restarted* it's actual a copy using the same message.
+A Track is atomic. It's the smallest time unit. This is where the time comes from. It's a time span presented by a begin date time and end date time. All date times are stored as UTC and converted temporary to your local timezone.
+
+## Stack
+
+The Stack holds Tracks. If you know [Git Stashing](https://git-scm.com/book/en/v1/Git-Tools-Stashing) it's very similar. Just for Tasks. The most recent Track is sometimes called the *Top Track*. It's either the current running Track or on `pause` the latest ran Track.
+
+When first starting a new Task, a new Track will be created and pushed to the Stack. When running the Stop command this Task will be removed from the Stack.
+
+You can push another Track to the Stack by running the Push command. It is like the Start command but without removing the previous Track from the Stack. The Push and Pop command is helpful when you need to work temporary on another Task. When running the Pop command the Top Track will be stopped and removed from the Stack. Further, the next Track on the Stack will continue immediately.
 
 ## Clients
 
@@ -42,21 +50,121 @@ Use `-C` to change the directory in which Timr should operate:
 
 ## Commands
 
+See `timr <command> --help` to read details about a specific command, or `timr help <command>` to open the man page for this command.
+
+The man pages are also available online: <https://timr.fox21.at/man/>
+
 ### Start Command
+
+The Start command always removes all Tracks from the Stack. If there is another current running Task this Task will be stopped and removed from the Stack.
 
 	timr start [<options>] [<task_id> [<track_id>]]
 
-Options:
+See more informations on the [timr-start(1)](https://timr.fox21.at/man/start.1.html) man page.
 
-- `-n`, `--name` Track Name
+### Stop Command
+
+The Stop command stopps the current running Track and removes it from the Stack.
+
+	timr stop [<options>]
+
+See more informations on the [timr-stop(1)](https://timr.fox21.at/man/stop.1.html) man page.
+
+### Pause Command
+
+Pause the current running Track.
+
+	timr pause [<options>]
+
+See more informations on the [timr-pause(1)](https://timr.fox21.at/man/pause.1.html) man page.
+
+### Continue Command
+
+Continue the previous paused Track. When a Track will be continued (or *restarted*) it's actual a copy using the same message.
+
+	timr continue [<options>]
+
+See more informations on the [timr-continue(1)](https://timr.fox21.at/man/continue.1.html) man page.
+
+### Push Command
+
+Sometimes you need to work on a Task only temporary. You want to track the time for this as well. For example fixing a bug. When you fixed the bug you want to continue your actual work. Here comes `push` and `pop` into the game. It modifies the Stack. If you `push` a new Task the below Task will be paused. On `pop` the Top Task will be stopped and the next below will continue.
+
+	timr push [<options>] [<task_id> [<track_id>]]
+
+See more informations on the [timr-push(1)](https://timr.fox21.at/man/push.1.html) man page.
+
+### Pop Command
+
+	timr pop [<options>]
+
+See more informations on the [timr-pop(1)](https://timr.fox21.at/man/pop.1.html) man page.
 
 ### Status Command
 
-### Push/Pop Command
+description
 
-	timr push
+	timr status [<options>]
 
-Sometimes you need to work on a task only temporary. You want to track the time for this as well. For example fixing a bug. When you fixed the bug you want to continue your actual work. Here comes `push` and `pop` into the game. It works like a stack. If you know [Git Stashing](https://git-scm.com/book/en/v1/Git-Tools-Stashing) it's very similar. But only for tasks. If you `push` a new task the below task will be paused. On `pop` the top task will be stopped and the next below will continued.
+See more informations on the [timr-status(1)](https://timr.fox21.at/man/status.1.html) man page.
+
+### Log Command
+
+description
+
+	timr log [<options>]
+
+See more informations on the [timr-log(1)](https://timr.fox21.at/man/log.1.html) man page.
+
+### Task Command
+
+description
+
+	timr task <subcommand> [<options>] [<task_id>]
+
+See more informations on the [timr-task(1)](https://timr.fox21.at/man/task.1.html) man page.
+
+### Track Command
+
+description
+
+	timr track <subcommand> [<options>] [<track_id>]
+
+See more informations on the [timr-track(1)](https://timr.fox21.at/man/track.1.html) man page.
+
+### Report Command
+
+description
+
+	timr report [<options>]
+
+See more informations on the [timr-report(1)](https://timr.fox21.at/man/report.1.html) man page.
+
+## Workflow Example
+
+Here is an example as shell commands how your workflow could look like while using Timr.
+
+Before starting to work on a Task:
+
+	timr start
+
+Do your work.
+
+After finished your Task:
+
+	timr stop
+
+But you like to name your Task at the beginning to know on what you worked:
+
+	timr start --name 'Refactor Star Wars'
+
+In case you need to do several things on your Task provide a more specific message:
+
+	timr start --name 'Refactor Star Wars' --message 'This is what I am going to do.'
+
+But maybe you have not set `--message` on `start`. So you can also set it on `stop`:
+
+	timr stop --message 'This is what I have done.'
 
 ## Bash Completion
 

@@ -12,6 +12,8 @@ module TheFox
 				include TheFox::Timr::Helper
 				include TheFox::Timr::Error
 				
+				MAN_PATH = 'man/log.1'
+				
 				def initialize(argv = Array.new)
 					super()
 					# puts "#{Time.now.to_ms} #{self.class} #{__method__}" # @TODO remove
@@ -256,6 +258,7 @@ module TheFox
 					puts '   or: timr log -d|--day <YYYY-MM-DD>'
 					puts '   or: timr log -m|--month <YYYY-MM>'
 					puts '   or: timr log -y|--year <YYYY>'
+					puts '   or: timr log -a|--all'
 					puts '   or: timr log [-h|--help]'
 					puts
 					puts 'Total Filter'

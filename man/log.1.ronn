@@ -1,9 +1,9 @@
-timr-status(1) -- Show the current Stack.
+timr-log(1) -- description
 ===
 
 ## SYNOPSIS
 
-timr status [<options>...]
+timr log [<options>...]
 
 ## DESCRIPTION
 

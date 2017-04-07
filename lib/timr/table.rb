@@ -4,6 +4,7 @@ module TheFox
 		
 		class Table
 			
+			# Holds all rows.
 			attr_reader :rows
 			
 			def initialize(options = Hash.new)

@@ -3,11 +3,13 @@ module TheFox
 	module Timr
 		module Command
 			
-			# Continue the current paused [Track](rdoc-ref:TheFox::Timr::Model::Track).
+			# Continue the previous paused [Track](rdoc-ref:TheFox::Timr::Model::Track).
 			class ContinueCommand < BasicCommand
 				
 				include TheFox::Timr::Helper
 				include TheFox::Timr::Error
+				
+				MAN_PATH = 'man/continue.1'
 				
 				def initialize(argv = Array.new)
 					super()

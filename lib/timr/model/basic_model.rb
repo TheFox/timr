@@ -19,7 +19,10 @@ module TheFox
 				
 				include TheFox::Timr::Error
 				
-				attr_accessor :has_changed # @TODO rename to has_changed
+				# When calling `save_to_file`, it will only write the file if `@has_changed` is `true`.
+				attr_accessor :has_changed
+				
+				# Path to file.
 				attr_accessor :file_path
 				
 				def initialize
@@ -97,13 +100,20 @@ module TheFox
 					post_load_from_file
 				end
 				
+				# Hook function for subclass called before `load_from_file` payload will be executed.
 				def pre_load_from_file
 					true
 				end
 				
+				# Hook function for subclass called after `load_from_file` payload was executed.
+				# 
+				# Subclasses can access `@meta` and `@data` to write values into instance variables, or to convert data to other formats.
+				# 
+				# See `pre_save_to_file`.
 				def post_load_from_file
 				end
 				
+				# Save an entity to a YAML file.
 				def save_to_file(path = nil, force = false)
 					store = pre_save_to_file
 					
@@ -137,13 +147,21 @@ module TheFox
 					post_save_to_file
 				end
 				
+				# Hook function for subclass called before `save_to_file` payload will be executed.
+				# 
+				# Subclasses can modify `@meta` and `@data` in this method to store more informations to the meta Hash, or to convert data to other formats that can be better written to file.
+				# 
+				# For example, it's probably better to convert a floating point number to a `%.2f` formatted String and convert it back to float on `post_load_from_file`.  
+				# See Floating Point Math <http://0.30000000000000004.com>.
 				def pre_save_to_file
 					true
 				end
 				
+				# Hook function for subclass called after `save_to_file` payload was executed.
 				def post_save_to_file
 				end
 				
+				# Delete the file.
 				def delete_file(path = nil)
 					path ||= @file_path
 					if path.nil?

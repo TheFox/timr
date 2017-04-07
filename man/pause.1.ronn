@@ -1,9 +1,9 @@
-timr-status(1) -- Show the current Stack.
+timr-pause(1) -- description
 ===
 
 ## SYNOPSIS
 
-timr status [<options>...]
+timr pause [<options>...]
 
 ## DESCRIPTION
 

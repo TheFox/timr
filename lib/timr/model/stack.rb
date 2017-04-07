@@ -12,7 +12,7 @@ module TheFox
 				
 				include TheFox::Timr::Helper
 				
-				# Timr instance
+				# Timr instance.
 				attr_accessor :timr
 				
 				# Holds all Tracks.

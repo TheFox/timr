@@ -12,6 +12,8 @@ module TheFox
 				include TheFox::Timr::Helper
 				include TheFox::Timr::Error
 				
+				MAN_PATH = 'man/task.1'
+				
 				def initialize(argv = Array.new)
 					super()
 					# puts "argv #{argv.frozen?} '#{argv}'"
@@ -294,7 +296,7 @@ module TheFox
 				# end
 				
 				def help
-					puts 'usage: timr task [show] [[-t|--tracks] <task_ids...>]'
+					puts 'usage: timr task [show] [[-t|--tracks] <task_id>...]'
 					puts '   or: timr task add [-n|--name <name>] [--description <str>]'
 					puts '                     [--estimation <time>] [--billed|--unbilled]'
 					puts '                     [--hourly-rate <value>] [--no-hourly-rate]'
@@ -303,7 +305,7 @@ module TheFox
 					puts '                     [--estimation <time>] [--billed|--unbilled]'
 					puts '                     [--flat-rate|--no-flat-rate]'
 					puts '                     <task_id>'
-					puts '   or: timr task remove <task_ids...>'
+					puts '   or: timr task remove <task_id>...'
 					puts '   or: timr task [-h|--help]'
 					puts
 					puts 'Subcommands'

@@ -1,4 +1,5 @@
 
+# Extend core [Time](http://ruby-doc.org/stdlib-2.4.0/libdoc/time/rdoc/Time.html) class.
 class Time
 	
 	# See [How do I get elapsed time in milliseconds in Ruby?](http://stackoverflow.com/questions/1414951/how-do-i-get-elapsed-time-in-milliseconds-in-ruby)

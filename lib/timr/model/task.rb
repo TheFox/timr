@@ -43,7 +43,7 @@ module TheFox
 					name
 				end
 				
-				# Get name or '---' if name is not set.
+				# Get name or `---` if name is not set.
 				def name_s(max_length = nil)
 					s = name(max_length)
 					if s.nil?
@@ -515,6 +515,7 @@ module TheFox
 					end
 				end
 				
+				# Start a new Track by given `options`.
 				def start(options = Hash.new)
 					track_id_opt = options.fetch(:track_id, nil)
 					
@@ -648,8 +649,8 @@ module TheFox
 					duration
 				end
 				
-				# Alias for `duration()`.
-				
+				# Alias for `duration` method.
+				# 
 				# Options:
 				# 
 				# - `:billed` (Boolean)
@@ -657,7 +658,7 @@ module TheFox
 					duration(options.merge({:billed => true}))
 				end
 				
-				# Alias for `duration()`.
+				# Alias for `duration` method.
 				# 
 				# Options:
 				# 
@@ -683,6 +684,10 @@ module TheFox
 					end
 				end
 				
+				# Get the remaining Time as Human String.
+				# 
+				# - Like `2h 30m`.
+				# - Or `---` when `@estimation` is `nil`.
 				def remaining_time_s
 					rmt = remaining_time
 					if rmt
@@ -698,6 +703,7 @@ module TheFox
 					end
 				end
 				
+				# Get the remaining Time as percent.
 				def remaining_time_percent
 					rmt = remaining_time
 					if rmt && @estimation
@@ -705,6 +711,7 @@ module TheFox
 					end
 				end
 				
+				# Get the remaining Time Percent as String.
 				def remaining_time_percent_s
 					rmtp = remaining_time_percent
 					if rmtp
@@ -714,6 +721,7 @@ module TheFox
 					end
 				end
 				
+				# Get Task status as Status instance.
 				def status
 					stati = @tracks.map{ |track_id, track| track.status.short_status }.to_set
 					
@@ -730,6 +738,7 @@ module TheFox
 					Status.new(status)
 				end
 				
+				# Set is_billed.
 				def is_billed=(is_billed)
 					@tracks.each do |track_id, track|
 						track.is_billed = is_billed
@@ -775,6 +784,7 @@ module TheFox
 					self.id == task.id
 				end
 				
+				# To String
 				def to_s
 					"Task_#{short_id}"
 				end
@@ -784,6 +794,7 @@ module TheFox
 					to_compact_array.join("\n")
 				end
 				
+				# Used to print informations to STDOUT.
 				def to_compact_array
 					to_ax = Array.new
 					to_ax << 'Task: %s %s' % [self.short_id, self.name]
