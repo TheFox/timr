@@ -24,7 +24,7 @@ test_feature:
     only:
         - /^feature/
     script:
-        - make test
+        - ./bin/test.sh
 
 test_21:
     image: ruby:2.1
@@ -33,7 +33,7 @@ test_21:
     only:
         - tags
     script:
-        - make test
+        - ./bin/test.sh
 
 test_22:
     image: ruby:2.2
@@ -42,7 +42,7 @@ test_22:
     only:
         - tags
     script:
-        - make test
+        - ./bin/test.sh
 
 test_23:
     image: ruby:2.3
@@ -51,7 +51,7 @@ test_23:
     only:
         - tags
     script:
-        - make test
+        - ./bin/test.sh
 
 test_24:
     image: ruby:2.4.0
@@ -60,7 +60,7 @@ test_24:
     only:
         - tags
     script:
-        - make test
+        - ./bin/test.sh
 
 release:
     image: ruby:2.4.0
