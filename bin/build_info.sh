@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Build build.txt file for https://timr.fox21.at/build.txt.
+
 DATE=$(date +"%F %T %z")
 SCRIPT_BASEDIR=$(dirname "$0")
 

@@ -1,9 +1,9 @@
 /.bundle/
 .env
 .setup
+/api/
 CHANGELOG-*.txt
 /coverage/
-/doc/
 Gemfile.lock
 /lib1/
 /releases/

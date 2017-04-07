@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
+# Build manual pages.
+
 DATE=$(date +"%F")
 SCRIPT_BASEDIR=$(dirname "$0")
+
 
 set -e
 which ronn &> /dev/null || { echo 'ronn not found in PATH'; exit 1; }

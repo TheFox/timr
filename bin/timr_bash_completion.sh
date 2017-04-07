@@ -1,4 +1,7 @@
 
+# Source from this file running
+# 	source bin/timr_bash_completion.sh
+
 function _timr_command {
 	local curr_word=$1
 	local timr_commands=(
@@ -224,10 +227,7 @@ function _timr_track_set {
 
 function _timr_track_show {
 	local curr_word=$1
-	local timr_commands=(
-		--task
-	)
-	COMPREPLY=( $(compgen -W '${timr_commands[@]}' -- "${curr_word}") )
+	COMPREPLY=( $(compgen -W '--task' -- "${curr_word}") )
 }
 
 function _timr_main {
