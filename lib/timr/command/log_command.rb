@@ -173,10 +173,10 @@ module TheFox
 								
 								bdt = track.begin_datetime(@filter_options)
 								edt = track.end_datetime(@filter_options)
-								if !totals[:begin_datetime] || bdt < totals[:begin_datetime]
+								if bdt && (!totals[:begin_datetime] || bdt < totals[:begin_datetime])
 									totals[:begin_datetime] = bdt
 								end
-								if !totals[:end_datetime] || edt > totals[:end_datetime]
+								if edt && (!totals[:end_datetime] || edt > totals[:end_datetime])
 									totals[:end_datetime] = edt
 								end
 								
@@ -203,10 +203,10 @@ module TheFox
 							bdt = track.begin_datetime(@filter_options)
 							edt = track.end_datetime(@filter_options)
 							
-							if !totals[:begin_datetime] || bdt < totals[:begin_datetime]
+							if bdt && (!totals[:begin_datetime] || bdt < totals[:begin_datetime])
 								totals[:begin_datetime] = bdt
 							end
-							if !totals[:end_datetime] || edt > totals[:end_datetime]
+							if edt && (!totals[:end_datetime] || edt > totals[:end_datetime])
 								totals[:end_datetime] = edt
 							end
 							
