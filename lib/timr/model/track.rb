@@ -449,7 +449,9 @@ module TheFox
 					if @task
 						to_ax << ' Task: %s %s' % [@task.short_id, @task.name_s]
 					end
-					to_ax << 'Track: %s %s' % [self.short_id, self.title]
+					to_ax << 'Track: %s' % [self.short_id]
+					to_ax << '  ID: %s' % [self.id]
+					to_ax << '  Title: %s' % [self.title]
 					to_ax << '  Start: %s' % [self.begin_datetime_s]
 					to_ax << '  End:   %s' % [self.end_datetime_s]
 					to_ax << '  Duration: %s' % [duration_human]

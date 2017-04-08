@@ -364,12 +364,12 @@ module TheFox
 				def help
 					puts 'usage: timr track [show] [-t|--task] <track_id>...'
 					puts '   or: timr track add [-m|--message <message>]'
-					puts '                      [--start-date <YYYY-MM-DD> --start-time <HH:MM[:SS]>'
-					puts '                        [--end-date <YYYY-MM-DD> --end-time <HH:MM[:SS]>]]'
+					puts '                      [--start-date <date> --start-time <time>'
+					puts '                        [--end-date <date> --end-time <time>]]'
 					puts '                      [--billed|--unbilled] <task_id>'
 					puts '   or: timr track set [-m|--message <message>]'
-					puts '                      [--start-date <YYYY-MM-DD> --start-time <HH:MM[:SS]>]'
-					puts '                      [--end-date <YYYY-MM-DD> --end-time <HH:MM[:SS]>]'
+					puts '                      [--start-date <date> --start-time <time>]'
+					puts '                      [--end-date <date> --end-time <time>]'
 					puts '                      [-t|--task <task_id>] [--billed|--unbilled]'
 					puts '                      <track_id>'
 					puts '   or: timr track remove <track_id>...'
@@ -379,22 +379,24 @@ module TheFox
 					puts "    -t, --task       Show Task of Track. Same as 'timr task <task_id>'."
 					puts
 					puts 'Add/Set Options'
-					puts '    -m, --message                      Track Message. What have you done?'
-					puts '    --sd, --start-date <YYYY-MM-DD>    Start Date'
-					puts '    --st, --start-time <HH:MM[:SS]>    Start Time'
-					puts '    --ed, --end-date <YYYY-MM-DD>      End Date'
-					puts '    --et, --end-time <HH:MM[:SS]>      End Time'
-					puts '    -b, --billed                       Mark Track as billed.'
-					puts '    --unbilled                         Mark Track as unbilled.'
+					puts '    -m, --message <message>      Track Message. What have you done?'
+					puts '    --sd, --start-date <date>    Start Date'
+					puts '    --st, --start-time <time>    Start Time'
+					puts '    --ed, --end-date <date>      End Date'
+					puts '    --et, --end-time <time>      End Time'
+					puts '    -b, --billed                 Mark Track as billed.'
+					puts '    --unbilled                   Mark Track as unbilled.'
 					puts
 					puts 'Set Options'
-					puts '    --task <task_id>                   Move Track to another Task.'
+					puts '    --task <task_id>             Move Track to another Task.'
 					puts
 					puts 'Start DateTime must be given when End DateTime is given. A Track cannot have a'
 					puts 'End DateTime without a Start DateTime.'
 					puts
 					puts 'Man Unit: 8 hours are 1 man-day.'
 					puts '          5 man-days are 1 man-week, and so on.'
+					puts
+					HelpCommand.print_datetime_help
 					puts
 				end
 				

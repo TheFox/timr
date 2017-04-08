@@ -1,15 +1,44 @@
-timr-start(1) -- description
+timr-start(1) -- Start a new Task/Track.
 ===
 
 ## SYNOPSIS
 
-timr start [<options>...]
+timr start [<options>] [<task_id> [<track_id>]]
 
 ## DESCRIPTION
 
-description
+Always removes all Tracks from the Stack and creates a new Track. If there is another current running Task this Task will be stopped and removed from the Stack.
 
-## OPTIONS
+Without any options this command always creates a new Task and starts a new Track for this Task. When providing a Task ID (SHA1 hex) of an existing Task, this Task will be continued. When also providing a Track ID (SHA1 hex) the same Track message will be taken to create a new Track for the Task.
+
+## TASK OPTIONS
+
+* -n, --name <str>:
+	The name of the new Task. When providing a <task_id> this option will be ignored.
+
+* --description <descr>:
+	Longer description of the new Task. This should descibe the Task in general. Provide details by using `--message` option. When providing a <task_id> this option will be ignored.
+
+## TRACK OPTIONS
+
+* -m, --message <message>:
+	Details about what you have done. This overwrites the <track_id> argument.
+
+* -d, --date <date>:
+	Track Start Date. Default: today
+
+* -t, --time <time>:
+	Track Start Time. Default: now. This is useful when you forgot to run the Start command.
+
+## GENERAL OPTIONS
 
 * -h, --help:
 	Displays the help page.
+
+## ARGUMENTS
+
+<task_id> - Task ID as SHA1 hex string. It can be the full 40 characters or only the first 6. If not specified a new Task will be created.
+
+<track_id> - Track ID as SHA1 hex string. It can be the full 40 characters or only the first 6. If specified a new Track with the same message will be created.
+
+## EXAMPLES

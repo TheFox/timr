@@ -122,30 +122,27 @@ module TheFox
 				
 				def help
 					puts 'usage: timr start [-n|--name <name>] [--desc|--description <description>]'
-					puts '                  [[-d|--date <YYYY-MM-DD>] -t|--time <HH:MM[:SS]>]'
+					puts '                  [[-d|--date <date>] -t|--time <time>]'
 					puts '                  [-m|--message <message>] [<task_id> [<track_id>]]'
 					puts '   or: timr start [-h|--help]'
 					puts
 					puts 'Task Options'
 					#puts '    -i, --id           Task ID' # @TODO --id
-					puts '    -n, --name <name>              Name of the Task.'
-					puts '    --desc, --description <str>    Description of the Task.'
+					puts '    -n, --name <name>              Task Name.'
+					puts '    --desc, --description <str>    Task Description.'
 					#puts '    -e, --estimation <HH:MM>' # @TODO --estimation
 					puts
 					puts 'Track Options'
-					puts '    -m, --message                  Track Message. What have you done?'
+					puts '    -m, --message <message>        Track Message. What have you done?'
 					puts '                                   You can overwrite this on stop command.'
 					# puts '    -e, --edit         Edit Track Message.'
-					puts '    -d, --date <YYYY-MM-DD>        Start Date. Default: today'
-					puts '    -t, --time <HH:MM[:SS]>        Start Time. Default: now'
+					puts '    -d, --date <date>              Track Start Date. Default: today'
+					puts '    -t, --time <time>              Track Start Time. Default: now'
 					puts
 					puts 'Arguments'
-					puts '    <task_id>     Task ID (SHA1 Hash)'
-					puts '                  If not specified a new Task will be created.'
+					HelpCommand.print_id_help
 					puts
-					puts '    <track_id>    Track ID (SHA1 Hash)'
-					puts '                  If specified a new Track with the same'
-					puts '                  Message will be created.'
+					HelpCommand.print_datetime_help
 					puts
 				end
 				

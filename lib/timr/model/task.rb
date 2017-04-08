@@ -817,6 +817,7 @@ module TheFox
 				def to_detailed_array
 					to_ax = Array.new
 					to_ax << 'Task: %s' % [self.short_id]
+					to_ax << '  ID: %s' % [self.id]
 					to_ax << '  Name: %s' % [self.name]
 					
 					if self.description

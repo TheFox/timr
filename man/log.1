@@ -4,19 +4,79 @@
 .TH "TIMR\-LOG" "1" "April 2017" "FOX21.at" "Timr Manual"
 .
 .SH "NAME"
-\fBtimr\-log\fR \- description
+\fBtimr\-log\fR \- Show recent Tracks\.
 .
 .SH "SYNOPSIS"
-timr log [\fIoptions\fR\.\.\.]
+timr log [\fIoptions\fR]
 .
 .SH "DESCRIPTION"
-description
+By default this command prints all todays Tracks\.
 .
-.SH "OPTIONS"
+.SH "TOTAL FILTER OPTIONS"
+.
+.TP
+\-s, \-\-from \'\fIdate_time\fR\'
+From Date/Time\. Must be in quotes to be one single string\. Default: today 00:00:00
+.
+.TP
+\-e, \-\-to \'\fIdate_time\fR\'
+To Date/Time\. Must be in quotes to be one single string\. Default: today 23:59:59
+.
+.TP
+\-d, \-\-day \fIdate\fR
+A single day from 00:00 to 23:59\.
+.
+.TP
+\-m, \-\-month \fI[YYYY\-]MM\fR
+A single month from 01 to 31\.
+.
+.TP
+\-y, \-\-year [\fIYYYY\fR]
+A single year from 01\-01 to 12\-31\.
+.
+.TP
+\-a, \-\-all
+Show all Tracks\.
+.
+.SH "DAY TIME FILTER OPTIONS"
+.
+.TP
+\-\-sd, \-\-start\-date \fIdate\fR
+Start Date
+.
+.TP
+\-\-ed, \-\-end\-date \fIdate\fR
+End Date
+.
+.TP
+\-\-st, \-\-start\-time \fItime\fR
+Start Time
+.
+.TP
+\-\-et, \-\-end\-time \fItime\fR
+End Time
+.
+.SH "GENERAL OPTIONS"
 .
 .TP
 \-h, \-\-help
 Displays the help page\.
+.
+.SH "EXAMPLES"
+.
+.SH "DATETIME FORMATS"
+.
+.TP
+\fIdate_time\fR
+A DateTime is one single string representing \fB<date> <time>\fR\.
+.
+.TP
+\fIdate\fR
+Formats: \fBYYYY\-MM\-DD\fR, \fBMM/DD/YYYY\fR, \fBDD\.MM\.YYYY\fR
+.
+.TP
+\fItime\fR
+Formats: \fBHH:MM\fR, \fBHH:MM:SS\fR
 .
 .SH "ONLINE RESCOURCES"
 .

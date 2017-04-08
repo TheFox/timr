@@ -1,15 +1,25 @@
-timr-pop(1) -- description
+timr-pop(1) -- Pop current Track from the Stack.
 ===
 
 ## SYNOPSIS
 
-timr pop [<options>...]
+timr pop [<options>]
 
 ## DESCRIPTION
 
-description
+Stop and pop the current running Track from the Stack. Also `timr stop` removes the current Track from the Stack.
 
-## OPTIONS
+## TRACK OPTIONS
+
+* -d, --date <date>:
+	End Date for the current running Track, Start Date for the next underlying Track to continue. Same applies for `--time`.
+
+* -t, --time <time>:
+	Same logic as for `--date` option but for Time.
+
+## GENERAL OPTIONS
 
 * -h, --help:
 	Displays the help page.
+
+## EXAMPLES

@@ -649,11 +649,11 @@ module TheFox
 					puts '   or: timr report [-h|--help]'
 					puts
 					puts 'Options'
-					puts '    -d, --day   <YYYY-MM-DD>    A single day from 00:00 to 23:59.'
+					puts '    -d, --day   <date>          A single day from 00:00 to 23:59.'
 					puts '    -m, --month <[YYYY-]MM>     A single month from 01 to 31.'
 					puts '    -y, --year  [<YYYY>]        A single year from 01-01 to 12-31.'
 					puts '    -a, --all                   All.'
-					puts '    --tasks                     Export Tasks. Default.'
+					puts '    --tasks                     Export Tasks (default)'
 					puts '    --tracks                    Export Tracks'
 					# puts '    --billed                    Filter only Tasks/Tracks which are billed.'
 					# puts '    --unbilled                  Filter only Tasks/Tracks which are not billed.'
@@ -717,6 +717,9 @@ module TheFox
 					puts '    TRACK_IS_BILLED'
 					puts
 					puts 'The last row in CSV files is always the total sum.'
+					puts
+					HelpCommand.print_datetime_help
+					puts
 				end
 				
 			end # class TrackCommand

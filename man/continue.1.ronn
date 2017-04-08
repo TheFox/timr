@@ -1,15 +1,25 @@
-timr-continue(1) -- description
+timr-continue(1) -- Continue the previous paused Track.
 ===
 
 ## SYNOPSIS
 
-timr continue [<options>...]
+timr continue [<options>]
 
 ## DESCRIPTION
 
-description
+When a Track will be continued (or *restarted*) it's actual a copy using the same message.
 
-## OPTIONS
+## TRACK OPTIONS
+
+* -d, --date <date>:
+	Start Date for the new Track.
+
+* -t, --time <time>:
+	Start Time for the new Track.
+
+## GENERAL OPTIONS
 
 * -h, --help:
 	Displays the help page.
+
+## EXAMPLES

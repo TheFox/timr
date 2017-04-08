@@ -87,25 +87,27 @@ module TheFox
 				private
 				
 				def help
-					puts 'usage: timr stop [[--start-date <YYYY-MM-DD>] --start-time <HH:MM[:SS]>]'
-					puts '                 [-d|--date <YYYY-MM-DD>] [-t|--time <HH:MM[:SS]>]'
-					puts '                 [-m|--message <message>] [-a|--append]'
+					puts 'usage: timr stop [-m|--message <message>] [-a|--append]'
+					puts '                 [[--start-date <date>] --start-time <time>]'
+					puts '                 [-d|--date <date>] [-t|--time <time>]'
 					puts '   or: timr stop [-h|--help]'
 					puts
 					puts 'Track Options'
-					puts '    -m, --message              Track Message. What have you done? This will'
+					puts '    -m, --message <message>    Track Message. What have you done? This will'
 					puts '                               overwrite the start message. See --append option.'
 					puts '    -a, --append               Append the message from --message option'
 					puts '                               to the start message.'
 					puts
-					puts '    --sd, --start-date <YYYY-MM-DD>    Overwrite the start date.'
-					puts '    --st, --start-time <HH:MM[:SS]>    Overwrite the start time.'
+					puts '    --sd, --start-date <date>    Overwrite the Start date.'
+					puts '    --st, --start-time <time>    Overwrite the Start time.'
 					puts
-					puts '    --ed, --end-date <YYYY-MM-DD>      End Date. Default: today'
-					puts '    --et, --end-time <HH:MM[:SS]>      End Time. Default: now'
+					puts '    --ed, --end-date <date>      Track End Date. Default: today'
+					puts '    --et, --end-time <time>      Track End Time. Default: now'
 					puts
-					puts '    -d, --date <YYYY-MM-DD>            Alias for --end-date.'
-					puts '    -t, --time <HH:MM[:SS]>            Alias for --end-time.'
+					puts '    -d, --date <date>            --end-date alias.'
+					puts '    -t, --time <time>            --end-time alias.'
+					puts
+					HelpCommand.print_datetime_help
 					puts
 				end
 				

@@ -1,15 +1,51 @@
-timr-log(1) -- description
+timr-log(1) -- Show recent Tracks.
 ===
 
 ## SYNOPSIS
 
-timr log [<options>...]
+timr log [<options>]
 
 ## DESCRIPTION
 
-description
+By default this command prints all todays Tracks.
 
-## OPTIONS
+## TOTAL FILTER OPTIONS
+
+* -s, --from '<date_time>':
+	From Date/Time. Must be in quotes to be one single string. Default: today 00:00:00
+
+* -e, --to '<date_time>':
+	To Date/Time. Must be in quotes to be one single string. Default: today 23:59:59
+
+* -d, --day <date>:
+	A single day from 00:00 to 23:59.
+
+* -m, --month <[YYYY-]MM>:
+	A single month from 01 to 31.
+
+* -y, --year [<YYYY>]:
+	A single year from 01-01 to 12-31.
+
+* -a, --all:
+	Show all Tracks.
+
+## DAY TIME FILTER OPTIONS
+
+* --sd, --start-date <date>:
+	Start Date
+
+* --ed, --end-date <date>:
+	End Date
+
+* --st, --start-time <time>:
+	Start Time
+
+* --et, --end-time <time>:
+	End Time
+
+## GENERAL OPTIONS
 
 * -h, --help:
 	Displays the help page.
+
+## EXAMPLES

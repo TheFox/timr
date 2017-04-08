@@ -303,6 +303,7 @@ module TheFox
 					puts '                     [--flat-rate|--no-flat-rate]'
 					puts '   or: timr task set [-n|--name <name>] [--description <str>]'
 					puts '                     [--estimation <time>] [--billed|--unbilled]'
+					puts '                     [--hourly-rate <value>] [--no-hourly-rate]'
 					puts '                     [--flat-rate|--no-flat-rate]'
 					puts '                     <task_id>'
 					puts '   or: timr task remove <task_id>...'
@@ -332,22 +333,24 @@ module TheFox
 					puts '          5 man-days are 1 man-week, and so on.'
 					puts
 					puts 'Estimation'
-					puts '  Estimation is parsed by chronic_duration.'
-					puts '  Examples:'
-					puts "      -e 2:10:5           # Sets Estimation to 2h 10m 5s."
-					puts "      -e '2h 10m 5s'      # Sets Estimation to 2h 10m 5s."
+					puts '    Estimation is parsed by chronic_duration.'
+					puts '    Examples:'
+					puts "        -e 2:10:5         # Sets Estimation to 2h 10m 5s."
+					puts "        -e '2h 10m 5s'    # Sets Estimation to 2h 10m 5s."
 					puts
-					puts "  Use '+' or '-' to calculate with Estimation Times:"
-					puts "      -e '-45m'           # Subtracts 45 minutes from the original Estimation."
-					puts "      -e '+1h 30m'        # Adds 1 hour 30 minutes to the original Estimation."
+					puts "    Use '+' or '-' to calculate with Estimation Times:"
+					puts "        -e '-45m'         # Subtracts 45 minutes from the original Estimation."
+					puts "        -e '+1h 30m'      # Adds 1 hour 30 minutes to the original Estimation."
 					puts
-					puts '  See chronic_duration for more examples.'
-					puts '  https://github.com/henrypoydar/chronic_duration'
+					puts '    See chronic_duration for more examples.'
+					puts '    https://github.com/henrypoydar/chronic_duration'
 					puts
 					puts 'Billed/Unbilled'
-					puts '  If a whole Task gets billed/unbilled all Tracks are changed to'
-					puts "  billed/unbilled. Each Track has a flag 'is_billed'."
+					puts '    If a whole Task gets billed/unbilled all Tracks are changed to'
+					puts "    billed/unbilled. Each Track has a flag 'is_billed'."
 					puts
+					# HelpCommand.print_datetime_help
+					# puts
 				end
 				
 			end # class TaskCommand

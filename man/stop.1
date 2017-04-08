@@ -4,19 +4,69 @@
 .TH "TIMR\-STOP" "1" "April 2017" "FOX21.at" "Timr Manual"
 .
 .SH "NAME"
-\fBtimr\-stop\fR \- description
+\fBtimr\-stop\fR \- Stop the current running Track\.
 .
 .SH "SYNOPSIS"
-timr stop [\fIoptions\fR\.\.\.]
+timr stop [\fIoptions\fR]
 .
 .SH "DESCRIPTION"
-description
+Stopps the current running Track and removes it from the Stack\. When more then one Track is on the Stack the left Tracks will not be touched\.
 .
-.SH "OPTIONS"
+.SH "TRACK OPTIONS"
+.
+.TP
+\-m, \-\-message \fImessage\fR
+Details about what you have done\. This overwrites the message set on \fBtimr start\fR\. Use \fB\-\-append\fR option to append this message to the Start message\.
+.
+.TP
+\-a, \-\-append
+Append the message provided by \fB\-\-message\fR to the Start message\.
+.
+.TP
+\-\-sd, \-\-start\-date \fIdate\fR
+Overwrite the Start date\.
+.
+.TP
+\-\-st, \-\-start\-time \fItime\fR
+Overwrite the Start time\.
+.
+.TP
+\-\-ed, \-\-end\-date \fIdate\fR
+End Date\. Default: today
+.
+.TP
+\-\-et, \-\-end\-time \fItime\fR
+End Time\. Default: now\. This is useful when you forgot to run the Stop command\.
+.
+.TP
+\-d, \-\-date \fIdate\fR
+\-\-end\-date alias\.
+.
+.TP
+\-t, \-\-time \fItime\fR
+\-\-end\-time alias\.
+.
+.SH "GENERAL OPTIONS"
 .
 .TP
 \-h, \-\-help
 Displays the help page\.
+.
+.SH "EXAMPLES"
+.
+.SH "DATETIME FORMATS"
+.
+.TP
+\fIdate_time\fR
+A DateTime is one single string representing \fB<date> <time>\fR\.
+.
+.TP
+\fIdate\fR
+Formats: \fBYYYY\-MM\-DD\fR, \fBMM/DD/YYYY\fR, \fBDD\.MM\.YYYY\fR
+.
+.TP
+\fItime\fR
+Formats: \fBHH:MM\fR, \fBHH:MM:SS\fR
 .
 .SH "ONLINE RESCOURCES"
 .

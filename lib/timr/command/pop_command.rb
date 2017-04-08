@@ -3,10 +3,9 @@ module TheFox
 	module Timr
 		module Command
 			
-			# This command pops the Top [Track](rdoc-ref:TheFox::Timr::Model::Track),
-			# makes a duplication of the next Track on the [Stack](rdoc-ref:TheFox::Timr::Model::Stack), pops the next,
-			# and pushes the duplication Track back on the Stack. There are
-			# at least 3 Tracks involved.
+			# This command pops the Top [Track](rdoc-ref:TheFox::Timr::Model::Track), makes a duplication
+			# of the next Track on the [Stack](rdoc-ref:TheFox::Timr::Model::Stack), pops the next,
+			# and pushes the duplication Track back on the Stack. There are at least 3 Tracks involved.
 			# 
 			# ### Example
 			# 
@@ -137,14 +136,16 @@ module TheFox
 				private
 				
 				def help
-					puts 'usage: timr pop [-d|--date <YYYY-MM-DD>] [-t|--time <HH:MM[:SS]>]'
+					puts 'usage: timr pop [-d|--date <date>] [-t|--time <time>]'
 					puts '   or: timr pop [-h|--help]'
 					puts
 					puts 'Track Options'
-					puts '    -d, --date <YYYY-MM-DD>    End Date for the current running Track,'
-					puts '                               Start Date for the next underlying Track'
-					puts '                               to continue. Same for --time.'
-					puts '    -t, --time <HH:MM[:SS]>    See --date.'
+					puts '    -d, --date <date>    End Date for the current running Track,'
+					puts '                         Start Date for the next underlying Track'
+					puts '                         to continue. Same applies for --time.'
+					puts '    -t, --time <time>    Same logic as for --date but for Time.'
+					puts
+					HelpCommand.print_datetime_help
 					puts
 				end
 				

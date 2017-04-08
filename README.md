@@ -1,8 +1,6 @@
 # Timr
 
-Time Tracking for Hackers: CLI tool for tracking work hours.
-
-Timr is a time tracking tool for the [Command-line](https://en.wikipedia.org/wiki/Command-line_interface) written in [Ruby](https://www.ruby-lang.org/). You can track your time spent for a specific project. I know, there are (too) many time tracking tools and such blabla you can use. The main focus of this tool is to use it on the Command-line and make automatic reports. I love the Command-line, so I want the terminal to handle as much as possible. I don't want programms with fancy UIs. Text-based is good enough. All data are stored in YAML files. So editing can also be done by using your favorite editor.
+Timr is a time tracking tool for the [Command-line](https://en.wikipedia.org/wiki/Command-line_interface), written in [Ruby](https://www.ruby-lang.org/). You can track your time spent for a specific project. I know, there are (too) many time tracking tools and such blabla you can use. The main focus of this tool is to use it on the Command-line and make automatic reports. I love the Command-line, so I want the terminal to handle as much as possible. I don't want programms with fancy UIs. Text-based is good enough. All data are stored in YAML files. So editing can also be done by using your favorite editor.
 
 ## Install
 
@@ -96,13 +94,15 @@ See more informations on the [timr-push(1)](https://timr.fox21.at/man/push.1.htm
 
 ### Pop Command
 
+Stop and pop the current running Track from the Stack.
+
 	timr pop [<options>]
 
 See more informations on the [timr-pop(1)](https://timr.fox21.at/man/pop.1.html) man page.
 
 ### Status Command
 
-description
+Print the current Stack status.
 
 	timr status [<options>]
 
@@ -110,7 +110,7 @@ See more informations on the [timr-status(1)](https://timr.fox21.at/man/status.1
 
 ### Log Command
 
-description
+Show recent Tracks.
 
 	timr log [<options>]
 
@@ -118,7 +118,7 @@ See more informations on the [timr-log(1)](https://timr.fox21.at/man/log.1.html)
 
 ### Task Command
 
-description
+Show, add, edit, or remove a Task.
 
 	timr task <subcommand> [<options>] [<task_id>]
 
@@ -126,7 +126,7 @@ See more informations on the [timr-task(1)](https://timr.fox21.at/man/task.1.htm
 
 ### Track Command
 
-description
+Show, add, edit, or remove a Track.
 
 	timr track <subcommand> [<options>] [<track_id>]
 

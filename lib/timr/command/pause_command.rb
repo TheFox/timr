@@ -65,15 +65,17 @@ module TheFox
 				private
 				
 				def help
-					puts 'usage: timr pause [-d|--date <YYYY-MM-DD>] [-t|--time <HH:MM[:SS]>]'
+					puts 'usage: timr pause [-d|--date <date>] [-t|--time <time>]'
 					puts '   or: timr pause [-h|--help]'
 					puts
 					puts 'Track Options'
-					puts '    --ed, --end-date <YYYY-MM-DD>    End Date'
-					puts '    --et, --end-time <HH:MM[:SS]>    End Time'
+					puts '    --ed, --end-date <date>    Track End Date'
+					puts '    --et, --end-time <time>    Track End Time'
 					puts
-					puts '    -d, --date <YYYY-MM-DD>          Alias for --end-date.'
-					puts '    -t, --time <HH:MM[:SS]>          Alias for --end-time.'
+					puts '    -d, --date <date>          --end-date alias.'
+					puts '    -t, --time <time>          --end-time alias.'
+					puts
+					HelpCommand.print_datetime_help
 					puts
 				end
 				

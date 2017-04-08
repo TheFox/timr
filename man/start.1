@@ -4,19 +4,68 @@
 .TH "TIMR\-START" "1" "April 2017" "FOX21.at" "Timr Manual"
 .
 .SH "NAME"
-\fBtimr\-start\fR \- description
+\fBtimr\-start\fR \- Start a new Task/Track\.
 .
 .SH "SYNOPSIS"
-timr start [\fIoptions\fR\.\.\.]
+timr start [\fIoptions\fR] [\fItask_id\fR [\fItrack_id\fR]]
 .
 .SH "DESCRIPTION"
-description
+Always removes all Tracks from the Stack and creates a new Track\. If there is another current running Task this Task will be stopped and removed from the Stack\.
 .
-.SH "OPTIONS"
+.P
+Without any options this command always creates a new Task and starts a new Track for this Task\. When providing a Task ID (SHA1 hex) of an existing Task, this Task will be continued\. When also providing a Track ID (SHA1 hex) the same Track message will be taken to create a new Track for the Task\.
+.
+.SH "TASK OPTIONS"
+.
+.TP
+\-n, \-\-name \fIstr\fR
+The name of the new Task\. When providing a \fItask_id\fR this option will be ignored\.
+.
+.TP
+\-\-description \fIdescr\fR
+Longer description of the new Task\. This should descibe the Task in general\. Provide details by using \fB\-\-message\fR option\. When providing a \fItask_id\fR this option will be ignored\.
+.
+.SH "TRACK OPTIONS"
+.
+.TP
+\-m, \-\-message \fImessage\fR
+Details about what you have done\. This overwrites the \fItrack_id\fR argument\.
+.
+.TP
+\-d, \-\-date \fIdate\fR
+Track Start Date\. Default: today
+.
+.TP
+\-t, \-\-time \fItime\fR
+Track Start Time\. Default: now\. This is useful when you forgot to run the Start command\.
+.
+.SH "GENERAL OPTIONS"
 .
 .TP
 \-h, \-\-help
 Displays the help page\.
+.
+.SH "ARGUMENTS"
+\fItask_id\fR \- Task ID as SHA1 hex string\. It can be the full 40 characters or only the first 6\. If not specified a new Task will be created\.
+.
+.P
+\fItrack_id\fR \- Track ID as SHA1 hex string\. It can be the full 40 characters or only the first 6\. If specified a new Track with the same message will be created\.
+.
+.SH "EXAMPLES"
+.
+.SH "DATETIME FORMATS"
+.
+.TP
+\fIdate_time\fR
+A DateTime is one single string representing \fB<date> <time>\fR\.
+.
+.TP
+\fIdate\fR
+Formats: \fBYYYY\-MM\-DD\fR, \fBMM/DD/YYYY\fR, \fBDD\.MM\.YYYY\fR
+.
+.TP
+\fItime\fR
+Formats: \fBHH:MM\fR, \fBHH:MM:SS\fR
 .
 .SH "ONLINE RESCOURCES"
 .

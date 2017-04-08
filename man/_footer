@@ -1,3 +1,14 @@
+## DATETIME FORMATS
+
+* <date_time>:
+	A DateTime is one single string representing `<date> <time>`.
+
+* <date>:
+	Formats: `YYYY-MM-DD`, `MM/DD/YYYY`, `DD.MM.YYYY`
+
+* <time>:
+	Formats: `HH:MM`, `HH:MM:SS`
+
 ## ONLINE RESCOURCES
 
 - [Homepage](https://timr.fox21.at/)

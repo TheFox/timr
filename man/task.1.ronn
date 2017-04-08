@@ -1,15 +1,35 @@
-timr-task(1) -- description
+timr-task(1) -- Show, add, edit, or remove a Task.
 ===
 
 ## SYNOPSIS
 
-timr task [<options>...]
+timr task <subcommand> [<options>] [<task_id>]
 
 ## DESCRIPTION
 
-description
+This command takes several subcommands. Per default, when providing a Task ID it displays details about this specific Task.
 
-## OPTIONS
+## SUBCOMMANDS
+
+* add:
+	Add a new Task.
+
+* set:
+	Edit an existing Task.
+
+* show:
+	Default when not providing a specific subcommand.
+
+* remove:
+	Delete a Task, all informations about this Task and all including Tracks. This cannot be undone.
+
+## ADD/SET OPTIONS
+
+## SHOW OPTIONS
+
+## GENERAL OPTIONS
 
 * -h, --help:
 	Displays the help page.
+
+## EXAMPLES

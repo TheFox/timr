@@ -1,15 +1,35 @@
-timr-track(1) -- description
+timr-track(1) -- Show, add, edit, or remove a Track.
 ===
 
 ## SYNOPSIS
 
-timr track [<options>...]
+timr track <subcommand> [<options>] [<track_id>]
 
 ## DESCRIPTION
 
-description
+This command takes several subcommands. Per default, when providing a Track ID it displays details about this specific Track.
 
-## OPTIONS
+## SUBCOMMANDS
+
+* add:
+	Add a new Track.
+
+* set:
+	Edit an existing Track. To move a Track to another Task see `--task` option in section SET OPTIONS.
+
+* show:
+	Default when not providing a specific subcommand.
+
+* remove:
+	Delete a Track and all informations about this Track. This cannot be undone.
+
+## ADD/SET OPTIONS
+
+## SHOW OPTIONS
+
+## GENERAL OPTIONS
 
 * -h, --help:
 	Displays the help page.
+
+## EXAMPLES

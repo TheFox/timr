@@ -255,32 +255,32 @@ module TheFox
 				def help
 					puts 'usage: timr log [-s|--from <date_time>] [-e|--to <date_time>]'
 					puts '   or: timr log --sd <date> --ed <date> --st <time> --et <time>'
-					puts '   or: timr log -d|--day <YYYY-MM-DD>'
+					puts '   or: timr log -d|--day <date>'
 					puts '   or: timr log -m|--month <YYYY-MM>'
 					puts '   or: timr log -y|--year <YYYY>'
 					puts '   or: timr log -a|--all'
 					puts '   or: timr log [-h|--help]'
 					puts
 					puts 'Total Filter'
-					puts "    -s, --from '<YYYY-MM-DD> <HH:MM[:SS]>'    From Date/Time. Must be in"
-					puts '                                              quotes. Default: today 00:00:00'
-					puts "    -e, --to   '<YYYY-MM-DD> <HH:MM[:SS]>'    To Date/Time. Must be in quotes."
-					puts '                                              Default: today 23:59:59'
-					puts '    -d, --day   <YYYY-MM-DD>                  A single day from 00:00 to 23:59.'
-					puts '    -m, --month <[YYYY-]MM>                   A single month from 01 to 31.'
-					puts '    -y, --year  [<YYYY>]                      A single year from 01-01 to 12-31.'
-					puts '    -a, --all                                 All.'
+					puts "    -s, --from '<date_time>'    From Date/Time. Must be in quotes."
+					puts '                                Default: today 00:00:00'
+					puts "    -e, --to   '<date_time>'    To Date/Time. Must be in quotes."
+					puts '                                Default: today 23:59:59'
+					puts '    -d, --day   <date>          A single day from 00:00 to 23:59.'
+					puts '    -m, --month <[YYYY-]MM>     A single month from 01 to 31.'
+					puts '    -y, --year  [<YYYY>]        A single year from 01-01 to 12-31.'
+					puts '    -a, --all                   Show all Tracks.'
 					puts
 					puts 'Day Time Filter'
-					puts '    --sd, --start-date <YYYY-MM-DD>    Start Date'
-					puts '    --ed,   --end-date <YYYY-MM-DD>      End Date'
-					puts '    --st, --start-time <HH:MM[:SS]>    Start Time'
-					puts '    --et,   --end-time <HH:MM[:SS]>      End Time'
+					puts '    --sd, --start-date <date>    Start Date'
+					puts '    --ed,   --end-date <date>    End Date'
+					puts '    --st, --start-time <time>    Start Time'
+					puts '    --et,   --end-time <time>    End Time'
 					puts
 					puts 'If you would like to filter everything between 09:00 and 17:00 on every day'
 					puts 'in the range from Mon 2017-03-06 to Fri 2017-03-10:'
 					puts
-					puts '  timr log --sd 2017-03-06 --ed 2017-03-10 --st 09:00 --et 17:00'
+					puts '    timr log --sd 2017-03-06 --ed 2017-03-10 --st 09:00 --et 17:00'
 					puts
 					puts 'Columns'
 					puts '    START    Track Start Date'
@@ -288,6 +288,8 @@ module TheFox
 					puts '    DUR      Track Duration'
 					puts '    TASK     Task ID'
 					puts '    TRACK    Track ID and Title.'
+					puts
+					HelpCommand.print_datetime_help
 					puts
 				end
 				

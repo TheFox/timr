@@ -4,19 +4,53 @@
 .TH "TIMR\-PAUSE" "1" "April 2017" "FOX21.at" "Timr Manual"
 .
 .SH "NAME"
-\fBtimr\-pause\fR \- description
+\fBtimr\-pause\fR \- Pause the current running Track\.
 .
 .SH "SYNOPSIS"
-timr pause [\fIoptions\fR\.\.\.]
+timr pause [\fIoptions\fR]
 .
 .SH "DESCRIPTION"
-description
+Pause the current running Track\. To continue the current Track (Top Track) run \fBtimr continue\fR\.
 .
-.SH "OPTIONS"
+.SH "TRACK OPTIONS"
+.
+.TP
+\-\-ed, \-\-end\-date \fIdate\fR
+End Date
+.
+.TP
+\-\-et, \-\-end\-time \fItime\fR
+End Time
+.
+.TP
+\-d, \-\-date \fIdate\fR
+\-\-end\-date alias\.
+.
+.TP
+\-t, \-\-time \fItime\fR
+\-\-end\-time alias\.
+.
+.SH "GENERAL OPTIONS"
 .
 .TP
 \-h, \-\-help
 Displays the help page\.
+.
+.SH "EXAMPLES"
+.
+.SH "DATETIME FORMATS"
+.
+.TP
+\fIdate_time\fR
+A DateTime is one single string representing \fB<date> <time>\fR\.
+.
+.TP
+\fIdate\fR
+Formats: \fBYYYY\-MM\-DD\fR, \fBMM/DD/YYYY\fR, \fBDD\.MM\.YYYY\fR
+.
+.TP
+\fItime\fR
+Formats: \fBHH:MM\fR, \fBHH:MM:SS\fR
 .
 .SH "ONLINE RESCOURCES"
 .

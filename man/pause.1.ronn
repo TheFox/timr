@@ -1,15 +1,31 @@
-timr-pause(1) -- description
+timr-pause(1) -- Pause the current running Track.
 ===
 
 ## SYNOPSIS
 
-timr pause [<options>...]
+timr pause [<options>]
 
 ## DESCRIPTION
 
-description
+Pause the current running Track. To continue the current Track (Top Track) run `timr continue`.
 
-## OPTIONS
+## TRACK OPTIONS
+
+* --ed, --end-date <date>:
+	End Date
+
+* --et, --end-time <time>:
+	End Time
+
+* -d, --date <date>:
+	--end-date alias.
+
+* -t, --time <time>:
+	--end-time alias.
+
+## GENERAL OPTIONS
 
 * -h, --help:
 	Displays the help page.
+
+## EXAMPLES

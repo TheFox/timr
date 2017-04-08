@@ -1,15 +1,17 @@
-timr-report(1) -- description
+timr-report(1) -- Export Tasks
 ===
 
 ## SYNOPSIS
 
-timr report [<options>...]
+timr report [<options>]
 
 ## DESCRIPTION
 
-description
+This command is designed to print a list of Tasks or Tracks to STDOUT and to export Tasks and Tracks as CSV files. The main focus is exporting Tasks to a CSV file.
 
 ## OPTIONS
 
 * -h, --help:
 	Displays the help page.
+
+## EXAMPLES

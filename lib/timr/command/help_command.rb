@@ -41,6 +41,36 @@ module TheFox
 					end
 				end
 				
+				# All methods in this block are static.
+				class << self
+					
+					def print_id_help
+						print_task_id_help
+						puts
+						print_track_id_help
+					end
+					
+					def print_task_id_help
+						puts '    <task_id>     Task ID (SHA1 hex)'
+						puts '                  If not specified a new Task will be created.'
+					end
+					
+					def print_track_id_help
+						puts '    <track_id>    Track ID (SHA1 hex)'
+						puts '                  If specified a new Track with the same'
+						puts '                  message will be created.'
+					end
+					
+					def print_datetime_help
+						puts 'DateTime Formats'
+						puts "    <date_time>    A DateTime is one single string"
+						puts "                   representing '<date> <time>'."
+						puts '    <date>         Formats: YYYY-MM-DD, MM/DD/YYYY, DD.MM.YYYY'
+						puts '    <time>         Formats: HH:MM, HH:MM:SS'
+					end
+					
+				end
+				
 				private
 				
 				def help

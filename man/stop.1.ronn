@@ -1,15 +1,43 @@
-timr-stop(1) -- description
+timr-stop(1) -- Stop the current running Track.
 ===
 
 ## SYNOPSIS
 
-timr stop [<options>...]
+timr stop [<options>]
 
 ## DESCRIPTION
 
-description
+Stopps the current running Track and removes it from the Stack. When more then one Track is on the Stack the left Tracks will not be touched.
 
-## OPTIONS
+## TRACK OPTIONS
+
+* -m, --message <message>:
+	Details about what you have done. This overwrites the message set on `timr start`. Use `--append` option to append this message to the Start message.
+
+* -a, --append:
+	Append the message provided by `--message` to the Start message.
+
+* --sd, --start-date <date>:
+	Overwrite the Start date.
+
+* --st, --start-time <time>:
+	Overwrite the Start time.
+
+* --ed, --end-date <date>:
+	End Date. Default: today
+
+* --et, --end-time <time>:
+	End Time. Default: now. This is useful when you forgot to run the Stop command.
+
+* -d, --date <date>:
+	--end-date alias.
+
+* -t, --time <time>:
+	--end-time alias.
+
+## GENERAL OPTIONS
 
 * -h, --help:
 	Displays the help page.
+
+## EXAMPLES

@@ -3,13 +3,23 @@ timr-status(1) -- Show the current Stack.
 
 ## SYNOPSIS
 
-timr status [<options>...]
+timr status [<options>]
 
 ## DESCRIPTION
 
-description
+Displays the Stack as a list and the status of each Track.
+
+To see more details about a specific Task see `timr task <task_id>`, or a specific Track see `timr track <track_id>`.
 
 ## OPTIONS
 
+* -f, --full:
+	Show full status.
+
+* -r, --reverse:
+	Reverse the list.
+
 * -h, --help:
 	Displays the help page.
+
+## EXAMPLES

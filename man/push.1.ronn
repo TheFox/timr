@@ -1,15 +1,20 @@
-timr-push(1) -- description
+timr-push(1) -- Push new Track to the Stack.
 ===
 
 ## SYNOPSIS
 
-timr push [<options>...]
+timr push [<options>]
 
 ## DESCRIPTION
 
-description
+Sometimes you need to work on a Task only temporary. You want to track the time for this as well. For example fixing a bug. When you fixed the bug you want to continue your actual work. Here comes `push` and `pop` into the game. It modifies the Stack. If you `push` a new Track the below Track will be paused and hold on the Stack. On `pop` the current Track (Top Track) will be stopped and the next below will continue.
 
 ## OPTIONS
 
-* -h, --help:
-	Displays the help page.
+See timr-start(1).
+
+## ARGUMENTS
+
+See timr-start(1).
+
+## EXAMPLES

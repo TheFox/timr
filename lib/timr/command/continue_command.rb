@@ -66,12 +66,14 @@ module TheFox
 				private
 				
 				def help
-					puts 'usage: timr continue [-d|--date <YYYY-MM-DD>] [-t|--time <HH:MM[:SS]>]'
+					puts 'usage: timr continue [-d|--date <date>] [-t|--time <time>]'
 					puts '   or: timr continue [-h|--help]'
 					puts
 					puts 'Track Options'
-					puts '    -d, --date <YYYY-MM-DD>    New Start Date'
-					puts '    -t, --time <HH:MM[:SS]>    New Start Time'
+					puts '    -d, --date <date>    Track Start Date'
+					puts '    -t, --time <time>    Track Start Time'
+					puts
+					HelpCommand.print_datetime_help
 					puts
 				end
 				

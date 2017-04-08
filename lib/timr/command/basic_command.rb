@@ -100,7 +100,7 @@ module TheFox
 							end
 						end
 						
-						puts "command_name: '#{command_name}'"
+						# puts "command_name: '#{command_name}'" # @TODO remove
 						command_class = get_command_class_by_name(command_name)
 						command = command_class.new(command_argv)
 						command.cwd = cwd_opt
