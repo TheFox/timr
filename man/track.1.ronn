@@ -1,4 +1,4 @@
-timr-track(1) -- Show, add, edit, or remove a Track.
+timr-track(1) -- Show, add, edit, move, or remove a Track.
 ===
 
 ## SYNOPSIS
@@ -25,7 +25,36 @@ This command takes several subcommands. Per default, when providing a Track ID i
 
 ## ADD/SET OPTIONS
 
+* -m, --message <message>:
+	Track Message. Details about what you have done.
+
+* --sd, --start-date <date>:
+	Start Date
+
+* --st, --start-time <time>:
+	Start Time
+
+* --ed, --end-date <date>:
+	End Date
+
+* --et, --end-time <time>:
+	End Time
+
+* -b, --billed:
+	Mark Track as billed.
+
+* --unbilled:
+	Mark Track as unbilled.
+
+## SET OPTIONS
+
+--task <task_id>:
+	Move Track to another Task.
+
 ## SHOW OPTIONS
+
+* -t, --task:
+	Show Task of Track. Same as `timr task <task_id>`.
 
 ## GENERAL OPTIONS
 
@@ -33,3 +62,14 @@ This command takes several subcommands. Per default, when providing a Track ID i
 	Displays the help page.
 
 ## EXAMPLES
+
+```
+timr track abcd12
+timr track show abcd12
+timr track set --start-date 2017-01-01 --start-time 10:00 \
+	--end-date 2017-01-02 --end-time 15:30 abcd12
+timr track set --track xyz345 abcd12
+timr track add --start-date 2017-01-02 --start-time 16:00 \
+	--end-date 2017-01-02 --end-time 17:00 xyz345
+timr track remove abcd12
+```

@@ -319,31 +319,21 @@ module TheFox
 					puts '    -t, --tracks             Show a list of Track IDs for each Task.'
 					puts
 					puts 'Add/Set Options'
-					puts '    -n, --name <name>                 Name of the Task.'
-					puts '    --desc, --description <str>       Description of the Task.'
-					puts '    -e, --est, --estimation <time>    Estimation of the Task. See details below.'
+					puts '    -n, --name <name>                 Task Name.'
+					puts '    --desc, --description <str>       Task Description.'
+					puts '    -e, --est, --estimation <time>    Task Estimation. See details below.'
 					puts '    -b, --billed                      Mark Task as billed.'
 					puts '    --unbilled                        Mark Task as unbilled.'
-					puts '    -r, --hourly-rate <value>         Set the Hourly Rate for this Task.'
+					puts '    -r, --hourly-rate <value>         Set the Hourly Rate.'
 					puts '    --no-hourly-rate                  Unset Hourly Rate.'
 					puts '    --fr, --flat-rate, --flat         Has Task a Flat Rate?'
 					puts '    --no-flat-rate, --no-flat         Unset Flat Rate.'
 					puts
-					puts 'Man Unit: 8 hours are 1 man-day.'
-					puts '          5 man-days are 1 man-week, and so on.'
+					puts 'Man Units'
+					puts '    8 hours are 1 man-day.'
+					puts '    5 man-days are 1 man-week, and so on.'
 					puts
-					puts 'Estimation'
-					puts '    Estimation is parsed by chronic_duration.'
-					puts '    Examples:'
-					puts "        -e 2:10:5         # Sets Estimation to 2h 10m 5s."
-					puts "        -e '2h 10m 5s'    # Sets Estimation to 2h 10m 5s."
-					puts
-					puts "    Use '+' or '-' to calculate with Estimation Times:"
-					puts "        -e '-45m'         # Subtracts 45 minutes from the original Estimation."
-					puts "        -e '+1h 30m'      # Adds 1 hour 30 minutes to the original Estimation."
-					puts
-					puts '    See chronic_duration for more examples.'
-					puts '    https://github.com/henrypoydar/chronic_duration'
+					HelpCommand.print_estimation_help(true)
 					puts
 					puts 'Billed/Unbilled'
 					puts '    If a whole Task gets billed/unbilled all Tracks are changed to'

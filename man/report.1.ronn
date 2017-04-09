@@ -1,4 +1,4 @@
-timr-report(1) -- Export Tasks
+timr-report(1) -- Export Tasks and Tracks.
 ===
 
 ## SYNOPSIS
@@ -7,11 +7,176 @@ timr report [<options>]
 
 ## DESCRIPTION
 
-This command is designed to print a list of Tasks or Tracks to STDOUT and to export Tasks and Tracks as CSV files. The main focus is exporting Tasks to a CSV file.
+This command is designed to print a list of Tasks or Tracks to STDOUT and to export Tasks and Tracks as CSV files. While this command is similar to `timr-log(1)`, the main focus is exporting Tasks/Tracks as CSV file for further processing.
 
 ## OPTIONS
+
+* -d, --day <date>:
+	A single day from 00:00 to 23:59.
+
+* -m, --month <[YYYY-]MM>:
+	A single month from 01 to 31.
+
+* -y, --year [<YYYY>]:
+	A single year from 01-01 to 12-31.
+
+* -a, --all:
+	Export all.
+
+* --tasks :
+	Export Tasks (default)
+
+* --tracks:
+	Export Tracks
+
+* --csv <path>:
+	Export as CSV file. Use `--csv -` to use STDOUT.
+
+* --force :
+	Force overwrite file.
 
 * -h, --help:
 	Displays the help page.
 
 ## EXAMPLES
+
+```
+timr report
+timr report --day 2017-01-02
+timr report --day 2017-01-02 --csv timr_report_20170102.csv
+timr report --day 2017-01-02 --csv timr_report_20170102.csv --tracks
+timr report --month 2017-01 --csv timr_report_201701.csv
+timr report --year 2017 --csv timr_report_2017.csv
+timr report --all --csv timr_report_all.csv
+```
+
+## TASK TABLE COLUMNS
+
+* START:
+	Task Start Date
+
+* END:
+	Task End Date
+
+* DUR:
+	Total Task Duration
+
+* UNB:
+	Unbilled Task Duration
+
+* TASK:
+	Task ID and Name.
+
+## TRACK TABLE COLUMNS
+
+* START:
+	Task Start Date
+
+* END:
+	Task End Date
+
+* DUR:
+	Task Duration
+
+* TASK:
+	Task ID
+
+* TRACK:
+	Track ID and Name.
+
+## TASK CSV COLUMNS
+
+* ROW_NO:
+	Sequential CSV file row number.
+
+* TASK_ID:
+	Task ID
+
+* TASK_NAME:
+	Task Name
+
+* TASK_BEGIN_DATETIME:
+	Begin DateTime of the first Track.
+
+* TASK_END_DATETIME:
+	End DateTime of the last Track.
+
+* TASK_DURATION_HUMAN:
+	Task Duration in human format. (`5m 6s`)
+
+* TASK_DURATION_SECONDS:
+	Task Duration in seconds. (`306`)
+
+* TASK_ESTIMATION_HUMAN
+
+* TASK_ESTIMATION_SECONDS
+
+* TASK_REMAINING_TIME_HUMAN
+
+* TASK_REMAINING_TIME_SECONDS
+
+* TASK_BILLED_DURATION_HUMAN:
+	Billed Task Duration in human format.
+
+* TASK_BILLED_DURATION_SECONDS:
+	Billed Task Duration in seconds.
+
+* TASK_UNBILLED_DURATION_HUMAN:
+	Unbilled Task Duration in human format.
+
+* TASK_UNBILLED_DURATION_SECONDS:
+	Unbilled Task Duration in seconds.
+
+* TASK_TRACK_COUNT:
+	Task Track count.
+
+* TASK_BILLED_TRACK_COUNT:
+	Task Billed Track count.
+
+* TASK_UNBILLED_TRACK_COUNT:
+	Task Unbilled Track count.
+
+## TRACK CSV COLUMNS
+
+* ROW_NO:
+	Sequential CSV file row number.
+
+* TASK_ID:
+	Task ID
+
+* TASK_NAME:
+	Task Name
+
+* TRACK_ID:
+	Track ID
+
+* TRACK_TITLE:
+	Track Title
+
+* TRACK_BEGIN_DATETIME:
+	Begin DateTime
+
+* TRACK_END_DATETIME:
+	End DateTime
+
+* TRACK_DURATION_HUMAN:
+	Track Duration in human format. (`5m 6s`)
+
+* TRACK_DURATION_SECONDS:
+	Track Duration in seconds. (`306`)
+
+* TRACK_BILLED_DURATION_HUMAN:
+	Billed Track Duration in human format.
+
+* TRACK_BILLED_DURATION_SECONDS:
+	Billed Track Duration in seconds.
+
+* TRACK_UNBILLED_DURATION_HUMAN:
+	Unbilled Track Duration in human format.
+
+* TRACK_UNBILLED_DURATION_SECONDS:
+	Unbilled Track Duration in seconds.
+
+* TRACK_IS_BILLED
+
+The last row in CSV files is always the total sum.

@@ -126,7 +126,7 @@ See more informations on the [timr-task(1)](https://timr.fox21.at/man/task.1.htm
 
 ### Track Command
 
-Show, add, edit, or remove a Track.
+Show, add, edit, move, or remove a Track.
 
 	timr track <subcommand> [<options>] [<track_id>]
 
@@ -134,7 +134,7 @@ See more informations on the [timr-track(1)](https://timr.fox21.at/man/track.1.h
 
 ### Report Command
 
-description
+Export Tasks and Tracks.
 
 	timr report [<options>]
 

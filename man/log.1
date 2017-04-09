@@ -64,6 +64,40 @@ Displays the help page\.
 .
 .SH "EXAMPLES"
 .
+.nf
+
+timr log
+timr log \-\-from \'2017\-01\-02 10:00\' \-\-to \'2017\-01\-09 17:00\'
+timr log \-\-day 2017\-01\-03
+timr log \-\-month 2017\-01
+timr log \-\-year 2017
+timr log \-\-all
+timr log \-\-start\-date 2017\-01\-01 \-\-end\-date 2017\-01\-05 \-\-start\-time 08:00 \-\-end\-time 17:00
+.
+.fi
+.
+.SH "COLUMNS"
+.
+.TP
+START
+Track Start Date
+.
+.TP
+END
+Track End Date
+.
+.TP
+DUR
+Track Duration
+.
+.TP
+TASK
+Task ID
+.
+.TP
+TRACK
+Track ID and Title\.
+.
 .SH "DATETIME FORMATS"
 .
 .TP
@@ -77,6 +111,9 @@ Formats: \fBYYYY\-MM\-DD\fR, \fBMM/DD/YYYY\fR, \fBDD\.MM\.YYYY\fR
 .TP
 \fItime\fR
 Formats: \fBHH:MM\fR, \fBHH:MM:SS\fR
+.
+.P
+See \fBtimr\-task(1)\fR, section ESTIMATION for estimation \fItime\fR details\.
 .
 .SH "ONLINE RESCOURCES"
 .

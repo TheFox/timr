@@ -35,6 +35,7 @@ module TheFox
 						case arg
 						when '-h', '--help'
 							@help_opt = true
+						
 						when '-n', '--name'
 							@name_opt = argv.shift
 						when '--desc', '--description'
@@ -45,8 +46,8 @@ module TheFox
 							@time_opt = argv.shift
 						when '-m', '--message'
 							@message_opt = argv.shift
-						when '-e', '--edit'
-							@edit_opt = true
+						# when '-e', '--edit'
+						# 	@edit_opt = true
 						else
 							if arg[0] == '-'
 								raise StartCommandError, "Unknown argument '#{arg}'. See 'timr start --help'."
@@ -124,13 +125,16 @@ module TheFox
 					puts 'usage: timr start [-n|--name <name>] [--desc|--description <description>]'
 					puts '                  [[-d|--date <date>] -t|--time <time>]'
 					puts '                  [-m|--message <message>] [<task_id> [<track_id>]]'
+					puts '                  [-m|--message <message>] [<task_id> [<track_id>]]'
 					puts '   or: timr start [-h|--help]'
+					puts
+					puts "Note: 'timr push' uses the same options."
 					puts
 					puts 'Task Options'
 					#puts '    -i, --id           Task ID' # @TODO --id
-					puts '    -n, --name <name>              Task Name.'
-					puts '    --desc, --description <str>    Task Description.'
-					#puts '    -e, --estimation <HH:MM>' # @TODO --estimation
+					puts '    -n, --name <name>                 The name of the new Task.'
+					puts '    --desc, --description <str>       Longer description of the new Task.'
+					#puts '    -e, --est, --estimation <time>    Task Estimation. See details below.'
 					puts
 					puts 'Track Options'
 					puts '    -m, --message <message>        Track Message. What have you done?'
@@ -144,6 +148,8 @@ module TheFox
 					puts
 					HelpCommand.print_datetime_help
 					puts
+					# HelpCommand.print_estimation_help
+					# puts
 				end
 				
 			end # class StartCommand

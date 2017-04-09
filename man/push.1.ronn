@@ -3,7 +3,7 @@ timr-push(1) -- Push new Track to the Stack.
 
 ## SYNOPSIS
 
-timr push [<options>]
+timr push [<options>] [<task_id> [<track_id>]]
 
 ## DESCRIPTION
 
@@ -16,5 +16,3 @@ See timr-start(1).
 ## ARGUMENTS
 
 See timr-start(1).
-
-## EXAMPLES

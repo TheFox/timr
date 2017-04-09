@@ -9,6 +9,8 @@
 * <time>:
 	Formats: `HH:MM`, `HH:MM:SS`
 
+See `timr-task(1)`, section ESTIMATION for estimation <time> details.
+
 ## ONLINE RESCOURCES
 
 - [Homepage](https://timr.fox21.at/)

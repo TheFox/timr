@@ -7,10 +7,19 @@
 \fBtimr\-task\fR \- Show, add, edit, or remove a Task\.
 .
 .SH "SYNOPSIS"
-timr task \fIsubcommand\fR [\fIoptions\fR] [\fItask_id\fR]
+timr task [show] [\fIoptions\fR] [\fItask_id\fR\.\.\.]
+.
+.P
+timr task add [\fIoptions\fR]
+.
+.P
+timr task set [\fIoptions\fR] \fItask_id\fR
+.
+.P
+timr task remove \fItask_id\fR\.\.\.
 .
 .SH "DESCRIPTION"
-This command takes several subcommands\. Per default, when providing a Task ID it displays details about this specific Task\.
+This command takes several subcommands\. Per default, when providing a Task ID it displays details about this specific Task\. Without any arguments it lists all Tasks\.
 .
 .SH "SUBCOMMANDS"
 .
@@ -32,7 +41,47 @@ Delete a Task, all informations about this Task and all including Tracks\. This 
 .
 .SH "ADD/SET OPTIONS"
 .
+.TP
+\-n, \-\-name \fIname\fR
+Task Name\.
+.
+.TP
+\-\-desc, \-\-description \fIstr\fR
+Task Description\.
+.
+.TP
+\-e, \-\-est, \-\-estimation \fItime\fR
+Task Estimation\. See details below\.
+.
+.TP
+\-b, \-\-billed
+Mark Task as billed\.
+.
+.TP
+\-\-unbilled
+Mark Task as unbilled\.
+.
+.TP
+\-r, \-\-hourly\-rate \fIvalue\fR
+Set the Hourly Rate\.
+.
+.TP
+\-\-no\-hourly\-rate
+Unset Hourly Rate\.
+.
+.TP
+\-\-fr, \-\-flat\-rate, \-\-flat
+Has Task a Flat Rate?
+.
+.TP
+\-\-no\-flat\-rate, \-\-no\-flat
+Unset Flat Rate\.
+.
 .SH "SHOW OPTIONS"
+.
+.TP
+\-t, \-\-tracks
+Show a list of Track IDs for each Task\.
 .
 .SH "GENERAL OPTIONS"
 .
@@ -41,6 +90,63 @@ Delete a Task, all informations about this Task and all including Tracks\. This 
 Displays the help page\.
 .
 .SH "EXAMPLES"
+.
+.nf
+
+timr task
+timr task abcd12
+timr task show abcd12
+timr task set \-\-name \'task_x\' \-\-estimation \'2h 30m\'
+timr task set \-\-billed \-\-hourly\-rate 50 \-\-flat\-rate abcd12
+timr task set \-\-unbilled \-\-no\-hourly\-rate \-\-no\-flat\-rate abcd12
+timr task add \-\-name \'task_z\' \-\-estimation 4h \-\-hourly\-rate 50 \-\-flat\-rate
+timr task remove abcd12
+.
+.fi
+.
+.SH "MAN UNITS"
+.
+.IP "\(bu" 4
+8 hours are 1 man\-day\.
+.
+.IP "\(bu" 4
+5 man\-days are 1 man\-week, and so on\.
+.
+.IP "" 0
+.
+.SH "ESTIMATION"
+Estimation is parsed by chronic_duration\.
+.
+.P
+Examples:
+.
+.IP "\(bu" 4
+\fB\-e 2:10:5 # Sets Estimation to 2h 10m 5s\.\fR
+.
+.IP "\(bu" 4
+\fB\-e \'2h 10m 5s\' # Sets Estimation to 2h 10m 5s\.\fR
+.
+.IP "" 0
+.
+.P
+Use \'+\' or \'\-\' to calculate with Estimation Times:
+.
+.IP "\(bu" 4
+\fB\-e \'\-45m\' # Subtracts 45 minutes from the original Estimation\.\fR
+.
+.IP "\(bu" 4
+\fB\-e \'+1h 30m\' # Adds 1 hour 30 minutes to the original Estimation\.\fR
+.
+.IP "" 0
+.
+.P
+See chronic_duration for more examples\. https://github\.com/henrypoydar/chronic_duration
+.
+.SH "BILLED/UNBILLED"
+Set a Task as \fBbilled\fR or \fBunbilled\fR to know which Task you already billed a client\.
+.
+.P
+If a whole Task gets billed/unbilled all Tracks are changed to billed/unbilled\. Each Track has a flag \fBis_billed\fR\.
 .
 .SH "DATETIME FORMATS"
 .
@@ -55,6 +161,9 @@ Formats: \fBYYYY\-MM\-DD\fR, \fBMM/DD/YYYY\fR, \fBDD\.MM\.YYYY\fR
 .TP
 \fItime\fR
 Formats: \fBHH:MM\fR, \fBHH:MM:SS\fR
+.
+.P
+See \fBtimr\-task(1)\fR, section ESTIMATION for estimation \fItime\fR details\.
 .
 .SH "ONLINE RESCOURCES"
 .

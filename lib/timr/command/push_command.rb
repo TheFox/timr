@@ -32,6 +32,7 @@ module TheFox
 						case arg
 						when '-h', '--help'
 							@help_opt = true
+						
 						when '-n', '--name'
 							@name_opt = argv.shift
 						when '--desc', '--description'
@@ -42,8 +43,7 @@ module TheFox
 							@time_opt = argv.shift
 						when '-m', '--message'
 							@message_opt = argv.shift
-						# when '-e', '--edit'
-						# 	@edit_opt = true
+						
 						else
 							if arg[0] == '-'
 								raise PushCommandError, "Unknown argument '#{arg}'. See 'timr push --help'."
@@ -89,26 +89,35 @@ module TheFox
 				private
 				
 				def help
-					puts 'usage: timr push [-n|--name <name>] [--desc|--description <description>]'
-					puts '                 [[-d|--date <date>] -t|--time <time>]'
-					puts '                 [-m|--message <message>] [<task_id> [<track_id>]]'
-					puts '   or: timr push [-h|--help]'
-					puts
-					puts 'Task Options'
-					puts '    -n, --name <name>            Task Name.'
-					puts '    --desc, --description <str>  Task Description.'
-					puts
-					puts 'Track Options'
-					puts '    -m, --message <message>      Track Message. What have you done?'
-					puts '                                 You can overwrite this on stop command.'
-					puts '    -d, --date <date>            Track Start Date. Default: today'
-					puts '    -t, --time <time>            Track Start Time. Default: now'
-					puts
-					puts 'Arguments'
-					HelpCommand.print_id_help
-					puts
-					HelpCommand.print_datetime_help
-					puts
+					start_command = StartCommand.new(['--help'])
+					start_command.run
+					start_command.shutdown
+					
+					#puts "For usage see 'timr start -h'. Same options apply for 'timr push'."
+					# puts 'usage: timr push [-n|--name <name>] [--desc|--description <description>]'
+					# puts '                 [[-d|--date <date>] -t|--time <time>]'
+					# puts '                 [-m|--message <message>] [<task_id> [<track_id>]]'
+					# puts '                 [-m|--message <message>] [<task_id> [<track_id>]]'
+					# puts '   or: timr push [-h|--help]'
+					# puts
+					# puts 'Task Options'
+					# puts '    -n, --name <name>                 Task Name.'
+					# puts '    --desc, --description <str>       Task Description.'
+					# puts '    -e, --est, --estimation <time>    Task Estimation. See details below.'
+					# puts
+					# puts 'Track Options'
+					# puts '    -m, --message <message>      Track Message. What have you done?'
+					# puts '                                 You can overwrite this on stop command.'
+					# puts '    -d, --date <date>            Track Start Date. Default: today'
+					# puts '    -t, --time <time>            Track Start Time. Default: now'
+					# puts
+					# puts 'Arguments'
+					# HelpCommand.print_id_help
+					# puts
+					# HelpCommand.print_datetime_help
+					# puts
+					# HelpCommand.print_estimation_help
+					# puts
 				end
 				
 			end # class PushCommand

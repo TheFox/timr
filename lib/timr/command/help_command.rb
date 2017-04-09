@@ -69,6 +69,23 @@ module TheFox
 						puts '    <time>         Formats: HH:MM, HH:MM:SS'
 					end
 					
+					def print_estimation_help(ext = false)
+						puts 'Estimation'
+						puts '    Estimation is parsed by chronic_duration.'
+						puts '    Examples:'
+						puts "        -e 2:10:5         # Sets Estimation to 2h 10m 5s."
+						puts "        -e '2h 10m 5s'    # Sets Estimation to 2h 10m 5s."
+						puts
+						if ext
+							puts "    Use '+' or '-' to calculate with Estimation Times:"
+							puts "        -e '-45m'         # Subtracts 45 minutes from the original Estimation."
+							puts "        -e '+1h 30m'      # Adds 1 hour 30 minutes to the original Estimation."
+							puts
+						end
+						puts '    See chronic_duration for more examples.'
+						puts '    https://github.com/henrypoydar/chronic_duration'
+					end
+					
 				end
 				
 				private

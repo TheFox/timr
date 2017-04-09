@@ -186,13 +186,15 @@ module TheFox
 								end_datetime_s   = track.end_datetime_s(tmp_end_options)
 								
 								duration = track.duration({:from => from, :to => to})
-								totals[:duration] += duration
+								if duration
+									totals[:duration] += duration
+								end
 								
 								table << [
 									track_c,
 									begin_datetime_s,
 									end_datetime_s,
-									duration.to_human,
+									duration ? duration.to_human : '---',
 									task.short_id,
 									'%s %s' % [track.short_id, track.title(15)],
 								]
@@ -214,13 +216,15 @@ module TheFox
 							end_datetime_s   = track.end_datetime_s(glob_end_options)
 							
 							duration = track.duration(@filter_options)
-							totals[:duration] += duration
+							if duration
+								totals[:duration] += duration
+							end
 							
 							table << [
 								totals[:task_c],
 								begin_datetime_s,
 								end_datetime_s,
-								duration.to_human,
+								duration ? duration.to_human : '---',
 								task.short_id,
 								'%s %s' % [track.short_id, track.title(15)],
 							]
@@ -238,7 +242,7 @@ module TheFox
 						nil,        # track_c
 						totals[:begin_datetime_s],
 						totals[:end_datetime_s],
-						totals[:duration].to_human, # duration
+						totals[:duration] ? totals[:duration].to_human : '---', # duration
 						'TOTAL',    # task
 						nil,        # track
 					]
@@ -270,6 +274,8 @@ module TheFox
 					puts '    -m, --month <[YYYY-]MM>     A single month from 01 to 31.'
 					puts '    -y, --year  [<YYYY>]        A single year from 01-01 to 12-31.'
 					puts '    -a, --all                   Show all Tracks.'
+					# @TODO billed
+					# @TODO unbilled
 					puts
 					puts 'Day Time Filter'
 					puts '    --sd, --start-date <date>    Start Date'

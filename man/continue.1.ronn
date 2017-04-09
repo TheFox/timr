@@ -23,3 +23,9 @@ When a Track will be continued (or *restarted*) it's actual a copy using the sam
 	Displays the help page.
 
 ## EXAMPLES
+
+```
+timr continue
+timr continue --time 11:00
+timr continue --date 2017-01-02 --time 11:00
+```

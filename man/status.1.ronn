@@ -23,3 +23,9 @@ To see more details about a specific Task see `timr task <task_id>`, or a specif
 	Displays the help page.
 
 ## EXAMPLES
+
+```
+timr status
+timr status --full
+timr status --full --reverse
+```

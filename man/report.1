@@ -4,21 +4,216 @@
 .TH "TIMR\-REPORT" "1" "April 2017" "FOX21.at" "Timr Manual"
 .
 .SH "NAME"
-\fBtimr\-report\fR \- Export Tasks
+\fBtimr\-report\fR \- Export Tasks and Tracks\.
 .
 .SH "SYNOPSIS"
 timr report [\fIoptions\fR]
 .
 .SH "DESCRIPTION"
-This command is designed to print a list of Tasks or Tracks to STDOUT and to export Tasks and Tracks as CSV files\. The main focus is exporting Tasks to a CSV file\.
+This command is designed to print a list of Tasks or Tracks to STDOUT and to export Tasks and Tracks as CSV files\. While this command is similar to \fBtimr\-log(1)\fR, the main focus is exporting Tasks/Tracks as CSV file for further processing\.
 .
 .SH "OPTIONS"
+.
+.TP
+\-d, \-\-day \fIdate\fR
+A single day from 00:00 to 23:59\.
+.
+.TP
+\-m, \-\-month \fI[YYYY\-]MM\fR
+A single month from 01 to 31\.
+.
+.TP
+\-y, \-\-year [\fIYYYY\fR]
+A single year from 01\-01 to 12\-31\.
+.
+.TP
+\-a, \-\-all
+Export all\.
+.
+.TP
+\-\-tasks
+Export Tasks (default)
+.
+.TP
+\-\-tracks
+Export Tracks
+.
+.TP
+\-\-csv \fIpath\fR
+Export as CSV file\. Use \fB\-\-csv \-\fR to use STDOUT\.
+.
+.TP
+\-\-force
+Force overwrite file\.
 .
 .TP
 \-h, \-\-help
 Displays the help page\.
 .
 .SH "EXAMPLES"
+.
+.nf
+
+timr report
+timr report \-\-day 2017\-01\-02
+timr report \-\-day 2017\-01\-02 \-\-csv timr_report_20170102\.csv
+timr report \-\-day 2017\-01\-02 \-\-csv timr_report_20170102\.csv \-\-tracks
+timr report \-\-month 2017\-01 \-\-csv timr_report_201701\.csv
+timr report \-\-year 2017 \-\-csv timr_report_2017\.csv
+timr report \-\-all \-\-csv timr_report_all\.csv
+.
+.fi
+.
+.SH "TASK TABLE COLUMNS"
+.
+.TP
+START
+Task Start Date
+.
+.TP
+END
+Task End Date
+.
+.TP
+DUR
+Total Task Duration
+.
+.TP
+UNB
+Unbilled Task Duration
+.
+.TP
+TASK
+Task ID and Name\.
+.
+.SH "TRACK TABLE COLUMNS"
+.
+.TP
+START
+Task Start Date
+.
+.TP
+END
+Task End Date
+.
+.TP
+DUR
+Task Duration
+.
+.TP
+TASK
+Task ID
+.
+.TP
+TRACK
+Track ID and Name\.
+.
+.SH "TASK CSV COLUMNS"
+.
+.IP "\(bu" 4
+ROW_NO: Sequential CSV file row number\.
+.
+.IP "\(bu" 4
+TASK_ID: Task ID
+.
+.IP "\(bu" 4
+TASK_NAME: Task Name
+.
+.IP "\(bu" 4
+TASK_BEGIN_DATETIME: Begin DateTime of the first Track\.
+.
+.IP "\(bu" 4
+TASK_END_DATETIME: End DateTime of the last Track\.
+.
+.IP "\(bu" 4
+TASK_DURATION_HUMAN: Task Duration in human format\. (\fB5m 6s\fR)
+.
+.IP "\(bu" 4
+TASK_DURATION_SECONDS: Task Duration in seconds\. (\fB306\fR)
+.
+.IP "\(bu" 4
+TASK_ESTIMATION_HUMAN
+.
+.IP "\(bu" 4
+TASK_ESTIMATION_SECONDS
+.
+.IP "\(bu" 4
+TASK_REMAINING_TIME_HUMAN
+.
+.IP "\(bu" 4
+TASK_REMAINING_TIME_SECONDS
+.
+.IP "\(bu" 4
+TASK_BILLED_DURATION_HUMAN: Billed Task Duration in human format\.
+.
+.IP "\(bu" 4
+TASK_BILLED_DURATION_SECONDS: Billed Task Duration in seconds\.
+.
+.IP "\(bu" 4
+TASK_UNBILLED_DURATION_HUMAN: Unbilled Task Duration in human format\.
+.
+.IP "\(bu" 4
+TASK_UNBILLED_DURATION_SECONDS: Unbilled Task Duration in seconds\.
+.
+.IP "\(bu" 4
+TASK_TRACK_COUNT: Task Track count\.
+.
+.IP "\(bu" 4
+TASK_BILLED_TRACK_COUNT: Task Billed Track count\.
+.
+.IP "\(bu" 4
+TASK_UNBILLED_TRACK_COUNT: Task Unbilled Track count\.
+.
+.IP "" 0
+.
+.SH "TRACK CSV COLUMNS"
+.
+.IP "\(bu" 4
+ROW_NO: Sequential CSV file row number\.
+.
+.IP "\(bu" 4
+TASK_ID: Task ID
+.
+.IP "\(bu" 4
+TASK_NAME: Task Name
+.
+.IP "\(bu" 4
+TRACK_ID: Track ID
+.
+.IP "\(bu" 4
+TRACK_TITLE: Track Title
+.
+.IP "\(bu" 4
+TRACK_BEGIN_DATETIME: Begin DateTime
+.
+.IP "\(bu" 4
+TRACK_END_DATETIME: End DateTime
+.
+.IP "\(bu" 4
+TRACK_DURATION_HUMAN: Track Duration in human format\. (\fB5m 6s\fR)
+.
+.IP "\(bu" 4
+TRACK_DURATION_SECONDS: Track Duration in seconds\. (\fB306\fR)
+.
+.IP "\(bu" 4
+TRACK_BILLED_DURATION_HUMAN: Billed Track Duration in human format\.
+.
+.IP "\(bu" 4
+TRACK_BILLED_DURATION_SECONDS: Billed Track Duration in seconds\.
+.
+.IP "\(bu" 4
+TRACK_UNBILLED_DURATION_HUMAN: Unbilled Track Duration in human format\.
+.
+.IP "\(bu" 4
+TRACK_UNBILLED_DURATION_SECONDS: Unbilled Track Duration in seconds\.
+.
+.IP "\(bu" 4
+TRACK_IS_BILLED
+.
+.IP "" 0
+.
+.P
+The last row in CSV files is always the total sum\.
 .
 .SH "DATETIME FORMATS"
 .
@@ -33,6 +228,9 @@ Formats: \fBYYYY\-MM\-DD\fR, \fBMM/DD/YYYY\fR, \fBDD\.MM\.YYYY\fR
 .TP
 \fItime\fR
 Formats: \fBHH:MM\fR, \fBHH:MM:SS\fR
+.
+.P
+See \fBtimr\-task(1)\fR, section ESTIMATION for estimation \fItime\fR details\.
 .
 .SH "ONLINE RESCOURCES"
 .

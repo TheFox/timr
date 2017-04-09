@@ -335,7 +335,7 @@ module TheFox
 				end
 				
 				def export_tasks_csv
-					# puts "xxxxxx" # @TODO remove
+					# puts "export_tasks_csv" # @TODO remove
 					
 					if @csv_opt == '-'
 						csv_file_handle = STDOUT
@@ -424,11 +424,21 @@ module TheFox
 						unbilled_duration = task.unbilled_duration(@csv_filter_options)
 						
 						# Global Duration Sum
-						totals[:duration] += duration
-						totals[:estimation] += estimation
-						totals[:remaining_time] += remaining_time
-						totals[:billed_duration] += billed_duration
-						totals[:unbilled_duration] += unbilled_duration
+						if duration
+							totals[:duration] += duration
+						end
+						if estimation
+							totals[:estimation] += estimation
+						end
+						if remaining_time
+							totals[:remaining_time] += remaining_time
+						end
+						if billed_duration
+							totals[:billed_duration] += billed_duration
+						end
+						if unbilled_duration
+							totals[:unbilled_duration] += unbilled_duration
+						end
 						
 						# Task Begin DateTime
 						bdt = task.begin_datetime(@csv_filter_options)
@@ -455,16 +465,16 @@ module TheFox
 							task.begin_datetime_s(@csv_filter_options),
 							task.end_datetime_s(@csv_filter_options),
 							
-							duration.to_human,
-							duration.to_i,
-							estimation.to_human,
-							estimation.to_i,
-							remaining_time.to_human,
-							remaining_time.to_i,
-							billed_duration.to_human,
-							billed_duration.to_i,
-							unbilled_duration.to_human,
-							unbilled_duration.to_i,
+							duration ? duration.to_human : '---',
+							duration ? duration.to_i : 0,
+							estimation ? estimation.to_human : '---',
+							estimation ? estimation.to_i : 0,
+							remaining_time ? remaining_time.to_human : '---',
+							remaining_time ? remaining_time.to_i : 0,
+							billed_duration ? billed_duration.to_human : '---',
+							billed_duration ? billed_duration.to_i : 0,
+							unbilled_duration ? unbilled_duration.to_human : '---',
+							unbilled_duration ? unbilled_duration.to_i : 0,
 							
 							tracks_c,
 							billed_tracks_c,
@@ -486,16 +496,16 @@ module TheFox
 						totals[:begin_datetime_s],
 						totals[:end_datetime_s],
 						
-						totals[:duration].to_human,
-						totals[:duration].to_i,
-						totals[:estimation].to_human,
-						totals[:estimation].to_i,
-						totals[:remaining_time].to_human,
-						totals[:remaining_time].to_i,
-						totals[:billed_duration].to_human,
-						totals[:billed_duration].to_i,
-						totals[:unbilled_duration].to_human,
-						totals[:unbilled_duration].to_i,
+						totals[:duration] ? totals[:duration].to_human : '---',
+						totals[:duration] ? totals[:duration].to_i : 0,
+						totals[:estimation] ? totals[:estimation].to_human : '---',
+						totals[:estimation] ? totals[:estimation].to_i : 0,
+						totals[:remaining_time] ? totals[:remaining_time].to_human : '---',
+						totals[:remaining_time] ? totals[:remaining_time].to_i : 0,
+						totals[:billed_duration] ? totals[:billed_duration].to_human : '---',
+						totals[:billed_duration] ? totals[:billed_duration].to_i : 0,
+						totals[:unbilled_duration] ? totals[:unbilled_duration].to_human : '---',
+						totals[:unbilled_duration] ? totals[:unbilled_duration].to_i : 0,
 						
 						totals[:tracks_c],
 						totals[:billed_tracks_c],
@@ -563,9 +573,15 @@ module TheFox
 						unbilled_duration = track.unbilled_duration(@csv_filter_options)
 						
 						# Global Duration Sum
-						totals[:duration] += duration
-						totals[:billed_duration] += billed_duration
-						totals[:unbilled_duration] += unbilled_duration
+						if duration
+							totals[:duration] += duration
+						end
+						if billed_duration
+							totals[:billed_duration] += billed_duration
+						end
+						if unbilled_duration
+							totals[:unbilled_duration] += unbilled_duration
+						end
 						
 						# Get Task from Track.
 						task = track.task
@@ -597,12 +613,12 @@ module TheFox
 							track.begin_datetime_s(@csv_filter_options),
 							track.end_datetime_s(@csv_filter_options),
 							
-							duration.to_human,
-							duration.to_i,
-							billed_duration.to_human,
-							billed_duration.to_i,
-							unbilled_duration.to_human,
-							unbilled_duration.to_i,
+							duration ? duration.to_human : '---',
+							duration ? duration.to_i : 0,
+							billed_duration ? billed_duration.to_human : '---',
+							billed_duration ? billed_duration.to_i : 0,
+							unbilled_duration ? unbilled_duration.to_human : '---',
+							unbilled_duration ? unbilled_duration.to_i : 0,
 							
 							track.is_billed.to_i,
 						]
@@ -625,12 +641,12 @@ module TheFox
 						totals[:begin_datetime_s],
 						totals[:end_datetime_s],
 						
-						totals[:duration].to_human,
-						totals[:duration].to_i,
-						totals[:billed_duration].to_human,
-						totals[:billed_duration].to_i,
-						totals[:unbilled_duration].to_human,
-						totals[:unbilled_duration].to_i,
+						totals[:duration] ? totals[:duration].to_human : '---',
+						totals[:duration] ? totals[:duration].to_i : 0,
+						totals[:billed_duration] ? totals[:billed_duration].to_human : '---',
+						totals[:billed_duration] ? totals[:billed_duration].to_i : 0,
+						totals[:unbilled_duration] ? totals[:unbilled_duration].to_human : '---',
+						totals[:unbilled_duration] ? totals[:unbilled_duration].to_i : 0,
 					]
 					
 					csv.close
@@ -658,65 +674,10 @@ module TheFox
 					# puts '    --billed                    Filter only Tasks/Tracks which are billed.'
 					# puts '    --unbilled                  Filter only Tasks/Tracks which are not billed.'
 					puts "    --csv <path>                Export as CSV file. Use '--csv -' to use STDOUT."
+					puts "    --force                     Force overwrite file."
 					puts
-					puts 'Task Table Columns'
-					puts '    START    Task Start Date'
-					puts '    END      Task End Date'
-					puts '    DUR      Total Task Duration'
-					# puts '    TRC      Tracks Count'
-					puts '    UNB      Unbilled Task Duration'
-					puts '    TASK     Task ID and Name.'
-					puts
-					puts 'Track Table Columns'
-					puts '    START    Task Start Date'
-					puts '    END      Task End Date'
-					puts '    DUR      Task Duration'
-					puts '    TASK     Task ID'
-					puts '    TRACK    Track ID and Name.'
-					puts
-					puts 'Task CSV Columns'
-					puts '    ROW_NO                             Sequential CSV file row number.'
-					puts
-					puts '    TASK_ID                            Task ID'
-					puts '    TASK_NAME                          Task Name'
-					puts '    TASK_BEGIN_DATETIME                Begin DateTime of the first Track.'
-					puts '    TASK_END_DATETIME                  End DateTime of the last Track.'
-					puts
-					puts '    TASK_DURATION_HUMAN                Task Duration in human format: 5m 6s'
-					puts '    TASK_DURATION_SECONDS              Task Duration in seconds: 306'
-					puts '    TASK_ESTIMATION_HUMAN'
-					puts '    TASK_ESTIMATION_SECONDS'
-					puts '    TASK_REMAINING_TIME_HUMAN'
-					puts '    TASK_REMAINING_TIME_SECONDS'
-					puts
-					puts '    TASK_BILLED_DURATION_HUMAN         Billed Task Duration in human format.'
-					puts '    TASK_BILLED_DURATION_SECONDS       Billed Task Duration in seconds.'
-					puts '    TASK_UNBILLED_DURATION_HUMAN       Unbilled Task Duration in human format.'
-					puts '    TASK_UNBILLED_DURATION_SECONDS     Unbilled Task Duration in seconds.'
-					puts
-					puts '    TASK_TRACK_COUNT                   Task Track count.'
-					puts '    TASK_BILLED_TRACK_COUNT            Task Billed Track count.'
-					puts '    TASK_UNBILLED_TRACK_COUNT          Task Unbilled Track count.'
-					puts
-					puts 'Track CSV Columns'
-					puts '    ROW_NO                             Sequential CSV file row number.'
-					puts
-					puts '    TASK_ID                            Task ID'
-					puts '    TASK_NAME                          Task Name'
-					puts
-					puts '    TRACK_ID                           Track ID'
-					puts '    TRACK_TITLE                        Track Title'
-					puts '    TRACK_BEGIN_DATETIME               Begin DateTime'
-					puts '    TRACK_END_DATETIME                 End DateTime'
-					puts '    TRACK_DURATION_HUMAN               Track Duration in human format: 5m 6s'
-					puts '    TRACK_DURATION_SECONDS             Track Duration in seconds: 306'
-					puts '    TRACK_BILLED_DURATION_HUMAN        Billed Track Duration in human format.'
-					puts '    TRACK_BILLED_DURATION_SECONDS      Billed Track Duration in seconds.'
-					puts '    TRACK_UNBILLED_DURATION_HUMAN      Unbilled Track Duration in human format.'
-					puts '    TRACK_UNBILLED_DURATION_SECONDS    Unbilled Track Duration in seconds.'
-					puts '    TRACK_IS_BILLED'
-					puts
-					puts 'The last row in CSV files is always the total sum.'
+					puts 'For column descriptions see man page:'
+					puts "'timr help report'"
 					puts
 					HelpCommand.print_datetime_help
 					puts

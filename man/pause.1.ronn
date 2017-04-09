@@ -29,3 +29,9 @@ Pause the current running Track. To continue the current Track (Top Track) run `
 	Displays the help page.
 
 ## EXAMPLES
+
+```
+timr pause
+timr pause --time 10:30
+timr pause --date 2017-01-02 --time 10:30
+```

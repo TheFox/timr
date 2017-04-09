@@ -16,7 +16,7 @@ Without any options this command always creates a new Task and starts a new Trac
 * -n, --name <str>:
 	The name of the new Task. When providing a <task_id> this option will be ignored.
 
-* --description <descr>:
+* --description <str>:
 	Longer description of the new Task. This should descibe the Task in general. Provide details by using `--message` option. When providing a <task_id> this option will be ignored.
 
 ## TRACK OPTIONS
@@ -42,3 +42,13 @@ Without any options this command always creates a new Task and starts a new Trac
 <track_id> - Track ID as SHA1 hex string. It can be the full 40 characters or only the first 6. If specified a new Track with the same message will be created.
 
 ## EXAMPLES
+
+```
+timr start
+timr start --name my_task1
+timr start --name my_task2 --description 'This is a very long description.'
+timr start --name my_task3 --date 2017-01-02 --time 15:30 --message 'Hello World'
+timr start --name my_task4 --message 'Hello World'
+timr start --message 'Hello World' abcd12
+timr start --time 10:30 --message 'Hello World' abcd12
+```

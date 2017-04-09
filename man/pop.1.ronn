@@ -23,3 +23,9 @@ Stop and pop the current running Track from the Stack. Also `timr stop` removes 
 	Displays the help page.
 
 ## EXAMPLES
+
+```
+timr pop
+timr pop --time 11:00
+timr pop --date 2017-01-02 --time 11:00
+```

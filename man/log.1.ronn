@@ -49,3 +49,30 @@ By default this command prints all todays Tracks.
 	Displays the help page.
 
 ## EXAMPLES
+
+```
+timr log
+timr log --from '2017-01-02 10:00' --to '2017-01-09 17:00'
+timr log --day 2017-01-03
+timr log --month 2017-01
+timr log --year 2017
+timr log --all
+timr log --start-date 2017-01-01 --end-date 2017-01-05 --start-time 08:00 --end-time 17:00
+```
+
+## COLUMNS
+
+* START:
+	Track Start Date
+
+* END:
+	Track End Date
+
+* DUR:
+	Track Duration
+
+* TASK:
+	Task ID
+
+* TRACK:
+	Track ID and Title.

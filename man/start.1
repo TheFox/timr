@@ -22,7 +22,7 @@ Without any options this command always creates a new Task and starts a new Trac
 The name of the new Task\. When providing a \fItask_id\fR this option will be ignored\.
 .
 .TP
-\-\-description \fIdescr\fR
+\-\-description \fIstr\fR
 Longer description of the new Task\. This should descibe the Task in general\. Provide details by using \fB\-\-message\fR option\. When providing a \fItask_id\fR this option will be ignored\.
 .
 .SH "TRACK OPTIONS"
@@ -53,6 +53,18 @@ Displays the help page\.
 .
 .SH "EXAMPLES"
 .
+.nf
+
+timr start
+timr start \-\-name my_task1
+timr start \-\-name my_task2 \-\-description \'This is a very long description\.\'
+timr start \-\-name my_task3 \-\-date 2017\-01\-02 \-\-time 15:30 \-\-message \'Hello World\'
+timr start \-\-name my_task4 \-\-message \'Hello World\'
+timr start \-\-message \'Hello World\' abcd12
+timr start \-\-time 10:30 \-\-message \'Hello World\' abcd12
+.
+.fi
+.
 .SH "DATETIME FORMATS"
 .
 .TP
@@ -66,6 +78,9 @@ Formats: \fBYYYY\-MM\-DD\fR, \fBMM/DD/YYYY\fR, \fBDD\.MM\.YYYY\fR
 .TP
 \fItime\fR
 Formats: \fBHH:MM\fR, \fBHH:MM:SS\fR
+.
+.P
+See \fBtimr\-task(1)\fR, section ESTIMATION for estimation \fItime\fR details\.
 .
 .SH "ONLINE RESCOURCES"
 .

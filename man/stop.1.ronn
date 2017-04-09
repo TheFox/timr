@@ -41,3 +41,12 @@ Stopps the current running Track and removes it from the Stack. When more then o
 	Displays the help page.
 
 ## EXAMPLES
+
+```
+timr stop
+timr stop --message 'Hello World'
+timr stop --message 'Hello World' --append
+timr stop --message 'Hello World' --append
+timr stop --time 17:00 --message 'Hello World'
+timr stop --start-time 10:00 --time 17:00 --message 'Hello World'
+```

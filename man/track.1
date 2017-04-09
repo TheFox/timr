@@ -4,7 +4,7 @@
 .TH "TIMR\-TRACK" "1" "April 2017" "FOX21.at" "Timr Manual"
 .
 .SH "NAME"
-\fBtimr\-track\fR \- Show, add, edit, or remove a Track\.
+\fBtimr\-track\fR \- Show, add, edit, move, or remove a Track\.
 .
 .SH "SYNOPSIS"
 timr track \fIsubcommand\fR [\fIoptions\fR] [\fItrack_id\fR]
@@ -32,7 +32,42 @@ Delete a Track and all informations about this Track\. This cannot be undone\.
 .
 .SH "ADD/SET OPTIONS"
 .
+.TP
+\-m, \-\-message \fImessage\fR
+Track Message\. Details about what you have done\.
+.
+.TP
+\-\-sd, \-\-start\-date \fIdate\fR
+Start Date
+.
+.TP
+\-\-st, \-\-start\-time \fItime\fR
+Start Time
+.
+.TP
+\-\-ed, \-\-end\-date \fIdate\fR
+End Date
+.
+.TP
+\-\-et, \-\-end\-time \fItime\fR
+End Time
+.
+.TP
+\-b, \-\-billed
+Mark Track as billed\.
+.
+.TP
+\-\-unbilled
+Mark Track as unbilled\.
+.
+.SH "SET OPTIONS"
+\-\-task \fItask_id\fR: Move Track to another Task\.
+.
 .SH "SHOW OPTIONS"
+.
+.TP
+\-t, \-\-task
+Show Task of Track\. Same as \fBtimr task <task_id>\fR\.
 .
 .SH "GENERAL OPTIONS"
 .
@@ -41,6 +76,19 @@ Delete a Track and all informations about this Track\. This cannot be undone\.
 Displays the help page\.
 .
 .SH "EXAMPLES"
+.
+.nf
+
+timr track abcd12
+timr track show abcd12
+timr track set \-\-start\-date 2017\-01\-01 \-\-start\-time 10:00 \e
+    \-\-end\-date 2017\-01\-02 \-\-end\-time 15:30 abcd12
+timr track set \-\-track xyz345 abcd12
+timr track add \-\-start\-date 2017\-01\-02 \-\-start\-time 16:00 \e
+    \-\-end\-date 2017\-01\-02 \-\-end\-time 17:00 xyz345
+timr track remove abcd12
+.
+.fi
 .
 .SH "DATETIME FORMATS"
 .
@@ -55,6 +103,9 @@ Formats: \fBYYYY\-MM\-DD\fR, \fBMM/DD/YYYY\fR, \fBDD\.MM\.YYYY\fR
 .TP
 \fItime\fR
 Formats: \fBHH:MM\fR, \fBHH:MM:SS\fR
+.
+.P
+See \fBtimr\-task(1)\fR, section ESTIMATION for estimation \fItime\fR details\.
 .
 .SH "ONLINE RESCOURCES"
 .

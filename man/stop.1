@@ -54,6 +54,17 @@ Displays the help page\.
 .
 .SH "EXAMPLES"
 .
+.nf
+
+timr stop
+timr stop \-\-message \'Hello World\'
+timr stop \-\-message \'Hello World\' \-\-append
+timr stop \-\-message \'Hello World\' \-\-append
+timr stop \-\-time 17:00 \-\-message \'Hello World\'
+timr stop \-\-start\-time 10:00 \-\-time 17:00 \-\-message \'Hello World\'
+.
+.fi
+.
 .SH "DATETIME FORMATS"
 .
 .TP
@@ -67,6 +78,9 @@ Formats: \fBYYYY\-MM\-DD\fR, \fBMM/DD/YYYY\fR, \fBDD\.MM\.YYYY\fR
 .TP
 \fItime\fR
 Formats: \fBHH:MM\fR, \fBHH:MM:SS\fR
+.
+.P
+See \fBtimr\-task(1)\fR, section ESTIMATION for estimation \fItime\fR details\.
 .
 .SH "ONLINE RESCOURCES"
 .

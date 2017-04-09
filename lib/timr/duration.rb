@@ -89,6 +89,8 @@ module TheFox
 					Duration.new(@seconds + duration)
 				when Duration
 					Duration.new(@seconds + duration.seconds)
+				when nil
+					Duration.new(@seconds)
 				else
 					raise DurationError, "Wrong type #{duration.class} for '+' function."
 				end
