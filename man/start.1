@@ -25,6 +25,18 @@ The name of the new Task\. When providing a \fItask_id\fR this option will be ig
 \-\-description \fIstr\fR
 Longer description of the new Task\. This should descibe the Task in general\. Provide details by using \fB\-\-message\fR option\. When providing a \fItask_id\fR this option will be ignored\.
 .
+.TP
+\-e, \-\-est, \-\-estimation \fItime\fR
+Task Estimation\. See \fBtimr\-task(1)\fR for details\.
+.
+.TP
+\-r, \-\-hourly\-rate \fIvalue\fR
+Set the Hourly Rate\.
+.
+.TP
+\-\-fr, \-\-flat\-rate, \-\-flat
+Has Task a Flat Rate?
+.
 .SH "TRACK OPTIONS"
 .
 .TP
@@ -60,6 +72,7 @@ timr start \-\-name my_task1
 timr start \-\-name my_task2 \-\-description \'This is a very long description\.\'
 timr start \-\-name my_task3 \-\-date 2017\-01\-02 \-\-time 15:30 \-\-message \'Hello World\'
 timr start \-\-name my_task4 \-\-message \'Hello World\'
+timr start \-\-name my_task5 \-\-estimation 2h
 timr start \-\-message \'Hello World\' abcd12
 timr start \-\-time 10:30 \-\-message \'Hello World\' abcd12
 .

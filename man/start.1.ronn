@@ -19,6 +19,15 @@ Without any options this command always creates a new Task and starts a new Trac
 * --description <str>:
 	Longer description of the new Task. This should descibe the Task in general. Provide details by using `--message` option. When providing a <task_id> this option will be ignored.
 
+* -e, --est, --estimation <time>:
+	Task Estimation. See `timr-task(1)` for details.
+
+* -r, --hourly-rate <value>:
+	Set the Hourly Rate.
+
+* --fr, --flat-rate, --flat:
+	Has Task a Flat Rate?
+
 ## TRACK OPTIONS
 
 * -m, --message <message>:
@@ -49,6 +58,7 @@ timr start --name my_task1
 timr start --name my_task2 --description 'This is a very long description.'
 timr start --name my_task3 --date 2017-01-02 --time 15:30 --message 'Hello World'
 timr start --name my_task4 --message 'Hello World'
+timr start --name my_task5 --estimation 2h
 timr start --message 'Hello World' abcd12
 timr start --time 10:30 --message 'Hello World' abcd12
 ```

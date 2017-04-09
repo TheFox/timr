@@ -21,6 +21,11 @@ module TheFox
 					
 					@name_opt = nil
 					@description_opt = nil
+					@estimation_opt = nil
+					
+					@hourly_rate_opt = nil
+					@has_flat_rate_opt = nil
+					
 					@date_opt = nil
 					@time_opt = nil
 					@message_opt = nil
@@ -40,6 +45,14 @@ module TheFox
 							@name_opt = argv.shift
 						when '--desc', '--description'
 							@description_opt = argv.shift
+						when '-e', '--est', '--estimation'
+							@estimation_opt = argv.shift
+						
+						when '-r', '--hourly-rate'
+							@hourly_rate_opt = argv.shift
+						when '--fr', '--flat', '--flat-rate'
+							@has_flat_rate_opt = true
+						
 						when '-d', '--date'
 							@date_opt = argv.shift
 						when '-t', '--time'
@@ -102,9 +115,15 @@ module TheFox
 					options = {
 						:name => @name_opt,
 						:description => @description_opt,
+						:estimation => @estimation_opt,
+						
+						:hourly_rate => @hourly_rate_opt,
+						:has_flat_rate => @has_flat_rate_opt,
+						
 						:date => @date_opt,
 						:time => @time_opt,
 						:message => @message_opt,
+						
 						:task_id => @id_opts.shift,
 						:track_id => @id_opts.shift,
 					}
@@ -124,8 +143,9 @@ module TheFox
 				def help
 					puts 'usage: timr start [-n|--name <name>] [--desc|--description <description>]'
 					puts '                  [[-d|--date <date>] -t|--time <time>]'
-					puts '                  [-m|--message <message>] [<task_id> [<track_id>]]'
-					puts '                  [-m|--message <message>] [<task_id> [<track_id>]]'
+					puts '                  [-m|--message <message>] [--estimation <time>]'
+					puts '                  [--hourly-rate <value>] [--flat-rate]'
+					puts '                  [<task_id> [<track_id>]]'
 					puts '   or: timr start [-h|--help]'
 					puts
 					puts "Note: 'timr push' uses the same options."
@@ -134,12 +154,14 @@ module TheFox
 					#puts '    -i, --id           Task ID' # @TODO --id
 					puts '    -n, --name <name>                 The name of the new Task.'
 					puts '    --desc, --description <str>       Longer description of the new Task.'
-					#puts '    -e, --est, --estimation <time>    Task Estimation. See details below.'
+					puts '    -e, --est, --estimation <time>    Task Estimation. See details below.'
+					puts '    -r, --hourly-rate <value>         Set the Hourly Rate.'
+					puts '    --fr, --flat-rate, --flat         Has Task a Flat Rate?'
 					puts
 					puts 'Track Options'
 					puts '    -m, --message <message>        Track Message. What have you done?'
 					puts '                                   You can overwrite this on stop command.'
-					# puts '    -e, --edit         Edit Track Message.'
+					# puts '    --edit         Edit Track Message.' # @TODO --edit
 					puts '    -d, --date <date>              Track Start Date. Default: today'
 					puts '    -t, --time <time>              Track Start Time. Default: now'
 					puts
@@ -148,8 +170,8 @@ module TheFox
 					puts
 					HelpCommand.print_datetime_help
 					puts
-					# HelpCommand.print_estimation_help
-					# puts
+					HelpCommand.print_estimation_help
+					puts
 				end
 				
 			end # class StartCommand

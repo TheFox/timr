@@ -18,6 +18,11 @@ module TheFox
 					
 					@name_opt = nil
 					@description_opt = nil
+					@estimation_opt = nil
+					
+					@hourly_rate_opt = nil
+					@has_flat_rate_opt = nil
+					
 					@date_opt = nil
 					@time_opt = nil
 					@message_opt = nil
@@ -37,6 +42,14 @@ module TheFox
 							@name_opt = argv.shift
 						when '--desc', '--description'
 							@description_opt = argv.shift
+						when '-e', '--est', '--estimation'
+							@estimation_opt = argv.shift
+						
+						when '-r', '--hourly-rate'
+							@hourly_rate_opt = argv.shift
+						when '--fr', '--flat', '--flat-rate'
+							@has_flat_rate_opt = true
+						
 						when '-d', '--date'
 							@date_opt = argv.shift
 						when '-t', '--time'
@@ -68,9 +81,15 @@ module TheFox
 					options = {
 						:name => @name_opt,
 						:description => @description_opt,
+						:estimation => @estimation_opt,
+						
+						:hourly_rate => @hourly_rate_opt,
+						:has_flat_rate => @has_flat_rate_opt,
+						
 						:date => @date_opt,
 						:time => @time_opt,
 						:message => @message_opt,
+						
 						:task_id => @id_opts.shift,
 						:track_id => @id_opts.shift,
 					}
@@ -92,32 +111,6 @@ module TheFox
 					start_command = StartCommand.new(['--help'])
 					start_command.run
 					start_command.shutdown
-					
-					#puts "For usage see 'timr start -h'. Same options apply for 'timr push'."
-					# puts 'usage: timr push [-n|--name <name>] [--desc|--description <description>]'
-					# puts '                 [[-d|--date <date>] -t|--time <time>]'
-					# puts '                 [-m|--message <message>] [<task_id> [<track_id>]]'
-					# puts '                 [-m|--message <message>] [<task_id> [<track_id>]]'
-					# puts '   or: timr push [-h|--help]'
-					# puts
-					# puts 'Task Options'
-					# puts '    -n, --name <name>                 Task Name.'
-					# puts '    --desc, --description <str>       Task Description.'
-					# puts '    -e, --est, --estimation <time>    Task Estimation. See details below.'
-					# puts
-					# puts 'Track Options'
-					# puts '    -m, --message <message>      Track Message. What have you done?'
-					# puts '                                 You can overwrite this on stop command.'
-					# puts '    -d, --date <date>            Track Start Date. Default: today'
-					# puts '    -t, --time <time>            Track Start Time. Default: now'
-					# puts
-					# puts 'Arguments'
-					# HelpCommand.print_id_help
-					# puts
-					# HelpCommand.print_datetime_help
-					# puts
-					# HelpCommand.print_estimation_help
-					# puts
 				end
 				
 			end # class PushCommand

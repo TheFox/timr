@@ -968,11 +968,14 @@ module TheFox
 					# - `:name` (String)
 					# - `:description` (String)
 					# - `:estimation` (String|Integer|Duration)
+					# - `:hourly_rate` (Integer)
 					def create_task_from_hash(options)
 						task = Task.new
-						task.name = options[:name]
-						task.description = options[:description]
-						task.estimation = options[:estimation]
+						task.name = options.fetch(:name, nil)
+						task.description = options.fetch(:description, nil)
+						task.estimation = options.fetch(:estimation, nil)
+						task.hourly_rate = options.fetch(:hourly_rate, nil)
+						task.has_flat_rate = options.fetch(:has_flat_rate, false)
 						task
 					end
 					
