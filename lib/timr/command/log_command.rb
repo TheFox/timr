@@ -16,7 +16,6 @@ module TheFox
 				
 				def initialize(argv = Array.new)
 					super()
-					# puts "#{Time.now.to_ms} #{self.class} #{__method__}" # @TODO remove
 					
 					@help_opt = false
 					
@@ -73,8 +72,6 @@ module TheFox
 						@from_opt = Time.parse("#{@start_date.strftime('%F')} #{@start_time.strftime('%T')}")
 						@to_opt   = Time.parse("#{@end_date.strftime('%F')} #{@end_time.strftime('%T')}")
 						
-						# puts "from parsed: #{@from_opt.strftime('%F %T')}" # @TODO remove
-						# puts "to   parsed: #{@to_opt.strftime('%F %T')}" # @TODO remove
 						@daytime_filter = true
 					end
 					
@@ -87,13 +84,10 @@ module TheFox
 					end
 					
 					@filter_options = {:from => @from_opt, :to => @to_opt}
-					
-					# puts "#{Time.now.to_ms} #{self.class} #{__method__} END" # @TODO remove
 				end
 				
 				# See BasicCommand#run.
 				def run
-					# puts "#{Time.now.to_ms} #{self.class} #{__method__}" # @TODO remove
 					if @help_opt
 						help
 						return
@@ -107,8 +101,6 @@ module TheFox
 				private
 				
 				def print_small_table
-					# puts "#{Time.now.to_ms} #{self.class} #{__method__}" # @TODO remove
-					
 					puts 'Selected datetime range:'
 					if @daytime_filter
 						puts "On every day from #{@start_date.strftime('%F')}"
@@ -252,8 +244,6 @@ module TheFox
 					else
 						puts 'No tracks found.'
 					end
-					
-					# puts "#{Time.now.to_ms} #{self.class} #{__method__} END" # @TODO remove
 				end
 				
 				def help
@@ -274,8 +264,6 @@ module TheFox
 					puts '    -m, --month <[YYYY-]MM>     A single month from 01 to 31.'
 					puts '    -y, --year  [<YYYY>]        A single year from 01-01 to 12-31.'
 					puts '    -a, --all                   Show all Tracks.'
-					# @TODO billed
-					# @TODO unbilled
 					puts
 					puts 'Day Time Filter'
 					puts '    --sd, --start-date <date>    Start Date'

@@ -3,7 +3,6 @@
 require 'minitest/autorun'
 require 'time'
 require 'timr'
-require 'pp' # @TODO remove pp
 
 class TestTask < MiniTest::Test
 	

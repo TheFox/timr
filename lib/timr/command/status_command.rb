@@ -84,19 +84,9 @@ module TheFox
 						
 						status = track.status.short_status
 						duration = track.duration
-						# estimation = task.estimation
 						estimation_s = task.estimation_s
-						# remaining_time = task.remaining_time
 						remaining_time_s = task.remaining_time_s
 						remaining_time_percent_s = task.remaining_time_percent_s
-						
-						# puts
-						# puts "duration:         #{duration.class} #{duration}" # @TODO remove
-						# puts "estimation:       #{estimation.class} #{estimation}" # @TODO remove
-						# puts "remaining_time:   #{remaining_time.class} #{remaining_time}" # @TODO remove
-						# puts "remaining_time_s: #{remaining_time_s.class} #{remaining_time_s}" # @TODO remove
-						# puts "remaining_time_percent_s: #{remaining_time_percent_s.class} #{remaining_time_percent_s}" # @TODO remove
-						# puts
 						
 						if track.begin_datetime
 							begin_datetime_s = track.begin_datetime_s({:format => '%H:%M'})

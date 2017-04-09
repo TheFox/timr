@@ -1,6 +1,4 @@
 
-require 'pp' # @TODO remove pp
-
 module TheFox
 	module Timr
 		module Command
@@ -15,7 +13,6 @@ module TheFox
 				
 				def initialize(argv = Array.new)
 					super()
-					# puts "argv '#{argv}'"
 					
 					@help_opt = false
 					

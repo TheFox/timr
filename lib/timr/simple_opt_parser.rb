@@ -83,14 +83,11 @@ module TheFox
 				# Reset previous options.
 				@options = []
 				
-				# puts "parse '#{args}'"
-				
 				if args.is_a?(Array)
 					pre_argv = args
 				else
 					pre_argv = args.split(' ')
 				end
-				puts "pre_argv '#{pre_argv}'"
 				
 				argv = Array.new
 				
@@ -122,17 +119,13 @@ module TheFox
 					end
 				end
 				
-				puts "argv '#{argv}'"
-				
 				loop_c = 0 # Limit the loop.
 				while argv.length > 0 && loop_c < 1024
 					loop_c += 1
 					
 					arg = argv.shift
-					# puts "arg '#{arg}' '#{argv}'"
 					
 					if arg[0] == '-'
-						# puts "has - at begin"
 						if @valid_options[arg]
 							# Recognized Argument
 							
@@ -160,7 +153,6 @@ module TheFox
 								@options << arg_values
 							else
 								# n values.
-								# puts "n values rest=#{argv.length} '#{argv}'"
 								
 								arg_values = []
 								sub_loop_c = 0 # Limit the loop.
@@ -168,7 +160,6 @@ module TheFox
 									sub_loop_c += 1
 									
 									val = argv.shift
-									# puts "arg val: '#{val}'   rest=#{argv.length} '#{argv}'"
 									
 									# When reaching the end.
 									unless val
@@ -193,15 +184,11 @@ module TheFox
 							# Unknown Arguments
 							# '-ab' arguments will be processed in pre_argv.
 							@unknown_options << arg
-							puts "unknown '#{arg}'"
 						end
 					else
 						# Command
-						# puts 'is a command'
 						@options << [arg]
 					end
-					
-					# puts
 				end
 				
 				@options
@@ -209,7 +196,6 @@ module TheFox
 			
 			# Do not re-parse. Verify an already parsed array.
 			def verify(opts)
-				puts "verify '#{opts}'"
 				opts.each do |opt_ar|
 					arg = opt_ar.first
 					

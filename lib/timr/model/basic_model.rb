@@ -1,5 +1,4 @@
 
-require 'pp' # @TODO remove pp
 require 'time'
 require 'yaml/store'
 require 'uuid'
@@ -38,7 +37,6 @@ module TheFox
 					@data = nil
 					@has_changed = false
 					@file_path = nil
-					# pp @meta # @TODO remove pp
 				end
 				
 				# Set ID.
@@ -89,7 +87,6 @@ module TheFox
 						@file_path = path
 					end
 					
-					# puts "#{self.class} load_from_file: #{path} #{load}"
 					if load
 						content = YAML::load_file(path)
 						@meta = content['meta']
@@ -126,7 +123,6 @@ module TheFox
 						@file_path = path
 					end
 					
-					#puts "#{self.class} save_to_file: #{store} #{@has_changed}"
 					if force || (store && @has_changed)
 						@meta['modified'] = Time.now.utc.strftime(MODEL_DATETIME_FORMAT)
 						
@@ -199,11 +195,7 @@ module TheFox
 							raise IdError, "ID is too short for creating a path. Minimum length: 7"
 						end
 						
-						# puts "base_path: #{base_path}"
-						# puts "id: #{id}"
-						
 						path_s = '%s/%s/%s/%s.yml' % [id[0, 2], id[2, 2], id[4, 2], id[6..-1]]
-						# puts "path_s: #{path_s}"
 						Pathname.new(path_s).expand_path(base_path)
 					end
 					
@@ -251,9 +243,6 @@ module TheFox
 								end
 							end
 							search_path << '*'
-							
-							# puts "search_path #{search_path}"
-							# puts "base_path #{base_path}"
 							
 							path = nil
 							base_path.find.each do |file|

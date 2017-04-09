@@ -102,12 +102,10 @@ module TheFox
 					
 					if @csv_opt
 						if @csv_opt == '-'
-							#@csv_opt = STDOUT
+							# OK
 						else
 							@csv_opt = Pathname.new(@csv_opt).expand_path
 						end
-						
-						# puts "csv opt: #{@csv_opt}" # @TODO remove
 					end
 				end
 				
@@ -121,8 +119,6 @@ module TheFox
 					@timr = Timr.new(@cwd)
 					
 					if @csv_opt
-						# puts "CSV: task=#{@tasks_opt} track=#{@tracks_opt}" # @TODO remove
-						
 						if @tasks_opt
 							export_tasks_csv
 						elsif @tracks_opt
@@ -144,8 +140,6 @@ module TheFox
 				private
 				
 				def print_task_table
-					# puts "print_task_table" # @TODO remove
-					
 					puts "From #{@from_opt.strftime('%F %T %z')}"
 					puts "  To #{@to_opt.strftime('%F %T %z')}"
 					puts
@@ -335,8 +329,6 @@ module TheFox
 				end
 				
 				def export_tasks_csv
-					# puts "export_tasks_csv" # @TODO remove
-					
 					if @csv_opt == '-'
 						csv_file_handle = STDOUT
 					else
@@ -516,8 +508,6 @@ module TheFox
 				end
 				
 				def export_tracks_csv
-					# puts "export_tracks_csv" # @TODO remove
-					
 					if @csv_opt == '-'
 						csv_file_handle = STDOUT
 					else

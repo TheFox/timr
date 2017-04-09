@@ -1,5 +1,4 @@
 
-require 'pp' # @TODO remove pp
 require 'pathname'
 
 module TheFox
@@ -41,27 +40,20 @@ module TheFox
 				
 				# Stack Path
 				stack_path = Pathname.new('stack.yml').expand_path(@cwd)
-				# puts "stack path: #{stack_path}"
 				
 				# Stack
 				@stack = Stack.new
 				@stack.timr = self
-				# @stack.tasks_path = @tasks_path
 				@stack.file_path = stack_path
 				if stack_path.exist?
-					# puts "load stack from file"
 					@stack.load_from_file
 				end
-				
-				# puts "timr for stack: #{@stack.timr}"
 			end
 			
 			# Removes all previous [Tracks](rdoc-ref:TheFox::Timr::Model::Track) and starts a new one.
 			def start(options = Hash.new)
 				task_id_opt = options.fetch(:task_id, nil)
 				track_id_opt = options.fetch(:track_id, nil)
-				
-				#pp options # @TODO remove pp
 				
 				# Get current Track from Stack.
 				old_track = @stack.current_track
@@ -87,12 +79,9 @@ module TheFox
 					task = get_task_by_id(task_id_opt)
 					
 					track = task.start(options)
-					# puts "new task: #{task.id}"
 					
-					#puts "save"
 					task.save_to_file
 					
-					#puts "start to stack: #{track}"
 					@stack.start(track)
 					@stack.save_to_file
 				else
@@ -100,11 +89,8 @@ module TheFox
 						# The long way. Should be avoided.
 						# Search all files.
 						
-						# puts 'the long way'
-						
 						track = Track.find_track_by_id(@tasks_path, track_id_opt)
 						if track
-							# puts "track: #{track.id}"
 							options[:track_id] = track.id
 							
 							# Get Task from Track.
@@ -119,7 +105,6 @@ module TheFox
 							# Save Task
 							task.save_to_file
 							
-							#puts "start to stack: #{track}"
 							@stack.start(track)
 							@stack.save_to_file
 						end
@@ -224,8 +209,6 @@ module TheFox
 				task_id_opt = options.fetch(:task_id, nil)
 				track_id_opt = options.fetch(:track_id, nil)
 				
-				#pp options # @TODO remove pp
-				
 				# Get current Track from Stack.
 				old_track = @stack.current_track
 				
@@ -250,11 +233,9 @@ module TheFox
 				end
 				
 				if task_id_opt
-					# puts "get_task_by_id(#{task_id_opt})" # @TODO remove
 					task = get_task_by_id(task_id_opt)
 					
 					# Start Task
-					# puts "start task" # @TODO remove
 					track = task.start(options)
 					
 					# Save Task
@@ -351,7 +332,6 @@ module TheFox
 				
 				# Get running Tracks and remove these from Stack.
 				task.tracks({:status => ?R}).each do |track_id, track|
-					# puts "TRACK: #{track}" # @TODO remove
 					@stack.remove(track)
 				end
 				@stack.save_to_file
@@ -402,8 +382,6 @@ module TheFox
 			def get_task_by_id(task_id)
 				task = @tasks[task_id]
 				
-				# puts "Timr get_task_by_id: #{task_id}" # @TODO remove
-				
 				if task
 					# Take Task from cache.
 				else
@@ -419,16 +397,12 @@ module TheFox
 					end
 				end
 				
-				# puts "Timr Tasks: #{@tasks.count} #{@tasks.map{|id, t| t.short_id}}" # @TODO remove
-				
 				task
 			end
 			
 			# Find a [Track](rdoc-ref:TheFox::Timr::Model::Track) by ID.
 			def get_track_by_id(track_id)
 				@tasks.each do |task_id, task|
-					# puts "Timr search track: #{task}" # @TODO remove
-					
 					track = task.find_track_by_id(track_id)
 					if track
 						return track
@@ -457,16 +431,9 @@ module TheFox
 				
 				filtered_tracks = Hash.new
 				@tasks.each do |task_id, task|
-					# puts "task: #{task} #{task.tracks.count}" # @TODO remove
-					
 					tracks = task.tracks(options)
 					filtered_tracks.merge!(tracks)
-					
-					# puts "  -> #{filtered_tracks.count}" # @TODO remove
-					# puts # @TODO remove
 				end
-				
-				# puts "#{Time.now.to_ms} #{self.class} #{__method__} END #{filtered_tracks.count}" # @TODO remove
 				
 				if sort_opt
 					# Sort ASC by Begin DateTime, End DateTime.
@@ -475,7 +442,6 @@ module TheFox
 						t2 = t2.last
 						
 						cmp1 = t1.begin_datetime <=> t2.begin_datetime
-						#puts "cmp1: #{cmp1}" # @TODO remove
 						
 						if cmp1 == 0
 							t1.end_datetime <=> t2.end_datetime
@@ -490,8 +456,6 @@ module TheFox
 			
 			# Save [Stack](rdoc-ref:TheFox::Timr::Model::Stack) and [Config](rdoc-ref:TheFox::Timr::Model::Config).
 			def shutdown
-				# puts 'Timr shutdown'
-				
 				# Save Stack
 				@stack.save_to_file
 				

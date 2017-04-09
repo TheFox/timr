@@ -51,7 +51,6 @@ module TheFox
 							@tracks_opt = true
 						when '-n', '--name'
 							@name_opt = argv.shift
-							#puts "name: #{@name_opt.class} #{@name_opt.is_digit?}" # @TODO remove
 						when '--desc', '--description', '-d' # -d not official
 							@description_opt = argv.shift
 						when '-e', '--est', '--estimation'
@@ -82,9 +81,7 @@ module TheFox
 						when Task
 							@tasks_opt << arg
 						else
-							# puts 'opt else' # @TODO remove
 							if /^[a-f0-9]{4,40}$/i.match(arg)
-								# puts 'collect tasks' # @TODO remove
 								@tasks_opt << arg
 							else
 								raise TaskCommandError, "Unknown argument '#{arg}'. See 'timr task --help'."
@@ -167,16 +164,6 @@ module TheFox
 						raise TaskCommandError, "No option given. See 'time task -h'."
 					end
 					
-					# puts "@name_opt #{@name_opt.nil?}"
-					# puts "@description_opt #{@description_opt.nil?}"
-					# puts "@estimation_opt #{@estimation_opt.nil?}"
-					# puts "@billed_opt #{@billed_opt.nil?}"
-					# puts "@unbilled_opt #{@unbilled_opt.nil?}"
-					# puts "@hourly_rate_opt #{@hourly_rate_opt.nil?}"
-					# puts "@unset_hourly_rate_opt #{@unset_hourly_rate_opt.nil?}"
-					# puts "@has_flat_rate_opt #{@has_flat_rate_opt.nil?}"
-					# puts "@unset_flat_rate_opt #{@unset_flat_rate_opt.nil?}"
-					
 					task = @timr.get_task_by_id(task_id)
 					
 					puts '--- OLD ---'
@@ -242,59 +229,6 @@ module TheFox
 					end
 				end
 				
-				# Is used to print the Task to STDOUT.
-				# def task_to_array(task)
-				# 	task_s = Array.new
-				# 	task_s << 'Task: %s %s' % [task.short_id, task.name]
-					
-				# 	duration_human = task.duration.to_human
-				# 	task_s << '  Duration: %s' % [duration_human]
-					
-				# 	duration_man_days = task.duration.to_man_days
-				# 	if duration_human != duration_man_days
-				# 		task_s << '  Man Unit: %s' % [duration_man_days]
-				# 	end
-					
-				# 	tracks = task.tracks
-				# 	first_track = tracks
-				# 		.select{ |track_id, track| track.begin_datetime }
-				# 		.sort_by{ |track_id, track| track.begin_datetime }
-				# 		.to_h
-				# 		.values
-				# 		.first
-				# 	if first_track
-				# 		task_s << '  Begin Track: %s  %s' % [first_track.short_id, first_track.begin_datetime_s]
-				# 	end
-					
-				# 	last_track = tracks
-				# 		.select{ |track_id, track| track.end_datetime }
-				# 		.sort_by{ |track_id, track| track.end_datetime }
-				# 		.to_h
-				# 		.values
-				# 		.last
-				# 	if last_track
-				# 		task_s << '  End   Track: %s  %s' % [last_track.short_id, last_track.end_datetime_s]
-				# 	end
-					
-				# 	status = task.status.colorized
-				# 	task_s << '  Status: %s' % [status]
-					
-				# 	tracks_count = tracks.count
-				# 	task_s << '  Tracks: %d' % [tracks_count]
-					
-				# 	if tracks_count > 0 && @tracks_opt # --tracks
-				# 		task_s << '  Track IDs: %s' % [tracks.map{ |track_id, track| track.short_id }.join(' ')]
-				# 	end
-					
-				# 	if task.description
-				# 		task_s << '  Description: %s' % [task.description]
-				# 	end
-					
-				# 	task_s << '  File path: %s' % [task.file_path]
-					
-				# 	task_s
-				# end
-				
 				def help
 					puts 'usage: timr task [show] [[-t|--tracks] <task_id>...]'
 					puts '   or: timr task add [-n|--name <name>] [--description <str>]'
@@ -339,8 +273,6 @@ module TheFox
 					puts '    If a whole Task gets billed/unbilled all Tracks are changed to'
 					puts "    billed/unbilled. Each Track has a flag 'is_billed'."
 					puts
-					# HelpCommand.print_datetime_help
-					# puts
 				end
 				
 			end # class TaskCommand

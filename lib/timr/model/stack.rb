@@ -75,18 +75,7 @@ module TheFox
 						raise StackError, "track variable must be a Track instance. #{track.class} given."
 					end
 					
-					# puts "stack tracks: #{@tracks.count}" # @TODO remove
-					
-					# puts "stack track to remove: #{track.short_id} #{track.object_id}" # @TODO remove
-					# @tracks.each do |track|
-					# 	puts "stack track: #{track.short_id} #{track.object_id}" # @TODO remove
-					# end
-					
 					@tracks.delete(track)
-					# r = @tracks.delete(track)
-					
-					# puts "stack tracks delete: #{r.class}" # @TODO remove
-					# puts "stack left tracks: #{@tracks.count}" # @TODO remove
 					
 					# Mark Stack as changed.
 					changed
@@ -121,8 +110,6 @@ module TheFox
 				
 				# BasicModel Hook
 				def post_load_from_file
-					#puts "Stack post_load_from_file" # @TODO remove
-					
 					unless @timr
 						raise StackError, 'Stack: @timr variable is not set.'
 					end
@@ -157,7 +144,6 @@ module TheFox
 							nil
 						end
 					}.select{ |track|
-						# puts "track found B: #{track.class}" # @TODO remove
 						!track.nil?
 					}
 				end

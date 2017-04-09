@@ -193,8 +193,6 @@ module TheFox
 					
 					# Set Start DateTime
 					if start_date_opt || start_time_opt
-						# puts "set start date/time: #{start_date_opt} #{start_time_opt}" # @TODO remove
-						
 						begin_options = {
 							:date => start_date_opt,
 							:time => start_time_opt,
@@ -230,40 +228,30 @@ module TheFox
 				# - `:from` (Time), `:to` (Time)  
 				#   Limit the begin and end datetimes to a specific range.
 				def duration(options = Hash.new)
-					# puts "dur" # @TODO remove
-					
 					from_opt = options.fetch(:from, nil)
 					to_opt = options.fetch(:to, nil)
 					
 					if @begin_datetime
 						bdt = @begin_datetime.utc
-						# puts "#{self} A duration: bdt #{bdt.strftime('%F %T %z')}" # @TODO remove
 					end
 					if @end_datetime
 						edt = @end_datetime.utc
-						# puts "#{self} A duration: edt #{edt.strftime('%F %T %z')}" # @TODO remove
 					else
 						edt = Time.now.utc
 					end
 					
 					# Cut Start
 					if from_opt && bdt && from_opt > bdt
-						# puts "cut start" # @TODO remove
 						bdt = from_opt.utc
 					end
 					
 					# Cut End
 					if to_opt && edt && to_opt < edt
-						# puts "cut end" # @TODO remove
 						edt = to_opt.utc
 					end
 					
-					# puts "#{self} B duration: bdt #{bdt}" # @TODO remove
-					# puts "#{self} B duration: edt #{edt}" # @TODO remove
-					
 					seconds = 0
 					if bdt && edt
-						# puts "  -> #{(edt - bdt).to_i}   #{bdt < edt}" # @TODO remove
 						if bdt < edt
 							seconds = (edt - bdt).to_i
 						end
@@ -274,8 +262,6 @@ module TheFox
 				
 				# Alias method.
 				def billed_duration(options = Hash.new)
-					# puts "billed_duration"
-					
 					if self.is_billed
 						duration(options)
 					else
@@ -285,8 +271,6 @@ module TheFox
 				
 				# Alias method.
 				def unbilled_duration(options = Hash.new)
-					# puts "unbilled_duration"
-					
 					if !self.is_billed
 						duration(options)
 					else
@@ -349,8 +333,6 @@ module TheFox
 					
 					msg = @message.split("\n\n").first.split("\n").first
 					
-					# puts "max_length: #{max_length} + 2"
-					# puts "msg: #{msg.length}"
 					if max_length && msg.length > max_length + 2
 						msg = msg[0, max_length] << '...'
 					end
@@ -409,7 +391,6 @@ module TheFox
 				# To String
 				def to_s
 					"Track_#{short_id}"
-					#to_a.join("\n")
 				end
 				
 				# To Hash
@@ -476,10 +457,6 @@ module TheFox
 					"#<Track #{short_id}>"
 				end
 				
-				# def method_missing(method_name, *arguments, &block)
-				# 	raise TrackError, "Method '#{method_name}' not defined for #{self.class}. Did you mean Task?"
-				# end
-				
 				# All methods in this block are static.
 				class << self
 					
@@ -488,9 +465,6 @@ module TheFox
 						unless hash.is_a?(Hash)
 							raise TrackError, "hash variable must be a Hash instance. #{hash.class} given."
 						end
-						
-						# puts "create_track_from_hash" # @TODO remove
-						# pp hash # @TODO remove
 						
 						track = Track.new
 						if hash['id']

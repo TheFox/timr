@@ -1,6 +1,5 @@
 
 require 'pathname'
-require 'pp' # @TODO remove pp
 
 module TheFox
 	module Timr
@@ -13,9 +12,6 @@ module TheFox
 				attr_accessor :cwd
 				
 				def initialize(argv = Array.new)
-					# puts "#{Time.now.to_ms} #{self.class} #{__method__}" # @TODO remove
-					# puts "argv #{argv}" # @TODO remove
-					
 					@cwd = nil
 					@timr = nil
 				end
@@ -63,44 +59,20 @@ module TheFox
 									command_name = 'version'
 								when '-C'
 									cwd_opt = Pathname.new(argv.shift).expand_path
-									# puts "cwd_opt: #{cwd_opt}" # @TODO remove
 								when '--install-basepath'
-									# puts Pathname.new($0).expand_path.to_s
-									# puts Pathname.new($0).expand_path.parent.to_s
-									# puts Pathname.new($0).expand_path.parent.parent.to_s
-									# puts
-									# puts Pathname.new($0).to_s
-									# puts Pathname.new($0).parent.to_s
-									# puts Pathname.new($0).parent.parent.to_s
-									# puts
-									
-									# puts Pathname.new(__FILE__).expand_path.to_s
-									# puts Pathname.new(__FILE__).expand_path.parent.to_s
-									# puts Pathname.new(__FILE__).expand_path.parent.parent.to_s
-									# puts
-									# puts Pathname.new(__FILE__).to_s
-									# puts Pathname.new(__FILE__).parent.to_s
-									# puts Pathname.new(__FILE__).parent.parent.to_s
-									# puts
-									
-									#print Pathname.new($0).expand_path.parent.parent.to_s
 									timr_gem = Gem::Specification.find_by_name('timr')
 									print timr_gem.gem_dir
-									#pp timr_gem.spec_dir
 									exit
 								else
-									# puts "ELSE '#{arg[0]}'"
 									if arg[0] == '-'
 										raise CommandError, "Unknown argument '#{arg}'. See 'timr --help'."
 									else
-										# puts "set command_name" # @TODO remove
 										command_name = arg
 									end
 								end
 							end
 						end
 						
-						# puts "command_name: '#{command_name}'" # @TODO remove
 						command_class = get_command_class_by_name(command_name)
 						command = command_class.new(command_argv)
 						command.cwd = cwd_opt
