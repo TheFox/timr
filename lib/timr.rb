@@ -8,6 +8,7 @@ require 'timr/exception/timr_error'
 
 require 'timr/helper/datetime_helper'
 require 'timr/helper/translation_helper'
+require 'timr/helper/terminal_helper'
 
 require 'timr/model/basic_model'
 require 'timr/model/track'

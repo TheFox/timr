@@ -30,6 +30,9 @@ module TheFox
 					@time_opt = nil
 					@message_opt = nil
 					@edit_opt = false
+					
+					@task_id_opt = nil
+					@track_id_opt = nil
 					@id_opts = Array.new
 					
 					loop_c = 0 # Limit the loop.
@@ -59,8 +62,8 @@ module TheFox
 							@time_opt = argv.shift
 						when '-m', '--message'
 							@message_opt = argv.shift
-						# when '-e', '--edit'
-						# 	@edit_opt = true
+						when '--edit'
+							@edit_opt = true
 						else
 							if arg[0] == '-'
 								raise StartCommandError, "Unknown argument '#{arg}'. See 'timr start --help'."
@@ -73,6 +76,10 @@ module TheFox
 							end
 						end
 					end
+					
+					if @id_opts.length
+						@task_id_opt, @track_id_opt = @id_opts
+					end
 				end
 				
 				# See BasicCommand#run.
@@ -82,35 +89,9 @@ module TheFox
 						return
 					end
 					
-					if @edit_opt
-						# Edit feature is still in alpha stage.
-						unless ENV['EDITOR']
-							raise StartCommandError, 'EDITOR environment variable not set'
-						end
-						
-						tmpfile = Tempfile.new('timr_start_message')
-						tmpfile.write("\n")
-						tmpfile.write("# This is a comment.\n")
-						tmpfile.write("# The first line should be a sentence. Sentence have dots at the end.\n")
-						tmpfile.write("# The second line should be empty, if you provide a more detailed\n")
-						tmpfile.write("# description from on the third line. Like on Git.\n")
-						tmpfile.close
-						
-						# @TODO Edit option: when a <track_id> is provided, you maybe want to edit
-						# a copy of this track here. But this also means that the current work flow below
-						# via @timr.start is not working here anymore. When no <track_id> is provided, edit
-						# the current running track before (or after) it ended.
-						
-						system_s = '%s %s' % [ENV['EDITOR'], tmpfile.path]
-						puts "start '#{system_s}'"
-						system(system_s)
-						
-						tmpfile.open
-						tmpfile_lines = tmpfile.read
-						tmpfile.close
-						
-						@message_opt = tmpfile_lines.split("\n").map{ |row| row.strip }.select{ |row| row[0] != '#' }.join("\n")
-					end
+					@timr = Timr.new(@cwd)
+					
+					run_edit
 					
 					options = {
 						:name => @name_opt,
@@ -124,11 +105,10 @@ module TheFox
 						:time => @time_opt,
 						:message => @message_opt,
 						
-						:task_id => @id_opts.shift,
-						:track_id => @id_opts.shift,
+						:task_id => @task_id_opt,
+						:track_id => @track_id_opt,
 					}
 					
-					@timr = Timr.new(@cwd)
 					track = @timr.start(options)
 					unless track
 						raise TrackError, 'Could not start a new Track.'
@@ -159,11 +139,12 @@ module TheFox
 					puts '    --fr, --flat-rate, --flat         Has Task a Flat Rate?'
 					puts
 					puts 'Track Options'
-					puts '    -m, --message <message>        Track Message. What have you done?'
-					puts '                                   You can overwrite this on stop command.'
-					# puts '    --edit         Edit Track Message.' # @TODO --edit
-					puts '    -d, --date <date>              Track Start Date. Default: today'
-					puts '    -t, --time <time>              Track Start Time. Default: now'
+					puts '    -m, --message <message>    Track Message. What have you done?'
+					puts '                               You can overwrite this on stop command.'
+					puts '    --edit                     Edit Track Message when providing <track_id>.'
+					puts '                               EDITOR environment variable must be set.'
+					puts '    -d, --date <date>          Track Start Date. Default: today'
+					puts '    -t, --time <time>          Track Start Time. Default: now'
 					puts
 					puts 'Arguments'
 					HelpCommand.print_id_help

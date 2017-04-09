@@ -182,13 +182,14 @@ module TheFox
 				# - `:start_time`
 				# - `:end_date`, `:date`
 				# - `:end_time`, `:time`
+				# - `:message` (String)
 				def stop(options = Hash.new)
 					start_date_opt = options.fetch(:start_date, nil)
 					start_time_opt = options.fetch(:start_time, nil)
 					end_date_opt = options.fetch(:end_date, options.fetch(:date, nil))
 					end_time_opt = options.fetch(:end_time, options.fetch(:time, nil))
 					message_opt = options.fetch(:message, nil)
-					append_opt = options.fetch(:append, false)
+					#append_opt = options.fetch(:append, false)
 					# paused_opt = options.fetch(:paused, false)
 					
 					# Set Start DateTime
@@ -208,11 +209,12 @@ module TheFox
 					@end_datetime = DateTimeHelper.get_datetime_from_options(end_options)
 					
 					if message_opt
-						if append_opt
-							@message << ' ' << message_opt
-						else
-							@message = message_opt
-						end
+						@message = message_opt
+						# if append_opt
+						# 	@message << ' ' << message_opt
+						# else
+						# 	@message = message_opt
+						# end
 					end
 					
 					# @paused = paused_opt

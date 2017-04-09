@@ -682,6 +682,8 @@ module TheFox
 				def find_track_by_id(track_id)
 					track_id_len = track_id.length
 					
+					# puts "search track id '#{track_id}'"
+					
 					if track_id_len < 40
 						found_track_id = nil
 						@tracks.keys.each do |key|

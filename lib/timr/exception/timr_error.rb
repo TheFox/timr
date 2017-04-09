@@ -52,6 +52,10 @@ module TheFox
 			class DateTimeHelperError < TimrError
 			end
 			
+			# Use by TheFox::Timr::Helper::TerminalHelper.
+			class TerminalHelperError < TimrError
+			end
+			
 			class CommandError < TimrError
 			end
 			

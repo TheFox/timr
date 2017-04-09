@@ -412,6 +412,18 @@ module TheFox
 				nil
 			end
 			
+			# Get a Track by a specific Task ID and Track ID.
+			def get_track_by_task_id(task_id, track_id)
+				if task_id && track_id
+					task = get_task_by_id(task_id)
+					if task
+						return task.find_track_by_id(track_id)
+					end
+				end
+				
+				nil
+			end
+			
 			# Get all [Tasks](rdoc-ref:TheFox::Timr::Model::Task).
 			def tasks
 				load_all_tracks

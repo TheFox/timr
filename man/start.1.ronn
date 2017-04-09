@@ -33,6 +33,9 @@ Without any options this command always creates a new Task and starts a new Trac
 * -m, --message <message>:
 	Details about what you have done. This overwrites the <track_id> argument.
 
+* --edit:
+	Edit Track Message when providing a <track_id>. The EDITOR environment variable must be set.
+
 * -d, --date <date>:
 	Track Start Date. Default: today
 

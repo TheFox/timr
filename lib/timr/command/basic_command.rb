@@ -8,6 +8,8 @@ module TheFox
 			# Basic Class
 			class BasicCommand
 				
+				include TheFox::Timr::Helper
+				
 				# Current Working Directory
 				attr_accessor :cwd
 				
@@ -114,6 +116,41 @@ module TheFox
 						end
 					end
 					
+				end
+				
+				private
+				
+				# Uses
+				#   @timr
+				#   @edit_opt
+				#   @task_id_opt
+				#   @track_id_opt
+				def run_edit
+					if @timr && @edit_opt
+						edit_text = Array.new
+						
+						if @message_opt
+							edit_text << @message_opt.clone
+						else
+							# puts "get_track_by_task_id"
+							track = @timr.get_track_by_task_id(@task_id_opt, @track_id_opt)
+							# puts "TRACK: #{track}"
+							if track && track.message
+								edit_text << track.message.clone
+							else
+								edit_text << @message_opt.clone
+							end
+						end
+						
+						TerminalHelper.external_editor_help(edit_text)
+						
+						editor_message = TerminalHelper.run_external_editor(edit_text)
+						# puts "msg: '#{editor_message}'"
+						
+						if editor_message.length > 0
+							@message_opt = editor_message
+						end
+					end
 				end
 				
 			end # class Command

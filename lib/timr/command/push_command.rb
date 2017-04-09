@@ -27,6 +27,9 @@ module TheFox
 					@time_opt = nil
 					@message_opt = nil
 					# @edit_opt = false
+					
+					@task_id_opt = nil
+					@track_id_opt = nil
 					@id_opts = Array.new
 					
 					loop_c = 0 # Limit the loop.
@@ -69,6 +72,10 @@ module TheFox
 							end
 						end
 					end
+					
+					if @id_opts.length
+						@task_id_opt, @track_id_opt = @id_opts
+					end
 				end
 				
 				# See BasicCommand#run.
@@ -90,8 +97,8 @@ module TheFox
 						:time => @time_opt,
 						:message => @message_opt,
 						
-						:task_id => @id_opts.shift,
-						:track_id => @id_opts.shift,
+						:task_id => @task_id_opt,
+						:track_id => @track_id_opt,
 					}
 					
 					@timr = Timr.new(@cwd)

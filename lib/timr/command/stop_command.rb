@@ -20,8 +20,9 @@ module TheFox
 					@start_time_opt = nil
 					@end_date_opt = nil
 					@end_time_opt = nil
+					
 					@message_opt = nil
-					@append_opt = false
+					@append_message_opt = false
 					
 					loop_c = 0 # Limit the loop.
 					while loop_c < 1024 && argv.length > 0
@@ -45,7 +46,7 @@ module TheFox
 						when '-m', '--message'
 							@message_opt = argv.shift
 						when '-a', '--append'
-							@append_opt = true
+							@append_message_opt = true
 						else
 							raise StopCommandError, "Unknown argument '#{arg}'. See 'timr stop --help'."
 						end
@@ -59,6 +60,11 @@ module TheFox
 						return
 					end
 					
+					@timr = Timr.new(@cwd)
+					
+					# if @append_message_opt
+					# end
+					
 					options = {
 						:start_date => @start_date_opt,
 						:start_time => @start_time_opt,
@@ -67,10 +73,10 @@ module TheFox
 						:end_time => @end_time_opt,
 						
 						:message => @message_opt,
-						:append => @append_opt,
+						#:append => @append_message_opt,
 					}
 					
-					@timr = Timr.new(@cwd)
+					
 					track = @timr.stop(options)
 					unless track
 						puts 'No running Track to stop.'
