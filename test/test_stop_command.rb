@@ -23,7 +23,6 @@ class TestStopCommand < MiniTest::Test
 		StopCommand.new(['--sd', '2017-01-01'])
 		StopCommand.new(['--st', '15:30'])
 		StopCommand.new(['-m', 'xyz'])
-		StopCommand.new(['-a'])
 		
 		assert_raises(StopCommandError) do
 			StopCommand.new(['xunkn0wn_cmd'])

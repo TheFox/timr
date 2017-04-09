@@ -8,6 +8,7 @@ module TheFox
 				include TheFox::Timr::Error
 				
 				attr_reader :description
+				attr_reader :current_track
 				attr_reader :hourly_rate
 				attr_reader :has_flat_rate
 				
@@ -827,6 +828,10 @@ module TheFox
 					
 					status = self.status.colorized
 					to_ax << '  Status: %s' % [status]
+					
+					if @current_track
+						to_ax << '  Current Track: %s %s' % [@current_track.short_id, @current_track.title]
+					end
 					
 					tracks_count = tracks.count
 					to_ax << '  Tracks:          %d' % [tracks_count]

@@ -16,11 +16,11 @@ Stopps the current running Track and removes it from the Stack\. When more then 
 .
 .TP
 \-m, \-\-message \fImessage\fR
-Details about what you have done\. This overwrites the message set on \fBtimr start\fR\. Use \fB\-\-append\fR option to append this message to the Start message\.
+Details about what you have done\. This overwrites the message set on \fBtimr start\fR\. Use \fB\-\-edit\fR option to edit the Start Track message\.
 .
 .TP
-\-a, \-\-append
-Append the message provided by \fB\-\-message\fR to the Start message\.
+\-\-edit
+Edit Track Message\. The EDITOR environment variable must be set\.
 .
 .TP
 \-\-sd, \-\-start\-date \fIdate\fR
@@ -58,8 +58,7 @@ Displays the help page\.
 
 timr stop
 timr stop \-\-message \'Hello World\'
-timr stop \-\-message \'Hello World\' \-\-append
-timr stop \-\-message \'Hello World\' \-\-append
+timr stop \-\-message \'Hello World\' \-\-edit
 timr stop \-\-time 17:00 \-\-message \'Hello World\'
 timr stop \-\-start\-time 10:00 \-\-time 17:00 \-\-message \'Hello World\'
 .

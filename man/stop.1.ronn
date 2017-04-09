@@ -12,10 +12,10 @@ Stopps the current running Track and removes it from the Stack. When more then o
 ## TRACK OPTIONS
 
 * -m, --message <message>:
-	Details about what you have done. This overwrites the message set on `timr start`. Use `--append` option to append this message to the Start message.
+	Details about what you have done. This overwrites the message set on `timr start`. Use `--edit` option to edit the Start Track message.
 
-* -a, --append:
-	Append the message provided by `--message` to the Start message.
+* --edit:
+	Edit Track Message. The EDITOR environment variable must be set.
 
 * --sd, --start-date <date>:
 	Overwrite the Start date.
@@ -45,8 +45,7 @@ Stopps the current running Track and removes it from the Stack. When more then o
 ```
 timr stop
 timr stop --message 'Hello World'
-timr stop --message 'Hello World' --append
-timr stop --message 'Hello World' --append
+timr stop --message 'Hello World' --edit
 timr stop --time 17:00 --message 'Hello World'
 timr stop --start-time 10:00 --time 17:00 --message 'Hello World'
 ```

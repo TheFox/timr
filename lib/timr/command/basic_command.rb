@@ -125,7 +125,10 @@ module TheFox
 				#   @edit_opt
 				#   @task_id_opt
 				#   @track_id_opt
-				def run_edit
+				def run_edit(task_id = nil, track_id = nil)
+					task_id ||= @task_id_opt
+					track_id ||= @track_id_opt
+					
 					if @timr && @edit_opt
 						edit_text = Array.new
 						
@@ -133,7 +136,7 @@ module TheFox
 							edit_text << @message_opt.clone
 						else
 							# puts "get_track_by_task_id"
-							track = @timr.get_track_by_task_id(@task_id_opt, @track_id_opt)
+							track = @timr.get_track_by_task_id(task_id, track_id)
 							# puts "TRACK: #{track}"
 							if track && track.message
 								edit_text << track.message.clone

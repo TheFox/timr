@@ -6,11 +6,13 @@ require 'timr'
 include TheFox::Timr::Command
 include TheFox::Timr::Error
 
-START_TIME = Time.now.to_ms
-# puts "#{START_TIME} #{self.class} #{__method__} START"
-# puts "__FILE__: #{__FILE__}"
-# puts "$0: #{$0}"
-# puts '-------------------------------------------------------------------------'
+if $DEBUG # @TODO deactivate this
+	START_TIME = Time.now.to_ms
+	puts "#{START_TIME} #{self.class} #{__method__} START"
+	# puts "__FILE__: #{__FILE__}"
+	# puts "$0: #{$0}"
+	puts '-------------------------------------------------------------------------'
+end
 
 begin
 	command = BasicCommand.create_command_from_argv(ARGV.clone)
@@ -20,7 +22,9 @@ rescue TimrError => e
 	puts "timr error: #{e}"
 end
 
-END_TIME = Time.now.to_ms
-# puts '-------------------------------------------------------------------------'
-# puts "#{END_TIME} #{self.class} #{__method__} END"
-# puts "TIMR RUNTIME: #{END_TIME - START_TIME} ms"
+if $DEBUG # @TODO deactivate this
+	END_TIME = Time.now.to_ms
+	puts '-------------------------------------------------------------------------'
+	puts "#{END_TIME} #{self.class} #{__method__} END"
+	puts "TIMR RUNTIME: #{END_TIME - START_TIME} ms"
+end

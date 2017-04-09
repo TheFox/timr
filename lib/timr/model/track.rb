@@ -189,7 +189,6 @@ module TheFox
 					end_date_opt = options.fetch(:end_date, options.fetch(:date, nil))
 					end_time_opt = options.fetch(:end_time, options.fetch(:time, nil))
 					message_opt = options.fetch(:message, nil)
-					#append_opt = options.fetch(:append, false)
 					# paused_opt = options.fetch(:paused, false)
 					
 					# Set Start DateTime
@@ -210,11 +209,6 @@ module TheFox
 					
 					if message_opt
 						@message = message_opt
-						# if append_opt
-						# 	@message << ' ' << message_opt
-						# else
-						# 	@message = message_opt
-						# end
 					end
 					
 					# @paused = paused_opt

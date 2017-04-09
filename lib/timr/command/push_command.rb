@@ -26,7 +26,7 @@ module TheFox
 					@date_opt = nil
 					@time_opt = nil
 					@message_opt = nil
-					# @edit_opt = false
+					@edit_opt = false
 					
 					@task_id_opt = nil
 					@track_id_opt = nil
@@ -59,6 +59,8 @@ module TheFox
 							@time_opt = argv.shift
 						when '-m', '--message'
 							@message_opt = argv.shift
+						when '--edit'
+							@edit_opt = true
 						
 						else
 							if arg[0] == '-'
@@ -85,6 +87,10 @@ module TheFox
 						return
 					end
 					
+					@timr = Timr.new(@cwd)
+					
+					run_edit
+					
 					options = {
 						:name => @name_opt,
 						:description => @description_opt,
@@ -101,7 +107,7 @@ module TheFox
 						:track_id => @track_id_opt,
 					}
 					
-					@timr = Timr.new(@cwd)
+					
 					track = @timr.push(options)
 					unless track
 						raise TrackError, 'Could not start a new Track.'

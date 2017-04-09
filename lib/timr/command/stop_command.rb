@@ -22,7 +22,7 @@ module TheFox
 					@end_time_opt = nil
 					
 					@message_opt = nil
-					@append_message_opt = false
+					@edit_opt = false
 					
 					loop_c = 0 # Limit the loop.
 					while loop_c < 1024 && argv.length > 0
@@ -45,8 +45,8 @@ module TheFox
 						
 						when '-m', '--message'
 							@message_opt = argv.shift
-						when '-a', '--append'
-							@append_message_opt = true
+						when '--edit'
+							@edit_opt = true
 						else
 							raise StopCommandError, "Unknown argument '#{arg}'. See 'timr stop --help'."
 						end
@@ -62,8 +62,13 @@ module TheFox
 					
 					@timr = Timr.new(@cwd)
 					
-					# if @append_message_opt
-					# end
+					track = @timr.stack.current_track
+					if track
+						task = track.task
+						if task
+							run_edit(task.id, track.id)
+						end
+					end
 					
 					options = {
 						:start_date => @start_date_opt,
@@ -73,9 +78,7 @@ module TheFox
 						:end_time => @end_time_opt,
 						
 						:message => @message_opt,
-						#:append => @append_message_opt,
 					}
-					
 					
 					track = @timr.stop(options)
 					unless track
@@ -90,16 +93,16 @@ module TheFox
 				private
 				
 				def help
-					puts 'usage: timr stop [-m|--message <message>] [-a|--append]'
+					puts 'usage: timr stop [-m|--message <message>] [--edit]'
 					puts '                 [[--start-date <date>] --start-time <time>]'
 					puts '                 [-d|--date <date>] [-t|--time <time>]'
 					puts '   or: timr stop [-h|--help]'
 					puts
 					puts 'Track Options'
 					puts '    -m, --message <message>    Track Message. What have you done? This will'
-					puts '                               overwrite the start message. See --append option.'
-					puts '    -a, --append               Append the message from --message option'
-					puts '                               to the start message.'
+					puts '                               overwrite the start message. See --edit option.'
+					puts '    --edit                     Edit Track Message.'
+					puts '                               EDITOR environment variable must be set.'
 					puts
 					puts '    --sd, --start-date <date>    Overwrite the Start date.'
 					puts '    --st, --start-time <time>    Overwrite the Start time.'

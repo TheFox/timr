@@ -123,7 +123,7 @@ module TheFox
 				def help
 					puts 'usage: timr start [-n|--name <name>] [--desc|--description <description>]'
 					puts '                  [[-d|--date <date>] -t|--time <time>]'
-					puts '                  [-m|--message <message>] [--estimation <time>]'
+					puts '                  [-m|--message <message>] [--edit] [--estimation <time>]'
 					puts '                  [--hourly-rate <value>] [--flat-rate]'
 					puts '                  [<task_id> [<track_id>]]'
 					puts '   or: timr start [-h|--help]'
