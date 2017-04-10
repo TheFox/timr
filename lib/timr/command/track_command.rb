@@ -352,8 +352,7 @@ module TheFox
 					puts 'Start DateTime must be given when End DateTime is given. A Track cannot have a'
 					puts 'End DateTime without a Start DateTime.'
 					puts
-					puts 'Man Unit: 8 hours are 1 man-day.'
-					puts '          5 man-days are 1 man-week, and so on.'
+					HelpCommand.print_man_units_help
 					puts
 					HelpCommand.print_datetime_help
 					puts

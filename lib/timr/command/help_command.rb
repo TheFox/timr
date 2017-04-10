@@ -86,6 +86,12 @@ module TheFox
 						puts '    https://github.com/henrypoydar/chronic_duration'
 					end
 					
+					def print_man_units_help
+						puts 'Man Units'
+						puts '    8 hours are 1 man-day.'
+						puts '    5 man-days are 1 man-week, and so on.'
+					end
+					
 				end
 				
 				private

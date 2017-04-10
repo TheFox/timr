@@ -58,8 +58,11 @@ Without any options this command always creates a new Task and starts a new Trac
 ```
 timr start
 timr start --name my_task1
-timr start --name my_task2 --description 'This is a very long description.'
-timr start --name my_task3 --date 2017-01-02 --time 15:30 --message 'Hello World'
+timr start --name my_task2 \
+	--description 'This is a very long description.'
+timr start --name my_task3 \
+	--date 2017-01-02 --time 15:30 \
+	--message 'Hello World'
 timr start --name my_task4 --message 'Hello World'
 timr start --name my_task5 --estimation 2h
 timr start --message 'Hello World' abcd12

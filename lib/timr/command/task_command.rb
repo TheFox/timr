@@ -263,9 +263,7 @@ module TheFox
 					puts '    --fr, --flat-rate, --flat         Has Task a Flat Rate?'
 					puts '    --no-flat-rate, --no-flat         Unset Flat Rate.'
 					puts
-					puts 'Man Units'
-					puts '    8 hours are 1 man-day.'
-					puts '    5 man-days are 1 man-week, and so on.'
+					HelpCommand.print_man_units_help
 					puts
 					HelpCommand.print_estimation_help(true)
 					puts

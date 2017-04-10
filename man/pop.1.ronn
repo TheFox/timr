@@ -11,11 +11,23 @@ Stop and pop the current running Track from the Stack. Also `timr stop` removes 
 
 ## TRACK OPTIONS
 
+* --sd, --start-date <date>:
+	Start Date for the next underlying Track (continue).
+
+* --st, --start-time <time>:
+	Start Time for the next underlying Track (continue).
+
+* --ed, --end-date <date>:
+	End Date for the current running Track (pop).
+
+* --et, --end-time <time>:
+	End Time for the current running Track (pop).
+
 * -d, --date <date>:
-	End Date for the current running Track, Start Date for the next underlying Track to continue. Same applies for `--time`.
+	Alias for `--end-date <date> --start-date <date>`.
 
 * -t, --time <time>:
-	Same logic as for `--date` option but for Time.
+	Alias for `--end-time <time> --start-time <time>`.
 
 ## GENERAL OPTIONS
 
@@ -28,4 +40,6 @@ Stop and pop the current running Track from the Stack. Also `timr stop` removes 
 timr pop
 timr pop --time 11:00
 timr pop --date 2017-01-02 --time 11:00
+timr pop --end-date 2017-01-02 --end-time 17:00 \
+	--start-date 2017-01-03 --start-time 10:00
 ```

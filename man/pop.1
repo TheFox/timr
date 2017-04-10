@@ -15,12 +15,28 @@ Stop and pop the current running Track from the Stack\. Also \fBtimr stop\fR rem
 .SH "TRACK OPTIONS"
 .
 .TP
+\-\-sd, \-\-start\-date \fIdate\fR
+Start Date for the next underlying Track (continue)\.
+.
+.TP
+\-\-st, \-\-start\-time \fItime\fR
+Start Time for the next underlying Track (continue)\.
+.
+.TP
+\-\-ed, \-\-end\-date \fIdate\fR
+End Date for the current running Track (pop)\.
+.
+.TP
+\-\-et, \-\-end\-time \fItime\fR
+End Time for the current running Track (pop)\.
+.
+.TP
 \-d, \-\-date \fIdate\fR
-End Date for the current running Track, Start Date for the next underlying Track to continue\. Same applies for \fB\-\-time\fR\.
+Alias for \fB\-\-end\-date <date> \-\-start\-date <date>\fR\.
 .
 .TP
 \-t, \-\-time \fItime\fR
-Same logic as for \fB\-\-date\fR option but for Time\.
+Alias for \fB\-\-end\-time <time> \-\-start\-time <time>\fR\.
 .
 .SH "GENERAL OPTIONS"
 .
@@ -35,6 +51,8 @@ Displays the help page\.
 timr pop
 timr pop \-\-time 11:00
 timr pop \-\-date 2017\-01\-02 \-\-time 11:00
+timr pop \-\-end\-date 2017\-01\-02 \-\-end\-time 17:00 \e
+    \-\-start\-date 2017\-01\-03 \-\-start\-time 10:00
 .
 .fi
 .

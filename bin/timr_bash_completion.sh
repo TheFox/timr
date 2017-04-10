@@ -35,12 +35,16 @@ function _timr_log_main {
 	local curr_word=$1
 	local timr_commands=(
 		--help
+		
 		--from
 		--to
+		
 		--day
 		--month
 		--year
+		
 		--all
+		
 		--start-date --start-time
 		--end-date --end-time
 	)
@@ -61,6 +65,10 @@ function _timr_pop_main {
 	local curr_word=$1
 	local timr_commands=(
 		--help
+		
+		--start-date --start-time
+		--end-date --end-time
+		
 		--date
 		--time
 	)
@@ -71,11 +79,16 @@ function _timr_push_main {
 	local curr_word=$1
 	local timr_commands=(
 		--help
+		
 		--name
 		--description
+		--hourly-rate
+		--flat-rate
+		
+		--message
+		--edit
 		--date
 		--time
-		--message
 	)
 	COMPREPLY=( $(compgen -W '${timr_commands[@]}' -- "${curr_word}") )
 }
@@ -100,9 +113,15 @@ function _timr_start_main {
 	local curr_word=$1
 	local timr_commands=(
 		--help
+		
 		--name
 		--description
+		--estimation
+		--hourly-rate
+		--flat-rate
+		
 		--message
+		--edit
 		--date
 		--time
 	)
@@ -123,11 +142,14 @@ function _timr_stop_main {
 	local curr_word=$1
 	local timr_commands=(
 		--help
-		--start-date --start-time
-		--end-date --end-time
-		--date --time
+		
+		--start-date
+		--start-time
+		--end-date --date
+		--end-time --time
+		
 		--message
-		--append
+		--edit
 	)
 	COMPREPLY=( $(compgen -W '${timr_commands[@]}' -- "${curr_word}") )
 }

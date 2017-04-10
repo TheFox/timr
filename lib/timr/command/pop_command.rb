@@ -44,12 +44,13 @@ module TheFox
 					
 					@help_opt = false
 					
-					@date_opt = nil
-					@time_opt = nil
-					@start_date_opt = nil # @TODO --start-date
+					@start_date_opt = nil
 					@start_time_opt = nil
 					@end_date_opt = nil
 					@end_time_opt = nil
+					
+					@date_opt = nil
+					@time_opt = nil
 					
 					loop_c = 0 # Limit the loop.
 					while loop_c < 1024 && argv.length > 0
@@ -60,23 +61,32 @@ module TheFox
 						when '-h', '--help'
 							@help_opt = true
 						
+						when '--sd', '--start-date'
+							@start_date_opt = argv.shift
+						when '--st', '--start-time'
+							@start_time_opt = argv.shift
+						when '--ed', '--end-date'
+							@end_date_opt = argv.shift
+						when '--et', '--end-time'
+							@end_time_opt = argv.shift
+						
 						when '-d', '--date'
 							@date_opt = argv.shift
 						when '-t', '--time'
 							@time_opt = argv.shift
 						
-						# when '--sd', '--start-date'
-						# 	@start_date_opt = argv.shift
-						# when '--st', '--start-time'
-						# 	@start_time_opt = argv.shift
-						# when '--ed', '--end-date'
-						# 	@end_date_opt = argv.shift
-						# when '--et', '--end-time'
-						# 	@end_time_opt = argv.shift
-						
 						else
 							raise PopCommandError, "Unknown argument '#{arg}'. See 'timr pop --help'."
 						end
+					end
+					
+					if @date_opt
+						@start_date_opt = @date_opt
+						@end_date_opt = @date_opt
+					end
+					if @time_opt
+						@start_time_opt = @time_opt
+						@end_time_opt = @time_opt
 					end
 				end
 				
@@ -91,8 +101,8 @@ module TheFox
 					
 					# Stop
 					options = {
-						:date => @date_opt,
-						:time => @time_opt,
+						:date => @end_date_opt,
+						:time => @end_time_opt,
 					}
 					
 					track = @timr.stop(options)
@@ -112,8 +122,8 @@ module TheFox
 					
 					# Continue
 					options = {
-						:date => @date_opt,
-						:time => @time_opt,
+						:date => @start_date_opt,
+						:time => @start_time_opt,
 					}
 					
 					track = @timr.continue(options)
@@ -136,14 +146,22 @@ module TheFox
 				private
 				
 				def help
-					puts 'usage: timr pop [-d|--date <date>] [-t|--time <time>]'
+					puts 'usage: timr pop [--sd|--start-date <date>] [--st|--start-time <time>]'
+					puts '                [--ed|--end-date <date>] [--et|--end-time <time>]'
+					puts '   or: timr pop [-d|--date <date>] [-t|--time <time>]'
 					puts '   or: timr pop [-h|--help]'
 					puts
 					puts 'Track Options'
-					puts '    -d, --date <date>    End Date for the current running Track,'
-					puts '                         Start Date for the next underlying Track'
-					puts '                         to continue. Same applies for --time.'
-					puts '    -t, --time <time>    Same logic as for --date but for Time.'
+					puts '    --sd, --start-date <date>    Start Date for the next underlying Track.'
+					puts '    --st, --start-time <time>    Start Time for the next underlying Track.'
+					puts
+					puts '    --ed, --end-date <date>      End Date for the current running Track.'
+					puts '    --et, --end-time <time>      End Time for the current running Track.'
+					puts
+					puts "    -d, --date <date>            Alias for"
+					puts "                                 '--end-date <date> --start-date <date>'."
+					puts "    -t, --time <time>            Alias for"
+					puts "                                 '--end-time <time> --start-time <time>'."
 					puts
 					HelpCommand.print_datetime_help
 					puts

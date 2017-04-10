@@ -47,5 +47,6 @@ timr stop
 timr stop --message 'Hello World'
 timr stop --message 'Hello World' --edit
 timr stop --time 17:00 --message 'Hello World'
-timr stop --start-time 10:00 --time 17:00 --message 'Hello World'
+timr stop --start-time 10:00 --time 17:00 \
+	--message 'Hello World'
 ```
