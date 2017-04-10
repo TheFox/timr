@@ -24,10 +24,8 @@ class TestTrackCommand < MiniTest::Test
 		TrackCommand.new(['add'])
 		TrackCommand.new(['remove'])
 		TrackCommand.new(['1234'])
+		TaskCommand.new(['xyz']) # OK as --id
 		
-		assert_raises(TrackCommandError) do
-			TrackCommand.new(['xunkn0wn_cmd'])
-		end
 		assert_raises(TrackCommandError) do
 			TrackCommand.new(['--billed', '--unbilled'])
 		end

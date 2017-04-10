@@ -49,7 +49,7 @@ This command takes several subcommands. Per default, when providing a Track ID i
 ## SET OPTIONS
 
 --task <task_id>:
-	Move Track to another Task.
+	Move Track to another Task. <task_id> can also be a Foreign ID. See `timr-task(1)`.
 
 ## SHOW OPTIONS
 

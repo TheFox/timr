@@ -9,10 +9,12 @@ module TheFox
 		# - TimrError
 		# 	- ModelError
 		# 		- IdError
+		# 		- ForeignIdError
 		# 		- TaskError
 		# 		- TrackError
 		# 		- StackError
 		# 	- DateTimeHelperError
+		# 	- TerminalHelperError
 		# 	- CommandError
 		# 		- ContinueCommandError
 		# 		- LogCommandError
@@ -37,6 +39,9 @@ module TheFox
 			end
 			
 			class IdError < ModelError
+			end
+			
+			class ForeignIdError < ModelError
 			end
 			
 			class TaskError < ModelError

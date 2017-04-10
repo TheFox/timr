@@ -424,7 +424,11 @@ module TheFox
 					
 					to_ax = Array.new
 					if @task
-						to_ax << ' Task: %s %s' % [@task.short_id, @task.name_s]
+						if @task.foreign_id
+							to_ax << ' Task: %s %s %s' % [@task.short_id, @task.foreign_id, @task.name_s]
+						else
+							to_ax << ' Task: %s %s' % [@task.short_id, @task.name_s]
+						end
 					end
 					to_ax << 'Track: %s' % [self.short_id]
 					to_ax << '  ID: %s' % [self.id]
@@ -447,6 +451,19 @@ module TheFox
 					# 	to_ax << '  File path: %s' % [self.file_path]
 					# end
 					to_ax
+				end
+				
+				# Are two Tracks equal?
+				# 
+				# Uses ID for comparision.
+				# 
+				# @TODO unit test
+				def eql?(track)
+					unless track.is_a?(Track)
+						raise TrackError, "track variable must be a Track instance. #{track.class} given."
+					end
+					
+					self.id == track.id
 				end
 				
 				def inspect

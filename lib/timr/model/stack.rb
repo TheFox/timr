@@ -81,6 +81,15 @@ module TheFox
 					changed
 				end
 				
+				# Check Track on Stack.
+				def on_stack?(track)
+					unless track.is_a?(Track)
+						raise StackError, "track variable must be a Track instance. #{track.class} given."
+					end
+					
+					@tracks.include?(track)
+				end
+				
 				# Append a Track.
 				def <<(track)
 					@tracks << track

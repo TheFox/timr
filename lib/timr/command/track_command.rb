@@ -74,11 +74,13 @@ module TheFox
 							@set_opt = true
 						
 						else
-							if /^[a-f0-9]{4,40}$/i.match(arg)
-								@tracks_opt << arg
-							else
-								raise TrackCommandError, "Unknown argument '#{arg}'. See 'timr track --help'."
-							end
+							@tracks_opt << arg
+							
+							# if /^[a-f0-9]{4,40}$/i.match(arg)
+							# 	@tracks_opt << arg
+							# else
+							# 	raise TrackCommandError, "Unknown argument '#{arg}'. See 'timr track --help'."
+							# end
 						end
 					end
 					
@@ -263,6 +265,11 @@ module TheFox
 						task.move_track(track, target_task)
 						
 						target_task.save_to_file
+						
+						if @timr.stack.on_stack?(track)
+							@timr.stack.changed
+							@timr.stack.save_to_file
+						end
 					end
 					
 					task.save_to_file
@@ -325,11 +332,11 @@ module TheFox
 					puts '   or: timr track add [-m|--message <message>]'
 					puts '                      [--start-date <date> --start-time <time>'
 					puts '                        [--end-date <date> --end-time <time>]]'
-					puts '                      [--billed|--unbilled] <task_id>'
+					puts '                      [--billed|--unbilled] <id>|<task_id>'
 					puts '   or: timr track set [-m|--message <message>]'
 					puts '                      [--start-date <date> --start-time <time>]'
 					puts '                      [--end-date <date> --end-time <time>]'
-					puts '                      [-t|--task <task_id>] [--billed|--unbilled]'
+					puts '                      [-t|--task <id>|<task_id>] [--billed|--unbilled]'
 					puts '                      <track_id>'
 					puts '   or: timr track remove <track_id>...'
 					puts '   or: timr track [-h|--help]'
@@ -347,7 +354,7 @@ module TheFox
 					puts '    --unbilled                   Mark Track as unbilled.'
 					puts
 					puts 'Set Options'
-					puts '    --task <task_id>             Move Track to another Task.'
+					puts '    --task <id>|<task_id>        Move Track to another Task.'
 					puts
 					puts 'Start DateTime must be given when End DateTime is given. A Track cannot have a'
 					puts 'End DateTime without a Start DateTime.'

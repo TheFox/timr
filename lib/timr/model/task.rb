@@ -7,6 +7,7 @@ module TheFox
 				
 				include TheFox::Timr::Error
 				
+				attr_reader :foreign_id
 				attr_reader :description
 				attr_reader :current_track
 				attr_reader :hourly_rate
@@ -16,6 +17,7 @@ module TheFox
 					super()
 					
 					# Meta
+					@foreign_id = nil # --id
 					@name = nil
 					@description = nil
 					@current_track = nil
@@ -25,6 +27,13 @@ module TheFox
 					
 					# Data
 					@tracks = Hash.new
+				end
+				
+				def foreign_id=(foreign_id)
+					@foreign_id = foreign_id
+					
+					# Mark Task as changed.
+					changed
 				end
 				
 				# Set name.
@@ -63,10 +72,15 @@ module TheFox
 				end
 				
 				# Add a Track.
-				def add_track(track)
+				# @TODO unit test
+				def add_track(track, set_as_current_track = false)
 					track.task = self
 					
 					@tracks[track.id] = track
+					
+					if set_as_current_track
+						@current_track = track
+					end
 					
 					# Mark Task as changed.
 					changed
@@ -95,7 +109,13 @@ module TheFox
 						return false
 					end
 					
-					target_task.add_track(track)
+					set_as_current_track = false
+					if @current_track && @current_track.eql?(track)
+						@current_track = nil
+						set_as_current_track = true
+					end
+					
+					target_task.add_track(track, set_as_current_track)
 					
 					true
 				end
@@ -485,7 +505,14 @@ module TheFox
 				end
 				
 				# Start a new Track by given `options`.
+				# 
+				# Options:
+				# 
+				# - `:foreign_id` (String)
+				# - `:track_id` (String)
+				# - `:no_stop` (Boolean)
 				def start(options = Hash.new)
+					foreign_id_opt = options.fetch(:foreign_id, nil)
 					track_id_opt = options.fetch(:track_id, nil)
 					
 					# Used by Push.
@@ -495,6 +522,10 @@ module TheFox
 						# End current Track before starting a new one.
 						# Leave options empty here for stop().
 						stop
+					end
+					
+					if foreign_id_opt && @foreign_id.nil?
+						@foreign_id = foreign_id_opt
 					end
 					
 					if track_id_opt
@@ -708,6 +739,8 @@ module TheFox
 				# Are two Tasks equal?
 				# 
 				# Uses ID for comparision.
+				#
+				# @TODO unit test
 				def eql?(task)
 					unless task.is_a?(Task)
 						raise TaskError, "task variable must be a Task instance. #{task.class} given."
@@ -729,7 +762,11 @@ module TheFox
 				# Used to print informations to STDOUT.
 				def to_compact_array
 					to_ax = Array.new
-					to_ax << 'Task: %s %s' % [self.short_id, self.name]
+					if self.foreign_id
+						to_ax << 'Task: %s %s %s' % [self.short_id, self.foreign_id, self.name]
+					else
+						to_ax << 'Task: %s %s' % [self.short_id, self.name]
+					end
 					if self.description
 						to_ax << '  Description: %s' % [self.description]
 					end
@@ -750,6 +787,9 @@ module TheFox
 					to_ax = Array.new
 					to_ax << 'Task: %s' % [self.short_id]
 					to_ax << '  ID: %s' % [self.id]
+					if self.foreign_id
+						to_ax << '  Foreign ID: %s' % [self.foreign_id]
+					end
 					to_ax << '  Name: %s' % [self.name]
 					
 					if self.description
@@ -878,12 +918,14 @@ module TheFox
 					# 
 					# Options:
 					# 
+					# - `:foreign_id` (String)
 					# - `:name` (String)
 					# - `:description` (String)
 					# - `:estimation` (String|Integer|Duration)
 					# - `:hourly_rate` (Integer)
 					def create_task_from_hash(options)
 						task = Task.new
+						# task.foreign_id = options.fetch(:foreign_id, nil)
 						task.name = options.fetch(:name, nil)
 						task.description = options.fetch(:description, nil)
 						task.estimation = options.fetch(:estimation, nil)
@@ -899,6 +941,7 @@ module TheFox
 				# BasicModel Hook
 				def pre_save_to_file
 					# Meta
+					@meta['foreign_id'] = @foreign_id
 					@meta['name'] = @name
 					@meta['description'] = @description
 					
@@ -942,6 +985,7 @@ module TheFox
 						@current_track = @tracks[current_track_id]
 					end
 					
+					@foreign_id = @meta['foreign_id']
 					@name = @meta['name']
 					@description = @meta['description']
 					

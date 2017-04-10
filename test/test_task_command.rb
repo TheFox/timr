@@ -27,9 +27,13 @@ class TestTaskCommand < MiniTest::Test
 		TaskCommand.new(['remove'])
 		TaskCommand.new(['set'])
 		TaskCommand.new(['1234'])
+		TaskCommand.new(['xyz']) # OK as --id
 		
 		assert_raises(TaskCommandError) do
-			TaskCommand.new(['xunkn0wn_cmd'])
+			TaskCommand.new(['--id', 'xyz', '--no-id'])
+		end
+		assert_raises(TaskCommandError) do
+			TaskCommand.new(['--billed', '--unbilled'])
 		end
 		assert_raises(TaskCommandError) do
 			TaskCommand.new(['--billed', '--unbilled'])

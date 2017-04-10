@@ -7,9 +7,9 @@ timr task [show] [<options>] [<task_id>...]
 
 timr task add [<options>]
 
-timr task set [<options>] <task_id>
+timr task set [<options>] <id>|<task_id>
 
-timr task remove <task_id>...
+timr task remove <id>|<task_id>...
 
 ## DESCRIPTION
 
@@ -30,6 +30,9 @@ This command takes several subcommands. Per default, when providing a Task ID it
 	Delete a Task, all informations about this Task and all including Tracks. This cannot be undone.
 
 ## ADD/SET OPTIONS
+
+* --id <str>:
+	Your ID to identify the Task. Not just to use the internal Task ID as <task_id> but also if you like to use your own ID. For example, when you want to sync Timr with JIRA and use the JIRA IDs to identify Timr Tasks instead of the Timr internal IDs. This can be any string, but MUST NOT include spaces. Use this String for <task_id>. This ID is also called 'Foreign ID' by Timr (internal).
 
 * -n, --name <name>:
 	Task Name.
@@ -79,7 +82,17 @@ timr task set --billed --hourly-rate 50 --flat-rate abcd12
 timr task set --unbilled --no-hourly-rate --no-flat-rate abcd12
 timr task add --name 'task_z' --estimation 4h \
 	--hourly-rate 50 --flat-rate
+timr task add --id T800 --name 'Model 101'
+timr task remove T800
 timr task remove abcd12
+```
+
+## FOREIGN ID EXAMPLE
+
+```
+timr task add --id t800 --name Terminator1
+timr task set --name Terminator2 t800
+timr task remove t800
 ```
 
 ## MAN UNITS

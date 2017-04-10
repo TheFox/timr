@@ -114,6 +114,7 @@ function _timr_start_main {
 	local timr_commands=(
 		--help
 		
+		--id
 		--name
 		--description
 		--estimation
@@ -170,6 +171,7 @@ function _timr_task_main {
 function _timr_task_add {
 	local curr_word=$1
 	local timr_commands=(
+		--id
 		--name
 		--description
 		--estimation
@@ -188,6 +190,7 @@ function _timr_task_remove {
 function _timr_task_set {
 	local curr_word=$1
 	local timr_commands=(
+		--id
 		--name
 		--description
 		--estimation

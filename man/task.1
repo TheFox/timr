@@ -13,10 +13,10 @@ timr task [show] [\fIoptions\fR] [\fItask_id\fR\.\.\.]
 timr task add [\fIoptions\fR]
 .
 .P
-timr task set [\fIoptions\fR] \fItask_id\fR
+timr task set [\fIoptions\fR] \fIid\fR|\fItask_id\fR
 .
 .P
-timr task remove \fItask_id\fR\.\.\.
+timr task remove \fIid\fR|\fItask_id\fR\.\.\.
 .
 .SH "DESCRIPTION"
 This command takes several subcommands\. Per default, when providing a Task ID it displays details about this specific Task\. Without any arguments it lists all Tasks\.
@@ -40,6 +40,10 @@ remove
 Delete a Task, all informations about this Task and all including Tracks\. This cannot be undone\.
 .
 .SH "ADD/SET OPTIONS"
+.
+.TP
+\-\-id \fIstr\fR
+Your ID to identify the Task\. Not just to use the internal Task ID as \fItask_id\fR but also if you like to use your own ID\. For example, when you want to sync Timr with JIRA and use the JIRA IDs to identify Timr Tasks instead of the Timr internal IDs\. This can be any string, but MUST NOT include spaces\. Use this String for \fItask_id\fR\. This ID is also called \'Foreign ID\' by Timr (internal)\.
 .
 .TP
 \-n, \-\-name \fIname\fR
@@ -101,7 +105,19 @@ timr task set \-\-billed \-\-hourly\-rate 50 \-\-flat\-rate abcd12
 timr task set \-\-unbilled \-\-no\-hourly\-rate \-\-no\-flat\-rate abcd12
 timr task add \-\-name \'task_z\' \-\-estimation 4h \e
     \-\-hourly\-rate 50 \-\-flat\-rate
+timr task add \-\-id T800 \-\-name \'Model 101\'
+timr task remove T800
 timr task remove abcd12
+.
+.fi
+.
+.SH "FOREIGN ID EXAMPLE"
+.
+.nf
+
+timr task add \-\-id t800 \-\-name Terminator1
+timr task set \-\-name Terminator2 t800
+timr task remove t800
 .
 .fi
 .

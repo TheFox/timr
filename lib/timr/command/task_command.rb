@@ -25,6 +25,9 @@ module TheFox
 					@set_opt = false
 					
 					@tracks_opt = false
+					
+					@foreign_id_opt = nil
+					@unset_foreign_id_opt = nil
 					@name_opt = nil
 					@description_opt = nil
 					@estimation_opt = nil
@@ -47,8 +50,14 @@ module TheFox
 						case arg
 						when '-h', '--help'
 							@help_opt = true
+						
 						when '-t', '--tracks'
 							@tracks_opt = true
+						
+						when '--id'
+							@foreign_id_opt = argv.shift.strip
+						when '--no-id'
+							@unset_foreign_id_opt = true
 						when '-n', '--name'
 							@name_opt = argv.shift
 						when '--desc', '--description', '-d' # -d not official
@@ -81,14 +90,19 @@ module TheFox
 						when Task
 							@tasks_opt << arg
 						else
-							if /^[a-f0-9]{4,40}$/i.match(arg)
-								@tasks_opt << arg
-							else
-								raise TaskCommandError, "Unknown argument '#{arg}'. See 'timr task --help'."
-							end
+							@tasks_opt << arg
+							
+							# if /^[a-f0-9]{4,40}$/i.match(arg)
+							# 	@tasks_opt << arg
+							# else
+							# 	raise TaskCommandError, "Unknown argument '#{arg}'. See 'timr task --help'."
+							# end
 						end
 					end
 					
+					if @foreign_id_opt && @unset_foreign_id_opt
+						raise TaskCommandError, 'Cannot use --id and --no-id.'
+					end
 					if @billed_opt && @unbilled_opt
 						raise TaskCommandError, 'Cannot use --billed and --unbilled.'
 					end
@@ -98,8 +112,6 @@ module TheFox
 					if @has_flat_rate_opt && @unset_flat_rate_opt
 						raise TaskCommandError, 'Cannot use --flat-rate and --no-flat-rate.'
 					end
-					
-					# pp @tasks_opt
 				end
 				
 				# See BasicCommand#run.
@@ -131,6 +143,7 @@ module TheFox
 				# Uses TheFox::Timr::Timr.add_task.
 				def run_add
 					options = {
+						:foreign_id => @foreign_id_opt,
 						:name => @name_opt,
 						:description => @description_opt,
 						:estimation => @estimation_opt,
@@ -155,7 +168,8 @@ module TheFox
 					end
 					task_id = @tasks_opt.first
 					
-					if @name_opt.nil? && @description_opt.nil? &&
+					if @foreign_id_opt.nil? && @unset_foreign_id_opt.nil?
+						@name_opt.nil? && @description_opt.nil? &&
 						@estimation_opt.nil? &&
 						@billed_opt.nil? && @unbilled_opt.nil? &&
 						@hourly_rate_opt.nil? && @unset_hourly_rate_opt.nil? &&
@@ -170,6 +184,18 @@ module TheFox
 					puts task.to_detailed_str
 					puts
 					
+					if @foreign_id_opt && task.foreign_id != @foreign_id_opt
+						@timr.foreign_id_db.remove_task(task)
+						
+						# Throws exception when Foreign ID already exists in DB.
+						# Break before Task save.
+						@timr.foreign_id_db.add_task(task, @foreign_id_opt)
+						@timr.foreign_id_db.save_to_file
+					end
+					if @unset_foreign_id_opt
+						@timr.foreign_id_db.remove_task(task)
+						@timr.foreign_id_db.save_to_file
+					end
 					if @name_opt
 						task.name = @name_opt
 					end
@@ -230,17 +256,17 @@ module TheFox
 				end
 				
 				def help
-					puts 'usage: timr task [show] [[-t|--tracks] <task_id>...]'
-					puts '   or: timr task add [-n|--name <name>] [--description <str>]'
+					puts 'usage: timr task [show] [[-t|--tracks] <id>|<task_id>...]'
+					puts '   or: timr task add [--id <str>] [-n|--name <name>] [--description <str>]'
 					puts '                     [--estimation <time>] [--billed|--unbilled]'
 					puts '                     [--hourly-rate <value>] [--no-hourly-rate]'
 					puts '                     [--flat-rate|--no-flat-rate]'
-					puts '   or: timr task set [-n|--name <name>] [--description <str>]'
+					puts '   or: timr task set [--id <str>] [-n|--name <name>] [--description <str>]'
 					puts '                     [--estimation <time>] [--billed|--unbilled]'
 					puts '                     [--hourly-rate <value>] [--no-hourly-rate]'
 					puts '                     [--flat-rate|--no-flat-rate]'
-					puts '                     <task_id>'
-					puts '   or: timr task remove <task_id>...'
+					puts '                     <id>|<task_id>'
+					puts '   or: timr task remove <id>|<task_id>...'
 					puts '   or: timr task [-h|--help]'
 					puts
 					puts 'Subcommands'
@@ -253,6 +279,7 @@ module TheFox
 					puts '    -t, --tracks             Show a list of Track IDs for each Task.'
 					puts
 					puts 'Add/Set Options'
+					puts '    --id <str>                        Your ID to identify the Task.'
 					puts '    -n, --name <name>                 Task Name.'
 					puts '    --desc, --description <str>       Task Description.'
 					puts '    -e, --est, --estimation <time>    Task Estimation. See details below.'

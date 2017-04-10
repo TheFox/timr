@@ -14,6 +14,9 @@ module TheFox
 			include Model
 			include Error
 			
+			# ForeignIdDb instance.
+			attr_reader :foreign_id_db
+			
 			# Stack instance.
 			attr_reader :stack
 			
@@ -28,6 +31,12 @@ module TheFox
 				else
 					#@config.save_to_file
 					@config.save_to_file(nil, true)
+				end
+				
+				@foreign_id_db = ForeignIdDb.new
+				@foreign_id_db.file_path = Pathname.new('foreign_id_db.yml').expand_path(@cwd)
+				if @foreign_id_db.file_path.exist?
+					@foreign_id_db.load_from_file
 				end
 				
 				@tasks_path = Pathname.new('tasks').expand_path(@cwd)
@@ -51,7 +60,14 @@ module TheFox
 			end
 			
 			# Removes all previous [Tracks](rdoc-ref:TheFox::Timr::Model::Track) and starts a new one.
+			# 
+			# Options:
+			# 
+			# - `:foreign_id` (String)
+			# - `:task_id` (String)
+			# - `:track_id` (String)
 			def start(options = Hash.new)
+				foreign_id_opt = options.fetch(:foreign_id, nil)
 				task_id_opt = options.fetch(:task_id, nil)
 				track_id_opt = options.fetch(:track_id, nil)
 				
@@ -75,8 +91,23 @@ module TheFox
 					old_task = nil
 				end
 				
+				# Search in Foreign ID DB.
+				# if foreign_id_opt
+				# 	task_id = @foreign_id_db.get_task_id(foreign_id_opt)
+				# 	if task_id
+				# 		task_id_opt = task_id
+				# 	end
+				# end
+				
 				if task_id_opt
 					task = get_task_by_id(task_id_opt)
+					
+					if foreign_id_opt
+						# Throws exception when Foreign ID already exists in DB.
+						# Break before new Track creation.
+						@foreign_id_db.add_task(task, foreign_id_opt)
+						@foreign_id_db.save_to_file
+					end
 					
 					track = task.start(options)
 					
@@ -86,8 +117,8 @@ module TheFox
 					@stack.save_to_file
 				else
 					if track_id_opt
-						# The long way. Should be avoided.
-						# Search all files.
+						# Seach Track ID the long way. Should be avoided.
+						# Searches all files.
 						
 						track = Track.find_track_by_id(@tasks_path, track_id_opt)
 						if track
@@ -111,6 +142,13 @@ module TheFox
 					else
 						# Create completely new Task.
 						task = Task.create_task_from_hash(options)
+						
+						if foreign_id_opt
+							# Throws exception when Foreign ID already exists in DB.
+							# Break before new Track creation.
+							@foreign_id_db.add_task(task, foreign_id_opt)
+							@foreign_id_db.save_to_file
+						end
 						
 						# Start Task
 						track = task.start(options)
@@ -180,6 +218,10 @@ module TheFox
 			end
 			
 			# Continues the Top [Track](rdoc-ref:TheFox::Timr::Model::Track).
+			# 
+			# Options:
+			# 
+			# - `:track` (Track)
 			def continue(options = Hash.new)
 				# Get current Track from Stack.
 				track = @stack.current_track
@@ -205,7 +247,14 @@ module TheFox
 			end
 			
 			# Starts a new [Track](rdoc-ref:TheFox::Timr::Model::Track) and pauses the underlying one.
+			# 
+			# Options:
+			# 
+			# - `:foreign_id` (String)
+			# - `:task_id` (String)
+			# - `:track_id` (String)
 			def push(options = Hash.new)
+				foreign_id_opt = options.fetch(:foreign_id, nil)
 				task_id_opt = options.fetch(:task_id, nil)
 				track_id_opt = options.fetch(:track_id, nil)
 				
@@ -234,6 +283,13 @@ module TheFox
 				
 				if task_id_opt
 					task = get_task_by_id(task_id_opt)
+					
+					if foreign_id_opt
+						# Throws exception when Foreign ID already exists in DB.
+						# Break before new Track creation.
+						@foreign_id_db.add_task(task, foreign_id_opt)
+						@foreign_id_db.save_to_file
+					end
 					
 					# Start Task
 					track = task.start(options)
@@ -271,6 +327,13 @@ module TheFox
 						# Create completely new Task.
 						task = Task.create_task_from_hash(options)
 						
+						if foreign_id_opt
+							# Throws exception when Foreign ID already exists in DB.
+							# Break before new Track creation.
+							@foreign_id_db.add_task(task, foreign_id_opt)
+							@foreign_id_db.save_to_file
+						end
+						
 						# Start Task
 						track = task.start(options)
 						
@@ -300,8 +363,21 @@ module TheFox
 			# Uses [Task#create_task_from_hash](rdoc-ref:TheFox::Timr::Model::Task::create_task_from_hash) to create a new Task instance and [BasicModel#create_path_by_id](rdoc-ref:TheFox::Timr::Model::BasicModel.create_path_by_id) to create a new file path.
 			# 
 			# Returns the new created Task instance.
+			# 
+			# Options:
+			# 
+			# - `:foreign_id` (String)
 			def add_task(options = Hash.new)
+				foreign_id_opt = options.fetch(:foreign_id, nil)
+				
 				task = Task.create_task_from_hash(options)
+				
+				if foreign_id_opt
+					# Throws exception when Foreign ID already exists in DB.
+					# Break before Task save.
+					@foreign_id_db.add_task(task, foreign_id_opt)
+					@foreign_id_db.save_to_file
+				end
 				
 				# Task Path
 				task_file_path = BasicModel.create_path_by_id(@tasks_path, task.id)
@@ -318,7 +394,7 @@ module TheFox
 			# 
 			# Options:
 			# 
-			# - `:task_id` (String) 
+			# - `:task_id` (String) Can be either a internal ID (hex) or Foreign ID, because `get_task_by_id` searches also the Foreign ID DB.
 			def remove_task(options = Hash.new)
 				task_id_opt = options.fetch(:task_id, nil)
 				
@@ -335,6 +411,10 @@ module TheFox
 					@stack.remove(track)
 				end
 				@stack.save_to_file
+				
+				# Remove Task from Foreign ID DB.
+				@foreign_id_db.remove_task(task)
+				@foreign_id_db.save_to_file
 				
 				task.delete_file
 				
@@ -374,12 +454,18 @@ module TheFox
 				}
 			end
 			
-			# Find a [Task](rdoc-ref:TheFox::Timr::Model::Task) by ID.
+			# Find a [Task](rdoc-ref:TheFox::Timr::Model::Task) by ID (internal or foreign).
 			# 
 			# Tasks always should be loaded with this methods to check if a Task instance already exist at `@tasks`. This is like a cache.
 			# 
-			# `task_id` can be a short ID. If a Task is already loaded with full ID another search by short ID would lead to generate a new object_id. Then there would be two Tasks instances loaded for the same Task ID. The Check Cache if condition prohibits this.
+			# `task_id` can be a short ID or a Foreign ID. If a Task is already loaded with full ID another search by short ID would lead to generate a new object_id. Then there would be two Tasks instances loaded for the same Task ID. The Check Cache if condition prohibits this.
 			def get_task_by_id(task_id)
+				# First search in Foreign ID DB.
+				tmp_task_id = @foreign_id_db.get_task_id(task_id)
+				if tmp_task_id
+					task_id = tmp_task_id
+				end
+				
 				task = @tasks[task_id]
 				
 				if task
@@ -466,6 +552,10 @@ module TheFox
 				end
 			end
 			
+			# Alias for `ForeignIdDb#match_task_with_foreign_id`.
+			# def match_task_with_foreign_id(task, foreign_id)
+			# end
+			
 			# Save [Stack](rdoc-ref:TheFox::Timr::Model::Stack) and [Config](rdoc-ref:TheFox::Timr::Model::Config).
 			def shutdown
 				# Save Stack
@@ -473,6 +563,9 @@ module TheFox
 				
 				# Save config
 				@config.save_to_file
+				
+				# Save Foreign ID DB
+				@foreign_id_db.save_to_file
 			end
 			
 			# Load all [Tracks](rdoc-ref:TheFox::Timr::Model::Track) using `get_task_by_id`.

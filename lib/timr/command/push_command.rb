@@ -16,6 +16,7 @@ module TheFox
 					
 					@help_opt = false
 					
+					@foreign_id_opt = nil
 					@name_opt = nil
 					@description_opt = nil
 					@estimation_opt = nil
@@ -41,6 +42,8 @@ module TheFox
 						when '-h', '--help'
 							@help_opt = true
 						
+						when '--id'
+							@foreign_id_opt = argv.shift.strip
 						when '-n', '--name'
 							@name_opt = argv.shift
 						when '--desc', '--description'
@@ -75,6 +78,8 @@ module TheFox
 						end
 					end
 					
+					check_foreign_id(@foreign_id_opt)
+					
 					if @id_opts.length
 						@task_id_opt, @track_id_opt = @id_opts
 					end
@@ -92,6 +97,7 @@ module TheFox
 					run_edit
 					
 					options = {
+						:foreign_id => @foreign_id_opt,
 						:name => @name_opt,
 						:description => @description_opt,
 						:estimation => @estimation_opt,
@@ -106,7 +112,6 @@ module TheFox
 						:task_id => @task_id_opt,
 						:track_id => @track_id_opt,
 					}
-					
 					
 					track = @timr.push(options)
 					unless track

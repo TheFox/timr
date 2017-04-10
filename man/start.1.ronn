@@ -3,7 +3,7 @@ timr-start(1) -- Start a new Task/Track.
 
 ## SYNOPSIS
 
-timr start [<options>] [<task_id> [<track_id>]]
+timr start [<options>] [<id>|<task_id> [<track_id>]]
 
 ## DESCRIPTION
 
@@ -12,6 +12,9 @@ Always removes all Tracks from the Stack and creates a new Track. If there is an
 Without any options this command always creates a new Task and starts a new Track for this Task. When providing a Task ID (SHA1 hex) of an existing Task, this Task will be continued. When also providing a Track ID (SHA1 hex) the same Track message will be taken to create a new Track for the Task.
 
 ## TASK OPTIONS
+
+* --id <str>:
+	Your ID to identify the Task. Not just to use the internal Task ID as <task_id> but also if you like to use your own ID. For example, when you want to sync Timr with JIRA and use the JIRA IDs to identify Timr Tasks instead of the Timr internal IDs. This can be any string, but MUST NOT include spaces. Use this String for <task_id>. This ID is also called 'Foreign ID' by Timr (internal).
 
 * -n, --name <str>:
 	The name of the new Task. When providing a <task_id> this option will be ignored.
@@ -58,8 +61,8 @@ Without any options this command always creates a new Task and starts a new Trac
 ```
 timr start
 timr start --name my_task1
-timr start --name my_task2 \
-	--description 'This is a very long description.'
+timr start --name 'Model 101' \
+	--description 'Construct series 101.'
 timr start --name my_task3 \
 	--date 2017-01-02 --time 15:30 \
 	--message 'Hello World'
@@ -67,4 +70,5 @@ timr start --name my_task4 --message 'Hello World'
 timr start --name my_task5 --estimation 2h
 timr start --message 'Hello World' abcd12
 timr start --time 10:30 --message 'Hello World' abcd12
+timr start --id T800
 ```

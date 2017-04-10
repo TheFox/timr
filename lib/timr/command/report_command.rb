@@ -6,6 +6,7 @@ module TheFox
 		module Command
 			
 			# This Command is very similar to LogCommand. By default it prints all [Tasks](rdoc-ref:TheFox::Timr::Model::Task) of the current month.
+			# @TODO add foreign_id to ReportCommand
 			class ReportCommand < BasicCommand
 				
 				include TheFox::Timr::Helper

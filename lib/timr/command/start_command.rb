@@ -19,6 +19,7 @@ module TheFox
 					
 					@help_opt = false
 					
+					@foreign_id_opt = nil
 					@name_opt = nil
 					@description_opt = nil
 					@estimation_opt = nil
@@ -44,6 +45,8 @@ module TheFox
 						when '-h', '--help'
 							@help_opt = true
 						
+						when '--id'
+							@foreign_id_opt = argv.shift.strip
 						when '-n', '--name'
 							@name_opt = argv.shift
 						when '--desc', '--description'
@@ -77,6 +80,8 @@ module TheFox
 						end
 					end
 					
+					check_foreign_id(@foreign_id_opt)
+					
 					if @id_opts.length
 						@task_id_opt, @track_id_opt = @id_opts
 					end
@@ -94,6 +99,7 @@ module TheFox
 					run_edit
 					
 					options = {
+						:foreign_id => @foreign_id_opt,
 						:name => @name_opt,
 						:description => @description_opt,
 						:estimation => @estimation_opt,
@@ -121,7 +127,8 @@ module TheFox
 				private
 				
 				def help
-					puts 'usage: timr start [-n|--name <name>] [--desc|--description <description>]'
+					puts 'usage: timr start [--id <str>]'
+					puts '                  [-n|--name <name>] [--desc|--description <description>]'
 					puts '                  [[-d|--date <date>] -t|--time <time>]'
 					puts '                  [-m|--message <message>] [--edit] [--estimation <time>]'
 					puts '                  [--hourly-rate <value>] [--flat-rate]'
@@ -131,7 +138,7 @@ module TheFox
 					puts "Note: 'timr push' uses the same options."
 					puts
 					puts 'Task Options'
-					#puts '    -i, --id           Task ID' # @TODO --id
+					puts '    --id <str>                        Your ID to identify the Task.'
 					puts '    -n, --name <name>                 The name of the new Task.'
 					puts '    --desc, --description <str>       Longer description of the new Task.'
 					puts '    -e, --est, --estimation <time>    Task Estimation. See details below.'

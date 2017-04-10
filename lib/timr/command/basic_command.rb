@@ -9,6 +9,7 @@ module TheFox
 			class BasicCommand
 				
 				include TheFox::Timr::Helper
+				include TheFox::Timr::Error
 				
 				# Current Working Directory
 				attr_accessor :cwd
@@ -133,11 +134,12 @@ module TheFox
 						edit_text = Array.new
 						
 						if @message_opt
+							# puts "run_edit: use --message"
 							edit_text << @message_opt.clone
 						else
-							# puts "get_track_by_task_id"
+							# puts "run_edit: search task '#{task_id}', track '#{track_id}'"
 							track = @timr.get_track_by_task_id(task_id, track_id)
-							# puts "TRACK: #{track}"
+							
 							if track && track.message
 								edit_text << track.message.clone
 							else
@@ -153,6 +155,14 @@ module TheFox
 						if editor_message.length > 0
 							@message_opt = editor_message
 						end
+					end
+				end
+				
+				def check_foreign_id(foreign_id)
+					if foreign_id && foreign_id.match(/ /)
+						foreign_id_without_spaces = foreign_id.gsub(' ', '')
+						
+						raise ForeignIdError, "Foreign ID (--id) cannot include spaces. Maybe you want to use '#{foreign_id_without_spaces}' instead."
 					end
 				end
 				
