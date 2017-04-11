@@ -11,6 +11,7 @@ module TheFox
 			class Stack < BasicModel
 				
 				include TheFox::Timr::Helper
+				include TheFox::Timr::Error
 				
 				# Timr instance.
 				attr_accessor :timr
@@ -142,9 +143,7 @@ module TheFox
 									track
 								end
 							end
-						# @TODO not use Exception
-						# see http://stackoverflow.com/questions/10048173/why-is-it-a-bad-style-to-rescue-exception-e-in-ruby
-						rescue Exception
+						rescue TimrError
 							# Task file for ID from Stack was not found.
 							
 							# Mark Stack as changed.
