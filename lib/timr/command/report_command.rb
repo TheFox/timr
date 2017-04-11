@@ -6,7 +6,6 @@ module TheFox
 		module Command
 			
 			# This Command is very similar to LogCommand. By default it prints all [Tasks](rdoc-ref:TheFox::Timr::Model::Task) of the current month.
-			# @TODO add foreign_id to ReportCommand
 			class ReportCommand < BasicCommand
 				
 				include TheFox::Timr::Helper
@@ -213,7 +212,7 @@ module TheFox
 							duration.to_human,
 							unbilled_duration.to_human,
 							# tracks_c,
-							'%s %s' % [task.short_id, task.name(15)]
+							'%s %s' % [task.short_id, task.foreign_id ? task.foreign_id : task.name(15)]
 						]
 					end
 					
@@ -301,7 +300,7 @@ module TheFox
 							track.begin_datetime_s(@filter_options),
 							track.end_datetime_s(@filter_options),
 							duration.to_human,
-							'%s' % [task.short_id],
+							'%s' % [task.foreign_id ? task.foreign_id : task.short_id],
 							'%s %s' % [track.short_id, track.title(15)],
 						]
 					end
@@ -362,6 +361,7 @@ module TheFox
 							'ROW_NO',
 							
 							'TASK_ID',
+							'TASK_FOREIGN_ID',
 							'TASK_NAME',
 							
 							'TASK_BEGIN_DATETIME',
@@ -453,6 +453,7 @@ module TheFox
 							totals[:row_c],
 							
 							task.id,
+							task.foreign_id,
 							task.name,
 							
 							task.begin_datetime_s(@csv_filter_options),
@@ -484,7 +485,8 @@ module TheFox
 						totals[:row_c],
 						
 						'TOTAL',
-						'TOTAL',
+						nil,
+						nil,
 						
 						totals[:begin_datetime_s],
 						totals[:end_datetime_s],
@@ -534,6 +536,7 @@ module TheFox
 							'ROW_NO',
 							
 							'TASK_ID',
+							'TASK_FOREIGN_ID',
 							'TASK_NAME',
 							
 							'TRACK_ID',
@@ -597,6 +600,7 @@ module TheFox
 							totals[:row_c],
 							
 							task.id,
+							task.foreign_id,
 							task.name,
 							
 							track.id,
@@ -624,10 +628,11 @@ module TheFox
 						totals[:row_c],
 						'TOTAL',
 						
-						'TOTAL',
-						'TOTAL',
+						nil,
+						nil,
+						nil,
 						
-						'TOTAL',
+						nil,
 						
 						totals[:begin_datetime_s],
 						totals[:end_datetime_s],

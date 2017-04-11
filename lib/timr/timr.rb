@@ -24,6 +24,10 @@ module TheFox
 				# Current Working Directory
 				@cwd = cwd
 				
+				unless @cwd.exist?
+					puts "Initialize Timr in #{@cwd}"
+				end
+				
 				@config = Config.new
 				@config.file_path = Pathname.new('config.yml').expand_path(@cwd)
 				if @config.file_path.exist?
