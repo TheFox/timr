@@ -22,6 +22,11 @@ fi
 
 gem_file=$(gem build "${GEMSPEC_FILE}" 2> /dev/null | grep 'File:' | tail -1 | awk '{ print $2 }')
 
+if [[ -z "$gem_file" ]] ; then
+	echo 'ERROR: gem_file variable not set'
+	exit 1
+fi
+
 echo "install gem file '$gem_file'"
 gem install "$gem_file"
 

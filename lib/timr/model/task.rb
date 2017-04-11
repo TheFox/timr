@@ -72,7 +72,6 @@ module TheFox
 				end
 				
 				# Add a Track.
-				# @TODO unit test
 				def add_track(track, set_as_current_track = false)
 					track.task = self
 					
@@ -739,8 +738,6 @@ module TheFox
 				# Are two Tasks equal?
 				# 
 				# Uses ID for comparision.
-				#
-				# @TODO unit test
 				def eql?(task)
 					unless task.is_a?(Task)
 						raise TaskError, "task variable must be a Task instance. #{task.class} given."
@@ -918,14 +915,12 @@ module TheFox
 					# 
 					# Options:
 					# 
-					# - `:foreign_id` (String)
 					# - `:name` (String)
 					# - `:description` (String)
 					# - `:estimation` (String|Integer|Duration)
 					# - `:hourly_rate` (Integer)
 					def create_task_from_hash(options)
 						task = Task.new
-						# task.foreign_id = options.fetch(:foreign_id, nil)
 						task.name = options.fetch(:name, nil)
 						task.description = options.fetch(:description, nil)
 						task.estimation = options.fetch(:estimation, nil)

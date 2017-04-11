@@ -456,8 +456,6 @@ module TheFox
 				# Are two Tracks equal?
 				# 
 				# Uses ID for comparision.
-				# 
-				# @TODO unit test
 				def eql?(track)
 					unless track.is_a?(Track)
 						raise TrackError, "track variable must be a Track instance. #{track.class} given."

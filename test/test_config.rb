@@ -10,8 +10,9 @@ class TestConfig < MiniTest::Test
 	# include TheFox::Timr::Error
 	
 	def test_config
-		# config1 = Config.new
-		Config.new # @TODO config test
+		config1 = Config.new
+		
+		assert_instance_of(Config, config1)
 	end
 	
 end

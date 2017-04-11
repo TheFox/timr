@@ -62,6 +62,14 @@ class TestTask < MiniTest::Test
 		moved = task1.move_track(track2, task2)
 		assert_equal(true, moved)
 		assert_equal(task2, track2.task)
+		
+		track3 = Track.new
+		assert_nil(task1.current_track)
+		task1.add_track(track3)
+		
+		track4 = Track.new
+		task1.add_track(track4, true)
+		assert_equal(track4, task1.current_track)
 	end
 	
 	def test_tracks_status
@@ -701,7 +709,7 @@ class TestTask < MiniTest::Test
 		assert_equal('Task_123456', task1.to_s)
 	end
 	
-	def test_to_compact_str_array
+	def test_to_compact_str_array1
 		task1 = Task.new
 		task1.id = '123456789a'
 		task1.name = 'zyx'
@@ -712,9 +720,34 @@ class TestTask < MiniTest::Test
 		assert_equal(['Task: 123456 zyx', '  Description: xyz', '  Estimation: 10h 5m', '  File path: '], task1.to_compact_array)
 	end
 	
-	def test_to_detailed_str_array
+	def test_to_compact_str_array2
 		task1 = Task.new
 		task1.id = '123456789a'
+		task1.foreign_id = 'abc'
+		task1.name = 'zyx'
+		task1.description = 'xyz'
+		task1.estimation = '10h 5m'
+		
+		task1.to_compact_str # @TODO to_compact_str test
+		assert_equal(['Task: 123456 abc zyx', '  Description: xyz', '  Estimation: 10h 5m', '  File path: '], task1.to_compact_array)
+	end
+	
+	def test_to_detailed_str_array1
+		task1 = Task.new
+		task1.id = '123456789a'
+		task1.name = 'zyx'
+		task1.description = 'xyz'
+		task1.estimation = '10h 5m'
+		
+		task1.to_detailed_str
+		#assert_equal(['Task: 123456 zyx', '  Description: xyz', '  Estimation: 10h 5m', '  File path: '], task1.to_detailed_array)
+		# @TODO to_detailed_array test
+	end
+	
+	def test_to_detailed_str_array2
+		task1 = Task.new
+		task1.id = '123456789a'
+		task1.foreign_id = 'abc'
 		task1.name = 'zyx'
 		task1.description = 'xyz'
 		task1.estimation = '10h 5m'

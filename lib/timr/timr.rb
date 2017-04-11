@@ -22,10 +22,16 @@ module TheFox
 			
 			def initialize(cwd)
 				# Current Working Directory
-				@cwd = cwd
+				case cwd
+				when String
+					@cwd = Pathname.new(cwd)
+				else
+					@cwd = cwd
+				end
 				
-				unless @cwd.exist?
+				if @cwd && !@cwd.exist?
 					puts "Initialize Timr in #{@cwd}"
+					@cwd.mkpath
 				end
 				
 				@config = Config.new
