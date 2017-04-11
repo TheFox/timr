@@ -16,15 +16,15 @@ By default this command prints all todays Tracks\.
 .
 .TP
 \-s, \-\-from \'\fIdate_time\fR\'
-From Date/Time\. Must be in quotes to be one single string\. Default: today 00:00:00
+From Date/Time\. Must be in quotes to be one single string\. Default: today 00:00:00\. See timr\-ftime(7)\.
 .
 .TP
 \-e, \-\-to \'\fIdate_time\fR\'
-To Date/Time\. Must be in quotes to be one single string\. Default: today 23:59:59
+To Date/Time\. Must be in quotes to be one single string\. Default: today 23:59:59\. See timr\-ftime(7)\.
 .
 .TP
 \-d, \-\-day \fIdate\fR
-A single day from 00:00 to 23:59\.
+A single day from 00:00 to 23:59\. See timr\-ftime(7)\.
 .
 .TP
 \-m, \-\-month \fI[YYYY\-]MM\fR
@@ -42,19 +42,19 @@ Show all Tracks\.
 .
 .TP
 \-\-sd, \-\-start\-date \fIdate\fR
-Start Date
+Start Date\. See timr\-ftime(7)\.
 .
 .TP
 \-\-ed, \-\-end\-date \fIdate\fR
-End Date
+End Date\. See timr\-ftime(7)\.
 .
 .TP
 \-\-st, \-\-start\-time \fItime\fR
-Start Time
+Start Time\. See timr\-ftime(7)\.
 .
 .TP
 \-\-et, \-\-end\-time \fItime\fR
-End Time
+End Time\. See timr\-ftime(7)\.
 .
 .SH "GENERAL OPTIONS"
 .
@@ -99,50 +99,8 @@ Task ID
 TRACK
 Track ID and Title\.
 .
-.SH "DATETIME FORMATS"
+.SH "SEE ALSO"
+timr\-report(1), timr\-ftime(7)
 .
-.TP
-\fIdate_time\fR
-A DateTime is one single string representing \fB<date> <time>\fR\.
-.
-.TP
-\fIdate\fR
-Formats: \fBYYYY\-MM\-DD\fR, \fBMM/DD/YYYY\fR, \fBDD\.MM\.YYYY\fR
-.
-.TP
-\fItime\fR
-Formats: \fBHH:MM\fR, \fBHH:MM:SS\fR
-.
-.P
-See \fBtimr\-task(1)\fR, section ESTIMATION for estimation \fItime\fR details\.
-.
-.SH "ONLINE RESCOURCES"
-.
-.IP "\(bu" 4
-Homepage \fIhttps://timr\.fox21\.at/\fR
-.
-.IP "\(bu" 4
-Code Coverage \fIhttps://timr\.fox21\.at/coverage/\fR
-.
-.IP "\(bu" 4
-GitHub Page \fIhttps://github\.com/TheFox/timr\fR
-.
-.IP "\(bu" 4
-RubyGems Page \fIhttps://rubygems\.org/gems/timr\fR
-.
-.IP "\(bu" 4
-Travis CI Repository \fIhttps://travis\-ci\.org/TheFox/timr\fR
-.
-.IP "" 0
-.
-.SH "BUGS"
-Report bugs to
-.
-.IP "\(bu" 4
-the GitHub issues tracker \fIhttps://github\.com/TheFox/timr/issues\fR
-.
-.IP "\(bu" 4
-or via email to \fIchristian@fox21\.at\fR\.
-.
-.IP "" 0
-
+.SH "TIMR"
+This is part of timr(1)\.

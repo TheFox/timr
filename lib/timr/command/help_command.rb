@@ -65,13 +65,13 @@ module TheFox
 						puts 'DateTime Formats'
 						puts "    <date_time>    A DateTime is one single string"
 						puts "                   representing '<date> <time>'."
-						puts '    <date>         Formats: YYYY-MM-DD, MM/DD/YYYY, DD.MM.YYYY'
+						puts '    <date>         Formats: YYYYMMDD, YYYY-MM-DD, MM/DD/YYYY, DD.MM.YYYY'
 						puts '    <time>         Formats: HH:MM, HH:MM:SS'
 					end
 					
 					def print_estimation_help(ext = false)
-						puts 'Estimation'
-						puts '    Estimation is parsed by chronic_duration.'
+						puts 'Duration'
+						puts '    Duration is parsed by chronic_duration.'
 						puts '    Examples:'
 						puts "        -e 2:10:5         # Sets Estimation to 2h 10m 5s."
 						puts "        -e '2h 10m 5s'    # Sets Estimation to 2h 10m 5s."
@@ -99,7 +99,9 @@ module TheFox
 				def help
 					puts 'usage: timr [-V|--version] [-h|--help] [-C <path>] <command> [<args>]'
 					puts
-					puts '    -C <path>            Path to the project base directory.'
+					puts '    -V, --version        Show version.'
+					puts '    -h, --help           Show help.'
+					puts '    -C <path>            Set path to the project base directory.'
 					puts '                         Default: ~/.timr/defaultc'
 					puts
 					puts 'Commands'

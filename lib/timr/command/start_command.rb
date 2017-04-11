@@ -142,7 +142,7 @@ module TheFox
 					puts '    -n, --name <name>                 The name of the new Task.'
 					puts '    --desc, --description <str>       Longer description of the new Task.'
 					puts '    -e, --est, --estimation <time>    Task Estimation. See details below.'
-					puts '    -r, --hourly-rate <value>         Set the Hourly Rate.'
+					puts '    -r, --hourly-rate <float>         Set the Hourly Rate.'
 					puts '    --fr, --flat-rate, --flat         Has Task a Flat Rate?'
 					puts
 					puts 'Track Options'

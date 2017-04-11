@@ -12,13 +12,13 @@ By default this command prints all todays Tracks.
 ## TOTAL FILTER OPTIONS
 
 * -s, --from '<date_time>':
-	From Date/Time. Must be in quotes to be one single string. Default: today 00:00:00
+	From Date/Time. Must be in quotes to be one single string. Default: today 00:00:00. See timr-ftime(7).
 
 * -e, --to '<date_time>':
-	To Date/Time. Must be in quotes to be one single string. Default: today 23:59:59
+	To Date/Time. Must be in quotes to be one single string. Default: today 23:59:59. See timr-ftime(7).
 
 * -d, --day <date>:
-	A single day from 00:00 to 23:59.
+	A single day from 00:00 to 23:59. See timr-ftime(7).
 
 * -m, --month <[YYYY-]MM>:
 	A single month from 01 to 31.
@@ -32,16 +32,16 @@ By default this command prints all todays Tracks.
 ## DAY TIME FILTER OPTIONS
 
 * --sd, --start-date <date>:
-	Start Date
+	Start Date. See timr-ftime(7).
 
 * --ed, --end-date <date>:
-	End Date
+	End Date. See timr-ftime(7).
 
 * --st, --start-time <time>:
-	Start Time
+	Start Time. See timr-ftime(7).
 
 * --et, --end-time <time>:
-	End Time
+	End Time. See timr-ftime(7).
 
 ## GENERAL OPTIONS
 
@@ -77,3 +77,7 @@ timr log --start-date 2017-01-01 --end-date 2017-01-05 \
 
 * TRACK:
 	Track ID and Title.
+
+## SEE ALSO
+
+timr-report(1), timr-ftime(7)

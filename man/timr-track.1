@@ -7,7 +7,16 @@
 \fBtimr\-track\fR \- Show, add, edit, move, or remove a Track\.
 .
 .SH "SYNOPSIS"
-timr track \fIsubcommand\fR [\fIoptions\fR] [\fItrack_id\fR]
+timr track [show] [\fIoptions\fR] \fItrack_id\fR\.\.\.
+.
+.P
+timr track add [\fIoptions\fR]
+.
+.P
+timr track set [\fIoptions\fR] \fItrack_id\fR
+.
+.P
+timr track remove \fItrack_id\fR\.\.\.
 .
 .SH "DESCRIPTION"
 This command takes several subcommands\. Per default, when providing a Track ID it displays details about this specific Track\.
@@ -38,19 +47,19 @@ Track Message\. Details about what you have done\.
 .
 .TP
 \-\-sd, \-\-start\-date \fIdate\fR
-Start Date
+Start Date\. See timr\-ftime(7)\.
 .
 .TP
 \-\-st, \-\-start\-time \fItime\fR
-Start Time
+Start Time\. See timr\-ftime(7)\.
 .
 .TP
 \-\-ed, \-\-end\-date \fIdate\fR
-End Date
+End Date\. See timr\-ftime(7)\.
 .
 .TP
 \-\-et, \-\-end\-time \fItime\fR
-End Time
+End Time\. See timr\-ftime(7)\.
 .
 .TP
 \-b, \-\-billed
@@ -61,7 +70,7 @@ Mark Track as billed\.
 Mark Track as unbilled\.
 .
 .SH "SET OPTIONS"
-\-\-task \fItask_id\fR: Move Track to another Task\. \fItask_id\fR can also be a Foreign ID\. See \fBtimr\-task(1)\fR\.
+\-\-task \fItask_id\fR: Move Track to another Task\. \fItask_id\fR can also be a Foreign ID\. See timr\-task(1)\.
 .
 .SH "SHOW OPTIONS"
 .
@@ -90,50 +99,8 @@ timr track remove abcd12
 .
 .fi
 .
-.SH "DATETIME FORMATS"
+.SH "SEE ALSO"
+timr\-task(1), timr\-ftime(7)
 .
-.TP
-\fIdate_time\fR
-A DateTime is one single string representing \fB<date> <time>\fR\.
-.
-.TP
-\fIdate\fR
-Formats: \fBYYYY\-MM\-DD\fR, \fBMM/DD/YYYY\fR, \fBDD\.MM\.YYYY\fR
-.
-.TP
-\fItime\fR
-Formats: \fBHH:MM\fR, \fBHH:MM:SS\fR
-.
-.P
-See \fBtimr\-task(1)\fR, section ESTIMATION for estimation \fItime\fR details\.
-.
-.SH "ONLINE RESCOURCES"
-.
-.IP "\(bu" 4
-Homepage \fIhttps://timr\.fox21\.at/\fR
-.
-.IP "\(bu" 4
-Code Coverage \fIhttps://timr\.fox21\.at/coverage/\fR
-.
-.IP "\(bu" 4
-GitHub Page \fIhttps://github\.com/TheFox/timr\fR
-.
-.IP "\(bu" 4
-RubyGems Page \fIhttps://rubygems\.org/gems/timr\fR
-.
-.IP "\(bu" 4
-Travis CI Repository \fIhttps://travis\-ci\.org/TheFox/timr\fR
-.
-.IP "" 0
-.
-.SH "BUGS"
-Report bugs to
-.
-.IP "\(bu" 4
-the GitHub issues tracker \fIhttps://github\.com/TheFox/timr/issues\fR
-.
-.IP "\(bu" 4
-or via email to \fIchristian@fox21\.at\fR\.
-.
-.IP "" 0
-
+.SH "TIMR"
+This is part of timr(1)\.

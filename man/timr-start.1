@@ -31,10 +31,10 @@ Longer description of the new Task\. This should descibe the Task in general\. P
 .
 .TP
 \-e, \-\-est, \-\-estimation \fItime\fR
-Task Estimation\. See \fBtimr\-task(1)\fR for details\.
+Task Estimation\. See timr\-ftime(7)\.
 .
 .TP
-\-r, \-\-hourly\-rate \fIvalue\fR
+\-r, \-\-hourly\-rate \fIfloat\fR
 Set the Hourly Rate\.
 .
 .TP
@@ -53,11 +53,11 @@ Edit Track Message when providing a \fItrack_id\fR\. The EDITOR environment vari
 .
 .TP
 \-d, \-\-date \fIdate\fR
-Track Start Date\. Default: today
+Track Start Date\. Default: today\. See timr\-ftime(7)\.
 .
 .TP
 \-t, \-\-time \fItime\fR
-Track Start Time\. Default: now\. This is useful when you forgot to run the Start command\.
+Track Start Time\. This is useful when you forgot to run the Start command\. Default: now\. See timr\-ftime(7)\.
 .
 .SH "GENERAL OPTIONS"
 .
@@ -90,50 +90,8 @@ timr start \-\-id T800
 .
 .fi
 .
-.SH "DATETIME FORMATS"
+.SH "SEE ALSO"
+timr\-stop(1), timr\-push(1), timr\-ftime(7)
 .
-.TP
-\fIdate_time\fR
-A DateTime is one single string representing \fB<date> <time>\fR\.
-.
-.TP
-\fIdate\fR
-Formats: \fBYYYY\-MM\-DD\fR, \fBMM/DD/YYYY\fR, \fBDD\.MM\.YYYY\fR
-.
-.TP
-\fItime\fR
-Formats: \fBHH:MM\fR, \fBHH:MM:SS\fR
-.
-.P
-See \fBtimr\-task(1)\fR, section ESTIMATION for estimation \fItime\fR details\.
-.
-.SH "ONLINE RESCOURCES"
-.
-.IP "\(bu" 4
-Homepage \fIhttps://timr\.fox21\.at/\fR
-.
-.IP "\(bu" 4
-Code Coverage \fIhttps://timr\.fox21\.at/coverage/\fR
-.
-.IP "\(bu" 4
-GitHub Page \fIhttps://github\.com/TheFox/timr\fR
-.
-.IP "\(bu" 4
-RubyGems Page \fIhttps://rubygems\.org/gems/timr\fR
-.
-.IP "\(bu" 4
-Travis CI Repository \fIhttps://travis\-ci\.org/TheFox/timr\fR
-.
-.IP "" 0
-.
-.SH "BUGS"
-Report bugs to
-.
-.IP "\(bu" 4
-the GitHub issues tracker \fIhttps://github\.com/TheFox/timr/issues\fR
-.
-.IP "\(bu" 4
-or via email to \fIchristian@fox21\.at\fR\.
-.
-.IP "" 0
-
+.SH "TIMR"
+This is part of timr(1)\.

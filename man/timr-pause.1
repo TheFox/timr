@@ -1,0 +1,53 @@
+.\" generated with Ronn/v0.7.3
+.\" http://github.com/rtomayko/ronn/tree/0.7.3
+.
+.TH "TIMR\-PAUSE" "1" "April 2017" "FOX21.at" "Timr Manual"
+.
+.SH "NAME"
+\fBtimr\-pause\fR \- Pause the current running Track\.
+.
+.SH "SYNOPSIS"
+timr pause [\fIoptions\fR]
+.
+.SH "DESCRIPTION"
+Pause the current running Track\. To continue the current Track (Top Track) run \fBtimr continue\fR\. See also timr\-continue(1)\.
+.
+.SH "TRACK OPTIONS"
+.
+.TP
+\-\-ed, \-\-end\-date \fIdate\fR
+End Date\. See timr\-ftime(7)\.
+.
+.TP
+\-\-et, \-\-end\-time \fItime\fR
+End Time\. See timr\-ftime(7)\.
+.
+.TP
+\-d, \-\-date \fIdate\fR
+\-\-end\-date alias\.
+.
+.TP
+\-t, \-\-time \fItime\fR
+\-\-end\-time alias\.
+.
+.SH "GENERAL OPTIONS"
+.
+.TP
+\-h, \-\-help
+Displays the help page\.
+.
+.SH "EXAMPLES"
+.
+.nf
+
+timr pause
+timr pause \-\-time 10:30
+timr pause \-\-date 2017\-01\-02 \-\-time 10:30
+.
+.fi
+.
+.SH "SEE ALSO"
+timr\-continue(1), timr\-ftime(7)
+.
+.SH "TIMR"
+This is part of timr(1)\.

@@ -1,0 +1,45 @@
+.\" generated with Ronn/v0.7.3
+.\" http://github.com/rtomayko/ronn/tree/0.7.3
+.
+.TH "TIMR\-CONTINUE" "1" "April 2017" "FOX21.at" "Timr Manual"
+.
+.SH "NAME"
+\fBtimr\-continue\fR \- Continue the previous paused Track\.
+.
+.SH "SYNOPSIS"
+timr continue [\fIoptions\fR]
+.
+.SH "DESCRIPTION"
+When a Track will be continued (or \fIrestarted\fR) it\'s actual a copy using the same message\.
+.
+.SH "TRACK OPTIONS"
+.
+.TP
+\-d, \-\-date \fIdate\fR
+Start Date for the new Track\. See timr\-ftime(7)\.
+.
+.TP
+\-t, \-\-time \fItime\fR
+Start Time for the new Track\. See timr\-ftime(7)\.
+.
+.SH "GENERAL OPTIONS"
+.
+.TP
+\-h, \-\-help
+Displays the help page\.
+.
+.SH "EXAMPLES"
+.
+.nf
+
+timr continue
+timr continue \-\-time 11:00
+timr continue \-\-date 2017\-01\-02 \-\-time 11:00
+.
+.fi
+.
+.SH "SEE ALSO"
+timr\-pause(1), timr\-ftime(7)
+.
+.SH "TIMR"
+This is part of timr(1)\.

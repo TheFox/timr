@@ -3,7 +3,7 @@ timr-task(1) -- Show, add, edit, or remove a Task.
 
 ## SYNOPSIS
 
-timr task [show] [<options>] [<task_id>...]
+timr task [show] [<options>] [<id>|<task_id>...]
 
 timr task add [<options>]
 
@@ -41,7 +41,7 @@ This command takes several subcommands. Per default, when providing a Task ID it
 	Task Description.
 
 * -e, --est, --estimation <time>:
-	Task Estimation. See details below.
+	Task Estimation. See timr-ftime(7).
 
 * -b, --billed:
 	Mark Task as billed.
@@ -49,7 +49,7 @@ This command takes several subcommands. Per default, when providing a Task ID it
 * --unbilled:
 	Mark Task as unbilled.
 
-* -r, --hourly-rate <value>:
+* -r, --hourly-rate <float>:
 	Set the Hourly Rate.
 
 * --no-hourly-rate:
@@ -100,25 +100,12 @@ timr task remove t800
 - 8 hours are 1 man-day.
 - 5 man-days are 1 man-week, and so on.
 
-## ESTIMATION
-
-Estimation is parsed by chronic_duration.
-
-Examples:
-
-- `-e 2:10:5         # Sets Estimation to 2h 10m 5s.`
-- `-e '2h 10m 5s'    # Sets Estimation to 2h 10m 5s.`
-
-Use '+' or '-' to calculate with Estimation Times:
-
-- `-e '-45m'         # Subtracts 45 minutes from the original Estimation.`
-- `-e '+1h 30m'      # Adds 1 hour 30 minutes to the original Estimation.`
-
-See chronic_duration for more examples.
-https://github.com/henrypoydar/chronic_duration
-
 ## BILLED/UNBILLED
 
 Set a Task as `billed` or `unbilled` to know which Task you already billed a client.
 
 If a whole Task gets billed/unbilled all Tracks are changed to billed/unbilled. Each Track has a flag `is_billed`.
+
+## SEE ALSO
+
+timr-track(1), timr-ftime(7)

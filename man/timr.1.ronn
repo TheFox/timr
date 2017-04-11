@@ -1,0 +1,66 @@
+timr(1) -- Time Tracking for Hackers.
+===
+
+## SYNOPSIS
+
+timr [-V|--version] [-h|--help] [-C <path>] <command> [<args>]
+
+## OPTIONS
+
+* -V, --version:
+	Show version.
+
+* -h, --help:
+	Show help.
+
+* -C <path>:
+	Set path to the project base directory. Default: ~/.timr/defaultc
+
+## DESCRIPTION
+
+Timr is a time tracking tool for the Command-line, written in Ruby. You can track your time spent for a specific project. The main focus of this tool is to use it on the Command-line and make automatic reports. All data are stored in YAML files. So editing can also be done by using your favorite editor.
+
+## COMMANDS
+
+* timr-start(1)
+* timr-stop(1)
+* timr-pause(1)
+* timr-continue(1)
+* timr-push(1)
+* timr-pop(1)
+* timr-status(1)
+* timr-log(1)
+* timr-task(1)
+* timr-track(1)
+* timr-report(1)
+
+## MISCELLANEOUS
+
+* timr-ftime(7)
+
+## ONLINE RESCOURCES
+
+- [Homepage](https://timr.fox21.at/)
+- [Code Coverage](https://timr.fox21.at/coverage/)
+- [GitHub Page](https://github.com/TheFox/timr)
+- [RubyGems Page](https://rubygems.org/gems/timr)
+- [Travis CI Repository](https://travis-ci.org/TheFox/timr)
+
+## BUGS
+
+Report bugs to
+
+- the [GitHub issues tracker](https://github.com/TheFox/timr/issues)
+- or via email to <christian@fox21.at>.
+
+## AUTHOR
+
+Timr was created by Christian Mayer.
+
+## COPYRIGHT
+
+Copyright (C) 2016 [Christian Mayer](https://fox21.at)
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program. If not, see <http://www.gnu.org/licenses/>.

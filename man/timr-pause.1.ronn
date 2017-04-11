@@ -7,15 +7,15 @@ timr pause [<options>]
 
 ## DESCRIPTION
 
-Pause the current running Track. To continue the current Track (Top Track) run `timr continue`.
+Pause the current running Track. To continue the current Track (Top Track) run `timr continue`. See also timr-continue(1).
 
 ## TRACK OPTIONS
 
 * --ed, --end-date <date>:
-	End Date
+	End Date. See timr-ftime(7).
 
 * --et, --end-time <time>:
-	End Time
+	End Time. See timr-ftime(7).
 
 * -d, --date <date>:
 	--end-date alias.
@@ -35,3 +35,7 @@ timr pause
 timr pause --time 10:30
 timr pause --date 2017-01-02 --time 10:30
 ```
+
+## SEE ALSO
+
+timr-continue(1), timr-ftime(7)

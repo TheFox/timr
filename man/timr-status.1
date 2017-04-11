@@ -1,0 +1,43 @@
+.\" generated with Ronn/v0.7.3
+.\" http://github.com/rtomayko/ronn/tree/0.7.3
+.
+.TH "TIMR\-STATUS" "1" "April 2017" "FOX21.at" "Timr Manual"
+.
+.SH "NAME"
+\fBtimr\-status\fR \- Show the current Stack\.
+.
+.SH "SYNOPSIS"
+timr status [\fIoptions\fR]
+.
+.SH "DESCRIPTION"
+Displays the Stack as a list and the status of each Track\.
+.
+.P
+To see more details about a specific Task see \fBtimr task <task_id>\fR, or a specific Track see \fBtimr track <track_id>\fR\.
+.
+.SH "OPTIONS"
+.
+.TP
+\-f, \-\-full
+Show full status\.
+.
+.TP
+\-r, \-\-reverse
+Reverse the list\.
+.
+.TP
+\-h, \-\-help
+Displays the help page\.
+.
+.SH "EXAMPLES"
+.
+.nf
+
+timr status
+timr status \-\-full
+timr status \-\-full \-\-reverse
+.
+.fi
+.
+.SH "TIMR"
+This is part of timr(1)\.

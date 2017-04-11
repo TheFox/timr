@@ -1,0 +1,77 @@
+.\" generated with Ronn/v0.7.3
+.\" http://github.com/rtomayko/ronn/tree/0.7.3
+.
+.TH "TIMR\-FTIME" "7" "April 2017" "FOX21.at" "Timr Manual"
+.
+.SH "NAME"
+\fBtimr\-ftime\fR \- Date/Time Format
+.
+.SH "SYNOPSIS"
+timr *
+.
+.SH "DESCRIPTION"
+This document is about date, time and estimation Strings\.
+.
+.SH "DATETIME FORMATS"
+.
+.TP
+\fIdate_time\fR
+A DateTime is one single string representing \fB\'<date> <time>\'\fR\. Must be in quotes\.
+.
+.TP
+\fIdate\fR
+Formats: \fBYYYYMMDD\fR, \fBYYYY\-MM\-DD\fR, \fBMM/DD/YYYY\fR, \fBDD\.MM\.YYYY\fR
+.
+.TP
+\fItime\fR
+Formats: \fBHH:MM\fR, \fBHH:MM:SS\fR
+.
+.P
+All dates and times are handled by Ruby Time \fIhttps://ruby\-doc\.org/stdlib\-2\.4\.0/libdoc/time/rdoc/Time\.html\fR class\.
+.
+.SH "DURATION"
+Most used by Estimation (command\-line option \fB\-e\fR)\.
+.
+.SS "Examples"
+Sets Estimation to 2h 10m 5s:
+.
+.IP "\(bu" 4
+\fB\-e 2:10:5\fR
+.
+.IP "\(bu" 4
+\fB\-e \'2h 10m 5s\'\fR
+.
+.IP "" 0
+.
+.P
+Use \'+\' or \'\-\' to calculate with Estimation times\.
+.
+.P
+Subtracts 45 minutes from the original Estimation:
+.
+.P
+\fB\-e \'\-45m\'\fR
+.
+.P
+Adds 1 hour 30 minutes to the original Estimation:
+.
+.P
+\fB\-e \'+1h 30m\'\fR
+.
+.P
+This format is also called \fIHuman Format\fR\.
+.
+.SS "chronic_duration"
+Duration is parsed by chronic_duration\.
+.
+.P
+See chronic_duration for more examples:
+.
+.br
+\fIhttps://github\.com/henrypoydar/chronic_duration\fR
+.
+.SH "SEE ALSO"
+timr\-continue(1), timr\-log(1), timr\-pause(1), timr\-pop(1), timr\-report(1), timr\-start(1), timr\-stop(1), timr\-task(1), timr\-track(1)
+.
+.SH "TIMR"
+This is part of timr(1)\.

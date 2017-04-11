@@ -7,12 +7,12 @@ timr report [<options>]
 
 ## DESCRIPTION
 
-This command is designed to print a list of Tasks or Tracks to STDOUT and to export Tasks and Tracks as CSV files. While this command is similar to `timr-log(1)`, the main focus is exporting Tasks/Tracks as CSV file for further processing.
+This command is designed to print a list of Tasks or Tracks to STDOUT and to export Tasks and Tracks as CSV files. While this command is similar to timr-log(1), the main focus is exporting Tasks/Tracks as CSV file for further processing.
 
 ## OPTIONS
 
 * -d, --day <date>:
-	A single day from 00:00 to 23:59.
+	A single day from 00:00 to 23:59. See timr-ftime(7).
 
 * -m, --month <[YYYY-]MM>:
 	A single month from 01 to 31.
@@ -92,6 +92,9 @@ timr report --all --csv timr_report_all.csv
 * TASK_ID:
 	Task ID
 
+* TASK_FOREIGN_ID:
+	Foreign Task ID
+
 * TASK_NAME:
 	Task Name
 
@@ -102,10 +105,10 @@ timr report --all --csv timr_report_all.csv
 	End DateTime of the last Track.
 
 * TASK_DURATION_HUMAN:
-	Task Duration in human format. (`5m 6s`)
+	Task Duration in human format. See timr-ftime(7).
 
 * TASK_DURATION_SECONDS:
-	Task Duration in seconds. (`306`)
+	Task Duration in seconds.
 
 * TASK_ESTIMATION_HUMAN
 
@@ -116,13 +119,13 @@ timr report --all --csv timr_report_all.csv
 * TASK_REMAINING_TIME_SECONDS
 
 * TASK_BILLED_DURATION_HUMAN:
-	Billed Task Duration in human format.
+	Billed Task Duration in human format. See timr-ftime(7).
 
 * TASK_BILLED_DURATION_SECONDS:
 	Billed Task Duration in seconds.
 
 * TASK_UNBILLED_DURATION_HUMAN:
-	Unbilled Task Duration in human format.
+	Unbilled Task Duration in human format. See timr-ftime(7).
 
 * TASK_UNBILLED_DURATION_SECONDS:
 	Unbilled Task Duration in seconds.
@@ -160,19 +163,19 @@ timr report --all --csv timr_report_all.csv
 	End DateTime
 
 * TRACK_DURATION_HUMAN:
-	Track Duration in human format. (`5m 6s`)
+	Track Duration in human format. See timr-ftime(7).
 
 * TRACK_DURATION_SECONDS:
-	Track Duration in seconds. (`306`)
+	Track Duration in seconds.
 
 * TRACK_BILLED_DURATION_HUMAN:
-	Billed Track Duration in human format.
+	Billed Track Duration in human format. See timr-ftime(7).
 
 * TRACK_BILLED_DURATION_SECONDS:
 	Billed Track Duration in seconds.
 
 * TRACK_UNBILLED_DURATION_HUMAN:
-	Unbilled Track Duration in human format.
+	Unbilled Track Duration in human format. See timr-ftime(7).
 
 * TRACK_UNBILLED_DURATION_SECONDS:
 	Unbilled Track Duration in seconds.
@@ -180,3 +183,7 @@ timr report --all --csv timr_report_all.csv
 * TRACK_IS_BILLED
 
 The last row in CSV files is always the total sum.
+
+## SEE ALSO
+
+timr-log(1), timr-ftime(7)

@@ -1,27 +1,3 @@
-## DATETIME FORMATS
+## TIMR
 
-* <date_time>:
-	A DateTime is one single string representing `<date> <time>`.
-
-* <date>:
-	Formats: `YYYY-MM-DD`, `MM/DD/YYYY`, `DD.MM.YYYY`
-
-* <time>:
-	Formats: `HH:MM`, `HH:MM:SS`
-
-See `timr-task(1)`, section ESTIMATION for estimation <time> details.
-
-## ONLINE RESCOURCES
-
-- [Homepage](https://timr.fox21.at/)
-- [Code Coverage](https://timr.fox21.at/coverage/)
-- [GitHub Page](https://github.com/TheFox/timr)
-- [RubyGems Page](https://rubygems.org/gems/timr)
-- [Travis CI Repository](https://travis-ci.org/TheFox/timr)
-
-## BUGS
-
-Report bugs to
-
-- the [GitHub issues tracker](https://github.com/TheFox/timr/issues)
-- or via email to <christian@fox21.at>.
+This is part of timr(1).

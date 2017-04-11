@@ -1,0 +1,63 @@
+.\" generated with Ronn/v0.7.3
+.\" http://github.com/rtomayko/ronn/tree/0.7.3
+.
+.TH "TIMR\-POP" "1" "April 2017" "FOX21.at" "Timr Manual"
+.
+.SH "NAME"
+\fBtimr\-pop\fR \- Pop current Track from the Stack\.
+.
+.SH "SYNOPSIS"
+timr pop [\fIoptions\fR]
+.
+.SH "DESCRIPTION"
+Stop and pop the current running Track from the Stack\. Also \fBtimr stop\fR removes the current Track from the Stack\.
+.
+.SH "TRACK OPTIONS"
+.
+.TP
+\-\-sd, \-\-start\-date \fIdate\fR
+Start Date for the next underlying Track (continue)\. See timr\-ftime(7)\.
+.
+.TP
+\-\-st, \-\-start\-time \fItime\fR
+Start Time for the next underlying Track (continue)\. See timr\-ftime(7)\.
+.
+.TP
+\-\-ed, \-\-end\-date \fIdate\fR
+End Date for the current running Track (pop)\. See timr\-ftime(7)\.
+.
+.TP
+\-\-et, \-\-end\-time \fItime\fR
+End Time for the current running Track (pop)\. See timr\-ftime(7)\.
+.
+.TP
+\-d, \-\-date \fIdate\fR
+Alias for \fB\-\-end\-date <date> \-\-start\-date <date>\fR\.
+.
+.TP
+\-t, \-\-time \fItime\fR
+Alias for \fB\-\-end\-time <time> \-\-start\-time <time>\fR\.
+.
+.SH "GENERAL OPTIONS"
+.
+.TP
+\-h, \-\-help
+Displays the help page\.
+.
+.SH "EXAMPLES"
+.
+.nf
+
+timr pop
+timr pop \-\-time 11:00
+timr pop \-\-date 2017\-01\-02 \-\-time 11:00
+timr pop \-\-end\-date 2017\-01\-02 \-\-end\-time 17:00 \e
+    \-\-start\-date 2017\-01\-03 \-\-start\-time 10:00
+.
+.fi
+.
+.SH "SEE ALSO"
+timr\-push(1), timr\-stop(1), timr\-ftime(7)
+.
+.SH "TIMR"
+This is part of timr(1)\.

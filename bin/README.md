@@ -1,4 +1,4 @@
-# Timr bin directory
+# bin/
 
 | File | Description |
 |------|-------------|

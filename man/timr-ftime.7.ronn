@@ -1,0 +1,57 @@
+timr-ftime(7) -- Date/Time Format
+===
+
+## SYNOPSIS
+
+timr *
+
+## DESCRIPTION
+
+This document is about date, time and estimation Strings.
+
+## DATETIME FORMATS
+
+* <date_time>:
+	A DateTime is one single string representing `'<date> <time>'`. Must be in quotes.
+
+* <date>:
+	Formats: `YYYYMMDD`, `YYYY-MM-DD`, `MM/DD/YYYY`, `DD.MM.YYYY`
+
+* <time>:
+	Formats: `HH:MM`, `HH:MM:SS`
+
+All dates and times are handled by [Ruby Time](https://ruby-doc.org/stdlib-2.4.0/libdoc/time/rdoc/Time.html) class.
+
+## DURATION
+
+Most used by Estimation (command-line option `-e`).
+
+### Examples
+
+Sets Estimation to 2h 10m 5s:
+
+- `-e 2:10:5`
+- `-e '2h 10m 5s'`
+
+Use '+' or '-' to calculate with Estimation times.
+
+Subtracts 45 minutes from the original Estimation:
+
+`-e '-45m'`
+
+Adds 1 hour 30 minutes to the original Estimation:
+
+`-e '+1h 30m'`
+
+This format is also called *Human Format*.
+
+### chronic_duration
+
+Duration is parsed by chronic_duration.
+
+See chronic_duration for more examples:  
+<https://github.com/henrypoydar/chronic_duration>
+
+## SEE ALSO
+
+timr-continue(1), timr-log(1), timr-pause(1), timr-pop(1), timr-report(1), timr-start(1), timr-stop(1), timr-task(1), timr-track(1)

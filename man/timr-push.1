@@ -1,0 +1,22 @@
+.\" generated with Ronn/v0.7.3
+.\" http://github.com/rtomayko/ronn/tree/0.7.3
+.
+.TH "TIMR\-PUSH" "1" "April 2017" "FOX21.at" "Timr Manual"
+.
+.SH "NAME"
+\fBtimr\-push\fR \- Push new Track to the Stack\.
+.
+.SH "SYNOPSIS"
+timr push [\fIoptions\fR] [\fIid\fR|\fItask_id\fR [\fItrack_id\fR]]
+.
+.SH "DESCRIPTION"
+Sometimes you need to work on a Task only temporary\. You want to track the time for this as well\. For example fixing a bug\. When you fixed the bug you want to continue your actual work\. Here comes \fBtimr push\fR and timr\-pop(1) into the game\. It modifies the Stack\. When you push a new Track the below Track will be paused and hold on the Stack\. On pop the current Track (Top Track) will be stopped and the next below will continue\.
+.
+.P
+Options and Arguments are the same as for timr\-start(1)\.
+.
+.SH "SEE ALSO"
+timr\-pop(1), timr\-start(1), timr\-stop(1)
+.
+.SH "TIMR"
+This is part of timr(1)\.

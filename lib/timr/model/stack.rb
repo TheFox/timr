@@ -5,7 +5,7 @@ module TheFox
 			
 			# The Stack holds one or more [Tracks](rdoc-ref:TheFox::Timr::Model::Track). Only one Track can run at a time.
 			# 
-			# If you push a new Track on the Stack the underlying running will be paused.
+			# When you push a new Track on the Stack the underlying running will be paused.
 			# 
 			# Do not call Stack methods from extern. Only the Timr class is responsible to call Stack methods.
 			class Stack < BasicModel

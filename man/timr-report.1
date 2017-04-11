@@ -10,13 +10,13 @@
 timr report [\fIoptions\fR]
 .
 .SH "DESCRIPTION"
-This command is designed to print a list of Tasks or Tracks to STDOUT and to export Tasks and Tracks as CSV files\. While this command is similar to \fBtimr\-log(1)\fR, the main focus is exporting Tasks/Tracks as CSV file for further processing\.
+This command is designed to print a list of Tasks or Tracks to STDOUT and to export Tasks and Tracks as CSV files\. While this command is similar to timr\-log(1), the main focus is exporting Tasks/Tracks as CSV file for further processing\.
 .
 .SH "OPTIONS"
 .
 .TP
 \-d, \-\-day \fIdate\fR
-A single day from 00:00 to 23:59\.
+A single day from 00:00 to 23:59\. See timr\-ftime(7)\.
 .
 .TP
 \-m, \-\-month \fI[YYYY\-]MM\fR
@@ -117,6 +117,9 @@ ROW_NO: Sequential CSV file row number\.
 TASK_ID: Task ID
 .
 .IP "\(bu" 4
+TASK_FOREIGN_ID: Foreign Task ID
+.
+.IP "\(bu" 4
 TASK_NAME: Task Name
 .
 .IP "\(bu" 4
@@ -126,10 +129,10 @@ TASK_BEGIN_DATETIME: Begin DateTime of the first Track\.
 TASK_END_DATETIME: End DateTime of the last Track\.
 .
 .IP "\(bu" 4
-TASK_DURATION_HUMAN: Task Duration in human format\. (\fB5m 6s\fR)
+TASK_DURATION_HUMAN: Task Duration in human format\. See timr\-ftime(7)\.
 .
 .IP "\(bu" 4
-TASK_DURATION_SECONDS: Task Duration in seconds\. (\fB306\fR)
+TASK_DURATION_SECONDS: Task Duration in seconds\.
 .
 .IP "\(bu" 4
 TASK_ESTIMATION_HUMAN
@@ -144,13 +147,13 @@ TASK_REMAINING_TIME_HUMAN
 TASK_REMAINING_TIME_SECONDS
 .
 .IP "\(bu" 4
-TASK_BILLED_DURATION_HUMAN: Billed Task Duration in human format\.
+TASK_BILLED_DURATION_HUMAN: Billed Task Duration in human format\. See timr\-ftime(7)\.
 .
 .IP "\(bu" 4
 TASK_BILLED_DURATION_SECONDS: Billed Task Duration in seconds\.
 .
 .IP "\(bu" 4
-TASK_UNBILLED_DURATION_HUMAN: Unbilled Task Duration in human format\.
+TASK_UNBILLED_DURATION_HUMAN: Unbilled Task Duration in human format\. See timr\-ftime(7)\.
 .
 .IP "\(bu" 4
 TASK_UNBILLED_DURATION_SECONDS: Unbilled Task Duration in seconds\.
@@ -190,19 +193,19 @@ TRACK_BEGIN_DATETIME: Begin DateTime
 TRACK_END_DATETIME: End DateTime
 .
 .IP "\(bu" 4
-TRACK_DURATION_HUMAN: Track Duration in human format\. (\fB5m 6s\fR)
+TRACK_DURATION_HUMAN: Track Duration in human format\. See timr\-ftime(7)\.
 .
 .IP "\(bu" 4
-TRACK_DURATION_SECONDS: Track Duration in seconds\. (\fB306\fR)
+TRACK_DURATION_SECONDS: Track Duration in seconds\.
 .
 .IP "\(bu" 4
-TRACK_BILLED_DURATION_HUMAN: Billed Track Duration in human format\.
+TRACK_BILLED_DURATION_HUMAN: Billed Track Duration in human format\. See timr\-ftime(7)\.
 .
 .IP "\(bu" 4
 TRACK_BILLED_DURATION_SECONDS: Billed Track Duration in seconds\.
 .
 .IP "\(bu" 4
-TRACK_UNBILLED_DURATION_HUMAN: Unbilled Track Duration in human format\.
+TRACK_UNBILLED_DURATION_HUMAN: Unbilled Track Duration in human format\. See timr\-ftime(7)\.
 .
 .IP "\(bu" 4
 TRACK_UNBILLED_DURATION_SECONDS: Unbilled Track Duration in seconds\.
@@ -215,50 +218,8 @@ TRACK_IS_BILLED
 .P
 The last row in CSV files is always the total sum\.
 .
-.SH "DATETIME FORMATS"
+.SH "SEE ALSO"
+timr\-log(1), timr\-ftime(7)
 .
-.TP
-\fIdate_time\fR
-A DateTime is one single string representing \fB<date> <time>\fR\.
-.
-.TP
-\fIdate\fR
-Formats: \fBYYYY\-MM\-DD\fR, \fBMM/DD/YYYY\fR, \fBDD\.MM\.YYYY\fR
-.
-.TP
-\fItime\fR
-Formats: \fBHH:MM\fR, \fBHH:MM:SS\fR
-.
-.P
-See \fBtimr\-task(1)\fR, section ESTIMATION for estimation \fItime\fR details\.
-.
-.SH "ONLINE RESCOURCES"
-.
-.IP "\(bu" 4
-Homepage \fIhttps://timr\.fox21\.at/\fR
-.
-.IP "\(bu" 4
-Code Coverage \fIhttps://timr\.fox21\.at/coverage/\fR
-.
-.IP "\(bu" 4
-GitHub Page \fIhttps://github\.com/TheFox/timr\fR
-.
-.IP "\(bu" 4
-RubyGems Page \fIhttps://rubygems\.org/gems/timr\fR
-.
-.IP "\(bu" 4
-Travis CI Repository \fIhttps://travis\-ci\.org/TheFox/timr\fR
-.
-.IP "" 0
-.
-.SH "BUGS"
-Report bugs to
-.
-.IP "\(bu" 4
-the GitHub issues tracker \fIhttps://github\.com/TheFox/timr/issues\fR
-.
-.IP "\(bu" 4
-or via email to \fIchristian@fox21\.at\fR\.
-.
-.IP "" 0
-
+.SH "TIMR"
+This is part of timr(1)\.

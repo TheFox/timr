@@ -3,7 +3,13 @@ timr-track(1) -- Show, add, edit, move, or remove a Track.
 
 ## SYNOPSIS
 
-timr track <subcommand> [<options>] [<track_id>]
+timr track [show] [<options>] <track_id>...
+
+timr track add [<options>]
+
+timr track set [<options>] <track_id>
+
+timr track remove <track_id>...
 
 ## DESCRIPTION
 
@@ -29,16 +35,16 @@ This command takes several subcommands. Per default, when providing a Track ID i
 	Track Message. Details about what you have done.
 
 * --sd, --start-date <date>:
-	Start Date
+	Start Date. See timr-ftime(7).
 
 * --st, --start-time <time>:
-	Start Time
+	Start Time. See timr-ftime(7).
 
 * --ed, --end-date <date>:
-	End Date
+	End Date. See timr-ftime(7).
 
 * --et, --end-time <time>:
-	End Time
+	End Time. See timr-ftime(7).
 
 * -b, --billed:
 	Mark Track as billed.
@@ -49,7 +55,7 @@ This command takes several subcommands. Per default, when providing a Track ID i
 ## SET OPTIONS
 
 --task <task_id>:
-	Move Track to another Task. <task_id> can also be a Foreign ID. See `timr-task(1)`.
+	Move Track to another Task. <task_id> can also be a Foreign ID. See timr-task(1).
 
 ## SHOW OPTIONS
 
@@ -73,3 +79,7 @@ timr track add --start-date 2017-01-02 --start-time 16:00 \
 	--end-date 2017-01-02 --end-time 17:00 xyz345
 timr track remove abcd12
 ```
+
+## SEE ALSO
+
+timr-task(1), timr-ftime(7)

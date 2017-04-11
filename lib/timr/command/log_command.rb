@@ -256,14 +256,14 @@ module TheFox
 					puts '   or: timr log [-h|--help]'
 					puts
 					puts 'Total Filter'
-					puts "    -s, --from '<date_time>'    From Date/Time. Must be in quotes."
-					puts '                                Default: today 00:00:00'
-					puts "    -e, --to   '<date_time>'    To Date/Time. Must be in quotes."
-					puts '                                Default: today 23:59:59'
-					puts '    -d, --day   <date>          A single day from 00:00 to 23:59.'
-					puts '    -m, --month <[YYYY-]MM>     A single month from 01 to 31.'
-					puts '    -y, --year  [<YYYY>]        A single year from 01-01 to 12-31.'
-					puts '    -a, --all                   Show all Tracks.'
+					puts "    -s, --from '<date_time>'     From Date/Time. Must be in quotes."
+					puts '                                 Default: today 00:00:00'
+					puts "    -e, --to   '<date_time>'     To Date/Time. Must be in quotes."
+					puts '                                 Default: today 23:59:59'
+					puts '    -d, --day   <date>           A single day from 00:00 to 23:59.'
+					puts '    -m, --month <[YYYY-]MM>      A single month from 01 to 31.'
+					puts '    -y, --year  [<YYYY>]         A single year from 01-01 to 12-31.'
+					puts '    -a, --all                    Show all Tracks.'
 					puts
 					puts 'Day Time Filter'
 					puts '    --sd, --start-date <date>    Start Date'
