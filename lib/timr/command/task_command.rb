@@ -1,4 +1,6 @@
 
+require 'set'
+
 module TheFox
 	module Timr
 		module Command
@@ -251,7 +253,11 @@ module TheFox
 				
 				def run_show_all
 					@timr.tasks.each do |task_id, task|
-						puts '%s %s' % [task.short_id, task.name_s]
+						if task.foreign_id
+							puts '%s %s %s' % [task.short_id, task.foreign_id, task.name_s]
+						else
+							puts '%s - %s' % [task.short_id, task.name_s]
+						end
 					end
 				end
 				

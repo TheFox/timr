@@ -1,4 +1,6 @@
 
+require 'set'
+
 module TheFox
 	module Timr
 		module Command

@@ -5,6 +5,7 @@
 SCRIPT_BASEDIR=$(dirname "$0")
 
 
+option=$1
 set -e
 which gem &> /dev/null || { echo 'ERROR: gem not found in PATH'; exit 1; }
 which bundler &> /dev/null || { echo 'ERROR: bundler not found in PATH'; exit 1; }
@@ -35,4 +36,9 @@ if [[ ! -d tmp ]]; then
 	mkdir -p tmp
 	chmod u=rwx,go-rwx tmp
 fi
-mv -v -i "$gem_file" tmp
+
+if [[ "$option" = "-f" ]]; then
+	mv -v "$gem_file" tmp
+else
+	mv -v -i "$gem_file" tmp
+fi
