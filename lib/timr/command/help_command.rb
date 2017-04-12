@@ -99,28 +99,28 @@ module TheFox
 				def help
 					puts 'usage: timr [-V|--version] [-h|--help] [-C <path>] <command> [<args>]'
 					puts
-					puts '    -V, --version        Show version.'
-					puts '    -h, --help           Show help.'
-					puts '    -C <path>            Set path to the project base directory.'
-					puts '                         Default: ~/.timr/defaultc'
+					puts '    -V, --version    Show version.'
+					puts '    -h, --help       Show help.'
+					puts '    -C <path>        Set path to the project base directory.'
+					puts '                     Default: ~/.timr/defaultc'
 					puts
 					puts 'Commands'
-					puts '    start                Start working on a Task.'
-					puts '    stop                 Stop the current running Task/Track.'
+					puts '    start            Start working on a Task.'
+					puts '    stop             Stop the current running Task/Track.'
 					puts
-					puts '    pause                Pause the Top Track of the Stack.'
-					puts '    continue             Continue the Top Track of the Stack.'
+					puts '    pause            Pause the Top Track of the Stack.'
+					puts '    continue         Continue the Top Track of the Stack.'
 					puts
-					puts '    push                 Push a new Track on the Stack and pause the old one.'
-					puts '    pop                  Pop the Top Track and continue the old one.'
+					puts '    push             Push a new Track on the Stack and pause the old one.'
+					puts '    pop              Pop the Top Track and continue the old one.'
 					puts
-					puts '    status               Show the current Stack.'
-					puts '    log                  Show recent Tracks.'
+					puts '    status           Show the current Stack.'
+					puts '    log              Show recent Tracks.'
 					puts
-					puts "    task                 Task related commands. See 'timr task --help'."
-					puts "    track                Track related commands. See 'timr track --help'."
+					puts "    task             Task related commands. See 'timr task --help'."
+					puts "    track            Track related commands. See 'timr track --help'."
 					puts
-					puts '    report               Generate a report.'
+					puts '    report           Generate a report.'
 					puts
 					puts "See 'timr <command> --help' to read details about a specific command,"
 					puts " or 'timr help <command>' to open the man page for this command."

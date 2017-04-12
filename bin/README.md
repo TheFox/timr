@@ -12,6 +12,6 @@
 | publish | Upload files to <https://timr.fox21.at>. |
 | release.sh | Release gem to <https://rubygems.org/gems/timr>. |
 | test.sh | Run Unit Tests. |
-| timr | Timr Main Executable |
+| timr | Timr Main Executable for end user. |
 | timr_bash_completion.sh | Bash Completion |
 | uninstall.sh | Uninstall Timr Gem. |
