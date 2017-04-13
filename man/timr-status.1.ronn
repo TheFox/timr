@@ -9,9 +9,12 @@ timr status [<options>]
 
 Displays the Stack as a list and the status of each Track.
 
-To see more details about a specific Task see `timr task <task_id>`, or a specific Track see `timr track <track_id>`.
+To see more details about a specific Task see timr-task(1), or a specific Track timr-track(1).
 
 ## OPTIONS
+
+* -v, --verbose:
+	Show more columns in table view.
 
 * -f, --full:
 	Show full status.
@@ -29,3 +32,7 @@ timr status
 timr status --full
 timr status --full --reverse
 ```
+
+## SEE ALSO
+
+timr-task(1), timr-track(1)

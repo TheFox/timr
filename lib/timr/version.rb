@@ -2,8 +2,8 @@
 module TheFox
 	module Timr
 		NAME = 'Timr'
-		VERSION = '0.4.0-dev.11'
-		DATE = '2017-04-12'
+		VERSION = '0.4.0-dev.12'
+		DATE = '2017-04-13'
 		HOMEPAGE = 'https://github.com/TheFox/timr'
 		
 		MODEL_DATETIME_FORMAT = '%FT%T%z'

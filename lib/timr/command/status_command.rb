@@ -17,6 +17,8 @@ module TheFox
 					super()
 					
 					@help_opt = false
+					
+					@verbose_opt = false
 					@full_opt = false
 					@reverse_opt = false
 					
@@ -28,6 +30,8 @@ module TheFox
 						case arg
 						when '-h', '--help'
 							@help_opt = true
+						when '-v', '--verbose'
+							@verbose_opt = true
 						when '-f', '--full'
 							@full_opt = true
 						when '-r', '--reverse'
@@ -57,24 +61,26 @@ module TheFox
 				private
 				
 				def print_small_table
-					table_has_rows = false
+					headings = Array.new
+					headings << {:format => '%2s', :label => '##'}
+					headings << {:format => '%1s', :label => 'S'}
+					headings << {:format => '%-5s', :label => 'START', :padding_left => ' '}
+					headings << {:format => '%-5s', :label => 'END'}
+					headings << {:format => '%8s', :label => 'DUR', :padding_right => ' '}
+					if @verbose_opt
+						headings << {:format => '%7s', :label => 'EST', :padding_right => ' '}
+						headings << {:format => '%7s', :label => 'ETR', :padding_right => ' '}
+						headings << {:format => '%7s', :label => 'ETR%', :padding_right => ' '}
+					end
+					headings << {:format => '%-6s', :label => 'TASK', :padding_right => ' '}
+					headings << {:format => '%s', :label => 'TRACK'}
 					
 					table_options = {
-						:headings => [
-							{:format => '%2s', :label => '##'},
-							{:format => '%1s', :label => 'S'},
-							{:format => '%-5s', :label => 'START', :padding_left => ' '},
-							{:format => '%-5s', :label => 'END'},
-							{:format => '%8s', :label => 'DUR', :padding_right => ' '},
-							{:format => '%7s', :label => 'EST', :padding_right => ' '},
-							{:format => '%7s', :label => 'ETR', :padding_right => ' '},
-							{:format => '%7s', :label => 'ETR%', :padding_right => ' '},
-							{:format => '%-6s', :label => 'TASK', :padding_right => ' '},
-							{:format => '%s', :label => 'TRACK'},
-						],
+						:headings => headings,
 					}
 					table = Table.new(table_options)
 					
+					table_has_rows = false
 					track_c = 0
 					get_tracks.each do |track|
 						track_c += 1
@@ -96,18 +102,26 @@ module TheFox
 							end_datetime_s = track.end_datetime_s({:format => '%H:%M'})
 						end
 						
-						table << [
-							track_c,
-							status,
-							begin_datetime_s,
-							end_datetime_s,
-							duration.to_human,
-							estimation_s,
-							remaining_time_s,
-							remaining_time_percent_s,
-							task.short_id,
-							'%s %s' % [track.short_id, track.title(12)],
-						]
+						row = Array.new
+						row << track_c
+						row << status
+						row << begin_datetime_s
+						row << end_datetime_s
+						row << duration.to_human
+						if @verbose_opt
+							row << estimation_s
+							row << remaining_time_s
+							row << remaining_time_percent_s
+						end
+						row << task.short_id
+						
+						if @verbose_opt
+							row << '%s %s' % [track.short_id, track.title]
+						else
+							row << '%s %s' % [track.short_id, track.title(12)]
+						end
+						
+						table << row
 					end
 					
 					if table_has_rows
@@ -152,6 +166,7 @@ module TheFox
 					puts 'usage: timr status [-h|--help] [-f|--full] [-r|--reverse]'
 					puts
 					puts 'Options'
+					puts '    -v, --verbose    Show more columns in table view.'
 					puts '    -f, --full       Show full status.'
 					puts '    -r, --reverse    Reverse the list.'
 					puts

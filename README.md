@@ -22,15 +22,15 @@ The preferred method of installation is via RubyGems.org:
 
 The simplest thing you can do after installation is start a new Task:
 
-	timr start
+	$ timr start
 
-And after that you want to stop:
+And after some time you probably want to stop:
 
-	timr stop
+	$ timr stop
 
 To show the current status:
 
-	timr status
+	$ timr status
 
 ## Task
 

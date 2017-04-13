@@ -133,6 +133,7 @@ function _timr_status_main {
 	local curr_word=$1
 	local timr_commands=(
 		--help
+		--verbose
 		--full
 		--reverse
 	)
