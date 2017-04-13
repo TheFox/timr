@@ -80,7 +80,7 @@ See more informations on the [timr-start(1)](https://timr.fox21.at/man/timr-star
 
 ### Stop Command
 
-The Stop command stopps the current running Track and removes it from the Stack.
+Stopps the current running Track and removes it from the Stack.
 
 	timr stop [<options>]
 

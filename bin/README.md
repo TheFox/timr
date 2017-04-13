@@ -1,4 +1,4 @@
-# bin/
+# bin/ Directory Overview
 
 | File | Description |
 |------|-------------|

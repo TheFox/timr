@@ -9,6 +9,7 @@ module TheFox
 				include TheFox::Timr::Helper
 				include TheFox::Timr::Error
 				
+				# Path to man page.
 				MAN_PATH = 'man/stop.1'
 				
 				def initialize(argv = Array.new)

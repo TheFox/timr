@@ -13,6 +13,7 @@ module TheFox
 				include TheFox::Timr::Model
 				include TheFox::Timr::Error
 				
+				# Path to man page.
 				MAN_PATH = 'man/track.1'
 				
 				def initialize(argv = Array.new)

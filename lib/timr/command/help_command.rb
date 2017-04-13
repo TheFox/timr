@@ -44,23 +44,27 @@ module TheFox
 				# All methods in this block are static.
 				class << self
 					
+					# Alias
 					def print_id_help
 						print_task_id_help
 						puts
 						print_track_id_help
 					end
 					
+					# Print help about Task ID.
 					def print_task_id_help
 						puts '    <task_id>     Task ID (SHA1 hex)'
 						puts '                  If not specified a new Task will be created.'
 					end
 					
+					# Print help about Track ID.
 					def print_track_id_help
 						puts '    <track_id>    Track ID (SHA1 hex)'
 						puts '                  If specified a new Track with the same'
 						puts '                  message will be created.'
 					end
 					
+					# Print DateTime help.
 					def print_datetime_help
 						puts 'DateTime Formats'
 						puts "    <date_time>    A DateTime is one single string"
@@ -69,6 +73,7 @@ module TheFox
 						puts '    <time>         Formats: HH:MM, HH:MM:SS'
 					end
 					
+					# Print Estimation help.
 					def print_estimation_help(ext = false)
 						puts 'Duration'
 						puts '    Duration is parsed by chronic_duration.'
@@ -86,6 +91,7 @@ module TheFox
 						puts '    https://github.com/henrypoydar/chronic_duration'
 					end
 					
+					# Print Man Units help.
 					def print_man_units_help
 						puts 'Man Units'
 						puts '    8 hours are 1 man-day.'
