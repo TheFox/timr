@@ -433,6 +433,10 @@ module TheFox
 						to_ax << 'End:   %s' % [self.end_datetime_s]
 					end
 					
+					if self.duration && self.duration.to_i > 0
+						to_ax << 'Duration: %s' % [self.duration.to_human]
+					end
+					
 					to_ax << 'Status: %s' % [self.status.colorized]
 					
 					# if self.message
