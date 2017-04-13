@@ -6,17 +6,20 @@ SCRIPT_BASEDIR=$(dirname "$0")
 
 
 set -e
-pushd "${SCRIPT_BASEDIR}/.."
+cd "${SCRIPT_BASEDIR}/.."
 
 # Load Environment Variables
 [[ -f .env ]] && source .env
 
-if [[ -z "${RSYNC_USER}" ]] || [[ -z "${RSYNC_HOST}" ]] || [[ -z "${RSYNC_REMOTE_PATH}" ]] || [[ -z "${RSYNC_OPTIONS}" ]] ; then
+if [[ -z "${CI_BUILD_REF_NAME}" ]] || [[ -z "${RSYNC_USER}" ]] || [[ -z "${RSYNC_HOST}" ]] || [[ -z "${RSYNC_REMOTE_PATH_MASTER}" ]] || [[ -z "${RSYNC_REMOTE_PATH_DEVELOP}" ]] || [[ -z "${RSYNC_OPTIONS}" ]] ; then
 	echo 'ERROR: one of the environment variables is missing'
+	
+	echo "CI_BUILD_REF_NAME: '${CI_BUILD_REF_NAME}'"
 	
 	echo "RSYNC_USER: '${RSYNC_USER}'"
 	echo "RSYNC_HOST: '${RSYNC_HOST}'"
-	echo "RSYNC_REMOTE_PATH: '${RSYNC_REMOTE_PATH}'"
+	echo "RSYNC_REMOTE_PATH_MASTER: '${RSYNC_REMOTE_PATH_MASTER}'"
+	echo "RSYNC_REMOTE_PATH_DEVELOP: '${RSYNC_REMOTE_PATH_DEVELOP}'"
 	echo "RSYNC_OPTIONS: '${RSYNC_OPTIONS}'"
 	
 	exit 1
@@ -24,7 +27,12 @@ fi
 
 which rsync &> /dev/null || { echo 'ERROR: rsync not found in PATH'; exit 1; }
 
-echo "rsync to '${RSYNC_USER}@${RSYNC_HOST}:${RSYNC_REMOTE_PATH}'"
-rsync ${RSYNC_OPTIONS} build.txt coverage api "${RSYNC_USER}@${RSYNC_HOST}:${RSYNC_REMOTE_PATH}"
+remote_path=$RSYNC_REMOTE_PATH_DEVELOP
+if [[ "$CI_BUILD_REF_NAME" = "master" ]]; then
+	remote_path=$RSYNC_REMOTE_PATH_MASTER
+fi
 
-rsync ${RSYNC_OPTIONS} --include man --include='man/*.html' --exclude='*' man "${RSYNC_USER}@${RSYNC_HOST}:${RSYNC_REMOTE_PATH}"
+echo "rsync to '${RSYNC_USER}@${RSYNC_HOST}:${remote_path}'"
+rsync ${RSYNC_OPTIONS} build.txt coverage api "${RSYNC_USER}@${RSYNC_HOST}:${remote_path}"
+
+rsync ${RSYNC_OPTIONS} --include man --include='man/*.html' --exclude='*' man "${RSYNC_USER}@${RSYNC_HOST}:${remote_path}"

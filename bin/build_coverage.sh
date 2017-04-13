@@ -5,13 +5,13 @@
 SCRIPT_BASEDIR=$(dirname "$0")
 RUBYOPT=-w
 TZ=Europe/Vienna
-COVERAGE=1
+export COVERAGE=1
 
 
 set -e
 which bundler &> /dev/null || { echo 'ERROR: bundler not found in PATH'; exit 1; }
 
-pushd "${SCRIPT_BASEDIR}/.."
+cd "${SCRIPT_BASEDIR}/.."
 
 is_local=$1
 

@@ -7,9 +7,11 @@ SCRIPT_BASEDIR=$(dirname "$0")
 
 
 set -e
+which cp &> /dev/null || { echo 'ERROR: cp not found in PATH'; exit 1; }
+which cat &> /dev/null || { echo 'ERROR: cat not found in PATH'; exit 1; }
 which ronn &> /dev/null || { echo 'ERROR: ronn not found in PATH'; exit 1; }
 
-pushd "${SCRIPT_BASEDIR}/../man"
+cd "${SCRIPT_BASEDIR}/../man"
 
 for file in \
 	timr-continue.1.ronn \

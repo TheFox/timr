@@ -7,10 +7,13 @@ SCRIPT_BASEDIR=$(dirname "$0")
 
 option=$1
 set -e
+which mkdir &> /dev/null || { echo 'ERROR: mkdir not found in PATH'; exit 1; }
+which mv &> /dev/null || { echo 'ERROR: mv not found in PATH'; exit 1; }
+which chmod &> /dev/null || { echo 'ERROR: chmod not found in PATH'; exit 1; }
 which gem &> /dev/null || { echo 'ERROR: gem not found in PATH'; exit 1; }
 which bundler &> /dev/null || { echo 'ERROR: bundler not found in PATH'; exit 1; }
 
-pushd "${SCRIPT_BASEDIR}/.."
+cd "${SCRIPT_BASEDIR}/.."
 
 # Load Environment Variables
 [[ -f .env ]] && source .env

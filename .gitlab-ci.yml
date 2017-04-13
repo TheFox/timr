@@ -9,6 +9,7 @@ before_script:
     - ruby -v
     - gem update --system
     - gem install bundler -v '~>1.13'
+    - gem install ronn -v '0.7.3'
     - bundler --version
     - bundler install
 
@@ -73,10 +74,20 @@ release:
         - 'printf "%s\n:rubygems_api_key: %s" "---" "${RUBYGEMSORG_API_KEY}" > ~/.gem/credentials; chmod 0600 ~/.gem/credentials'
         - ./bin/release.sh
 
-deploy:
+deploy_dev:
     image: ruby:2.4.0
     stage: deploy
-    environment: homepage
+    environment: homepage_dev
+    only:
+        - develop
+    script:
+        - ./bin/build.sh
+        - ./bin/publish
+
+deploy_prod:
+    image: ruby:2.4.0
+    stage: deploy
+    environment: homepage_prod
     only:
         - tags
     script:
