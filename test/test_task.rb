@@ -738,6 +738,8 @@ class TestTask < MiniTest::Test
 		task1.estimation = '10h 5m'
 		
 		task1.to_detailed_str
+		task1.to_detailed_array
+		
 		#assert_equal(['Task: 123456 zyx', '  Description: xyz', '  Estimation: 10h 5m', '  File path: '], task1.to_detailed_array)
 		# @TODO to_detailed_array test
 	end
@@ -751,6 +753,8 @@ class TestTask < MiniTest::Test
 		task1.estimation = '10h 5m'
 		
 		task1.to_detailed_str
+		task1.to_detailed_array
+		
 		#assert_equal(['Task: 123456 zyx', '  Description: xyz', '  Estimation: 10h 5m', '  File path: '], task1.to_detailed_array)
 		# @TODO to_detailed_array test
 	end
