@@ -59,7 +59,7 @@ module TheFox
 					end
 					
 					puts '--- CONTINUED ---'
-					puts track.to_detailed_str
+					puts track.to_compact_str
 					puts @timr.stack
 				end
 				

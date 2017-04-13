@@ -409,47 +409,88 @@ module TheFox
 				end
 				
 				# Used to print informations to STDOUT.
-				def to_detailed_str
-					to_detailed_array.join("\n")
+				def to_compact_str
+					to_compact_array.join("\n")
 				end
 				
 				# Used to print informations to STDOUT.
-				def to_detailed_array(options = Hash.new)
-					#options[:duration_man_days] ||= false
-					#options[:message] ||= false
-					# options[:file_path] ||= false
+				def to_compact_array
+					to_ax = Array.new
 					
-					duration_human = self.duration.to_human
-					duration_man_days = self.duration.to_man_days
+					if @task
+						to_ax.concat(@task.to_track_array)
+					end
+					
+					to_ax << 'Track: %s %s' % [self.short_id, self.title]
+					
+					# if self.title
+					# 	to_ax << 'Title: %s' % [self.title]
+					# end
+					if self.begin_datetime
+						to_ax << 'Start: %s' % [self.begin_datetime_s]
+					end
+					if self.end_datetime
+						to_ax << 'End:   %s' % [self.end_datetime_s]
+					end
+					
+					to_ax << 'Status: %s' % [self.status.colorized]
+					
+					# if self.message
+					# 	to_ax << 'Message: %s' % [self.message]
+					# end
+					
+					to_ax
+				end
+				
+				# Used to print informations to STDOUT.
+				def to_detailed_str(options = Hash.new)
+					to_detailed_array(options).join("\n")
+				end
+				
+				# Used to print informations to STDOUT.
+				# 
+				# Options:
+				# 
+				# - `:full_id` (Boolean) Show full Task and Track IDs.
+				def to_detailed_array(options = Hash.new)
+					full_id_opt = options.fetch(:full_id, false) # @TODO full_id unit test
 					
 					to_ax = Array.new
+					
 					if @task
-						if @task.foreign_id
-							to_ax << ' Task: %s %s %s' % [@task.short_id, @task.foreign_id, @task.name_s]
-						else
-							to_ax << ' Task: %s %s' % [@task.short_id, @task.name_s]
+						to_ax.concat(@task.to_track_array(options))
+					end
+					
+					if full_id_opt
+						to_ax << 'Track: %s' % [self.id]
+					else
+						to_ax << 'Track: %s' % [self.short_id]
+					end
+					
+					if self.begin_datetime
+						to_ax << 'Start: %s' % [self.begin_datetime_s]
+					end
+					if self.end_datetime
+						to_ax << 'End:   %s' % [self.end_datetime_s]
+					end
+					
+					if self.duration && self.duration.to_i > 0
+						duration_human = self.duration.to_human
+						to_ax << 'Duration: %s' % [duration_human]
+						
+						duration_man_days = self.duration.to_man_days
+						if duration_human != duration_man_days
+							to_ax << 'Man Unit: %s' % [duration_man_days]
 						end
 					end
-					to_ax << 'Track: %s' % [self.short_id]
-					to_ax << '  ID: %s' % [self.id]
-					to_ax << '  Title: %s' % [self.title]
-					to_ax << '  Start: %s' % [self.begin_datetime_s]
-					to_ax << '  End:   %s' % [self.end_datetime_s]
-					to_ax << '  Duration: %s' % [duration_human]
-					# to_ax << "  Duration CLASS: #{duration_human.class}"
-					# if options[:duration_man_days] && duration_human != duration_man_days
-					if duration_human != duration_man_days
-						to_ax << '  Man Unit: %s' % [duration_man_days]
-					end
-					to_ax << '  Billed: %s' % [self.is_billed ? 'Yes' : 'No']
-					to_ax << '  Status: %s' % [self.status.colorized]
-					# if options[:message] && self.message
+					
+					to_ax << 'Billed: %s' % [self.is_billed ? 'Yes' : 'No']
+					to_ax << 'Status: %s' % [self.status.colorized]
+					
 					if self.message
-						to_ax << '  Message: %s' % [self.message]
+						to_ax << 'Message: %s' % [self.message]
 					end
-					# if options[:file_path]
-					# 	to_ax << '  File path: %s' % [self.file_path]
-					# end
+					
 					to_ax
 				end
 				

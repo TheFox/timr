@@ -26,6 +26,7 @@ module TheFox
 					@remove_opt = false
 					@set_opt = false
 					
+					@verbose_opt = false
 					@tracks_opt = false
 					
 					@foreign_id_opt = nil
@@ -53,6 +54,8 @@ module TheFox
 						when '-h', '--help'
 							@help_opt = true
 						
+						when '-v', '--verbose'
+							@verbose_opt = true
 						when '-t', '--tracks'
 							@tracks_opt = true
 						
@@ -152,7 +155,7 @@ module TheFox
 					}
 					task = @timr.add_task(options)
 					
-					puts task.to_compact_str
+					puts task.to_detailed_str
 				end
 				
 				def run_remove
@@ -234,6 +237,11 @@ module TheFox
 				end
 				
 				def run_show
+					options = Hash.new
+					if @verbose_opt
+						options[:full_id] = true
+					end
+					
 					tasks = Array.new
 					@tasks_opt.each do |task_id_or_instance|
 						if task_id_or_instance.is_a?(Task)
@@ -242,8 +250,7 @@ module TheFox
 							task = @timr.get_task_by_id(task_id_or_instance)
 						end
 						
-						# tasks << task_to_array(task)
-						tasks << task.to_detailed_array
+						tasks << task.to_detailed_array(options)
 					end
 					
 					if tasks.count > 0
@@ -253,10 +260,12 @@ module TheFox
 				
 				def run_show_all
 					@timr.tasks.each do |task_id, task|
+						full_id = @verbose_opt ? task.id : task.short_id
+						
 						if task.foreign_id
-							puts '%s %s %s' % [task.short_id, task.foreign_id, task.name_s]
+							puts '%s %s %s' % [full_id, task.foreign_id, task.name_s]
 						else
-							puts '%s - %s' % [task.short_id, task.name_s]
+							puts '%s - %s' % [full_id, task.name_s]
 						end
 					end
 				end

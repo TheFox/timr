@@ -716,8 +716,7 @@ class TestTask < MiniTest::Test
 		task1.description = 'xyz'
 		task1.estimation = '10h 5m'
 		
-		task1.to_compact_str # @TODO to_compact_str test
-		assert_equal(['Task: 123456 zyx', '  Description: xyz', '  Estimation: 10h 5m', '  File path: '], task1.to_compact_array)
+		assert_equal(['Task: 123456 zyx', 'Description: xyz', 'Estimation: 10h 5m'], task1.to_compact_array)
 	end
 	
 	def test_to_compact_str_array2
@@ -728,8 +727,7 @@ class TestTask < MiniTest::Test
 		task1.description = 'xyz'
 		task1.estimation = '10h 5m'
 		
-		task1.to_compact_str # @TODO to_compact_str test
-		assert_equal(['Task: 123456 abc zyx', '  Description: xyz', '  Estimation: 10h 5m', '  File path: '], task1.to_compact_array)
+		assert_equal(['Task: 123456 abc zyx', 'Description: xyz', 'Estimation: 10h 5m'], task1.to_compact_array)
 	end
 	
 	def test_to_detailed_str_array1

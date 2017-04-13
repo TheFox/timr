@@ -120,7 +120,7 @@ module TheFox
 						raise TrackError, 'Could not start a new Track.'
 					end
 					
-					puts track.to_detailed_str
+					puts track.to_compact_str
 					puts @timr.stack
 				end
 				

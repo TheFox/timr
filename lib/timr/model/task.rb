@@ -591,7 +591,7 @@ module TheFox
 							
 							add_track(@current_track)
 						else
-							raise TrackError, "Cannot continue Track #{@current_track.short_id}: already running."
+							raise TrackError, "Cannot continue Track #{@current_track.short_id}, is already running."
 						end
 					else
 						unless track_opt
@@ -751,6 +751,30 @@ module TheFox
 					"Task_#{short_id}"
 				end
 				
+				# Use to print informations for Track.
+				# 
+				# Options:
+				# 
+				# - `:full_id` (Boolean) Show full Task ID.
+				def to_track_array(options = Hash.new)
+					full_id_opt = options.fetch(:full_id, false) # @TODO full_id unit test
+					
+					full_id = full_id_opt ? self.id : self.short_id
+					
+					name_a = ["Task: #{full_id}"]
+					
+					if self.foreign_id
+						name_a << self.foreign_id
+					end
+					if self.name
+						name_a << self.name
+					end
+					
+					to_ax = Array.new
+					to_ax << name_a.join(' ')
+					to_ax
+				end
+				
 				# Used to print informations to STDOUT.
 				def to_compact_str
 					to_compact_array.join("\n")
@@ -765,12 +789,11 @@ module TheFox
 						to_ax << 'Task: %s %s' % [self.short_id, self.name]
 					end
 					if self.description
-						to_ax << '  Description: %s' % [self.description]
+						to_ax << 'Description: %s' % [self.description]
 					end
 					if self.estimation
-						to_ax << '  Estimation: %s' % [self.estimation.to_human]
+						to_ax << 'Estimation: %s' % [self.estimation.to_human]
 					end
-					to_ax << '  File path: %s' % [self.file_path]
 					to_ax
 				end
 				
@@ -780,40 +803,52 @@ module TheFox
 				end
 				
 				# Used to print informations to STDOUT.
-				def to_detailed_array
+				# 
+				# Options:
+				# 
+				# - `:full_id` (Boolean) Show full Task ID.
+				def to_detailed_array(options = Hash.new)
+					full_id_opt = options.fetch(:full_id, false)
+					
 					to_ax = Array.new
-					to_ax << 'Task: %s' % [self.short_id]
-					to_ax << '  ID: %s' % [self.id]
-					if self.foreign_id
-						to_ax << '  Foreign ID: %s' % [self.foreign_id]
+					
+					if full_id_opt
+						to_ax << 'Task: %s' % [self.id]
+					else
+						to_ax << 'Task: %s' % [self.short_id]
 					end
-					to_ax << '  Name: %s' % [self.name]
+					
+					if self.foreign_id
+						to_ax << 'Foreign ID: %s' % [self.foreign_id]
+					end
+					
+					to_ax << 'Name: %s' % [self.name]
 					
 					if self.description
-						to_ax << '  Description: %s' % [self.description]
+						to_ax << 'Description: %s' % [self.description]
 					end
 					
 					# Duration
 					duration_human = self.duration.to_human
-					to_ax << '  Duration:          %s' % [duration_human]
+					to_ax << 'Duration: %s' % [duration_human]
 					
 					duration_man_days = self.duration.to_man_days
 					if duration_human != duration_man_days
-						to_ax << '  Man Unit:          %s' % [duration_man_days]
+						to_ax << 'Man Unit: %s' % [duration_man_days]
 					end
 					
 					# Billed Duration
 					billed_duration_human = self.billed_duration.to_human
-					to_ax << '  Billed Duration:   %s' % [billed_duration_human]
+					to_ax << 'Billed   Duration: %s' % [billed_duration_human]
 					
 					# Unbilled Duration
 					unbilled_duration_human = self.unbilled_duration.to_human
-					to_ax << '  Unbilled Duration: %s' % [unbilled_duration_human]
+					to_ax << 'Unbilled Duration: %s' % [unbilled_duration_human]
 					
 					if self.estimation
-						to_ax << '  Estimation:     %s' % [self.estimation.to_human]
+						to_ax << 'Estimation:     %s' % [self.estimation.to_human]
 						
-						to_ax << '  Time Remaining: %s (%s)' % [self.remaining_time_s, self.remaining_time_percent_s]
+						to_ax << 'Time Remaining: %s (%s)' % [self.remaining_time_s, self.remaining_time_percent_s]
 						
 						bar_options = {
 							:total => self.estimation.to_i,
@@ -824,21 +859,21 @@ module TheFox
 						}
 						bar = ProgressBar.new(bar_options)
 						
-						to_ax << '                  |%s|' % [bar.render]
+						to_ax << '                |%s|' % [bar.render]
 					end
 					
 					if self.hourly_rate
-						to_ax << '  Hourly Rate:     %.2f' % [self.hourly_rate]
-						to_ax << '  Flat Rate:       %s' % [@has_flat_rate ? 'Yes' : 'No']
+						to_ax << 'Hourly Rate:     %.2f' % [self.hourly_rate]
+						to_ax << 'Flat Rate:       %s' % [@has_flat_rate ? 'Yes' : 'No']
 						
-						to_ax << '  Consumed Budge:  %.2f' % [self.consumed_budge]
+						to_ax << 'Consumed Budge:  %.2f' % [self.consumed_budge]
 						
 						if self.estimation
-							to_ax << '  Estimated Budge: %.2f' % [self.estimated_budge]
+							to_ax << 'Estimated Budge: %.2f' % [self.estimated_budge]
 						end
 						
 						if @has_flat_rate
-							to_ax << '  Loss Budge:      %.2f' % [self.loss_budge]
+							to_ax << 'Loss Budge:      %.2f' % [self.loss_budge]
 						end
 					end
 					
@@ -850,7 +885,7 @@ module TheFox
 						.values
 						.first
 					if first_track
-						to_ax << '  Begin Track: %s  %s' % [first_track.short_id, first_track.begin_datetime_s]
+						to_ax << 'Begin Track: %s  %s' % [first_track.short_id, first_track.begin_datetime_s]
 					end
 					
 					last_track = tracks
@@ -860,30 +895,32 @@ module TheFox
 						.values
 						.last
 					if last_track
-						to_ax << '  End   Track: %s  %s' % [last_track.short_id, last_track.end_datetime_s]
+						to_ax << 'End   Track: %s  %s' % [last_track.short_id, last_track.end_datetime_s]
 					end
 					
 					status = self.status.colorized
-					to_ax << '  Status: %s' % [status]
+					to_ax << 'Status: %s' % [status]
 					
 					if @current_track
-						to_ax << '  Current Track: %s %s' % [@current_track.short_id, @current_track.title]
+						to_ax << 'Current Track: %s %s' % [@current_track.short_id, @current_track.title]
 					end
 					
 					tracks_count = tracks.count
-					to_ax << '  Tracks:          %d' % [tracks_count]
+					to_ax << 'Tracks:          %d' % [tracks_count]
 					
 					billed_tracks_count = tracks({:billed => true}).count
-					to_ax << '  Billed Tracks:   %d' % [billed_tracks_count]
+					to_ax << 'Billed Tracks:   %d' % [billed_tracks_count]
 					
 					unbilled_tracks_count = tracks({:billed => false}).count
-					to_ax << '  Unbilled Tracks: %d' % [unbilled_tracks_count]
+					to_ax << 'Unbilled Tracks: %d' % [unbilled_tracks_count]
 					
 					if tracks_count > 0 && @tracks_opt # --tracks
-						to_ax << '  Track IDs: %s' % [tracks.map{ |track_id, track| track.short_id }.join(' ')]
+						to_ax << 'Track IDs: %s' % [tracks.map{ |track_id, track| track.short_id }.join(' ')]
 					end
 					
-					to_ax << '  File path: %s' % [self.file_path]
+					if self.file_path
+						to_ax << 'File path: %s' % [self.file_path]
+					end
 					
 					to_ax
 				end

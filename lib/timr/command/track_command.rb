@@ -25,9 +25,11 @@ module TheFox
 					@remove_opt = false
 					@set_opt = false
 					
+					@verbose_opt = false
 					@tracks_opt = Set.new
 					@task_opt = false
 					@task_id_opt = nil
+					
 					@message_opt = nil
 					@start_date_opt = nil
 					@start_time_opt = nil
@@ -44,6 +46,9 @@ module TheFox
 						case arg
 						when '-h', '--help'
 							@help_opt = true
+						
+						when '-v', '--verbose'
+							@verbose_opt = true
 						when '-t', '--task'
 							if @set_opt
 								@task_id_opt = argv.shift
@@ -128,11 +133,22 @@ module TheFox
 						end
 					end
 					
-					task_command = TaskCommand.new(tasks.values)
+					task_command_args = tasks.values
+					
+					if @verbose_opt
+						task_command_args << '--verbose'
+					end
+					
+					task_command = TaskCommand.new(task_command_args)
 					task_command.run
 				end
 				
 				def run_show
+					options = Hash.new
+					if @verbose_opt
+						options[:full_id] = true
+					end
+					
 					tracks = Array.new
 					@tracks_opt.each do |track_id|
 						track = @timr.get_track_by_id(track_id)
@@ -140,7 +156,7 @@ module TheFox
 							raise TrackCommandError, "Track for ID '#{track_id}' not found."
 						end
 						
-						tracks << track_to_array(track)
+						tracks << track.to_detailed_array(options)
 					end
 					
 					if tracks.count > 0
@@ -176,7 +192,7 @@ module TheFox
 					task.add_track(track)
 					task.save_to_file
 					
-					puts track_to_array(track).join("\n")
+					puts track.to_detailed_str
 				end
 				
 				def run_remove
@@ -201,7 +217,7 @@ module TheFox
 					end
 					
 					puts '--- OLD ---'
-					puts track_to_array(track).join("\n")
+					puts track.to_detailed_str
 					puts
 					
 					bdt = track.begin_datetime
@@ -277,12 +293,7 @@ module TheFox
 					task.save_to_file
 					
 					puts '--- NEW ---'
-					puts track_to_array(track).join("\n")
-				end
-				
-				# Is used to print the Task to STDOUT.
-				def track_to_array(track)
-					track.to_detailed_array
+					puts track.to_detailed_str
 				end
 				
 				def check_task_id

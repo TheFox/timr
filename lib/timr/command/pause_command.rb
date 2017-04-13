@@ -58,7 +58,7 @@ module TheFox
 					end
 					
 					puts '--- PAUSED ---'
-					puts track.to_detailed_str
+					puts track.to_compact_str
 					puts @timr.stack
 				end
 				

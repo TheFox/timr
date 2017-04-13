@@ -89,7 +89,7 @@ module TheFox
 					# Get Task from Track.
 					old_task = old_track.task
 					unless old_task
-						raise "Track #{old_track.short_id} has no Task."
+						raise TrackError, "Track #{old_track.short_id} has no Task."
 					end
 					
 					# Stop Task
@@ -137,7 +137,7 @@ module TheFox
 							# Get Task from Track.
 							task = track.task
 							unless task
-								raise "Track #{track.short_id} has no Task."
+								raise TrackError, "Track #{track.short_id} has no Task."
 							end
 							
 							# Start Task
@@ -210,7 +210,7 @@ module TheFox
 				
 				# Track Status
 				if track.stopped?
-					raise "Current Track #{track.short_id} is not running."
+					raise TrackError, "Cannot pause current Track #{track.short_id}, is not running."
 				end
 				
 				# Get Task from Track.
