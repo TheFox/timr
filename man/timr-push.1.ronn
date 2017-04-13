@@ -11,6 +11,10 @@ Sometimes you need to work on a Task only temporary. You want to track the time 
 
 Options and Arguments are the same as for timr-start(1).
 
+## API REFERENCE
+
+<https://timr.fox21.at/api/TheFox/Timr/Command/PushCommand.html>
+
 ## SEE ALSO
 
 timr-pop(1), timr-start(1), timr-stop(1)

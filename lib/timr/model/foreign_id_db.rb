@@ -3,10 +3,22 @@ module TheFox
 	module Timr
 		module Model
 			
+			# Holds the Task IDs for each Foreign Task ID.
+			# 
+			# Basically it's a Hash with structure:
+			# 
+			# ```
+			# foreign_id => task_id
+			# ```
 			class ForeignIdDb < BasicModel
 				
 				include TheFox::Timr::Error
 				
+				# Holds all Foreign Task IDs.
+				# 
+				# ```
+				# @foreign_ids[foreign_id] = task.id
+				# ```
 				attr_reader :foreign_ids
 				
 				def initialize

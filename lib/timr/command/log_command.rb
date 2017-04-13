@@ -7,13 +7,15 @@ module TheFox
 		module Command
 			
 			# By default this Command prints all todays [Tracks](rdoc-ref:TheFox::Timr::Model::Track).
+			# 
+			# Man page: [timr-log(1)](../../../../man/timr-log.1.html)
 			class LogCommand < BasicCommand
 				
 				include TheFox::Timr::Helper
 				include TheFox::Timr::Error
 				
 				# Path to man page.
-				MAN_PATH = 'man/log.1'
+				MAN_PATH = 'man/timr-log.1'
 				
 				def initialize(argv = Array.new)
 					super()

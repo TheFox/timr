@@ -4,13 +4,15 @@ module TheFox
 		module Command
 			
 			# Pause the current running [Track](rdoc-ref:TheFox::Timr::Model::Track).
+			# 
+			# Man page: [timr-pause(1)](../../../../man/timr-pause.1.html)
 			class PauseCommand < BasicCommand
 				
 				include TheFox::Timr::Helper
 				include TheFox::Timr::Error
 				
 				# Path to man page.
-				MAN_PATH = 'man/pause.1'
+				MAN_PATH = 'man/timr-pause.1'
 				
 				def initialize(argv = Array.new)
 					super()

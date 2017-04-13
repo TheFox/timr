@@ -7,6 +7,8 @@ module TheFox
 			# of the next Track on the [Stack](rdoc-ref:TheFox::Timr::Model::Stack), pops the next,
 			# and pushes the duplication Track back on the Stack. There are at least 3 Tracks involved.
 			# 
+			# Man page: [timr-pop(1)](../../../../man/timr-pop.1.html)
+			# 
 			# ### Example
 			# 
 			# Example Stack before pop:
@@ -37,11 +39,10 @@ module TheFox
 				include TheFox::Timr::Error
 				
 				# Path to man page.
-				MAN_PATH = 'man/pop.1'
+				MAN_PATH = 'man/timr-pop.1'
 				
 				def initialize(argv = Array.new)
 					super()
-					# puts "argv '#{argv}'"
 					
 					@help_opt = false
 					

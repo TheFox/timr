@@ -4,13 +4,15 @@ module TheFox
 		module Command
 			
 			# Push a new [Track](rdoc-ref:TheFox::Timr::Model::Track) to the [Stack](rdoc-ref:TheFox::Timr::Model::Stack).
+			# 
+			# Man page: [timr-push(1)](../../../../man/timr-push.1.html)
 			class PushCommand < BasicCommand
 				
 				include TheFox::Timr::Helper
 				include TheFox::Timr::Error
 				
 				# Path to man page.
-				MAN_PATH = 'man/push.1'
+				MAN_PATH = 'man/timr-push.1'
 				
 				def initialize(argv = Array.new)
 					super()

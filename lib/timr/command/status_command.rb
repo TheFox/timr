@@ -6,15 +6,16 @@ module TheFox
 		module Command
 			
 			# Print [Stack](rdoc-ref:TheFox::Timr::Model::Stack) Status.
+			# 
+			# Man page: [timr-status(1)](../../../../man/timr-status.1.html)
 			class StatusCommand < BasicCommand
 				
 				include TheFox::Timr::Error
 				
 				# Path to man page.
-				MAN_PATH = 'man/status.1'
+				MAN_PATH = 'man/timr-status.1'
 				
 				def initialize(argv = Array.new)
-					#puts "argv '#{argv}'"
 					super()
 					
 					@help_opt = false

@@ -106,6 +106,10 @@ Set a Task as `billed` or `unbilled` to know which Task you already billed a cli
 
 If a whole Task gets billed/unbilled all Tracks are changed to billed/unbilled. Each Track has a flag `is_billed`.
 
+## API REFERENCE
+
+<https://timr.fox21.at/api/TheFox/Timr/Command/TaskCommand.html>
+
 ## SEE ALSO
 
 timr-track(1), timr-ftime(7)

@@ -41,6 +41,7 @@ module TheFox
 							.join("\n")
 					end
 					
+					# Print help to external editor.
 					def external_editor_help(edit_text)
 						edit_text << '# This is a comment.'
 						edit_text << '# The first line should be a sentence. Sentence have dots at the end.'

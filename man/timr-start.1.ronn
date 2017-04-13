@@ -73,6 +73,10 @@ timr start --time 10:30 --message 'Hello World' abcd12
 timr start --id T800
 ```
 
+## API REFERENCE
+
+<https://timr.fox21.at/api/TheFox/Timr/Command/StartCommand.html>
+
 ## SEE ALSO
 
 timr-stop(1), timr-push(1), timr-ftime(7)

@@ -6,13 +6,15 @@ module TheFox
 		module Command
 			
 			# This Command is very similar to LogCommand. By default it prints all [Tasks](rdoc-ref:TheFox::Timr::Model::Task) of the current month.
+			# 
+			# Man page: [timr-report(1)](../../../../man/timr-report.1.html)
 			class ReportCommand < BasicCommand
 				
 				include TheFox::Timr::Helper
 				include TheFox::Timr::Error
 				
 				# Path to man page.
-				MAN_PATH = 'man/report.1'
+				MAN_PATH = 'man/timr-report.1'
 				
 				def initialize(argv = Array.new)
 					super()

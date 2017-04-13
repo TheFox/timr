@@ -33,6 +33,10 @@ timr status --full
 timr status --full --reverse
 ```
 
+## API REFERENCE
+
+<https://timr.fox21.at/api/TheFox/Timr/Command/StatusCommand.html>
+
 ## SEE ALSO
 
 timr-task(1), timr-track(1)

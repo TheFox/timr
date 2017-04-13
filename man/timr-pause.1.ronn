@@ -36,6 +36,10 @@ timr pause --time 10:30
 timr pause --date 2017-01-02 --time 10:30
 ```
 
+## API REFERENCE
+
+<https://timr.fox21.at/api/TheFox/Timr/Command/PauseCommand.html>
+
 ## SEE ALSO
 
 timr-continue(1), timr-ftime(7)

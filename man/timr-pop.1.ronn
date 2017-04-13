@@ -44,6 +44,10 @@ timr pop --end-date 2017-01-02 --end-time 17:00 \
 	--start-date 2017-01-03 --start-time 10:00
 ```
 
+## API REFERENCE
+
+<https://timr.fox21.at/api/TheFox/Timr/Command/PopCommand.html>
+
 ## SEE ALSO
 
 timr-push(1), timr-stop(1), timr-ftime(7)

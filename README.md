@@ -209,15 +209,12 @@ Do not forget to remove all links when deinstalling Timr.
 ## Project Links
 
 - [Homepage](https://timr.fox21.at/)
+- [API Reference Mainpage](https://timr.fox21.at/api/)
+- [Man pages](https://timr.fox21.at/man/timr.1.html)
 - [Code Coverage](https://timr.fox21.at/coverage/)
 - [GitHub Page](https://github.com/TheFox/timr)
 - [RubyGems Page](https://rubygems.org/gems/timr)
 - [Travis CI Repository](https://travis-ci.org/TheFox/timr)
-
-## API
-
-- [API Reference Mainpage](https://timr.fox21.at/doc/)
-- [Errors Inheritance Tree](https://timr.fox21.at/doc/TheFox/Timr/Error.html#module-TheFox::Timr::Error-label-Errors+Inheritance+Tree)
 
 ## Contributing
 

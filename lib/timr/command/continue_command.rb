@@ -4,13 +4,15 @@ module TheFox
 		module Command
 			
 			# Continue the previous paused [Track](rdoc-ref:TheFox::Timr::Model::Track).
+			# 
+			# Man page: [timr-continue(1)](../../../../man/timr-continue.1.html)
 			class ContinueCommand < BasicCommand
 				
 				include TheFox::Timr::Helper
 				include TheFox::Timr::Error
 				
 				# Path to man page.
-				MAN_PATH = 'man/continue.1'
+				MAN_PATH = 'man/timr-continue.1'
 				
 				def initialize(argv = Array.new)
 					super()

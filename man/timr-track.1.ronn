@@ -80,6 +80,10 @@ timr track add --start-date 2017-01-02 --start-time 16:00 \
 timr track remove abcd12
 ```
 
+## API REFERENCE
+
+<https://timr.fox21.at/api/TheFox/Timr/Command/TrackCommand.html>
+
 ## SEE ALSO
 
 timr-task(1), timr-ftime(7)

@@ -8,17 +8,18 @@ module TheFox
 			# - Print informations about a specific [Track](rdoc-ref:TheFox::Timr::Model::Track).
 			# - Add/remove a Track.
 			# - Edit (set) a Track.
+			# 
+			# Man page: [timr-track(1)](../../../../man/timr-track.1.html)
 			class TrackCommand < BasicCommand
 				
 				include TheFox::Timr::Model
 				include TheFox::Timr::Error
 				
 				# Path to man page.
-				MAN_PATH = 'man/track.1'
+				MAN_PATH = 'man/timr-track.1'
 				
 				def initialize(argv = Array.new)
 					super()
-					# puts "argv '#{argv}'"
 					
 					@help_opt = false
 					@show_opt = false

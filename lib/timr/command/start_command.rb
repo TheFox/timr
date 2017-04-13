@@ -6,6 +6,8 @@ module TheFox
 		module Command
 			
 			# Start a new [Track](rdoc-ref:TheFox::Timr::Model::Track).
+			# 
+			# Man page: [timr-start(1)](../../../../man/timr-start.1.html)
 			class StartCommand < BasicCommand
 				
 				include TheFox::Timr::Model
@@ -13,7 +15,7 @@ module TheFox
 				include TheFox::Timr::Error
 				
 				# Path to man page.
-				MAN_PATH = 'man/start.1'
+				MAN_PATH = 'man/timr-start.1'
 				
 				def initialize(argv = Array.new)
 					super()

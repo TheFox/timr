@@ -5,9 +5,7 @@
 CHANGELOG-*.txt
 /coverage/
 Gemfile.lock
-/lib1/
 README.html
-/test1/
 /tmp/
 *.log
 *.yml

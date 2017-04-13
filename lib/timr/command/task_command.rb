@@ -8,6 +8,8 @@ module TheFox
 			# - Print informations about a specific [Task](rdoc-ref:TheFox::Timr::Model::Task).
 			# - Add/remove a Task.
 			# - Edit (set) a Task.
+			# 
+			# Man page: [timr-task(1)](../../../../man/timr-task.1.html)
 			class TaskCommand < BasicCommand
 				
 				include TheFox::Timr::Model
@@ -15,11 +17,10 @@ module TheFox
 				include TheFox::Timr::Error
 				
 				# Path to man page.
-				MAN_PATH = 'man/task.1'
+				MAN_PATH = 'man/timr-task.1'
 				
 				def initialize(argv = Array.new)
 					super()
-					# puts "argv #{argv.frozen?} '#{argv}'"
 					
 					@help_opt = false
 					@show_opt = false
