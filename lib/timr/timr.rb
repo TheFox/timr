@@ -101,14 +101,6 @@ module TheFox
 					old_task = nil
 				end
 				
-				# Search in Foreign ID DB.
-				# if foreign_id_opt
-				# 	task_id = @foreign_id_db.get_task_id(foreign_id_opt)
-				# 	if task_id
-				# 		task_id_opt = task_id
-				# 	end
-				# end
-				
 				if task_id_opt
 					task = get_task_by_id(task_id_opt)
 					

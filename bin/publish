@@ -13,10 +13,12 @@ pushd "${SCRIPT_BASEDIR}/.."
 
 if [[ -z "${RSYNC_USER}" ]] || [[ -z "${RSYNC_HOST}" ]] || [[ -z "${RSYNC_REMOTE_PATH}" ]] || [[ -z "${RSYNC_OPTIONS}" ]] ; then
 	echo 'ERROR: one of the environment variables is missing'
+	
 	echo "RSYNC_USER: '${RSYNC_USER}'"
 	echo "RSYNC_HOST: '${RSYNC_HOST}'"
 	echo "RSYNC_REMOTE_PATH: '${RSYNC_REMOTE_PATH}'"
 	echo "RSYNC_OPTIONS: '${RSYNC_OPTIONS}'"
+	
 	exit 1
 fi
 

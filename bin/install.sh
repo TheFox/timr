@@ -17,7 +17,9 @@ pushd "${SCRIPT_BASEDIR}/.."
 
 if [[ -z "${GEMSPEC_FILE}" ]] ; then
 	echo 'ERROR: one of the environment variables is missing'
+	
 	echo "GEMSPEC_FILE: '${GEMSPEC_FILE}'"
+	
 	exit 1
 fi
 

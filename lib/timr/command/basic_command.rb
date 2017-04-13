@@ -134,10 +134,8 @@ module TheFox
 						edit_text = Array.new
 						
 						if @message_opt
-							# puts "run_edit: use --message"
 							edit_text << @message_opt.clone
 						else
-							# puts "run_edit: search task '#{task_id}', track '#{track_id}'"
 							track = @timr.get_track_by_task_id(task_id, track_id)
 							
 							if track && track.message
@@ -150,7 +148,6 @@ module TheFox
 						TerminalHelper.external_editor_help(edit_text)
 						
 						editor_message = TerminalHelper.run_external_editor(edit_text)
-						# puts "msg: '#{editor_message}'"
 						
 						if editor_message.length > 0
 							@message_opt = editor_message

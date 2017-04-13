@@ -16,7 +16,6 @@ module TheFox
 					loop_c = 0 # Limit the loop.
 					while loop_c < 1024 && argv.length > 0
 						loop_c += 1
-						#arg = argv.shift
 						
 						unless @command_opt
 							@command_opt = argv.shift
@@ -28,8 +27,6 @@ module TheFox
 				def run
 					if @command_opt
 						command_class = BasicCommand.get_command_class_by_name(@command_opt)
-						# command = command_class.new
-						# puts "CLASS: #{command_class}"
 						
 						if defined?(command_class::MAN_PATH)
 							system("man #{command_class::MAN_PATH}")

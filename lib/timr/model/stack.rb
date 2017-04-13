@@ -98,8 +98,6 @@ module TheFox
 				
 				# To String
 				def to_s
-					# "Stack"
-					
 					tracks_s = TranslationHelper.pluralize(@tracks.count, 'track', 'tracks')
 					'Stack: %s' % [tracks_s]
 				end

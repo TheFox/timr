@@ -59,7 +59,6 @@ module TheFox
 				
 				s << @headings.map{ |header|
 					unless header[:empty]
-						#('%%-%ds' % [header[:max_length]]) % [header[:label]]
 						"%s#{header[:format]}%s" % [header[:padding_left], header[:label], header[:padding_right]]
 					end
 				}.select{ |ts| !ts.nil? }.join(' ')
@@ -71,8 +70,8 @@ module TheFox
 					row.each do |col|
 						header = @headings[col_n]
 						unless header[:empty]
-							#s << header[:format] % [col] << ' '
 							col_s = "%s#{header[:format]}%s" % [header[:padding_left], col, header[:padding_right]]
+							
 							columns << col_s
 						end
 						col_n += 1

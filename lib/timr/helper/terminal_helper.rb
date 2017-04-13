@@ -29,7 +29,6 @@ module TheFox
 						tmpfile.close
 						
 						system_s = '%s %s' % [ENV['EDITOR'], tmpfile.path]
-						#puts "start '#{system_s}'"
 						system(system_s)
 						
 						tmpfile.open

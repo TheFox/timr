@@ -257,30 +257,19 @@ function _timr_track_show {
 }
 
 function _timr_main {
-	#echo "exec _timr_main"
-	
 	local curr_word
 	# local prev_word
 	
 	curr_word="${COMP_WORDS[COMP_CWORD]}"
 	# prev_word="${COMP_WORDS[COMP_CWORD-1]}"
 	
-	# echo
-	# echo "curr_word '$curr_word'"
-	# echo "prev_word '$prev_word'"
-	# echo "COMP_CWORD '${COMP_CWORD}'"
-	# echo "COMP_WORDS A '${COMP_WORDS[@]}'"
 	unset -v 'COMP_WORDS[0]'
-	# echo "COMP_WORDS B '${COMP_WORDS[@]}'"
-	# echo
 	
 	COMPREPLY=()
 	
 	local timr_command timr_subcommand
 	
-	# echo "loop commands"
 	for word in "${COMP_WORDS[@]}"; do
-		# echo "loop word: '$word'"
 		case ${word} in
 			-*)
 				# Skip, next.

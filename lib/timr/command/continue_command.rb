@@ -14,7 +14,6 @@ module TheFox
 				
 				def initialize(argv = Array.new)
 					super()
-					# puts "argv '#{argv}'"
 					
 					@help_opt = false
 					

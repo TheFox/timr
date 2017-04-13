@@ -97,12 +97,6 @@ module TheFox
 							@tasks_opt << arg
 						else
 							@tasks_opt << arg
-							
-							# if /^[a-f0-9]{4,40}$/i.match(arg)
-							# 	@tasks_opt << arg
-							# else
-							# 	raise TaskCommandError, "Unknown argument '#{arg}'. See 'timr task --help'."
-							# end
 						end
 					end
 					
