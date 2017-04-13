@@ -7,8 +7,3 @@ CHANGELOG-*.txt
 Gemfile.lock
 README.html
 /tmp/
-*.log
-*.yml
-*.txt
-*.csv
-*.html
