@@ -21,7 +21,8 @@ timr: %s
 
 --- build ---
 id: %s
-ref: %s@%s
+branch: %s
+commit: %s
 stage: %s
 server: %s %s
-" "${DATE}" "${RUBY_VERSION}" "${TIMR_VERSION}" "${CI_BUILD_ID}" "${CI_BUILD_REF}" "${CI_BUILD_REF_NAME}" "${CI_BUILD_STAGE}" "${CI_SERVER_NAME}" "${CI_SERVER_VERSION}"
+" "${DATE}" "${RUBY_VERSION}" "${TIMR_VERSION}" "${CI_BUILD_ID}" "${CI_BUILD_REF_NAME}" "${CI_BUILD_REF}" "${CI_BUILD_STAGE}" "${CI_SERVER_NAME}" "${CI_SERVER_VERSION}"

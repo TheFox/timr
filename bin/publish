@@ -27,10 +27,17 @@ fi
 
 which rsync &> /dev/null || { echo 'ERROR: rsync not found in PATH'; exit 1; }
 
-remote_path=$RSYNC_REMOTE_PATH_DEVELOP
-if [[ "$CI_BUILD_REF_NAME" = "master" ]]; then
-	remote_path=$RSYNC_REMOTE_PATH_MASTER
-fi
+echo "CI_BUILD_REF_NAME: '$CI_BUILD_REF_NAME'"
+
+case "$CI_BUILD_REF_NAME" in
+	# For example v0.4.0
+	v*.*)
+		remote_path=$RSYNC_REMOTE_PATH_MASTER
+		;;
+	*)
+		remote_path=$RSYNC_REMOTE_PATH_DEVELOP
+		;;
+esac
 
 echo "rsync to '${RSYNC_USER}@${RSYNC_HOST}:${remote_path}'"
 rsync ${RSYNC_OPTIONS} build.txt coverage api "${RSYNC_USER}@${RSYNC_HOST}:${remote_path}"
