@@ -21,6 +21,7 @@ module TheFox
 				
 				def initialize(argv = Array.new)
 					super()
+					# puts "argv #{argv}"
 					
 					@help_opt = false
 					@show_opt = false
@@ -71,6 +72,7 @@ module TheFox
 							@description_opt = argv.shift
 						when '-e', '--est', '--estimation'
 							@estimation_opt = argv.shift
+							# puts "est: #{@estimation_opt}"
 						when '-b', '--billed'
 							@billed_opt = true
 						when '--unbilled'
@@ -99,6 +101,8 @@ module TheFox
 						else
 							@tasks_opt << arg
 						end
+						
+						# puts "argv #{argv}"
 					end
 					
 					if @foreign_id_opt && @unset_foreign_id_opt
@@ -169,11 +173,12 @@ module TheFox
 					end
 					task_id = @tasks_opt.first
 					
-					if @foreign_id_opt.nil? && @unset_foreign_id_opt.nil?
-						@name_opt.nil? && @description_opt.nil? &&
-						@estimation_opt.nil? &&
-						@billed_opt.nil? && @unbilled_opt.nil? &&
-						@hourly_rate_opt.nil? && @unset_hourly_rate_opt.nil? &&
+					# @TODO run_set unit test
+					if @foreign_id_opt.nil? && @unset_foreign_id_opt.nil? && \
+						@name_opt.nil? && @description_opt.nil? && \
+						@estimation_opt.nil? && \
+						@billed_opt.nil? && @unbilled_opt.nil? && \
+						@hourly_rate_opt.nil? && @unset_hourly_rate_opt.nil? && \
 						@has_flat_rate_opt.nil? && @unset_flat_rate_opt.nil?
 						
 						raise TaskCommandError, "No option given. See 'time task -h'."
