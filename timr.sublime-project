@@ -24,6 +24,13 @@
 			"working_dir": "${project_path:${folder}}",
 			"path": "$HOME/.rbenv/shims:/usr/local/bin:$PATH",
 			"shell": true
+		},
+		{
+			"name": "Install",
+			"cmd": [ "./bin/install.sh -f" ],
+			"working_dir": "${project_path:${folder}}",
+			"path": "$HOME/.rbenv/shims:/usr/local/bin:$PATH",
+			"shell": true
 		}
 	]
 }

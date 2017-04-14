@@ -984,6 +984,8 @@ module TheFox
 					
 					if @estimation
 						@meta['estimation'] = @estimation.to_i
+					else
+						@meta['estimation'] = nil
 					end
 					if @hourly_rate
 						@meta['hourly_rate'] = @hourly_rate.to_f
