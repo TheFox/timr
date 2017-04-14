@@ -2,6 +2,7 @@
 .env
 .setup
 /api/
+build.txt
 CHANGELOG-*.txt
 /coverage/
 Gemfile.lock
