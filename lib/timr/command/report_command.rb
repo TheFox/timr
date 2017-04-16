@@ -27,6 +27,7 @@ module TheFox
 					@to_opt = nil
 					# @billed_opt = false
 					# @unbilled_opt = false
+					@format_opt = nil
 					@csv_opt = nil
 					@force_opt = false
 					
@@ -59,6 +60,9 @@ module TheFox
 						# 	@billed_opt = true
 						# when '--unbilled'
 						# 	@unbilled_opt = true
+						
+						when '--format'
+							@format_opt = argv.shift
 						
 						when '--csv'
 							@csv_opt = argv.shift
@@ -128,6 +132,14 @@ module TheFox
 							export_tracks_csv
 						else
 							export_tasks_csv
+						end
+					elsif @format_opt
+						if @tasks_opt
+							print_formatted_task_list
+						elsif @tracks_opt
+							print_formatted_track_list
+						else
+							print_formatted_task_list
 						end
 					else
 						if @tasks_opt
@@ -243,6 +255,13 @@ module TheFox
 					end
 				end
 				
+				def print_formatted_task_list
+					puts 'print_formatted_task_list'
+					filtered_tasks.each do |task|
+						puts task.formatted(@format_opt)
+					end
+				end
+				
 				def print_track_table
 					puts "From #{@from_opt.strftime('%F %T %z')}"
 					puts "  To #{@to_opt.strftime('%F %T %z')}"
@@ -328,6 +347,13 @@ module TheFox
 						puts table
 					else
 						puts 'No tracks found.'
+					end
+				end
+				
+				def print_formatted_track_list
+					puts 'print_formatted_track_list'
+					@timr.tracks(@filter_options).each do |track_id, track|
+						puts track.formatted(@format_opt)
 					end
 				end
 				
@@ -660,11 +686,13 @@ module TheFox
 				end
 				
 				def help
-					puts 'usage: timr report '
+					puts 'usage: timr report [-d|--day <date>] [-m|--month <[YYYY-]MM>]'
+					puts '                   [-y|--year [<YYYY>]] [-a|--all] [--tasks|--tracks]'
+					puts '                   [--csv <path>] [--force]'
 					puts '   or: timr report [-h|--help]'
 					puts
 					puts 'Options'
-					puts '    -d, --day   <date>          A single day from 00:00 to 23:59.'
+					puts '    -d, --day   [<date>]        A single day from 00:00 to 23:59.'
 					puts '    -m, --month <[YYYY-]MM>     A single month from 01 to 31.'
 					puts '    -y, --year  [<YYYY>]        A single year from 01-01 to 12-31.'
 					puts '    -a, --all                   All.'
@@ -672,6 +700,7 @@ module TheFox
 					puts '    --tracks                    Export Tracks'
 					# puts '    --billed                    Filter only Tasks/Tracks which are billed.'
 					# puts '    --unbilled                  Filter only Tasks/Tracks which are not billed.'
+					puts '    --format                    Format Tasks and Tracks output.'
 					puts "    --csv <path>                Export as CSV file. Use '--csv -' to use STDOUT."
 					puts "    --force                     Force overwrite file."
 					puts
@@ -679,6 +708,27 @@ module TheFox
 					puts "'timr help report'"
 					puts
 					HelpCommand.print_datetime_help
+					puts
+					puts 'Task Format'
+					puts '    %id     ID'
+					puts '    %sid    Short ID'
+					puts '    %fid    Foreign ID'
+					puts '    %n      Name'
+					puts '    %d      Description'
+					puts
+					puts 'Track Format'
+					puts '    %id     ID'
+					puts '    %sid    Short ID'
+					puts '    %m      Message'
+					puts '    %bdt    Begin DateTime'
+					puts '    %bd     Begin Date'
+					puts '    %bt     Begin Time'
+					puts '    %edt    End DateTime'
+					puts '    %ed     End Date'
+					puts '    %et     End Time'
+					puts
+					puts "Use '%T' prefix for each Task attribute for Track formatting."
+					puts "For example use '%Tid' to use the Task ID."
 					puts
 				end
 				

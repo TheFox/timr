@@ -509,6 +509,43 @@ module TheFox
 					self.id == track.id
 				end
 				
+				# Return formatted String.
+				# 
+				# - `%id` - ID
+				# - `%sid` - Short ID
+				# - `%t` - Title generated from message.
+				# - `%m` - Message
+				# - `%bdt` - Begin DateTime
+				# - `%bd` - Begin Date
+				# - `%bt` - Begin Time
+				# - `%edt` - End DateTime
+				# - `%ed` - End Date
+				# - `%et` - End Time
+				def formatted(format)
+					formatted_s = format
+						.gsub('%id', self.id)
+						.gsub('%sid', self.short_id)
+						.gsub('%t', self.title ? self.title : '')
+						.gsub('%m', self.message ? self.message : '')
+						.gsub('%bdt', self.begin_datetime ? self.begin_datetime.strftime('%F %H:%M') : '')
+						.gsub('%bd', self.begin_datetime ? self.begin_datetime.strftime('%F') : '')
+						.gsub('%bt', self.begin_datetime ? self.begin_datetime.strftime('%H:%M') : '')
+						.gsub('%edt', self.end_datetime ? self.end_datetime.strftime('%F %H:%M') : '')
+						.gsub('%ed', self.end_datetime ? self.end_datetime.strftime('%F') : '')
+						.gsub('%et', self.end_datetime ? self.end_datetime.strftime('%H:%M') : '')
+					
+					if @task
+						formatted_s = @task.formatted(formatted_s, '%T')
+					else
+						tmp_task = Task.new
+						tmp_task.id = ''
+						
+						formatted_s = tmp_task.formatted(formatted_s, '%T')
+					end
+					
+					formatted_s
+				end
+				
 				def inspect
 					"#<Track #{short_id}>"
 				end

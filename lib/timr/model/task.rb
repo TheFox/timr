@@ -935,6 +935,22 @@ module TheFox
 					to_ax
 				end
 				
+				# Return formatted String.
+				# 
+				# - `%id` - ID
+				# - `%sid` - Short ID
+				# - `%fid` - Foreign ID
+				# - `%n` - Name
+				# - `%d` - Description
+				def formatted(format, prefix = '%')
+					format
+						.gsub("#{prefix}id", self.id)
+						.gsub("#{prefix}sid", self.short_id ? self.short_id : '')
+						.gsub("#{prefix}fid", self.foreign_id ? self.foreign_id : '')
+						.gsub("#{prefix}n", self.name ? self.name : '')
+						.gsub("#{prefix}d", self.description ? self.description : '')
+				end
+				
 				def inspect
 					"#<Task_#{short_id} tracks=#{@tracks.count}>"
 				end

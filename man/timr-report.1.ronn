@@ -29,6 +29,9 @@ This command is designed to print a list of Tasks or Tracks to STDOUT and to exp
 * --tracks:
 	Export Tracks
 
+* --format
+	See TASK FORMAT and TRACK FORMAT section.
+
 * --csv <path>:
 	Export as CSV file. Use `--csv -` to use STDOUT.
 
@@ -48,6 +51,8 @@ timr report --day 2017-01-02 --csv timr_report_20170102.csv --tracks
 timr report --month 2017-01 --csv timr_report_201701.csv
 timr report --year 2017 --csv timr_report_2017.csv
 timr report --all --csv timr_report_all.csv
+timr report --format '- %id'
+timr report --tracks --format '- %Tsid %sid %t'
 ```
 
 ## TASK TABLE COLUMNS
@@ -183,6 +188,57 @@ timr report --all --csv timr_report_all.csv
 * TRACK_IS_BILLED
 
 The last row in CSV files is always the total sum.
+
+## TASK FORMAT
+
+* %id:
+	ID
+
+* %sid:
+	Short ID
+
+* %fid:
+	Foreign ID
+
+* %n:
+	Name
+
+* %d:
+	Description
+
+## TRACK FORMAT
+
+* %id:
+	ID
+
+* %sid:
+	Short ID
+
+* %t:
+	Title generated from message.
+
+* %m:
+	Message
+
+* %bdt:
+	Begin DateTime
+
+* %bd:
+	Begin Date
+
+* %bt:
+	Begin Time
+
+* %edt:
+	End DateTime
+
+* %ed:
+	End Date
+
+* %et:
+	End Time
+
+Use `%T` prefix for each Task attribute for Track formatting. For example use `%Tid` to use the Task ID.
 
 ## API REFERENCE
 

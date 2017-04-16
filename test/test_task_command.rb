@@ -1,12 +1,21 @@
 #!/usr/bin/env ruby
 
 require 'minitest/autorun'
+require 'fileutils'
 require 'timr'
 
 class TestTaskCommand < MiniTest::Test
 	
 	include TheFox::Timr::Command
 	include TheFox::Timr::Error
+	
+	def setup
+		@tmpdir = Dir.mktmpdir
+	end
+	
+	def teardown
+		FileUtils.remove_entry_secure(@tmpdir)
+	end
 	
 	def test_task_command
 		command1 = TaskCommand.new
@@ -49,11 +58,13 @@ class TestTaskCommand < MiniTest::Test
 	# Incomplete tests.
 	def test_run_set
 		command1 = TaskCommand.new(['set'])
+		command1.cwd = @tmpdir
 		assert_raises(TaskCommandError) do
 			command1.run
 		end
 		
 		command1 = TaskCommand.new(['set', 'task1'])
+		command1.cwd = @tmpdir
 		assert_raises(TaskCommandError) do
 			command1.run
 		end

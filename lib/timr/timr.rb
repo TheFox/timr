@@ -39,7 +39,6 @@ module TheFox
 				if @config.file_path.exist?
 					@config.load_from_file
 				else
-					#@config.save_to_file
 					@config.save_to_file(nil, true)
 				end
 				

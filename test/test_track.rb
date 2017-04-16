@@ -463,4 +463,46 @@ class TestTrack < MiniTest::Test
 		assert_nil(found_track)
 	end
 	
+	def test_formatted
+		track1 = Track.new
+		assert_equal('AZ', track1.formatted('A%TidZ'))
+		assert_equal('AZ', track1.formatted('A%mZ'))
+		assert_equal('AZ', track1.formatted('A%bdtZ'))
+		assert_equal('AZ', track1.formatted('A%bdZ'))
+		assert_equal('AZ', track1.formatted('A%btZ'))
+		assert_equal('AZ', track1.formatted('A%edtZ'))
+		assert_equal('AZ', track1.formatted('A%edZ'))
+		assert_equal('AZ', track1.formatted('A%etZ'))
+		
+		
+		track1 = Track.new
+		track1.id = '123456789a'
+		track1.message = 'xyz'
+		track1.begin_datetime = '2017-01-01 01:03:05'
+		track1.end_datetime   = '2017-02-03 02:04:06'
+		assert_equal('A123456789aZ', track1.formatted('A%idZ'))
+		assert_equal('A123456Z', track1.formatted('A%sidZ'))
+		assert_equal('AxyzZ', track1.formatted('A%mZ'))
+		
+		assert_equal('A2017-01-01 01:03Z', track1.formatted('A%bdtZ'))
+		assert_equal('A2017-01-01Z', track1.formatted('A%bdZ'))
+		assert_equal('A01:03Z', track1.formatted('A%btZ'))
+		
+		assert_equal('A2017-02-03 02:04Z', track1.formatted('A%edtZ'))
+		assert_equal('A2017-02-03Z', track1.formatted('A%edZ'))
+		assert_equal('A02:04Z', track1.formatted('A%etZ'))
+		
+		
+		task1 = Task.new
+		task1.id = '23456789ab'
+		
+		track1 = Track.new
+		track1.task = task1
+		track1.id = '123456789a'
+		
+		assert_equal('A234567Z', track1.formatted('A%TsidZ'))
+		assert_equal('A123456Z', track1.formatted('A%sidZ'))
+		assert_equal('A234567B123456Z', track1.formatted('A%TsidB%sidZ'))
+	end
+	
 end

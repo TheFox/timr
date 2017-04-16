@@ -759,6 +759,27 @@ class TestTask < MiniTest::Test
 		# @TODO to_detailed_array test
 	end
 	
+	def test_formatted
+		task1 = Task.new
+		# assert_equal('AZ', task1.formatted('A%idZ'))
+		# assert_equal('A123456Z', task1.formatted('A%sidZ'))
+		assert_equal('AZ', task1.formatted('A%fidZ'))
+		assert_equal('AZ', task1.formatted('A%nZ'))
+		assert_equal('AZ', task1.formatted('A%dZ'))
+		
+		task1 = Task.new
+		task1.id = '123456789a'
+		task1.foreign_id = 'abc'
+		task1.name = 'zyx'
+		task1.description = 'xyz'
+		task1.estimation = '10h 5m'
+		assert_equal('A123456789aZ', task1.formatted('A%idZ'))
+		assert_equal('A123456Z', task1.formatted('A%sidZ'))
+		assert_equal('AabcZ', task1.formatted('A%fidZ'))
+		assert_equal('AzyxZ', task1.formatted('A%nZ'))
+		assert_equal('AxyzZ', task1.formatted('A%dZ'))
+	end
+	
 	def test_create_task_from_hash
 		options = {
 			:name => 'zyx',
