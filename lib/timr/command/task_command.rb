@@ -260,12 +260,12 @@ module TheFox
 				
 				def run_show_all
 					@timr.tasks.each do |task_id, task|
-						full_id = @verbose_opt ? task.id : task.short_id
+						task_id = @verbose_opt ? task.id : task.short_id
 						
 						if task.foreign_id
-							puts '%s %s %s' % [full_id, task.foreign_id, task.name_s]
+							puts '%s %s %s' % [task_id, task.foreign_id, task.name_s]
 						else
-							puts '%s - %s' % [full_id, task.name_s]
+							puts '%s - %s' % [task_id, task.name_s]
 						end
 					end
 				end

@@ -215,7 +215,7 @@ module TheFox
 							duration.to_human,
 							unbilled_duration.to_human,
 							# tracks_c,
-							'%s %s' % [task.short_id, task.foreign_id ? task.foreign_id : task.name(15)]
+							'%s %s' % [task.id_foreign_or_short, task.name(15)]
 						]
 					end
 					
@@ -303,7 +303,7 @@ module TheFox
 							track.begin_datetime_s(@filter_options),
 							track.end_datetime_s(@filter_options),
 							duration.to_human,
-							'%s' % [task.foreign_id ? task.foreign_id : task.short_id],
+							'%s' % [task.id_foreign_or_short],
 							'%s %s' % [track.short_id, track.title(15)],
 						]
 					end

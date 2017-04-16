@@ -190,7 +190,7 @@ module TheFox
 									begin_datetime_s,
 									end_datetime_s,
 									duration ? duration.to_human : '---',
-									task.short_id,
+									task.id_foreign_or_short,
 									'%s %s' % [track.short_id, track.title(15)],
 								]
 							end
@@ -220,7 +220,7 @@ module TheFox
 								begin_datetime_s,
 								end_datetime_s,
 								duration ? duration.to_human : '---',
-								task.short_id,
+								task.id_foreign_or_short,
 								'%s %s' % [track.short_id, track.title(15)],
 							]
 						end

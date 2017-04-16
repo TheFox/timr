@@ -115,7 +115,8 @@ module TheFox
 							row << remaining_time_s
 							row << remaining_time_percent_s
 						end
-						row << task.short_id
+						
+						row << task.id_foreign_or_short
 						
 						if @verbose_opt
 							row << '%s %s' % [track.short_id, track.title]

@@ -727,7 +727,7 @@ class TestTask < MiniTest::Test
 		task1.description = 'xyz'
 		task1.estimation = '10h 5m'
 		
-		assert_equal(['Task: 123456 abc zyx', 'Description: xyz', 'Estimation: 10h 5m'], task1.to_compact_array)
+		assert_equal(['Task: abc zyx', 'Description: xyz', 'Estimation: 10h 5m'], task1.to_compact_array)
 	end
 	
 	def test_to_detailed_str_array1

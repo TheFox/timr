@@ -28,8 +28,10 @@ echo "push gem file '$gem_file'"
 gem push "$gem_file"
 
 # Create tmp directory.
-if [[ ! -d tmp ]]; then
-	mkdir -p tmp
+if [[ ! -d tmp/releases ]]; then
+	mkdir -p tmp/releases
+	
 	chmod u=rwx,go-rwx tmp
+	chmod u=rwx,go-rwx tmp/releases
 fi
-mv -v -i "$gem_file" tmp
+mv -v -i "$gem_file" tmp/releases

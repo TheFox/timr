@@ -29,6 +29,11 @@ module TheFox
 					@tracks = Hash.new
 				end
 				
+				# Get Foreign ID or Short ID.
+				def id_foreign_or_short
+					@foreign_id ? @foreign_id : short_id
+				end
+				
 				def foreign_id=(foreign_id)
 					@foreign_id = foreign_id
 					
@@ -772,13 +777,9 @@ module TheFox
 				def to_track_array(options = Hash.new)
 					full_id_opt = options.fetch(:full_id, false) # @TODO full_id unit test
 					
-					full_id = full_id_opt ? self.id : self.short_id
+					full_id = full_id_opt ? self.id : ( self.foreign_id ? self.foreign_id : self.short_id )
 					
-					name_a = ["Task: #{full_id}"]
-					
-					if self.foreign_id
-						name_a << self.foreign_id
-					end
+					name_a = ['Task:', full_id]
 					if self.name
 						name_a << self.name
 					end
@@ -795,12 +796,10 @@ module TheFox
 				
 				# Used to print informations to STDOUT.
 				def to_compact_array
+					full_id = self.foreign_id ? self.foreign_id : self.short_id
+					
 					to_ax = Array.new
-					if self.foreign_id
-						to_ax << 'Task: %s %s %s' % [self.short_id, self.foreign_id, self.name]
-					else
-						to_ax << 'Task: %s %s' % [self.short_id, self.name]
-					end
+					to_ax << 'Task: %s %s' % [full_id, self.name]
 					if self.description
 						to_ax << 'Description: %s' % [self.description]
 					end
@@ -823,13 +822,11 @@ module TheFox
 				def to_detailed_array(options = Hash.new)
 					full_id_opt = options.fetch(:full_id, false)
 					
+					full_id = full_id_opt ? self.id : self.short_id
+					
 					to_ax = Array.new
 					
-					if full_id_opt
-						to_ax << 'Task: %s' % [self.id]
-					else
-						to_ax << 'Task: %s' % [self.short_id]
-					end
+					to_ax << 'Task: %s' % [full_id]
 					
 					if self.foreign_id
 						to_ax << 'Foreign ID: %s' % [self.foreign_id]
