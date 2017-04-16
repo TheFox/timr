@@ -214,9 +214,12 @@ module TheFox
 							bdt = track.begin_datetime
 							edt = track.end_datetime || Time.now
 							
-							bdt && (
-								bdt <  from_opt && edt >  from_opt || # Track A, B
-								bdt >= from_opt && edt >= from_opt    # Track C, D, F
+							bdt && ( \
+								# Track A, B
+								bdt <  from_opt && edt >  from_opt || \
+								
+								# Track C, D, F
+								bdt >= from_opt && edt >= from_opt
 							)
 						}
 					elsif from_opt.nil? && !to_opt.nil?
@@ -225,9 +228,12 @@ module TheFox
 							bdt = track.begin_datetime
 							edt = track.end_datetime || Time.now
 							
-							bdt && (
-								bdt <  to_opt && edt <= to_opt || # Track B, D, E
-								bdt <  to_opt && edt >  to_opt    # Track A, C
+							bdt && ( \
+								# Track B, D, E
+								bdt <  to_opt && edt <= to_opt || \
+								
+								# Track A, C
+								bdt <  to_opt && edt >  to_opt
 							)
 						}
 					elsif !from_opt.nil? && !to_opt.nil?
@@ -236,11 +242,18 @@ module TheFox
 							bdt = track.begin_datetime
 							edt = track.end_datetime || Time.now
 							
-							bdt && (
-								bdt >= from_opt && edt <= to_opt ||               # Track D
-								bdt <  from_opt && edt >  to_opt ||               # Track A
-								bdt <  from_opt && edt <= to_opt && edt > from_opt || # Track B
-								bdt >= from_opt && edt >  to_opt && bdt < to_opt      # Track C
+							bdt && ( \
+								# Track D
+								bdt >= from_opt && edt <= to_opt || \
+								
+								# Track A
+								bdt <  from_opt && edt >  to_opt || \
+								
+								# Track B
+								bdt <  from_opt && edt <= to_opt && edt > from_opt || \
+								
+								# Track C
+								bdt >= from_opt && edt >  to_opt && bdt < to_opt
 							)
 						}
 					else

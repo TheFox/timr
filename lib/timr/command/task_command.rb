@@ -173,7 +173,6 @@ module TheFox
 					end
 					task_id = @tasks_opt.first
 					
-					# @TODO run_set unit test
 					if @foreign_id_opt.nil? && @unset_foreign_id_opt.nil? && \
 						@name_opt.nil? && @description_opt.nil? && \
 						@estimation_opt.nil? && \
@@ -181,7 +180,7 @@ module TheFox
 						@hourly_rate_opt.nil? && @unset_hourly_rate_opt.nil? && \
 						@has_flat_rate_opt.nil? && @unset_flat_rate_opt.nil?
 						
-						raise TaskCommandError, "No option given. See 'time task -h'."
+						raise TaskCommandError, "No option given. See 'timr task -h'."
 					end
 					
 					task = @timr.get_task_by_id(task_id)

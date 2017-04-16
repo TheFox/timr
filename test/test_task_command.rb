@@ -46,4 +46,17 @@ class TestTaskCommand < MiniTest::Test
 		end
 	end
 	
+	# Incomplete tests.
+	def test_run_set
+		command1 = TaskCommand.new(['set'])
+		assert_raises(TaskCommandError) do
+			command1.run
+		end
+		
+		command1 = TaskCommand.new(['set', 'task1'])
+		assert_raises(TaskCommandError) do
+			command1.run
+		end
+	end
+	
 end

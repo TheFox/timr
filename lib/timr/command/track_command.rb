@@ -307,7 +307,7 @@ module TheFox
 				end
 				
 				def check_opts_add
-					if @start_date_opt || @start_time_opt ||
+					if @start_date_opt || @start_time_opt || \
 						@end_date_opt || @end_time_opt
 						
 						if @start_date_opt.nil?
@@ -327,9 +327,9 @@ module TheFox
 				end
 				
 				def check_opts_set
-					if @start_date_opt.nil? && @start_time_opt.nil? &&
-						@end_date_opt.nil? && @end_time_opt.nil? &&
-						@message_opt.nil? && @task_id_opt.nil? &&
+					if @start_date_opt.nil? && @start_time_opt.nil? && \
+						@end_date_opt.nil? && @end_time_opt.nil? && \
+						@message_opt.nil? && @task_id_opt.nil? && \
 						@billed_opt.nil? && @unbilled_opt.nil?
 						
 						raise TrackCommandError, "No option given. See 'timr track --help'."
