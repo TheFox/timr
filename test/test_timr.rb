@@ -9,23 +9,12 @@ require 'timr'
 class TestTimr < MiniTest::Test
 	
 	include TheFox::Timr
-	# include TheFox::Timr::Model
-	# include TheFox::Timr::Error
 	
 	def setup
-		# puts
-		# puts 'setup'
-		
 		@tmpdir = Dir.mktmpdir
-		
-		# puts "tmpdir: #{@tmpdir}"
-		# puts
 	end
 	
 	def teardown
-		# puts
-		# puts 'teardown'
-		
 		FileUtils.remove_entry_secure(@tmpdir)
 	end
 	

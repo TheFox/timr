@@ -29,7 +29,7 @@ This command is designed to print a list of Tasks or Tracks to STDOUT and to exp
 * --tracks:
 	Export Tracks
 
-* --format
+* --format:
 	See TASK FORMAT and TRACK FORMAT section.
 
 * --csv <path>:
