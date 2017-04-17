@@ -937,18 +937,40 @@ module TheFox
 				
 				# Return formatted String.
 				# 
+				# Options:
+				# 
+				# - `:format`
+				# - `:prefix` - Default: `%`
+				# 
+				# Format:
+				# 
 				# - `%id` - ID
 				# - `%sid` - Short ID
 				# - `%fid` - Foreign ID
 				# - `%n` - Name
 				# - `%d` - Description
-				def formatted(format, prefix = '%')
-					format
+				# - `%ds` - Duration Seconds
+				# - `%dh` - Duration Human Format
+				def formatted(options = Hash.new)
+					format = options.fetch(:format, '')
+					prefix = options.fetch(:prefix, '%')
+					
+					formatted_s = format
 						.gsub("#{prefix}id", self.id)
 						.gsub("#{prefix}sid", self.short_id ? self.short_id : '')
 						.gsub("#{prefix}fid", self.foreign_id ? self.foreign_id : '')
 						.gsub("#{prefix}n", self.name ? self.name : '')
 						.gsub("#{prefix}d", self.description ? self.description : '')
+						.gsub("#{prefix}ds", self.duration.to_s)
+					
+					duration_human = self.duration.to_human
+					if duration_human
+						formatted_s.gsub!('%dh', self.duration.to_human)
+					else
+						formatted_s.gsub!('%dh', '')
+					end
+					
+					formatted_s
 				end
 				
 				def inspect

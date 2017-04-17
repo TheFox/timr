@@ -465,14 +465,15 @@ class TestTrack < MiniTest::Test
 	
 	def test_formatted
 		track1 = Track.new
-		assert_equal('AZ', track1.formatted('A%TidZ'))
-		assert_equal('AZ', track1.formatted('A%mZ'))
-		assert_equal('AZ', track1.formatted('A%bdtZ'))
-		assert_equal('AZ', track1.formatted('A%bdZ'))
-		assert_equal('AZ', track1.formatted('A%btZ'))
-		assert_equal('AZ', track1.formatted('A%edtZ'))
-		assert_equal('AZ', track1.formatted('A%edZ'))
-		assert_equal('AZ', track1.formatted('A%etZ'))
+		assert_equal('AZ', track1.formatted({:format => 'A%TidZ'}))
+		assert_equal('AZ', track1.formatted({:format => 'A%mZ'}))
+		assert_equal('AZ', track1.formatted({:format => 'A%bdtZ'}))
+		assert_equal('AZ', track1.formatted({:format => 'A%bdZ'}))
+		assert_equal('AZ', track1.formatted({:format => 'A%btZ'}))
+		assert_equal('AZ', track1.formatted({:format => 'A%edtZ'}))
+		assert_equal('AZ', track1.formatted({:format => 'A%edZ'}))
+		assert_equal('A0Z', track1.formatted({:format => 'A%dsZ'}))
+		assert_equal('AZ', track1.formatted({:format => 'A%dhZ'}))
 		
 		
 		track1 = Track.new
@@ -480,17 +481,20 @@ class TestTrack < MiniTest::Test
 		track1.message = 'xyz'
 		track1.begin_datetime = '2017-01-01 01:03:05'
 		track1.end_datetime   = '2017-02-03 02:04:06'
-		assert_equal('A123456789aZ', track1.formatted('A%idZ'))
-		assert_equal('A123456Z', track1.formatted('A%sidZ'))
-		assert_equal('AxyzZ', track1.formatted('A%mZ'))
+		assert_equal('A123456789aZ', track1.formatted({:format => 'A%idZ'}))
+		assert_equal('A123456Z', track1.formatted({:format => 'A%sidZ'}))
+		assert_equal('AxyzZ', track1.formatted({:format => 'A%mZ'}))
 		
-		assert_equal('A2017-01-01 01:03Z', track1.formatted('A%bdtZ'))
-		assert_equal('A2017-01-01Z', track1.formatted('A%bdZ'))
-		assert_equal('A01:03Z', track1.formatted('A%btZ'))
+		assert_equal('A2017-01-01 01:03Z', track1.formatted({:format => 'A%bdtZ'}))
+		assert_equal('A2017-01-01Z', track1.formatted({:format => 'A%bdZ'}))
+		assert_equal('A01:03Z', track1.formatted({:format => 'A%btZ'}))
 		
-		assert_equal('A2017-02-03 02:04Z', track1.formatted('A%edtZ'))
-		assert_equal('A2017-02-03Z', track1.formatted('A%edZ'))
-		assert_equal('A02:04Z', track1.formatted('A%etZ'))
+		assert_equal('A2017-02-03 02:04Z', track1.formatted({:format => 'A%edtZ'}))
+		assert_equal('A2017-02-03Z', track1.formatted({:format => 'A%edZ'}))
+		assert_equal('A02:04Z', track1.formatted({:format => 'A%etZ'}))
+		
+		assert_equal('A2854861Z', track1.formatted({:format => 'A%dsZ'}))
+		assert_equal('A793h 1mZ', track1.formatted({:format => 'A%dhZ'}))
 		
 		
 		task1 = Task.new
@@ -500,9 +504,9 @@ class TestTrack < MiniTest::Test
 		track1.task = task1
 		track1.id = '123456789a'
 		
-		assert_equal('A234567Z', track1.formatted('A%TsidZ'))
-		assert_equal('A123456Z', track1.formatted('A%sidZ'))
-		assert_equal('A234567B123456Z', track1.formatted('A%TsidB%sidZ'))
+		assert_equal('A234567Z', track1.formatted({:format => 'A%TsidZ'}))
+		assert_equal('A123456Z', track1.formatted({:format => 'A%sidZ'}))
+		assert_equal('A234567B123456Z', track1.formatted({:format => 'A%TsidB%sidZ'}))
 	end
 	
 end

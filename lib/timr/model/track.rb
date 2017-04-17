@@ -511,6 +511,12 @@ module TheFox
 				
 				# Return formatted String.
 				# 
+				# Options:
+				# 
+				# - `:format`
+				# 
+				# Format:
+				# 
 				# - `%id` - ID
 				# - `%sid` - Short ID
 				# - `%t` - Title generated from message.
@@ -521,7 +527,11 @@ module TheFox
 				# - `%edt` - End DateTime
 				# - `%ed` - End Date
 				# - `%et` - End Time
-				def formatted(format)
+				# - `%ds` - Duration Seconds
+				# - `%dh` - Duration Human Format
+				def formatted(options = Hash.new)
+					format = options.fetch(:format, '')
+					
 					formatted_s = format
 						.gsub('%id', self.id)
 						.gsub('%sid', self.short_id)
@@ -533,14 +543,27 @@ module TheFox
 						.gsub('%edt', self.end_datetime ? self.end_datetime.strftime('%F %H:%M') : '')
 						.gsub('%ed', self.end_datetime ? self.end_datetime.strftime('%F') : '')
 						.gsub('%et', self.end_datetime ? self.end_datetime.strftime('%H:%M') : '')
+						.gsub('%ds', self.duration.to_s)
+					
+					duration_human = self.duration.to_human
+					if duration_human
+						formatted_s.gsub!('%dh', self.duration.to_human)
+					else
+						formatted_s.gsub!('%dh', '')
+					end
+					
+					task_formating_options = {
+						:format => formatted_s,
+						:prefix => '%T',
+					}
 					
 					if @task
-						formatted_s = @task.formatted(formatted_s, '%T')
+						formatted_s = @task.formatted(task_formating_options)
 					else
 						tmp_task = Task.new
 						tmp_task.id = ''
 						
-						formatted_s = tmp_task.formatted(formatted_s, '%T')
+						formatted_s = tmp_task.formatted(task_formating_options)
 					end
 					
 					formatted_s

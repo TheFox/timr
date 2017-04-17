@@ -761,11 +761,11 @@ class TestTask < MiniTest::Test
 	
 	def test_formatted
 		task1 = Task.new
-		# assert_equal('AZ', task1.formatted('A%idZ'))
-		# assert_equal('A123456Z', task1.formatted('A%sidZ'))
-		assert_equal('AZ', task1.formatted('A%fidZ'))
-		assert_equal('AZ', task1.formatted('A%nZ'))
-		assert_equal('AZ', task1.formatted('A%dZ'))
+		# assert_equal('AZ', task1.formatted({:format => 'A%idZ'}))
+		# assert_equal('A123456Z', task1.formatted({:format => 'A%sidZ'}))
+		assert_equal('AZ', task1.formatted({:format => 'A%fidZ'}))
+		assert_equal('AZ', task1.formatted({:format => 'A%nZ'}))
+		assert_equal('AZ', task1.formatted({:format => 'A%dZ'}))
 		
 		task1 = Task.new
 		task1.id = '123456789a'
@@ -773,11 +773,11 @@ class TestTask < MiniTest::Test
 		task1.name = 'zyx'
 		task1.description = 'xyz'
 		task1.estimation = '10h 5m'
-		assert_equal('A123456789aZ', task1.formatted('A%idZ'))
-		assert_equal('A123456Z', task1.formatted('A%sidZ'))
-		assert_equal('AabcZ', task1.formatted('A%fidZ'))
-		assert_equal('AzyxZ', task1.formatted('A%nZ'))
-		assert_equal('AxyzZ', task1.formatted('A%dZ'))
+		assert_equal('A123456789aZ', task1.formatted({:format => 'A%idZ'}))
+		assert_equal('A123456Z', task1.formatted({:format => 'A%sidZ'}))
+		assert_equal('AabcZ', task1.formatted({:format => 'A%fidZ'}))
+		assert_equal('AzyxZ', task1.formatted({:format => 'A%nZ'}))
+		assert_equal('AxyzZ', task1.formatted({:format => 'A%dZ'}))
 	end
 	
 	def test_create_task_from_hash

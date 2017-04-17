@@ -206,6 +206,12 @@ The last row in CSV files is always the total sum.
 * %d:
 	Description
 
+* %ds:
+	Duration Seconds
+
+* %dh:
+	Duration Human Format
+
 ## TRACK FORMAT
 
 * %id:
@@ -237,6 +243,12 @@ The last row in CSV files is always the total sum.
 
 * %et:
 	End Time
+
+* %ds:
+	Duration Seconds
+
+* %dh:
+	Duration Human Format
 
 Use `%T` prefix for each Task attribute for Track formatting. For example use `%Tid` to use the Task ID.
 

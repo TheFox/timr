@@ -253,9 +253,10 @@ module TheFox
 				end
 				
 				def print_formatted_task_list
-					puts 'print_formatted_task_list'
+					# puts 'print_formatted_task_list'
+					options = {:format => @format_opt}
 					filtered_tasks.each do |task|
-						puts task.formatted(@format_opt)
+						puts task.formatted(options)
 					end
 				end
 				
@@ -348,9 +349,10 @@ module TheFox
 				end
 				
 				def print_formatted_track_list
-					puts 'print_formatted_track_list'
+					# puts 'print_formatted_track_list'
+					options = {:format => @format_opt}
 					@timr.tracks(@filter_options).each do |track_id, track|
-						puts track.formatted(@format_opt)
+						puts track.formatted(options)
 					end
 				end
 				
@@ -740,6 +742,8 @@ module TheFox
 					puts '    %fid    Foreign ID'
 					puts '    %n      Name'
 					puts '    %d      Description'
+					puts '    %ds     Duration Seconds'
+					puts '    %dh     Duration Human Format'
 					puts
 					puts 'Track Format'
 					puts '    %id     ID'
@@ -751,6 +755,8 @@ module TheFox
 					puts '    %edt    End DateTime'
 					puts '    %ed     End Date'
 					puts '    %et     End Time'
+					puts '    %ds     Duration Seconds'
+					puts '    %dh     Duration Human Format'
 					puts
 					puts "Use '%T' prefix for each Task attribute for Track formatting."
 					puts "For example use '%Tid' to use the Task ID."

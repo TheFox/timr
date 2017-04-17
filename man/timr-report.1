@@ -14,37 +14,45 @@ This command is designed to print a list of Tasks or Tracks to STDOUT and to exp
 .
 .SH "OPTIONS"
 .
-.IP "\(bu" 4
-\-d, \-\-day \fIdate\fR: A single day from 00:00 to 23:59\. See timr\-ftime(7)\.
+.TP
+\-d, \-\-day \fIdate\fR
+A single day from 00:00 to 23:59\. See timr\-ftime(7)\.
 .
-.IP "\(bu" 4
-\-m, \-\-month \fI[YYYY\-]MM\fR: A single month from 01 to 31\.
+.TP
+\-m, \-\-month \fI[YYYY\-]MM\fR
+A single month from 01 to 31\.
 .
-.IP "\(bu" 4
-\-y, \-\-year [\fIYYYY\fR]: A single year from 01\-01 to 12\-31\.
+.TP
+\-y, \-\-year [\fIYYYY\fR]
+A single year from 01\-01 to 12\-31\.
 .
-.IP "\(bu" 4
-\-a, \-\-all: Export all\.
+.TP
+\-a, \-\-all
+Export all\.
 .
-.IP "\(bu" 4
-\-\-tasks : Export Tasks (default)
+.TP
+\-\-tasks
+Export Tasks (default)
 .
-.IP "\(bu" 4
-\-\-tracks: Export Tracks
+.TP
+\-\-tracks
+Export Tracks
 .
-.IP "\(bu" 4
-\-\-format See TASK FORMAT and TRACK FORMAT section\.
+.TP
+\-\-format
+See TASK FORMAT and TRACK FORMAT section\.
 .
-.IP "\(bu" 4
-\-\-csv \fIpath\fR: Export as CSV file\. Use \fB\-\-csv \-\fR to use STDOUT\.
+.TP
+\-\-csv \fIpath\fR
+Export as CSV file\. Use \fB\-\-csv \-\fR to use STDOUT\.
 .
-.IP "\(bu" 4
-\-\-force : Force overwrite file\.
+.TP
+\-\-force
+Force overwrite file\.
 .
-.IP "\(bu" 4
-\-h, \-\-help: Displays the help page\.
-.
-.IP "" 0
+.TP
+\-h, \-\-help
+Displays the help page\.
 .
 .SH "EXAMPLES"
 .
@@ -238,6 +246,14 @@ Name
 %d
 Description
 .
+.TP
+%ds
+Duration Seconds
+.
+.TP
+%dh
+Duration Human Format
+.
 .SH "TRACK FORMAT"
 .
 .TP
@@ -279,6 +295,14 @@ End Date
 .TP
 %et
 End Time
+.
+.TP
+%ds
+Duration Seconds
+.
+.TP
+%dh
+Duration Human Format
 .
 .P
 Use \fB%T\fR prefix for each Task attribute for Track formatting\. For example use \fB%Tid\fR to use the Task ID\.
