@@ -383,7 +383,6 @@ module TheFox
 				# Removes itself from parent Task.
 				def remove
 					if @task
-						# puts "TRACK REMOVE"
 						@task.remove_track(self)
 					else
 						false

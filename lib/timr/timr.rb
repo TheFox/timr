@@ -374,8 +374,7 @@ module TheFox
 						task.reset
 					end
 					
-					r = track.remove
-					# puts "STACK RESET: #{r}"
+					track.remove
 					
 					# Save Task to file.
 					task.save_to_file
@@ -385,11 +384,9 @@ module TheFox
 				
 				if stack_opt
 					@stack.tracks.each do |track|
-						# puts "STACK: #{track}"
 						task = track.task
 						if task
-							r = task.reset
-							# puts "STACK RESET B: #{r}"
+							task.reset
 							
 							# Save Task to file.
 							task.save_to_file
