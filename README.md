@@ -158,6 +158,14 @@ Export Tasks and Tracks.
 
 See more informations on the [timr-report(1)](https://timr.fox21.at/man/timr-report.1.html) man page.
 
+### Reset Command
+
+Remove current running Track.
+
+	timr reset [<options>]
+
+See more informations on the [timr-reset(1)](https://timr.fox21.at/man/timr-reset.1.html) man page.
+
 ## Workflow Example
 
 Here is an example as shell commands how your workflow could look like while using Timr.

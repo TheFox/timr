@@ -17,3 +17,5 @@ if [[ ! -f .env ]]; then
 fi
 
 bundler install
+
+./bin/dev_data.sh

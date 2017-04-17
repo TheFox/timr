@@ -1,0 +1,41 @@
+.\" generated with Ronn/v0.7.3
+.\" http://github.com/rtomayko/ronn/tree/0.7.3
+.
+.TH "TIMR\-RESET" "1" "April 2017" "FOX21.at" "Timr Manual"
+.
+.SH "NAME"
+\fBtimr\-reset\fR \- Export Tasks and Tracks\.
+.
+.SH "SYNOPSIS"
+timr reset [\fIoptions\fR]
+.
+.SH "DESCRIPTION"
+Remove current running Track\. Paused commands will not be deleted\.
+.
+.SH "OPTIONS"
+.
+.TP
+\-s, \-\-stack
+Clean the Stack\.
+.
+.TP
+\-h, \-\-help
+Displays the help page\.
+.
+.SH "EXAMPLES"
+.
+.nf
+
+timr reset
+timr reset \-\-stack
+.
+.fi
+.
+.SH "API REFERENCE"
+\fIhttps://timr\.fox21\.at/api/TheFox/Timr/Command/ResetCommand\.html\fR
+.
+.SH "SEE ALSO"
+timr\-start(1), timr\-push(1)
+.
+.SH "TIMR"
+This is part of timr(1)\.

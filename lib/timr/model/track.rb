@@ -312,6 +312,11 @@ module TheFox
 					Status.new(short_status)
 				end
 				
+				# Is the Track running?
+				def running?
+					status.short_status == 'R' # running
+				end
+				
 				# Is the Track stopped?
 				def stopped?
 					status.short_status == 'S' # stopped
@@ -378,6 +383,7 @@ module TheFox
 				# Removes itself from parent Task.
 				def remove
 					if @task
+						# puts "TRACK REMOVE"
 						@task.remove_track(self)
 					else
 						false

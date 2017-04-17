@@ -82,6 +82,14 @@ module TheFox
 					changed
 				end
 				
+				# Remove all Tracks from Stack.
+				def reset
+					@tracks = Array.new
+					
+					# Mark Stack as changed.
+					changed
+				end
+				
 				# Check Track on Stack.
 				def on_stack?(track)
 					unless track.is_a?(Track)

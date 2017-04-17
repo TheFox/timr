@@ -92,9 +92,13 @@ module TheFox
 				
 				# Remove a Track.
 				def remove_track(track)
+					# puts "TASK REMOVE TRACK: #{track}"
+					
 					track.task = nil
 					
 					if @tracks.delete(track.id)
+						# puts "TASK REMOVE TRACK: OK"
+						
 						# Mark Task as changed.
 						changed
 					else
@@ -122,6 +126,15 @@ module TheFox
 					target_task.add_track(track, set_as_current_track)
 					
 					true
+				end
+				
+				def reset
+					if @current_track
+						@current_track = nil
+						
+						# Mark Task as changed.
+						changed
+					end
 				end
 				
 				# Select Track by Time Range and/or Status.

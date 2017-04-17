@@ -6,6 +6,7 @@ timr-pause(1) timr-pause.1.ronn
 timr-pop(1) timr-pop.1.ronn
 timr-push(1) timr-push.1.ronn
 timr-report(1) timr-report.1.ronn
+timr-reset(1) timr-reset.1.ronn
 timr-start(1) timr-start.1.ronn
 timr-status(1) timr-status.1.ronn
 timr-stop(1) timr-stop.1.ronn

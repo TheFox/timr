@@ -12,6 +12,7 @@ function _timr_command {
 		pop
 		push
 		report
+		reset
 		start
 		status
 		stop
@@ -108,6 +109,15 @@ function _timr_report_main {
 		--format
 		--csv
 		--force
+	)
+	COMPREPLY=( $(compgen -W '${timr_commands[@]}' -- "${curr_word}") )
+}
+
+function _timr_reset_main {
+	local curr_word=$1
+	local timr_commands=(
+		--help
+		--stack
 	)
 	COMPREPLY=( $(compgen -W '${timr_commands[@]}' -- "${curr_word}") )
 }
@@ -310,7 +320,7 @@ function _timr_main {
 		fi
 		
 		case "${timr_command}" in
-			continue|log|pause|pop|push|report|start|status|stop)
+			continue|log|pause|pop|push|report|reset|start|status|stop)
 				"_timr_${timr_command}_main" "$curr_word"
 				;;
 			task|track)

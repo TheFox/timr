@@ -33,6 +33,7 @@ Timr is a time tracking tool for the Command-line, written in Ruby. You can trac
 * timr-task(1)
 * timr-track(1)
 * timr-report(1)
+* timr-reset(1)
 
 ## MISCELLANEOUS
 

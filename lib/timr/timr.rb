@@ -157,7 +157,7 @@ module TheFox
 						# Task Path
 						task_file_path = BasicModel.create_path_by_id(@tasks_path, task.id)
 						
-						# Save Track to file.
+						# Save Task to file.
 						task.save_to_file(task_file_path)
 						
 						@stack.start(track)
@@ -341,7 +341,7 @@ module TheFox
 						# Task Path
 						task_file_path = BasicModel.create_path_by_id(@tasks_path, task.id)
 						
-						# Save Track to file.
+						# Save Task to file.
 						task.save_to_file(task_file_path)
 						
 						@stack.push(track)
@@ -357,6 +357,51 @@ module TheFox
 			def pop(options = Hash.new)
 				stop(options)
 				continue(options)
+			end
+			
+			# Remove current running Track.
+			# 
+			# Options:
+			# 
+			# - `:stack` (Boolean) Reset the Stack.
+			def reset(options = Hash.new)
+				stack_opt = options.fetch(:stack, false)
+				
+				track = @stack.current_track
+				if track && track.running?
+					task = track.task
+					if task
+						task.reset
+					end
+					
+					r = track.remove
+					# puts "STACK RESET: #{r}"
+					
+					# Save Task to file.
+					task.save_to_file
+					
+					@stack.remove(track)
+				end
+				
+				if stack_opt
+					@stack.tracks.each do |track|
+						# puts "STACK: #{track}"
+						task = track.task
+						if task
+							r = task.reset
+							# puts "STACK RESET B: #{r}"
+							
+							# Save Task to file.
+							task.save_to_file
+						end
+					end
+					
+					@stack.reset
+				end
+				
+				@stack.save_to_file
+				
+				nil
 			end
 			
 			# Create a new [Task](rdoc-ref:TheFox::Timr::Model::Task) based on the `options` Hash. Will not be started or something else.
@@ -383,7 +428,7 @@ module TheFox
 				# Task Path
 				task_file_path = BasicModel.create_path_by_id(@tasks_path, task.id)
 				
-				# Save Track to file.
+				# Save Task to file.
 				task.save_to_file(task_file_path)
 				
 				# Leave Stack untouched.

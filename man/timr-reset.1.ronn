@@ -1,0 +1,33 @@
+timr-reset(1) -- Export Tasks and Tracks.
+===
+
+## SYNOPSIS
+
+timr reset [<options>]
+
+## DESCRIPTION
+
+Remove current running Track. Paused commands will not be deleted.
+
+## OPTIONS
+
+* -s, --stack:
+	Clean the Stack.
+
+* -h, --help:
+	Displays the help page.
+
+## EXAMPLES
+
+```
+timr reset
+timr reset --stack
+```
+
+## API REFERENCE
+
+<https://timr.fox21.at/api/TheFox/Timr/Command/ResetCommand.html>
+
+## SEE ALSO
+
+timr-start(1), timr-push(1)

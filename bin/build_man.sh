@@ -20,6 +20,7 @@ for file in \
 	timr-pop.1.ronn \
 	timr-push.1.ronn \
 	timr-report.1.ronn \
+	timr-reset.1.ronn \
 	timr-start.1.ronn \
 	timr-status.1.ronn \
 	timr-stop.1.ronn \

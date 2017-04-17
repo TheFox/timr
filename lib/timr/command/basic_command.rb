@@ -112,6 +112,8 @@ module TheFox
 							command = TrackCommand
 						when 'report'
 							command = ReportCommand
+						when 'reset'
+							command = ResetCommand
 						else
 							raise CommandError, "'%s' is not a timr command. See 'timr --help'." % [name]
 						end

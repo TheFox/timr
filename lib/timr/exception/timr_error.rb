@@ -22,6 +22,7 @@ module TheFox
 		# 		- PopCommandError
 		# 		- PushCommandError
 		# 		- ReportCommandError
+		# 		- ResetCommandError
 		# 		- StartCommandError
 		# 		- StatusCommandError
 		# 		- StopCommandError
@@ -80,6 +81,9 @@ module TheFox
 			end
 			
 			class ReportCommandError < CommandError
+			end
+			
+			class ResetCommandError < CommandError
 			end
 			
 			class StartCommandError < CommandError
