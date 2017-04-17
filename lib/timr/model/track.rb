@@ -223,9 +223,17 @@ module TheFox
 				# 
 				# - `:from` (Time), `:to` (Time)  
 				#   Limit the begin and end datetimes to a specific range.
+				# - `:billed` (Boolean)
 				def duration(options = Hash.new)
 					from_opt = options.fetch(:from, nil)
 					to_opt = options.fetch(:to, nil)
+					billed_opt = options.fetch(:billed, nil)
+					
+					unless billed_opt.nil?
+						if @is_billed != billed_opt
+							return Duration.new(0)
+						end
+					end
 					
 					if @begin_datetime
 						bdt = @begin_datetime.utc
@@ -258,20 +266,12 @@ module TheFox
 				
 				# Alias method.
 				def billed_duration(options = Hash.new)
-					if self.is_billed
-						duration(options)
-					else
-						Duration.new(0)
-					end
+					duration(options.merge({:billed => true}))
 				end
 				
 				# Alias method.
 				def unbilled_duration(options = Hash.new)
-					if !self.is_billed
-						duration(options)
-					else
-						Duration.new(0)
-					end
+					duration(options.merge({:billed => false}))
 				end
 				
 				# When begin_datetime is `2017-01-01 01:15`  
@@ -529,6 +529,8 @@ module TheFox
 				# - `%et` - End Time
 				# - `%ds` - Duration Seconds
 				# - `%dh` - Duration Human Format
+				# - `%bi` - Billed Integer
+				# - `%bh` - Billed Human Format (YES, NO)
 				def formatted(options = Hash.new)
 					format = options.fetch(:format, '')
 					
@@ -544,6 +546,8 @@ module TheFox
 						.gsub('%ed', self.end_datetime ? self.end_datetime.strftime('%F') : '')
 						.gsub('%et', self.end_datetime ? self.end_datetime.strftime('%H:%M') : '')
 						.gsub('%ds', self.duration.to_s)
+						.gsub('%bi', self.is_billed.to_i.to_s)
+						.gsub('%bh', self.is_billed ? 'YES' : 'NO')
 					
 					duration_human = self.duration.to_human
 					if duration_human

@@ -474,6 +474,8 @@ class TestTrack < MiniTest::Test
 		assert_equal('AZ', track1.formatted({:format => 'A%edZ'}))
 		assert_equal('A0Z', track1.formatted({:format => 'A%dsZ'}))
 		assert_equal('AZ', track1.formatted({:format => 'A%dhZ'}))
+		assert_equal('A0Z', track1.formatted({:format => 'A%biZ'}))
+		assert_equal('ANOZ', track1.formatted({:format => 'A%bhZ'}))
 		
 		
 		track1 = Track.new
@@ -481,6 +483,8 @@ class TestTrack < MiniTest::Test
 		track1.message = 'xyz'
 		track1.begin_datetime = '2017-01-01 01:03:05'
 		track1.end_datetime   = '2017-02-03 02:04:06'
+		track1.is_billed = true
+		
 		assert_equal('A123456789aZ', track1.formatted({:format => 'A%idZ'}))
 		assert_equal('A123456Z', track1.formatted({:format => 'A%sidZ'}))
 		assert_equal('AxyzZ', track1.formatted({:format => 'A%mZ'}))
@@ -495,6 +499,9 @@ class TestTrack < MiniTest::Test
 		
 		assert_equal('A2854861Z', track1.formatted({:format => 'A%dsZ'}))
 		assert_equal('A793h 1mZ', track1.formatted({:format => 'A%dhZ'}))
+		
+		assert_equal('A1Z', track1.formatted({:format => 'A%biZ'}))
+		assert_equal('AYESZ', track1.formatted({:format => 'A%bhZ'}))
 		
 		
 		task1 = Task.new

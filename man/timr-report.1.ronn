@@ -29,6 +29,12 @@ This command is designed to print a list of Tasks or Tracks to STDOUT and to exp
 * --tracks:
 	Export Tracks
 
+* --billed:
+	Filter only Tasks/Tracks which are billed.
+
+* --unbilled:
+	Filter only Tasks/Tracks which are not billed.
+
 * --format:
 	See TASK FORMAT and TRACK FORMAT section.
 
@@ -53,6 +59,11 @@ timr report --year 2017 --csv timr_report_2017.csv
 timr report --all --csv timr_report_all.csv
 timr report --format '- %id'
 timr report --tracks --format '- %Tsid %sid %t'
+timr report --tracks --all --billed
+timr report --tracks --all --unbilled
+timr report --tasks --all
+timr report --tasks --all --billed
+timr report --tasks --all --unbilled
 ```
 
 ## TASK TABLE COLUMNS
@@ -249,6 +260,12 @@ The last row in CSV files is always the total sum.
 
 * %dh:
 	Duration Human Format
+
+* %bi:
+	Billed Integer
+
+* %bh:
+	Billed Human Format (YES, NO)
 
 Use `%T` prefix for each Task attribute for Track formatting. For example use `%Tid` to use the Task ID.
 

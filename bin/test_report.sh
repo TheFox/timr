@@ -31,11 +31,12 @@ bundler exec ./bin/timr -C "$cwd" task show t4
 bundler exec ./bin/timr -C "$cwd" track add \
 	--start-date 2017-01-01 --start-time 01:00 \
 	--end-date 2017-01-01 --end-time 02:00 \
+	--billed \
 	-m 'task1_track1' t1
 
 bundler exec ./bin/timr -C "$cwd" track add \
 	--start-date 2017-01-02 --start-time 01:00 \
-	--end-date 2017-01-02 --end-time 02:00 \
+	--end-date 2017-01-02 --end-time 03:00 \
 	-m 'task1_track2' t1
 
 # Task 2 empty
@@ -64,7 +65,11 @@ bundler exec ./bin/timr -C "$cwd" task show t4
 
 # Report to STDOUT.
 bundler exec ./bin/timr -C "$cwd" report --tasks --all
+bundler exec ./bin/timr -C "$cwd" report --tasks --all --billed
+bundler exec ./bin/timr -C "$cwd" report --tasks --all --unbilled
 bundler exec ./bin/timr -C "$cwd" report --tracks --all
+bundler exec ./bin/timr -C "$cwd" report --tracks --all --billed
+bundler exec ./bin/timr -C "$cwd" report --tracks --all --unbilled
 
 # Report to files.
 bundler exec ./bin/timr -C "$cwd" report --tasks --all --csv "${tasks_csv_file}"

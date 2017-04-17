@@ -103,6 +103,8 @@ function _timr_report_main {
 		--all
 		--tasks
 		--tracks
+		--billed
+		--unbilled
 		--format
 		--csv
 		--force

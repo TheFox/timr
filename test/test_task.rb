@@ -766,6 +766,8 @@ class TestTask < MiniTest::Test
 		assert_equal('AZ', task1.formatted({:format => 'A%fidZ'}))
 		assert_equal('AZ', task1.formatted({:format => 'A%nZ'}))
 		assert_equal('AZ', task1.formatted({:format => 'A%dZ'}))
+		assert_equal('A0Z', task1.formatted({:format => 'A%dsZ'}))
+		assert_equal('AZ', task1.formatted({:format => 'A%dhZ'}))
 		
 		task1 = Task.new
 		task1.id = '123456789a'
@@ -773,11 +775,27 @@ class TestTask < MiniTest::Test
 		task1.name = 'zyx'
 		task1.description = 'xyz'
 		task1.estimation = '10h 5m'
+		
 		assert_equal('A123456789aZ', task1.formatted({:format => 'A%idZ'}))
 		assert_equal('A123456Z', task1.formatted({:format => 'A%sidZ'}))
 		assert_equal('AabcZ', task1.formatted({:format => 'A%fidZ'}))
 		assert_equal('AzyxZ', task1.formatted({:format => 'A%nZ'}))
 		assert_equal('AxyzZ', task1.formatted({:format => 'A%dZ'}))
+		
+		
+		track1 = Track.new
+		track1.begin_datetime = '2017-01-01 01:00'
+		track1.end_datetime   = '2017-01-01 02:00'
+		
+		track2 = Track.new
+		track2.begin_datetime = '2017-01-01 02:00'
+		track2.end_datetime   = '2017-01-01 04:00'
+		
+		task1.add_track(track1)
+		task1.add_track(track2)
+		
+		assert_equal('A10800Z', task1.formatted({:format => 'A%dsZ'}))
+		assert_equal('A3hZ', task1.formatted({:format => 'A%dhZ'}))
 	end
 	
 	def test_create_task_from_hash

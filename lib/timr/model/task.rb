@@ -630,9 +630,8 @@ module TheFox
 				# 
 				# Options:
 				# 
-				# - `:billed`
+				# - `:billed` (Boolean)
 				def duration(options = Hash.new)
-					
 					billed_opt = options.fetch(:billed, nil)
 					
 					duration = Duration.new
@@ -960,15 +959,17 @@ module TheFox
 						.gsub("#{prefix}sid", self.short_id ? self.short_id : '')
 						.gsub("#{prefix}fid", self.foreign_id ? self.foreign_id : '')
 						.gsub("#{prefix}n", self.name ? self.name : '')
-						.gsub("#{prefix}d", self.description ? self.description : '')
-						.gsub("#{prefix}ds", self.duration.to_s)
+						.gsub("#{prefix}ds", self.duration(options).to_s)
 					
-					duration_human = self.duration.to_human
+					duration_human = self.duration(options).to_human
 					if duration_human
-						formatted_s.gsub!('%dh', self.duration.to_human)
+						formatted_s.gsub!('%dh', duration_human)
 					else
 						formatted_s.gsub!('%dh', '')
 					end
+					
+					# Must not before %dh and %ds.
+					formatted_s.gsub!("#{prefix}d", self.description ? self.description : '')
 					
 					formatted_s
 				end

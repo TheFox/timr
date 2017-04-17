@@ -24,8 +24,8 @@ module TheFox
 					@tracks_opt = false
 					@from_opt = nil
 					@to_opt = nil
-					# @billed_opt = false
-					# @unbilled_opt = false
+					@billed_opt = false
+					@unbilled_opt = false
 					@format_opt = nil
 					@csv_opt = nil
 					@force_opt = false
@@ -55,10 +55,10 @@ module TheFox
 						when '-t', '--tracks'
 							@tracks_opt = true
 						
-						# when '--billed'
-						# 	@billed_opt = true
-						# when '--unbilled'
-						# 	@unbilled_opt = true
+						when '--billed'
+							@billed_opt = true
+						when '--unbilled'
+							@unbilled_opt = true
 						
 						when '--format'
 							@format_opt = argv.shift
@@ -85,25 +85,33 @@ module TheFox
 						@to_opt = Time.new(today.year, today.month, month_end.day, 23, 59, 59)
 					end
 					
-					# @billed_resolved_opt = nil
-					# if @billed_opt || @unbilled_opt
-					# 	if @billed_opt
-					# 		@billed_resolved_opt = true
-					# 	elsif @unbilled_opt
-					# 		@billed_resolved_opt = false
-					# 	end
-					# end
+					@billed_resolved_opt = nil
+					if @billed_opt || @unbilled_opt
+						if @billed_opt
+							@billed_resolved_opt = true
+						elsif @unbilled_opt
+							@billed_resolved_opt = false
+						end
+					end
 					
 					@filter_options = {
 						:format => '%y-%m-%d %H:%M',
 						:from => @from_opt,
 						:to => @to_opt,
-						# :billed => @billed_resolved_opt,
+						:billed => @billed_resolved_opt,
 					}
 					@csv_filter_options = {
 						:format => '%F %T %z',
 						:from => @from_opt,
 						:to => @to_opt,
+					}
+					
+					# Used by
+					# 	print_formatted_task_list
+					# 	print_formatted_track_list
+					@format_options = {
+						:format => @format_opt,
+						:billed => @billed_resolved_opt,
 					}
 					
 					if @csv_opt
@@ -253,10 +261,8 @@ module TheFox
 				end
 				
 				def print_formatted_task_list
-					# puts 'print_formatted_task_list'
-					options = {:format => @format_opt}
 					filtered_tasks.each do |task|
-						puts task.formatted(options)
+						puts task.formatted(@format_options)
 					end
 				end
 				
@@ -349,10 +355,8 @@ module TheFox
 				end
 				
 				def print_formatted_track_list
-					# puts 'print_formatted_track_list'
-					options = {:format => @format_opt}
 					@timr.tracks(@filter_options).each do |track_id, track|
-						puts track.formatted(options)
+						puts track.formatted(@format_options)
 					end
 				end
 				
@@ -715,6 +719,7 @@ module TheFox
 				def help
 					puts 'usage: timr report [-d|--day <date>] [-m|--month <[YYYY-]MM>]'
 					puts '                   [-y|--year [<YYYY>]] [-a|--all] [--tasks|--tracks]'
+					puts '                   [--billed|--unbilled]'
 					puts '                   [--csv <path>] [--force] [--format <str>]'
 					puts '   or: timr report [-h|--help]'
 					puts
@@ -725,8 +730,8 @@ module TheFox
 					puts '    -a, --all                   All.'
 					puts '    --tasks                     Export Tasks (default)'
 					puts '    --tracks                    Export Tracks'
-					# puts '    --billed                    Filter only Tasks/Tracks which are billed.'
-					# puts '    --unbilled                  Filter only Tasks/Tracks which are not billed.'
+					puts '    --billed                    Filter only Tasks/Tracks which are billed.'
+					puts '    --unbilled                  Filter only Tasks/Tracks which are not billed.'
 					puts '    --format <str>              Format Tasks and Tracks output.'
 					puts "    --csv <path>                Export as CSV file. Use '--csv -' to use STDOUT."
 					puts "    --force                     Force overwrite file."
@@ -757,6 +762,8 @@ module TheFox
 					puts '    %et     End Time'
 					puts '    %ds     Duration Seconds'
 					puts '    %dh     Duration Human Format'
+					puts '    %bi     Billed Integer'
+					puts '    %bh     Billed Human Format (YES, NO)'
 					puts
 					puts "Use '%T' prefix for each Task attribute for Track formatting."
 					puts "For example use '%Tid' to use the Task ID."

@@ -39,6 +39,14 @@ Export Tasks (default)
 Export Tracks
 .
 .TP
+\-\-billed
+Filter only Tasks/Tracks which are billed\.
+.
+.TP
+\-\-unbilled
+Filter only Tasks/Tracks which are not billed\.
+.
+.TP
 \-\-format
 See TASK FORMAT and TRACK FORMAT section\.
 .
@@ -67,6 +75,11 @@ timr report \-\-year 2017 \-\-csv timr_report_2017\.csv
 timr report \-\-all \-\-csv timr_report_all\.csv
 timr report \-\-format \'\- %id\'
 timr report \-\-tracks \-\-format \'\- %Tsid %sid %t\'
+timr report \-\-tracks \-\-all \-\-billed
+timr report \-\-tracks \-\-all \-\-unbilled
+timr report \-\-tasks \-\-all
+timr report \-\-tasks \-\-all \-\-billed
+timr report \-\-tasks \-\-all \-\-unbilled
 .
 .fi
 .
@@ -303,6 +316,14 @@ Duration Seconds
 .TP
 %dh
 Duration Human Format
+.
+.TP
+%bi
+Billed Integer
+.
+.TP
+%bh
+Billed Human Format (YES, NO)
 .
 .P
 Use \fB%T\fR prefix for each Task attribute for Track formatting\. For example use \fB%Tid\fR to use the Task ID\.
