@@ -32,7 +32,7 @@ module TheFox
 						when '-s', '--stack'
 							@stack_opt = true
 						else
-							raise ResetCommandError, "Unknown argument '#{arg}'. See 'timr report --help'."
+							raise ResetCommandError, "Unknown argument '#{arg}'. See 'timr reset --help'."
 						end
 					end
 				end

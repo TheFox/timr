@@ -1,9 +1,20 @@
 
 module TheFox
 	module Timr
+		# Project Name
 		NAME = 'Timr'
-		VERSION = '0.6.0'
+		
+		# Version Stages
+		# 
+		# - `alpha` - Dev
+		# - `beta` - Testing
+		# - `rc` - Release Canditate Testing
+		VERSION = '0.7.0.alpha.1'
+		
+		# Release Date
 		DATE = '2017-04-17'
+		
+		# URL to Homepage.
 		HOMEPAGE = 'https://github.com/TheFox/timr'
 		
 		MODEL_DATETIME_FORMAT = '%FT%T%z'
