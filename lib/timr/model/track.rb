@@ -434,7 +434,7 @@ module TheFox
 					end
 					
 					if self.duration && self.duration.to_i > 0
-						to_ax << 'Duration: %s' % [self.duration.to_human]
+						to_ax << 'Duration: %s' % [self.duration.to_human_s]
 					end
 					
 					to_ax << 'Status: %s' % [self.status.colorized]
@@ -479,7 +479,7 @@ module TheFox
 					end
 					
 					if self.duration && self.duration.to_i > 0
-						duration_human = self.duration.to_human
+						duration_human = self.duration.to_human_s
 						to_ax << 'Duration: %s' % [duration_human]
 						
 						duration_man_days = self.duration.to_man_days

@@ -18,7 +18,6 @@ module TheFox
 				
 				def initialize(argv = Array.new)
 					super()
-					# puts "argv '#{argv}'"
 					
 					@help_opt = false
 					@tasks_opt = false
@@ -224,9 +223,8 @@ module TheFox
 							totals[:task_c],
 							task.begin_datetime_s(@filter_options),
 							task.end_datetime_s(@filter_options),
-							duration.to_human,
-							unbilled_duration.to_human,
-							# tracks_c,
+							duration.to_human_s,
+							unbilled_duration.to_human_s,
 							'%s %s' % [task.id_foreign_or_short, task.name(15)]
 						]
 					end
@@ -242,9 +240,8 @@ module TheFox
 						nil, # task_c
 						totals[:begin_datetime_s],
 						totals[:end_datetime_s],
-						totals[:duration].to_human, # duration
-						totals[:unbilled_duration].to_human, # duration
-						# totals[:tracks_c],
+						totals[:duration].to_human_s, # duration
+						totals[:unbilled_duration].to_human_s, # duration
 						'TOTAL', # task
 					]
 					
@@ -321,7 +318,7 @@ module TheFox
 							totals[:tracks_c],
 							track.begin_datetime_s(@filter_options),
 							track.end_datetime_s(@filter_options),
-							duration.to_human,
+							duration.to_human_s,
 							'%s' % [task.id_foreign_or_short],
 							'%s %s' % [track.short_id, track.title(15)],
 						]
@@ -338,7 +335,7 @@ module TheFox
 						nil, # task_c
 						totals[:begin_datetime_s],
 						totals[:end_datetime_s],
-						totals[:duration].to_human, # duration
+						totals[:duration].to_human_s, # duration
 						'TOTAL', # task
 						nil, # track
 					]
@@ -478,7 +475,7 @@ module TheFox
 							totals[:end_datetime] = edt
 						end
 						
-						csv << [
+						row = [
 							totals[:row_c],
 							
 							task.id,
@@ -488,21 +485,36 @@ module TheFox
 							task.begin_datetime_s(@csv_filter_options),
 							task.end_datetime_s(@csv_filter_options),
 							
-							duration ? duration.to_human : '---',
-							duration ? duration.to_i : 0,
-							estimation ? estimation.to_human : '---',
-							estimation ? estimation.to_i : 0,
-							remaining_time ? remaining_time.to_human : '---',
-							remaining_time ? remaining_time.to_i : 0,
-							billed_duration ? billed_duration.to_human : '---',
-							billed_duration ? billed_duration.to_i : 0,
-							unbilled_duration ? unbilled_duration.to_human : '---',
-							unbilled_duration ? unbilled_duration.to_i : 0,
-							
-							tracks_c,
-							billed_tracks_c,
-							unbilled_tracks_c,
+							duration.to_human_s,
+							duration.to_i,
 						]
+						
+						if estimation
+							row << estimation.to_human_s
+							row << estimation.to_i
+						else
+							row << '---'
+							row << 0
+						end
+						
+						if remaining_time
+							row << remaining_time.to_human_s
+							row << remaining_time.to_i
+						else
+							row << '---'
+							row << 0
+						end
+						
+						row << billed_duration.to_human_s
+						row << billed_duration.to_i
+						row << unbilled_duration.to_human_s
+						row << unbilled_duration.to_i
+						
+						row << tracks_c
+						row << billed_tracks_c
+						row << unbilled_tracks_c
+						
+						csv << row
 					end
 					
 					totals[:begin_datetime_s] = totals[:begin_datetime] ? totals[:begin_datetime].localtime.strftime(@csv_filter_options[:format]) : '---'
@@ -520,18 +532,23 @@ module TheFox
 						totals[:begin_datetime_s],
 						totals[:end_datetime_s],
 						
-						totals[:duration] ? totals[:duration].to_human : '---',
-						totals[:duration] ? totals[:duration].to_i : 0,
-						totals[:estimation] ? totals[:estimation].to_human : '---',
-						totals[:estimation] ? totals[:estimation].to_i : 0,
-						totals[:remaining_time] ? totals[:remaining_time].to_human : '---',
-						totals[:remaining_time] ? totals[:remaining_time].to_i : 0,
-						totals[:billed_duration] ? totals[:billed_duration].to_human : '---',
-						totals[:billed_duration] ? totals[:billed_duration].to_i : 0,
-						totals[:unbilled_duration] ? totals[:unbilled_duration].to_human : '---',
-						totals[:unbilled_duration] ? totals[:unbilled_duration].to_i : 0,
+						totals[:duration].to_human_s,
+						totals[:duration].to_i,
+						
+						totals[:estimation].to_human_s,
+						totals[:estimation].to_i,
+						
+						totals[:remaining_time].to_human_s,
+						totals[:remaining_time].to_i,
+						
+						totals[:billed_duration].to_human_s,
+						totals[:billed_duration].to_i,
+						
+						totals[:unbilled_duration].to_human_s,
+						totals[:unbilled_duration].to_i,
 						
 						totals[:tracks_c],
+						
 						totals[:billed_tracks_c],
 						totals[:unbilled_tracks_c],
 					]
@@ -625,7 +642,7 @@ module TheFox
 							totals[:end_datetime] = edt
 						end
 						
-						csv << [
+						row = [
 							totals[:row_c],
 							
 							task.id,
@@ -637,15 +654,19 @@ module TheFox
 							track.begin_datetime_s(@csv_filter_options),
 							track.end_datetime_s(@csv_filter_options),
 							
-							duration ? duration.to_human : '---',
-							duration ? duration.to_i : 0,
-							billed_duration ? billed_duration.to_human : '---',
-							billed_duration ? billed_duration.to_i : 0,
-							unbilled_duration ? unbilled_duration.to_human : '---',
-							unbilled_duration ? unbilled_duration.to_i : 0,
+							duration.to_human_s,
+							duration.to_i,
+							
+							billed_duration.to_human_s,
+							billed_duration.to_i,
+							
+							unbilled_duration.to_human_s,
+							unbilled_duration.to_i,
 							
 							track.is_billed.to_i,
 						]
+						
+						csv << row
 					end
 					
 					totals[:begin_datetime_s] = totals[:begin_datetime] ? totals[:begin_datetime].localtime.strftime(@csv_filter_options[:format]) : '---'
@@ -653,7 +674,7 @@ module TheFox
 					totals[:end_datetime_s] = totals[:end_datetime] ? totals[:end_datetime].localtime.strftime(@csv_filter_options[:format]) : '---'
 					
 					totals[:row_c] += 1
-					csv << [
+					row = [
 						totals[:row_c],
 						'TOTAL',
 						
@@ -666,13 +687,17 @@ module TheFox
 						totals[:begin_datetime_s],
 						totals[:end_datetime_s],
 						
-						totals[:duration] ? totals[:duration].to_human : '---',
-						totals[:duration] ? totals[:duration].to_i : 0,
-						totals[:billed_duration] ? totals[:billed_duration].to_human : '---',
-						totals[:billed_duration] ? totals[:billed_duration].to_i : 0,
-						totals[:unbilled_duration] ? totals[:unbilled_duration].to_human : '---',
-						totals[:unbilled_duration] ? totals[:unbilled_duration].to_i : 0,
+						totals[:duration].to_human_s,
+						totals[:duration].to_i,
+						
+						totals[:billed_duration].to_human_s,
+						totals[:billed_duration].to_i,
+						
+						totals[:unbilled_duration].to_human_s,
+						totals[:unbilled_duration].to_i,
 					]
+					
+					csv << row
 					
 					csv.close
 				end
@@ -688,7 +713,7 @@ module TheFox
 				def help
 					puts 'usage: timr report [-d|--day <date>] [-m|--month <[YYYY-]MM>]'
 					puts '                   [-y|--year [<YYYY>]] [-a|--all] [--tasks|--tracks]'
-					puts '                   [--csv <path>] [--force]'
+					puts '                   [--csv <path>] [--force] [--format <str>]'
 					puts '   or: timr report [-h|--help]'
 					puts
 					puts 'Options'
@@ -700,7 +725,7 @@ module TheFox
 					puts '    --tracks                    Export Tracks'
 					# puts '    --billed                    Filter only Tasks/Tracks which are billed.'
 					# puts '    --unbilled                  Filter only Tasks/Tracks which are not billed.'
-					puts '    --format                    Format Tasks and Tracks output.'
+					puts '    --format <str>              Format Tasks and Tracks output.'
 					puts "    --csv <path>                Export as CSV file. Use '--csv -' to use STDOUT."
 					puts "    --force                     Force overwrite file."
 					puts

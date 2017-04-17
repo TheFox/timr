@@ -45,7 +45,11 @@ module TheFox
 					:units => 2,
 				}
 				h = ChronicDuration.output(@seconds, dur_opt)
-				
+			end
+			
+			# Convert to_human to a String when nil.
+			def to_human_s
+				h = to_human
 				h ? h : '---'
 			end
 			

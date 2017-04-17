@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Run Unit Tests.
+# Run all Tests.
 
 SCRIPT_BASEDIR=$(dirname "$0")
 RUBYOPT=-w
@@ -17,3 +17,5 @@ cd "${SCRIPT_BASEDIR}/.."
 grep -r -i taks lib man test && { echo 'ERROR: Wrong word found'; exit 1; } || true
 
 bundler exec ./test/suite_all.rb
+
+./bin/test_report.sh

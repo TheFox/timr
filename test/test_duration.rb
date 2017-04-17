@@ -13,6 +13,22 @@ class TestDuration < MiniTest::Test
 		assert_equal([35, 30, 2], duration1.to_smh)
 	end
 	
+	def test_to_human
+		duration1 = Duration.new
+		assert_nil(duration1.to_human)
+		
+		duration1 = Duration.new(7200)
+		assert_equal('2h', duration1.to_human)
+	end
+	
+	def test_to_human_s
+		duration1 = Duration.new
+		assert_equal('---', duration1.to_human_s)
+		
+		duration1 = Duration.new(7200)
+		assert_equal('2h', duration1.to_human_s)
+	end
+	
 	def test_man_days
 		duration1 = Duration.new(7200 + 1800)
 		assert_equal('2h 30m', duration1.to_man_days)

@@ -464,7 +464,7 @@ module TheFox
 				# Get estimation as String.
 				def estimation_s
 					if @estimation
-						@estimation.to_human
+						@estimation.to_human_s
 					else
 						'---'
 					end
@@ -678,7 +678,7 @@ module TheFox
 				def remaining_time_s
 					rmt = remaining_time
 					if rmt
-						rmt.to_human
+						rmt.to_human_s
 					else
 						'---'
 					end
@@ -804,7 +804,7 @@ module TheFox
 						to_ax << 'Description: %s' % [self.description]
 					end
 					if self.estimation
-						to_ax << 'Estimation: %s' % [self.estimation.to_human]
+						to_ax << 'Estimation: %s' % [self.estimation.to_human_s]
 					end
 					to_ax
 				end
@@ -839,7 +839,7 @@ module TheFox
 					end
 					
 					# Duration
-					duration_human = self.duration.to_human
+					duration_human = self.duration.to_human_s
 					to_ax << 'Duration: %s' % [duration_human]
 					
 					duration_man_days = self.duration.to_man_days

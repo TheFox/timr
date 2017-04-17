@@ -189,7 +189,7 @@ module TheFox
 									track_c,
 									begin_datetime_s,
 									end_datetime_s,
-									duration ? duration.to_human : '---',
+									duration.to_human_s,
 									task.id_foreign_or_short,
 									'%s %s' % [track.short_id, track.title(15)],
 								]
@@ -219,7 +219,7 @@ module TheFox
 								totals[:task_c],
 								begin_datetime_s,
 								end_datetime_s,
-								duration ? duration.to_human : '---',
+								duration.to_human_s,
 								task.id_foreign_or_short,
 								'%s %s' % [track.short_id, track.title(15)],
 							]
@@ -237,7 +237,7 @@ module TheFox
 						nil,        # track_c
 						totals[:begin_datetime_s],
 						totals[:end_datetime_s],
-						totals[:duration] ? totals[:duration].to_human : '---', # duration
+						totals[:duration].to_human_s, # duration
 						'TOTAL',    # task
 						nil,        # track
 					]
