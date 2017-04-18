@@ -856,15 +856,15 @@ module TheFox
 					end
 					
 					# Billed Duration
-					billed_duration_human = self.billed_duration.to_human
+					billed_duration_human = self.billed_duration.to_human_s
 					to_ax << 'Billed   Duration: %s' % [billed_duration_human]
 					
 					# Unbilled Duration
-					unbilled_duration_human = self.unbilled_duration.to_human
+					unbilled_duration_human = self.unbilled_duration.to_human_s
 					to_ax << 'Unbilled Duration: %s' % [unbilled_duration_human]
 					
 					if self.estimation
-						to_ax << 'Estimation:     %s' % [self.estimation.to_human]
+						to_ax << 'Estimation:     %s' % [self.estimation.to_human_s]
 						
 						to_ax << 'Time Remaining: %s (%s)' % [self.remaining_time_s, self.remaining_time_percent_s]
 						

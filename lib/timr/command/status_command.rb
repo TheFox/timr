@@ -109,7 +109,7 @@ module TheFox
 						row << status
 						row << begin_datetime_s
 						row << end_datetime_s
-						row << duration.to_human
+						row << duration.to_human_s
 						if @verbose_opt
 							row << estimation_s
 							row << remaining_time_s
