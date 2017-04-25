@@ -92,7 +92,7 @@ module TheFox
 					end
 					
 					# Stop Task
-					old_task.stop
+					old_task.stop(options)
 					
 					# Save Task
 					old_task.save_to_file
