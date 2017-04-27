@@ -221,7 +221,7 @@ module TheFox
 								end_datetime_s,
 								duration.to_human_s,
 								task.id_foreign_or_short,
-								'%s %s' % [track.short_id, track.title(15)],
+								'%s %s' % [track.short_id, track.title],
 							]
 						end
 					end
