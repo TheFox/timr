@@ -121,8 +121,8 @@ class TestTrack < MiniTest::Test
 	# Date set, Time set Hour, Minute
 	def test_begin_datetime_date_set_time_set_hour_minute
 		options = {
-			:date => '2011-12-13',
-			:time => '15:1',
+			:start_date => '2011-12-13',
+			:start_time => '15:1',
 		}
 		track1 = Track.new
 		track1.start(options)
@@ -136,8 +136,8 @@ class TestTrack < MiniTest::Test
 	# Date set, Time set Hour, Minute, Second
 	def test_begin_datetime_date_set_time_set_hour_minute_second
 		options = {
-			:date => '2011-12-13',
-			:time => '15:1:2',
+			:start_date => '2011-12-13',
+			:start_time => '15:1:2',
 		}
 		track1 = Track.new
 		track1.start(options)
@@ -154,8 +154,8 @@ class TestTrack < MiniTest::Test
 	# Date set, Time set Hour, Minute, Second, Timezone
 	def test_begin_datetime_date_set_time_set_hour_minute_second_timezone
 		options = {
-			:date => '2011-12-13',
-			:time => '15:01:02+03:00',
+			:start_date => '2011-12-13',
+			:start_time => '15:01:02+03:00',
 		}
 		track1 = Track.new
 		track1.start(options)

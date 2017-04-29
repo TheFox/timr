@@ -79,6 +79,7 @@ module TheFox
 				foreign_id_opt = options.fetch(:foreign_id, nil)
 				task_id_opt = options.fetch(:task_id, nil)
 				track_id_opt = options.fetch(:track_id, nil)
+				track_id_opt = options.fetch(:track_id, nil)
 				
 				# Get current Track from Stack.
 				old_track = @stack.current_track
@@ -91,8 +92,13 @@ module TheFox
 						raise TrackError, "Track #{old_track.short_id} has no Task."
 					end
 					
+					old_task_options = {
+						:end_date => options[:start_date],
+						:end_time => options[:start_time],
+					}
+					
 					# Stop Task
-					old_task.stop(options)
+					old_task.stop(old_task_options)
 					
 					# Save Task
 					old_task.save_to_file

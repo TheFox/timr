@@ -160,14 +160,25 @@ module TheFox
 				end
 				
 				# Start this Track. A Track cannot be restarted because it's the smallest time unit.
+				# 
+				# Options:
+				# 
+				# - `:start_date`
+				# - `:start_time`
 				def start(options = Hash.new)
+					start_date_opt = options.fetch(:start_date, nil)
+					start_time_opt = options.fetch(:start_time, nil)
 					message_opt = options.fetch(:message, nil)
 					
 					if @begin_datetime
 						raise TrackError, 'Cannot restart Track. Use dup() on this instance or create a new instance by using Track.new().'
 					end
 					
-					@begin_datetime = DateTimeHelper.get_datetime_from_options(options)
+					begin_options = {
+						:date => start_date_opt,
+						:time => start_time_opt,
+					}
+					@begin_datetime = DateTimeHelper.get_datetime_from_options(begin_options)
 					
 					if message_opt
 						@message = message_opt

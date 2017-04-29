@@ -97,6 +97,7 @@ module TheFox
 					
 					@timr = Timr.new(@cwd)
 					
+					# See BasicCommand class.
 					run_edit
 					
 					options = {

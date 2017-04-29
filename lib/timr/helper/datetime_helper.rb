@@ -77,7 +77,7 @@ module TheFox
 						else
 							y = Date.today.year
 						end
-						if y < 2000 # shit
+						if y < 2000 # bullshit
 							y += 2000
 						end
 						

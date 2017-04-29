@@ -123,6 +123,8 @@ module TheFox
 				
 				private
 				
+				# Used for --edit argument.
+				# 
 				# Uses
 				#   @timr
 				#   @edit_opt

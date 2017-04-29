@@ -99,6 +99,7 @@ module TheFox
 					
 					@timr = Timr.new(@cwd)
 					
+					# See BasicCommand class.
 					run_edit
 					
 					options = {
@@ -110,8 +111,8 @@ module TheFox
 						:hourly_rate => @hourly_rate_opt,
 						:has_flat_rate => @has_flat_rate_opt,
 						
-						:date => @date_opt,
-						:time => @time_opt,
+						:start_date => @date_opt,
+						:start_time => @time_opt,
 						:message => @message_opt,
 						
 						:task_id => @task_id_opt,
@@ -154,7 +155,11 @@ module TheFox
 					puts '    --edit                     Edit Track Message when providing <track_id>.'
 					puts '                               EDITOR environment variable must be set.'
 					puts '    -d, --date <date>          Track Start Date. Default: today'
+					puts '                               Also used to set the end date for the'
+					puts '                               current running Track.'
 					puts '    -t, --time <time>          Track Start Time. Default: now'
+					puts '                               Also used to set the end time for the'
+					puts '                               current running Track.'
 					puts
 					puts 'Arguments'
 					HelpCommand.print_id_help
