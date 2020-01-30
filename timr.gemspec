@@ -15,7 +15,7 @@ Gem::Specification.new do |spec|
 	spec.summary       = %q{Timr - Time Tracking for Hackers.}
 	spec.description   = %q{Timr is a time tracking tool for the Command-line, written in Ruby. You can track your time spent for a specific project. The main focus of this tool is to use it on the Command-line and make automatic reports. All data are stored in YAML files. So editing can also be done by using your favorite editor.}
 	spec.homepage      = TheFox::Timr::HOMEPAGE
-	spec.license       = 'GPL-3.0'
+	spec.license       = 'MIT'
 	
 	spec.files         = `git ls-files -z`.split("\x0").reject{ |f| f.match(%r{^(test|spec|features)/}) }
 	spec.bindir        = 'bin'

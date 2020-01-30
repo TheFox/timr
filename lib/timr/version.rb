@@ -9,10 +9,10 @@ module TheFox
 		# - `alpha` - Dev
 		# - `beta` - Testing
 		# - `rc` - Release Canditate Testing
-		VERSION = '0.7.0.alpha.5'
+		VERSION = '0.7.0.alpha.6'
 		
 		# Release Date
-		DATE = '2017-04-29'
+		DATE = '2020-01-30'
 		
 		# URL to Homepage.
 		HOMEPAGE = 'https://github.com/TheFox/timr'
