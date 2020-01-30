@@ -47,7 +47,6 @@ Timr is a time tracking tool for the Command-line, written in Ruby. You can trac
 - [Code Coverage](https://timr.fox21.at/coverage/)
 - [GitHub Page](https://github.com/TheFox/timr)
 - [RubyGems Page](https://rubygems.org/gems/timr)
-- [Travis CI Repository](https://travis-ci.org/TheFox/timr)
 
 ## BUGS
 

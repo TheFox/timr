@@ -282,7 +282,6 @@ Do not forget to remove all links when deinstalling Timr.
 - [Code Coverage](https://timr.fox21.at/coverage/)
 - [GitHub Page](https://github.com/TheFox/timr)
 - [RubyGems Page](https://rubygems.org/gems/timr)
-- [Travis CI Repository](https://travis-ci.org/TheFox/timr)
 
 ## Contributing
 
