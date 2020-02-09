@@ -5,7 +5,7 @@ before_script:
     - eval $(ssh-agent -s)
     - ssh-add <(echo "$SSH_PRIVATE_KEY")
     - mkdir -p ~/.ssh
-    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - '[[ -f /.dockerenv ]] && printf "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
     - ruby -v
     - gem update --system
     - gem install bundler -v '~>1.13'
